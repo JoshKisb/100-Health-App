@@ -157,8 +157,6 @@ export const ICDField: SFC<ICD> = observer(
                 {visible ? (
                     <div className="flex">
                         <Input
-                         
-
                             size="large"
                             disabled={
                                 disabled
@@ -184,16 +182,13 @@ export const ICDField: SFC<ICD> = observer(
                                     store.disableValue("QHY3iYRLvMp");
                                 }
 
-                                console.log('input working')
+                                console.log("input working");
                                 setValue("");
-                            // if (form.getFieldValue('sfpqAeqKeyQ') === ''){
+                                // if (form.getFieldValue('sfpqAeqKeyQ') === ''){
 
-                            //     form.setFieldsValue({ zD0E77W4rFs: null });
-                            //     console.log('clear working')
-                            // }
-
-
-
+                                //     form.setFieldsValue({ zD0E77W4rFs: null });
+                                //     console.log('clear working')
+                                // }
                             }}
                         />
                         <Popconfirm
@@ -205,7 +200,7 @@ export const ICDField: SFC<ICD> = observer(
                                 console.log(codeField);
                                 console.log(searchQueryField);
                                 console.log(bestMatchTextField);
-                                
+
                                 // var cod = JSON.stringify(codeField);
 
                                 if (codeField === "zD0E77W4rFs") {
@@ -215,8 +210,6 @@ export const ICDField: SFC<ICD> = observer(
                                     store.enableValue("Ylht9kCLSRW");
                                     form.setFieldsValue({ zD0E77W4rFs: null });
                                     form.setFieldsValue({ sfpqAeqKeyQ: null });
-
-                                    
                                 }
 
                                 if (codeField === "tuMMQsGtE69") {
@@ -226,8 +219,6 @@ export const ICDField: SFC<ICD> = observer(
                                     store.enableValue("myydnkmLfhp");
                                     form.setFieldsValue({ tuMMQsGtE69: null });
                                     form.setFieldsValue({ zb7uTuBCPrN: null });
-
-                                    
                                 }
 
                                 if (codeField === "C8n6hBilwsX") {
@@ -237,10 +228,8 @@ export const ICDField: SFC<ICD> = observer(
                                     store.enableValue("aC64sB86ThG");
                                     form.setFieldsValue({ C8n6hBilwsX: null });
                                     form.setFieldsValue({ QGFYJK00ES7: null });
-
-                                    
                                 }
-                                
+
                                 if (codeField === "IeS8V8Yf40N") {
                                     store.disableValue("IeS8V8Yf40N");
                                     store.disableValue("CnPGhOcERFF");
@@ -248,14 +237,7 @@ export const ICDField: SFC<ICD> = observer(
                                     store.enableValue("cmZrrHfTxW3");
                                     form.setFieldsValue({ IeS8V8Yf40N: null });
                                     form.setFieldsValue({ CnPGhOcERFF: null });
-
-                                    
                                 }
-                                
-
-
-
-                               
 
                                 // store.disableValue(cod);
 

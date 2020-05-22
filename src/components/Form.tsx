@@ -22,9 +22,6 @@ import moment from "moment";
 const { Option } = Select;
 const { Title } = Typography;
 
-
-
-
 export const DataEntryForm = observer(() => {
     const [form] = Form.useForm();
     const [optionSets, setOptionSets] = useState<any>();
@@ -79,23 +76,28 @@ export const DataEntryForm = observer(() => {
         });
     }, [store]);
 
+    const [testVal, setTestVal] = useState("");
     const button = () => {
-        console.log("button pressed")
-        form.setFieldsValue({ QHY3iYRLvMp: "" });
-        
-
-    }
+        console.log("button pressed");
+        // form.setFieldsValue({ QHY3iYRLvMp: "" });
+        // button()
+        setTestVal("");
+    };
 
     const valuesChange = (changedValues: any, allValues: any) => {
-        if (changedValues.e96GB4CXyd3  && changedValues.e96GB4CXyd3 === "SX01-02" && form.getFieldValue('q7e7FOXKnOf') > 10 && form.getFieldValue('q7e7FOXKnOf') < 50 ) {
+        if (
+            changedValues.e96GB4CXyd3 &&
+            changedValues.e96GB4CXyd3 === "SX01-02" &&
+            form.getFieldValue("q7e7FOXKnOf") > 10 &&
+            form.getFieldValue("q7e7FOXKnOf") < 50
+        ) {
+            console.log(form.getFieldValue("q7e7FOXKnOf"));
 
-            console.log(form.getFieldValue('q7e7FOXKnOf')) 
-            
-            console.log("sex changed")
-        
-            window.alert("Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?'")
+            console.log("sex changed");
 
-           
+            window.alert(
+                "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?'"
+            );
         }
 
         if (changedValues.RbrUuKFSqkZ) {
@@ -133,11 +135,10 @@ export const DataEntryForm = observer(() => {
             }
         }
 
-        console.log('clear working')
+        console.log("clear working");
         if (changedValues.sfpqAeqKeyQ) {
-
             form.setFieldsValue({ zD0E77W4rFs: null });
-            console.log('clear working')
+            console.log("clear working");
         }
 
         if (changedValues.i8rrl8YWxLF) {
@@ -255,7 +256,10 @@ export const DataEntryForm = observer(() => {
             store.enableValue("uaxjt0inPNF");
         }
 
-        if (changedValues.e96GB4CXyd3 && changedValues.e96GB4CXyd3 !== "SX01-02") {
+        if (
+            changedValues.e96GB4CXyd3 &&
+            changedValues.e96GB4CXyd3 !== "SX01-02"
+        ) {
             store.disableValue("zcn7acUB6x1");
             store.disableValue("KpfvNQSsWIw");
             store.disableValue("AJAraEcfH63");
@@ -264,12 +268,15 @@ export const DataEntryForm = observer(() => {
             store.disableValue("K5BDPJQk1BP");
             store.disableValue("Z41di0TRjIu");
             store.disableValue("uaxjt0inPNF");
-            console.log('not female')
-        } else if (changedValues.e96GB4CXyd3 && changedValues.e96GB4CXyd3 === "SX01-02") {
+            console.log("not female");
+        } else if (
+            changedValues.e96GB4CXyd3 &&
+            changedValues.e96GB4CXyd3 === "SX01-02"
+        ) {
             store.enableValue("zcn7acUB6x1");
-            console.log('sex female')
-            var x = form.getFieldValue('q7e7FOXKnOf')
-            console.log(x) 
+            console.log("sex female");
+            var x = form.getFieldValue("q7e7FOXKnOf");
+            console.log(x);
         }
 
         if (
@@ -291,11 +298,9 @@ export const DataEntryForm = observer(() => {
             changedValues.jY3K6Bv4o9Q &&
             changedValues.jY3K6Bv4o9Q !== "YN01-01"
         ) {
-            
-             store.disableValue("UfG52s4YcUt");
+            store.disableValue("UfG52s4YcUt");
         } else {
-           
-             store.enableValue("UfG52s4YcUt");
+            store.enableValue("UfG52s4YcUt");
         }
 
         if (changedValues.j5TIQx3gHyF) {
@@ -640,9 +645,6 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 {optionSets ? (
-
-
-
                                     <Form.Item
                                         rules={[
                                             {
@@ -652,11 +654,6 @@ export const DataEntryForm = observer(() => {
                                         ]}
                                         name="e96GB4CXyd3"
                                         className="m-0"
-                                        
-
-
-
-                                        
                                     >
                                         {optionSet("SX01", "e96GB4CXyd3")}
                                     </Form.Item>
@@ -704,23 +701,32 @@ export const DataEntryForm = observer(() => {
                                             store.viewMode ||
                                             store.allDisabled.i8rrl8YWxLF
                                         }
-
                                         onChange={(e: any) => {
-                                            var minutes = 1000*60;
-                                            var hours = minutes*60;
-                                            var days = hours*24;
+                                            var minutes = 1000 * 60;
+                                            var hours = minutes * 60;
+                                            var days = hours * 24;
 
-                                            var foo_date1 = form.getFieldValue("RbrUuKFSqkZ")
-                                            var foo_date2 = form.getFieldValue("i8rrl8YWxLF")
-                                            var diff_date = Math.round((foo_date2 - foo_date1)/days);
+                                            var foo_date1 = form.getFieldValue(
+                                                "RbrUuKFSqkZ"
+                                            );
+                                            var foo_date2 = form.getFieldValue(
+                                                "i8rrl8YWxLF"
+                                            );
+                                            var diff_date = Math.round(
+                                                (foo_date2 - foo_date1) / days
+                                            );
 
-                                             console.log(diff_date)
-                                            console.log("function diffdate has been run ")
+                                            console.log(diff_date);
+                                            console.log(
+                                                "function diffdate has been run "
+                                            );
 
-                                            if (diff_date < 25)
-                                            {
-                                                window.alert(" Please remember that you should also complete the section 'Fetal or infant Death'")}
-                                        }} 
+                                            if (diff_date < 25) {
+                                                window.alert(
+                                                    " Please remember that you should also complete the section 'Fetal or infant Death'"
+                                                );
+                                            }
+                                        }}
                                     />
                                 </Form.Item>
                                 {form.getFieldValue("i8rrl8YWxLF") -
@@ -797,8 +803,6 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
-
-                                
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("a", value);
                                     }}
@@ -816,8 +820,8 @@ export const DataEntryForm = observer(() => {
                                     ) => {
                                         editUnderlyingCauses(
                                             "a",
-                                            value,
-                                            title ? title : null
+                                            title ? title : null,
+                                            value
                                         );
                                     }}
                                 />
@@ -835,49 +839,46 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
-                            
                                 <Form.Item name="QHY3iYRLvMp" className="m-0">
-                                   
-                                <table>
-                                <tr>
-                                    <td>
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.QHY3iYRLvMp ||
-                                            altSearchIsDisabled.a
-                                        }
-                                        onChange={(e: any) => {
-                                            editUnderlyingCauses(
-                                                "a",
-                                                e.target.value
-                                            );
-                                        }}
-                                    />
-
-                                    </td>
-                                    <td>
-                                    <Popconfirm
-                            title="Sure to add coded COD"
-                            onConfirm={() =>
-                                
-                            button()
-                        
-                        }
-                        >
-                            <Button size="large" name="btnFreeTextA">X</Button>
-                        </Popconfirm>
-
-                                    </td>
-                                </tr>
-                            </table>
-                                    
-                            
-                        
-                                                        </Form.Item>
-
-                                
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <Input
+                                                    size="large"
+                                                    disabled={
+                                                        store.viewMode ||
+                                                        store.allDisabled
+                                                            .QHY3iYRLvMp ||
+                                                        altSearchIsDisabled.a
+                                                    }
+                                                    value={testVal}
+                                                    onChange={(e: any) => {
+                                                        setTestVal(
+                                                            e.target.value
+                                                        );
+                                                        editUnderlyingCauses(
+                                                            "a",
+                                                            e.target.value
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Sure to add coded COD"
+                                                    onConfirm={() => button()}
+                                                >
+                                                    <Button
+                                                        size="large"
+                                                        name="btnFreeTextA"
+                                                    >
+                                                        X
+                                                    </Button>
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </Form.Item>
                             </td>
                             <td className="border p-1">
                                 {optionSets ? (
@@ -931,8 +932,8 @@ export const DataEntryForm = observer(() => {
                                     ) => {
                                         editUnderlyingCauses(
                                             "b",
-                                            value,
-                                            title ? title : null
+                                            title ? title : null,
+                                            value
                                         );
                                     }}
                                 />
@@ -951,33 +952,41 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item name="NkiH8GTX6HC" className="m-0">
-                                    <table><tr>
-                                        <td><Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.NkiH8GTX6HC ||
-                                            altSearchIsDisabled.b
-                                        }
-                                        onChange={(e: any) => {
-                                            editUnderlyingCauses(
-                                                "b",
-                                                e.target.value
-                                            );
-                                        }}
-                                    /></td>
-                                        <td>
-
-                                        <Popconfirm
-                            title="Sure to add coded COD"
-                            onConfirm={() => console.log("Delete alt text enable cos of death")}
-                        >
-                            <Button size="large">X</Button>
-                        </Popconfirm>
-
-                                        </td>
-                                    </tr></table>
-                                    
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <Input
+                                                    size="large"
+                                                    disabled={
+                                                        store.viewMode ||
+                                                        store.allDisabled
+                                                            .NkiH8GTX6HC ||
+                                                        altSearchIsDisabled.b
+                                                    }
+                                                    onChange={(e: any) => {
+                                                        editUnderlyingCauses(
+                                                            "b",
+                                                            e.target.value
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Sure to add coded COD"
+                                                    onConfirm={() =>
+                                                        console.log(
+                                                            "Delete alt text enable cos of death"
+                                                        )
+                                                    }
+                                                >
+                                                    <Button size="large">
+                                                        X
+                                                    </Button>
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
@@ -1025,8 +1034,8 @@ export const DataEntryForm = observer(() => {
                                     ) => {
                                         editUnderlyingCauses(
                                             "c",
-                                            value,
-                                            title ? title : null
+                                            title ? title : null,
+                                            value
                                         );
                                     }}
                                 />
@@ -1046,36 +1055,41 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item name="SDPq8UURlWc" className="m-0">
-                                    <table><tr>
-                                        <td>
-
-                                        <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.SDPq8UURlWc ||
-                                            altSearchIsDisabled.c
-                                        }
-                                        onChange={(e: any) => {
-                                            editUnderlyingCauses(
-                                                "c",
-                                                e.target.value
-                                            );
-                                        }}
-                                    />
-                                        </td>
-                                        <td>
-                                        <Popconfirm
-                            title="Sure to add coded COD"
-                            onConfirm={() => console.log("Delete alt text enable cos of death")}
-                        >
-                            <Button size="large">X</Button>
-                        </Popconfirm> 
-
-                                        </td>
-                                    </tr></table>
-
-                                    
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <Input
+                                                    size="large"
+                                                    disabled={
+                                                        store.viewMode ||
+                                                        store.allDisabled
+                                                            .SDPq8UURlWc ||
+                                                        altSearchIsDisabled.c
+                                                    }
+                                                    onChange={(e: any) => {
+                                                        editUnderlyingCauses(
+                                                            "c",
+                                                            e.target.value
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Sure to add coded COD"
+                                                    onConfirm={() =>
+                                                        console.log(
+                                                            "Delete alt text enable cos of death"
+                                                        )
+                                                    }
+                                                >
+                                                    <Button size="large">
+                                                        X
+                                                    </Button>
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
@@ -1123,8 +1137,8 @@ export const DataEntryForm = observer(() => {
                                     ) => {
                                         editUnderlyingCauses(
                                             "d",
-                                            value,
-                                            title ? title : null
+                                            title ? title : null,
+                                            value
                                         );
                                     }}
                                 />
@@ -1143,38 +1157,41 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item name="zqW9xWyqOur" className="m-0">
-
-                                <table><tr>
-                                        <td>
-                                        <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.zqW9xWyqOur ||
-                                            altSearchIsDisabled.d
-                                        }
-                                        onChange={(e: any) => {
-                                            editUnderlyingCauses(
-                                                "d",
-                                                e.target.value
-                                            );
-                                        }}
-                                    />
-
-                                        </td>
-                                        <td>
-                                       <Popconfirm
-                                            title="Sure to add coded COD"
-                                            onConfirm={() => console.log("Delete alt text enable cos of death")}
-                                        >
-                                            <Button size="large">X</Button>
-                                        </Popconfirm>
-
-
-                                        </td>
-                                    </tr></table>
-
-                                    
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <Input
+                                                    size="large"
+                                                    disabled={
+                                                        store.viewMode ||
+                                                        store.allDisabled
+                                                            .zqW9xWyqOur ||
+                                                        altSearchIsDisabled.d
+                                                    }
+                                                    onChange={(e: any) => {
+                                                        editUnderlyingCauses(
+                                                            "d",
+                                                            e.target.value
+                                                        );
+                                                    }}
+                                                />
+                                            </td>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Sure to add coded COD"
+                                                    onConfirm={() =>
+                                                        console.log(
+                                                            "Delete alt text enable cos of death"
+                                                        )
+                                                    }
+                                                >
+                                                    <Button size="large">
+                                                        X
+                                                    </Button>
+                                                </Popconfirm>
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
@@ -1204,9 +1221,6 @@ export const DataEntryForm = observer(() => {
                                 <b>State the underlying cause</b>
                             </td>
                             <td className="border p-1" colSpan={2}>
-
-                                
-
                                 {/* Testing */}
                                 {/* {optionSets ? <Form.Item
                                   rules={[{ required: true, message: 'Select the underlying cause'}]}
@@ -1262,37 +1276,43 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1" colSpan={1}>
                                 <Form.Item name="dTd7txVzhgY" className="m-0">
-                                <table><tr>
-                                        <td>
-                                        <Popconfirm
-                            title="Sure to add coded COD"
-                            onConfirm={() => console.log("Delete alt text enable cos of death")}
-                        >
-                            <Button size="large">X</Button>
-                        </Popconfirm>
-
-                                        </td>
-                                        <td>
-                                        <Input
-                                        type="hidden"
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.dTd7txVzhgY
-                                        }
-                                        onChange={(e: any) => {
-                                            console.log(
-                                                "Something changed and value is",
-                                                underlyingCauseAlt
-                                            );
-                                            return;
-                                        }}
-                                        // value={"HAM"}
-                                    />
-                                        </td>
-                                    </tr></table>
-
-                                   
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <Popconfirm
+                                                    title="Sure to add coded COD"
+                                                    onConfirm={() =>
+                                                        console.log(
+                                                            "Delete alt text enable cos of death"
+                                                        )
+                                                    }
+                                                >
+                                                    <Button size="large">
+                                                        X
+                                                    </Button>
+                                                </Popconfirm>
+                                            </td>
+                                            <td>
+                                                <Input
+                                                    type="hidden"
+                                                    size="large"
+                                                    disabled={
+                                                        store.viewMode ||
+                                                        store.allDisabled
+                                                            .dTd7txVzhgY
+                                                    }
+                                                    onChange={(e: any) => {
+                                                        console.log(
+                                                            "Something changed and value is",
+                                                            underlyingCauseAlt
+                                                        );
+                                                        return;
+                                                    }}
+                                                    // value={"HAM"}
+                                                />
+                                            </td>
+                                        </tr>
+                                    </table>
                                 </Form.Item>
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -1999,7 +2019,10 @@ export const DataEntryForm = observer(() => {
                                         color: "#000085",
                                     }}
                                 >
-                                    <b>For women, was the deceased pregnant or within 6 weeks of delivery?</b>
+                                    <b>
+                                        For women, was the deceased pregnant or
+                                        within 6 weeks of delivery?
+                                    </b>
                                 </h3>
                             </td>
                             <td className="border p-1">
@@ -2018,7 +2041,7 @@ export const DataEntryForm = observer(() => {
                                 <b>At what point?</b>
                             </td>
                             <td className="border p-1">
-                            {optionSets ? (
+                                {optionSets ? (
                                     <Form.Item
                                         name="KpfvNQSsWIw"
                                         className="m-0"
@@ -2049,12 +2072,15 @@ export const DataEntryForm = observer(() => {
                                 <b>Referred from (level of care)</b>
                             </td>
                             <td className="border p-1">
-                            {optionSets ? (
+                                {optionSets ? (
                                     <Form.Item
                                         name="RJhbkjYrODG"
                                         className="m-0"
                                     >
-                                        {optionSet("100RefLevels", "RJhbkjYrODG")}
+                                        {optionSet(
+                                            "100RefLevels",
+                                            "RJhbkjYrODG"
+                                        )}
                                     </Form.Item>
                                 ) : null}
                             </td>
