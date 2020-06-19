@@ -803,6 +803,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
+                                    id="testFlex"
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("a", value);
                                     }}

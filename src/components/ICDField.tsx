@@ -29,6 +29,7 @@ interface ICD {
     bestMatchTextField?: string;
     enableAltText?: any;
     addUnderlyingCause?: any;
+    id?: string;
 }
 
 export const ICDField: SFC<ICD> = observer(
@@ -43,6 +44,7 @@ export const ICDField: SFC<ICD> = observer(
         enableAltText,
         disabled = false,
         addUnderlyingCause,
+        id,
     }) => {
         // Testing
         const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
@@ -58,6 +60,20 @@ export const ICDField: SFC<ICD> = observer(
             searchEndedFunction: (e: any) => {
                 //this callback is called when search ends.
                 setButtonIsDisabled(false);
+                setTimeout(() => {
+                    if (id) {
+                        let resultsExist = document
+                            .getElementById(id)
+                            ?.getElementsByClassName("entityDetailsContent")
+                            ?.length;
+
+                        if (resultsExist) {
+                            alert("There are results");
+                        } else {
+                            alert("There are no results");
+                        }
+                    }
+                }, 2000);
             },
             // End of Testing
             selectedEntityFunction: (selectedEntity: any) => {
@@ -153,7 +169,7 @@ export const ICDField: SFC<ICD> = observer(
         };
 
         return (
-            <div>
+            <div id={id}>
                 {visible ? (
                     <div className="flex">
                         <Input
