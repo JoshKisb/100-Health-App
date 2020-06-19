@@ -1,3 +1,4 @@
+// For the new changes, check lines 34, 49 and 63 -> 82
 import React, { SFC, useState } from "react";
 import * as ECT from "@whoicd/icd11ect";
 import { Button, Form, Input, Popconfirm } from "antd";
@@ -12,6 +13,7 @@ import { any } from "prop-types";
 const mySettings = {
     apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
     autoBind: false,
+    wordsAvailable: false,
 };
 
 const state = {
@@ -49,6 +51,7 @@ export const ICDField: SFC<ICD> = observer(
         // Testing
         const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
         const [inputIsDisabled, setInputIsDisabled] = useState(false);
+        const [popConfirmVisible, setPopConfirmVisible] = useState(false);
 
         //
         const [value, setValue] = useState("");
@@ -68,9 +71,11 @@ export const ICDField: SFC<ICD> = observer(
                             ?.length;
 
                         if (resultsExist) {
-                            alert("There are results");
+                            // Hide the popup if it's visible
+                            setPopConfirmVisible(false);
                         } else {
-                            alert("There are no results");
+                            // Show the popup because there are no results
+                            setPopConfirmVisible(true);
                         }
                     }
                 }, 2000);
@@ -87,6 +92,23 @@ export const ICDField: SFC<ICD> = observer(
                     form.setFieldsValue({
                         [codeField]: selectedEntity.code,
                     });
+
+                    if (selectedEntity.code.charAt(0) === "N") {
+                        // var coded = selectedEntity.code
+
+                        //var res =  JSON.stringify(coded);
+                        // console.log(coded.charAt(0));
+                        console.log("Code starts with N");
+
+                        store.disableValue("FhHPxY16vet");
+                        store.disableValue("wX3i3gkTG4m");
+                        store.disableValue("KsGOxFyzIs1");
+                        store.disableValue("tYH7drlbNya");
+                        store.disableValue("xDMX2CJ4Xw3");
+                        store.disableValue("b4yPk98om7e");
+                        store.disableValue("fQWuywOaoN2");
+                        store.disableValue("o1hG9vr0peF");
+                    }
 
                     // Testing
                     if (addUnderlyingCause) {
@@ -209,6 +231,10 @@ export const ICDField: SFC<ICD> = observer(
                         />
                         <Popconfirm
                             disabled={buttonIsDisabled}
+                            visible={popConfirmVisible}
+                            onVisibleChange={() =>
+                                setPopConfirmVisible(!popConfirmVisible)
+                            }
                             title="ICD Code not found, use as Free  search Text Field?"
                             onConfirm={(e: any) => {
                                 console.log(store.ICDAltSearchtextA);

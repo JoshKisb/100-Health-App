@@ -1,5 +1,4 @@
-// Check line 331 for the update I just added that fixes the problematic field
-
+// Check lines 841, 955, 1062, 1171, 1389 for the new changes
 import React, { useEffect, useState } from "react";
 import {
     Button,
@@ -26,6 +25,9 @@ export const DataEntryForm = observer(() => {
     const [form] = Form.useForm();
     const [optionSets, setOptionSets] = useState<any>();
 
+    //blacklist
+    const blacklistedValues = ["N"];
+
     // Testing
     type altSearchBooleansOptions = {
         [key: string]: boolean;
@@ -39,6 +41,8 @@ export const DataEntryForm = observer(() => {
     const [altSearchIsDisabled, setAltSearchIsDisabled] = useState(
         altSearchBooleans
     );
+
+    const [underlyingCauseCode, setUnderlyingCauseCode] = useState("");
 
     type underlyingCauseObjectOptions = {
         [key: string]: string;
@@ -77,12 +81,42 @@ export const DataEntryForm = observer(() => {
     }, [store]);
 
     const [testVal, setTestVal] = useState("");
-    const button = () => {
+    const buttonA = () => {
         console.log("button pressed");
         // form.setFieldsValue({ QHY3iYRLvMp: "" });
         // button()
         setTestVal("");
     };
+    const [testVal2, setTestVal2] = useState("");
+    const buttonB = () => {
+        console.log("button pressed");
+        // form.setFieldsValue({ QHY3iYRLvMp: "" });
+        // button()
+        setTestVal2("");
+    };
+    const [testVal3, setTestVal3] = useState("");
+    const buttonC = () => {
+        console.log("button pressed");
+        // form.setFieldsValue({ QHY3iYRLvMp: "" });
+        // button()
+        setTestVal3("");
+    };
+
+    const [testVal4, setTestVal4] = useState("");
+    const buttonD = () => {
+        console.log("button pressed");
+        // form.setFieldsValue({ QHY3iYRLvMp: "" });
+        // button()
+        setTestVal4("");
+    };
+
+    // const [testValUnderlying, setTestValUnderlying] = useState("");
+    // const buttonUnderlying = () => {
+    //     console.log("button pressed");
+    //     // form.setFieldsValue({ QHY3iYRLvMp: "" });
+    //     // button()
+    //     setTestValUnderlying("");
+    // };
 
     const valuesChange = (changedValues: any, allValues: any) => {
         if (
@@ -377,6 +411,7 @@ export const DataEntryForm = observer(() => {
         console.log("Adding disease title of ", titleToAdd);
 
         // This Updates the problematic field Next to State underlying cause
+        setUnderlyingCauseCode(titleToAdd);
         form.setFieldsValue({
             dTd7txVzhgY: titleToAdd,
         });
@@ -803,7 +838,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
-                                    id="testFlex"
+                                    id="icdField1"
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("a", value);
                                     }}
@@ -867,7 +902,7 @@ export const DataEntryForm = observer(() => {
                                             <td>
                                                 <Popconfirm
                                                     title="Sure to add coded COD"
-                                                    onConfirm={() => button()}
+                                                    onConfirm={() => buttonA()}
                                                 >
                                                     <Button
                                                         size="large"
@@ -917,6 +952,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
+                                    id="icdField2"
                                     next="myydnkmLfhp"
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("b", value);
@@ -964,7 +1000,11 @@ export const DataEntryForm = observer(() => {
                                                             .NkiH8GTX6HC ||
                                                         altSearchIsDisabled.b
                                                     }
+                                                    value={testVal2}
                                                     onChange={(e: any) => {
+                                                        setTestVal2(
+                                                            e.target.value
+                                                        );
                                                         editUnderlyingCauses(
                                                             "b",
                                                             e.target.value
@@ -975,13 +1015,12 @@ export const DataEntryForm = observer(() => {
                                             <td>
                                                 <Popconfirm
                                                     title="Sure to add coded COD"
-                                                    onConfirm={() =>
-                                                        console.log(
-                                                            "Delete alt text enable cos of death"
-                                                        )
-                                                    }
+                                                    onConfirm={() => buttonB()}
                                                 >
-                                                    <Button size="large">
+                                                    <Button
+                                                        size="large"
+                                                        name="btnFreeTextB"
+                                                    >
                                                         X
                                                     </Button>
                                                 </Popconfirm>
@@ -1003,6 +1042,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item name="fleGy9CvHYh" className="m-0">
                                     <InputNumber
+                                        min={1}
                                         size="large"
                                         disabled={
                                             store.viewMode ||
@@ -1019,6 +1059,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
+                                    id="icdField3"
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("c", value);
                                     }}
@@ -1067,7 +1108,11 @@ export const DataEntryForm = observer(() => {
                                                             .SDPq8UURlWc ||
                                                         altSearchIsDisabled.c
                                                     }
+                                                    value={testVal3}
                                                     onChange={(e: any) => {
+                                                        setTestVal3(
+                                                            e.target.value
+                                                        );
                                                         editUnderlyingCauses(
                                                             "c",
                                                             e.target.value
@@ -1078,13 +1123,12 @@ export const DataEntryForm = observer(() => {
                                             <td>
                                                 <Popconfirm
                                                     title="Sure to add coded COD"
-                                                    onConfirm={() =>
-                                                        console.log(
-                                                            "Delete alt text enable cos of death"
-                                                        )
-                                                    }
+                                                    onConfirm={() => buttonC()}
                                                 >
-                                                    <Button size="large">
+                                                    <Button
+                                                        size="large"
+                                                        name="btnFreeTextC"
+                                                    >
                                                         X
                                                     </Button>
                                                 </Popconfirm>
@@ -1106,6 +1150,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item name="hO8No9fHVd2" className="m-0">
                                     <InputNumber
+                                        min={1}
                                         size="large"
                                         disabled={
                                             store.viewMode ||
@@ -1122,6 +1167,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <ICDField
+                                    id="icdField4"
                                     enableAltText={(value: boolean) => {
                                         toggleEnableAltSearch("d", value);
                                     }}
@@ -1169,7 +1215,11 @@ export const DataEntryForm = observer(() => {
                                                             .zqW9xWyqOur ||
                                                         altSearchIsDisabled.d
                                                     }
+                                                    value={testVal4}
                                                     onChange={(e: any) => {
+                                                        setTestVal4(
+                                                            e.target.value
+                                                        );
                                                         editUnderlyingCauses(
                                                             "d",
                                                             e.target.value
@@ -1180,13 +1230,12 @@ export const DataEntryForm = observer(() => {
                                             <td>
                                                 <Popconfirm
                                                     title="Sure to add coded COD"
-                                                    onConfirm={() =>
-                                                        console.log(
-                                                            "Delete alt text enable cos of death"
-                                                        )
-                                                    }
+                                                    onConfirm={() => buttonD()}
                                                 >
-                                                    <Button size="large">
+                                                    <Button
+                                                        name="btnFreeTextD"
+                                                        size="large"
+                                                    >
                                                         X
                                                     </Button>
                                                 </Popconfirm>
@@ -1208,6 +1257,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item name="eCVDO6lt4go" className="m-0">
                                     <InputNumber
+                                        min={1}
                                         size="large"
                                         disabled={
                                             store.viewMode ||
@@ -1237,7 +1287,12 @@ export const DataEntryForm = observer(() => {
                                         style={{ width: "100%" }}
                                         size="large"
                                         disabled={store.viewMode}
+                                        //value={testValUnderlying}
+
                                         onChange={(e: any) => {
+                                            // setTestValUnderlying(
+                                            //     e.target.value
+                                            // );
                                             addDiseaseTitle(e);
                                         }}
                                     >
@@ -1246,6 +1301,11 @@ export const DataEntryForm = observer(() => {
                                                 if (
                                                     option.includes(
                                                         "disease"
+                                                    ) === false &&
+                                                    blacklistedValues.includes(
+                                                        underlyingCauses[
+                                                            `diseaseTitle${option.toUpperCase()}`
+                                                        ][0]
                                                     ) === false
                                                 ) {
                                                     return (
@@ -1279,23 +1339,10 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item name="dTd7txVzhgY" className="m-0">
                                     <table>
                                         <tr>
-                                            <td>
-                                                <Popconfirm
-                                                    title="Sure to add coded COD"
-                                                    onConfirm={() =>
-                                                        console.log(
-                                                            "Delete alt text enable cos of death"
-                                                        )
-                                                    }
-                                                >
-                                                    <Button size="large">
-                                                        X
-                                                    </Button>
-                                                </Popconfirm>
-                                            </td>
+                                            <td></td>
                                             <td>
                                                 <Input
-                                                    type="hidden"
+                                                    readOnly
                                                     size="large"
                                                     disabled={
                                                         store.viewMode ||
@@ -1309,7 +1356,7 @@ export const DataEntryForm = observer(() => {
                                                         );
                                                         return;
                                                     }}
-                                                    // value={"HAM"}
+                                                    value={underlyingCauseCode}
                                                 />
                                             </td>
                                         </tr>
@@ -1339,6 +1386,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1" colSpan={2}>
                                 <ICDField
+                                    id="icdField5"
                                     form={form}
                                     field="xeE5TQLvucB"
                                     codeField="ctbKSNV2cg7"
