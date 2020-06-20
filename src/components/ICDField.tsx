@@ -1,4 +1,4 @@
-// For the new changes, check lines 34, 49 and 63 -> 82
+// For the new changes, check lines 193-208, 210, 335, 338, 341
 import React, { SFC, useState } from "react";
 import * as ECT from "@whoicd/icd11ect";
 import { Button, Form, Input, Popconfirm } from "antd";
@@ -190,8 +190,24 @@ export const ICDField: SFC<ICD> = observer(
             }
         };
 
+        const styles = {
+            icdContainerStyles: {
+                position: "relative" as "relative",
+            },
+            resultStyles: {
+                position: "absolute" as "absolute",
+                maxHeight: "300px",
+                zIndex: 1000,
+                backgroundColor: "#fff",
+                overflowY: "scroll" as "scroll",
+                left: 0,
+                right: "-40vw",
+                boxShadow: "5px 5px 3px rgba(0, 0, 0, 0.1)",
+            },
+        };
+
         return (
-            <div id={id}>
+            <div style={styles.icdContainerStyles} id={id}>
                 {visible ? (
                     <div className="flex">
                         <Input
@@ -316,7 +332,13 @@ export const ICDField: SFC<ICD> = observer(
                         />
                     </Form.Item>
                 )}
-                <div className="ctw-window" data-ctw-ino={field}></div>
+                {value ? (
+                    <div
+                        className="ctw-window"
+                        style={styles.resultStyles}
+                        data-ctw-ino={field}
+                    ></div>
+                ) : null}
             </div>
         );
     }
