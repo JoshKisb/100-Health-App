@@ -1,5 +1,7 @@
-// For the new changes, check lines 193-208, 210, 335, 338, 341
-import React, { SFC, useState } from "react";
+// For the new changes, check lines 37, 53,59-61,171-174
+// 204-232, 247-252, 256-268, 400
+//
+import React, { SFC, useState, useEffect } from "react";
 import * as ECT from "@whoicd/icd11ect";
 import { Button, Form, Input, Popconfirm } from "antd";
 import { CloseOutlined, ConsoleSqlOutlined } from "@ant-design/icons";
@@ -32,6 +34,7 @@ interface ICD {
     enableAltText?: any;
     addUnderlyingCause?: any;
     id?: string;
+    resetUnderlyingCauseDropdown?: any;
 }
 
 export const ICDField: SFC<ICD> = observer(
@@ -47,11 +50,15 @@ export const ICDField: SFC<ICD> = observer(
         disabled = false,
         addUnderlyingCause,
         id,
+        resetUnderlyingCauseDropdown,
     }) => {
         // Testing
         const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
         const [inputIsDisabled, setInputIsDisabled] = useState(false);
         const [popConfirmVisible, setPopConfirmVisible] = useState(false);
+        const popupContainerID = `${Math.random()}`;
+        const [reposition, setReposition] = useState(false);
+        const [listenerAdded, setListenerAdded] = useState(false);
 
         //
         const [value, setValue] = useState("");
@@ -69,7 +76,7 @@ export const ICDField: SFC<ICD> = observer(
                             .getElementById(id)
                             ?.getElementsByClassName("entityDetailsContent")
                             ?.length;
-
+                        // repositionSearchResults();
                         if (resultsExist) {
                             // Hide the popup if it's visible
                             setPopConfirmVisible(false);
@@ -161,6 +168,10 @@ export const ICDField: SFC<ICD> = observer(
                 ECT.Handler.clear(field);
                 setVisible(false);
                 setValue("");
+
+                if (resetUnderlyingCauseDropdown) {
+                    resetUnderlyingCauseDropdown(Math.random());
+                }
             },
         };
 
@@ -190,6 +201,35 @@ export const ICDField: SFC<ICD> = observer(
             }
         };
 
+        const repositionSearchResults = () => {
+            // Get the icd element
+            if (id) {
+                const icdPopup = document.getElementById(popupContainerID);
+
+                // Get it's position in the viewport
+                const bounding = icdPopup?.getBoundingClientRect();
+
+                // Log the results
+                if (bounding) {
+                    if (
+                        bounding.top >= 0 &&
+                        bounding.left >= 0 &&
+                        bounding.right <=
+                            (window.innerWidth ||
+                                document.documentElement.clientWidth) &&
+                        bounding.bottom <=
+                            (window.innerHeight ||
+                                document.documentElement.clientHeight)
+                    ) {
+                        // console.log("In the viewport!");
+                    } else {
+                        // console.log("Not in the viewport");
+                        setReposition(!reposition);
+                    }
+                }
+            }
+        };
+
         const styles = {
             icdContainerStyles: {
                 position: "relative" as "relative",
@@ -201,10 +241,30 @@ export const ICDField: SFC<ICD> = observer(
                 backgroundColor: "#fff",
                 overflowY: "scroll" as "scroll",
                 left: 0,
+                top: "100%",
                 right: "-40vw",
                 boxShadow: "5px 5px 3px rgba(0, 0, 0, 0.1)",
+                transform:
+                    !buttonIsDisabled && reposition
+                        ? "translateY(-115%)"
+                        : !buttonIsDisabled && !reposition
+                        ? "translateY(3%)"
+                        : "translateY(20%)",
             },
         };
+
+        useEffect(() => {
+            if (!listenerAdded) {
+                setListenerAdded(true);
+                window.addEventListener("scroll", repositionSearchResults, {
+                    passive: true,
+                });
+            }
+
+            return () => {
+                window.removeEventListener("scroll", repositionSearchResults);
+            };
+        }, []);
 
         return (
             <div style={styles.icdContainerStyles} id={id}>
@@ -337,6 +397,7 @@ export const ICDField: SFC<ICD> = observer(
                         className="ctw-window"
                         style={styles.resultStyles}
                         data-ctw-ino={field}
+                        id={popupContainerID}
                     ></div>
                 ) : null}
             </div>

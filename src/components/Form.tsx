@@ -1,4 +1,5 @@
-// Check lines 841, 955, 1062, 1171, 1389 for the new changes
+// Check the following lines for changes: 15, 16, 33-41, 444-459 892-894, 1008-1010,
+// 1118-1120, 1229-1231, 1327-1334, 1336, 1340-1386, 1422-1438, 1441
 import React, { useEffect, useState } from "react";
 import {
     Button,
@@ -11,6 +12,8 @@ import {
     InputNumber,
     Popconfirm,
     Select,
+    Tooltip,
+    Modal,
 } from "antd";
 import { observer } from "mobx-react";
 import { ICDField } from "./ICDField";
@@ -27,6 +30,15 @@ export const DataEntryForm = observer(() => {
 
     //blacklist
     const blacklistedValues = ["N"];
+    const [showBlackListWarning, setShowBlackListWarning] = useState(false);
+    const [blackListedFound, setBlackListedFound] = useState(false);
+    const [underlyingCauseKey, setUnderlyingCauseKey] = useState(Math.random());
+    const [showPregnancyReminder, setShowPregnancyReminder] = useState(false);
+    const [timeoutToClosePopup, setTimeoutToClosePopup] = useState(
+        setTimeout(() => {
+            return;
+        }, 1000)
+    );
 
     // Testing
     type altSearchBooleansOptions = {
@@ -82,21 +94,21 @@ export const DataEntryForm = observer(() => {
 
     const [testVal, setTestVal] = useState("");
     const buttonA = () => {
-        console.log("button pressed");
+        // console.log("button pressed");
         // form.setFieldsValue({ QHY3iYRLvMp: "" });
         // button()
         setTestVal("");
     };
     const [testVal2, setTestVal2] = useState("");
     const buttonB = () => {
-        console.log("button pressed");
+        // console.log("button pressed");
         // form.setFieldsValue({ QHY3iYRLvMp: "" });
         // button()
         setTestVal2("");
     };
     const [testVal3, setTestVal3] = useState("");
     const buttonC = () => {
-        console.log("button pressed");
+        // console.log("button pressed");
         // form.setFieldsValue({ QHY3iYRLvMp: "" });
         // button()
         setTestVal3("");
@@ -104,7 +116,7 @@ export const DataEntryForm = observer(() => {
 
     const [testVal4, setTestVal4] = useState("");
     const buttonD = () => {
-        console.log("button pressed");
+        // console.log("button pressed");
         // form.setFieldsValue({ QHY3iYRLvMp: "" });
         // button()
         setTestVal4("");
@@ -125,13 +137,14 @@ export const DataEntryForm = observer(() => {
             form.getFieldValue("q7e7FOXKnOf") > 10 &&
             form.getFieldValue("q7e7FOXKnOf") < 50
         ) {
-            console.log(form.getFieldValue("q7e7FOXKnOf"));
+            // console.log(form.getFieldValue("q7e7FOXKnOf"));
 
-            console.log("sex changed");
+            // console.log("sex changed");
 
-            window.alert(
-                "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?'"
-            );
+            setShowPregnancyReminder(true);
+            // window.alert(
+            //     "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+            // );
         }
 
         if (changedValues.RbrUuKFSqkZ) {
@@ -347,7 +360,7 @@ export const DataEntryForm = observer(() => {
             }
         }
 
-        console.log("working");
+        // console.log("working");
     };
 
     const optionSet = (os: string, field: string) => {
@@ -428,6 +441,22 @@ export const DataEntryForm = observer(() => {
             initialValues={store.defaultValues}
             onValuesChange={valuesChange}
         >
+            <Modal
+                title="Reminder"
+                visible={showPregnancyReminder}
+                onOk={() => {
+                    setShowPregnancyReminder(false);
+                }}
+                onCancel={() => {
+                    setShowPregnancyReminder(false);
+                }}
+            >
+                <p>
+                    Please Remember to fill in the section: For women, was the
+                    deceased pregnant or within 6 weeks of delivery?
+                </p>
+            </Modal>
+
             <Card
                 title={<Title level={2}>New Death Certificate</Title>}
                 actions={[
@@ -860,6 +889,9 @@ export const DataEntryForm = observer(() => {
                                             value
                                         );
                                     }}
+                                    resetUnderlyingCauseDropdown={
+                                        setUnderlyingCauseKey
+                                    }
                                 />
                             </td>
                             <td className="border p-1">
@@ -973,6 +1005,9 @@ export const DataEntryForm = observer(() => {
                                             value
                                         );
                                     }}
+                                    resetUnderlyingCauseDropdown={
+                                        setUnderlyingCauseKey
+                                    }
                                 />
                             </td>
                             <td className="border p-1">
@@ -1080,6 +1115,9 @@ export const DataEntryForm = observer(() => {
                                             value
                                         );
                                     }}
+                                    resetUnderlyingCauseDropdown={
+                                        setUnderlyingCauseKey
+                                    }
                                 />
                             </td>
 
@@ -1188,6 +1226,9 @@ export const DataEntryForm = observer(() => {
                                             value
                                         );
                                     }}
+                                    resetUnderlyingCauseDropdown={
+                                        setUnderlyingCauseKey
+                                    }
                                 />
                             </td>
                             <td className="border p-1">
@@ -1283,55 +1324,121 @@ export const DataEntryForm = observer(() => {
                                   </Form.Item> : null} */}
 
                                 {
-                                    <Select
-                                        style={{ width: "100%" }}
-                                        size="large"
-                                        disabled={store.viewMode}
-                                        //value={testValUnderlying}
-
-                                        onChange={(e: any) => {
-                                            // setTestValUnderlying(
-                                            //     e.target.value
-                                            // );
-                                            addDiseaseTitle(e);
+                                    <Tooltip
+                                        title={`NOTE: any values whose code begins with N are injuries and as such cannot be selected as an underlying cause of death.`}
+                                        visible={showBlackListWarning}
+                                        style={{
+                                            background: "#fff",
+                                            color: "#000",
                                         }}
                                     >
-                                        {Object.keys(underlyingCauses).map(
-                                            (option: any) => {
+                                        <Select
+                                            key={underlyingCauseKey}
+                                            style={{ width: "100%" }}
+                                            size="large"
+                                            disabled={store.viewMode}
+                                            onDropdownVisibleChange={(
+                                                change
+                                            ) => {
+                                                // Inform user if any blacklisted values were found
+
                                                 if (
-                                                    option.includes(
-                                                        "disease"
-                                                    ) === false &&
-                                                    blacklistedValues.includes(
-                                                        underlyingCauses[
-                                                            `diseaseTitle${option.toUpperCase()}`
-                                                        ][0]
-                                                    ) === false
+                                                    change === true &&
+                                                    blackListedFound &&
+                                                    !showBlackListWarning
                                                 ) {
-                                                    return (
-                                                        <Option
-                                                            key={Math.random()}
-                                                            value={
-                                                                underlyingCauses[
-                                                                    option
-                                                                ]
-                                                            }
-                                                        >
-                                                            {`(${option}) ${
-                                                                underlyingCauses[
-                                                                    option
-                                                                ]
-                                                                    ? underlyingCauses[
-                                                                          option
-                                                                      ]
-                                                                    : ""
-                                                            }`}
-                                                        </Option>
+                                                    setShowBlackListWarning(
+                                                        true
+                                                    );
+
+                                                    // Hide the popup after 8 seconds
+                                                    let timeout = setTimeout(
+                                                        () => {
+                                                            setShowBlackListWarning(
+                                                                false
+                                                            );
+                                                        },
+                                                        8000
+                                                    );
+
+                                                    setTimeoutToClosePopup(
+                                                        timeout
                                                     );
                                                 }
-                                            }
-                                        )}
-                                    </Select>
+                                                if (
+                                                    !change &&
+                                                    showBlackListWarning
+                                                ) {
+                                                    setShowBlackListWarning(
+                                                        false
+                                                    );
+
+                                                    if (timeoutToClosePopup) {
+                                                        console.log(
+                                                            "\n\n\nTIMEOUT is ",
+                                                            timeoutToClosePopup
+                                                        );
+                                                        clearTimeout(
+                                                            timeoutToClosePopup
+                                                        );
+                                                    }
+                                                }
+                                            }}
+                                            onChange={(e: any) => {
+                                                addDiseaseTitle(e);
+                                            }}
+                                        >
+                                            {Object.keys(underlyingCauses).map(
+                                                (option: any) => {
+                                                    if (
+                                                        option.includes(
+                                                            "disease"
+                                                        ) === false &&
+                                                        blacklistedValues.includes(
+                                                            underlyingCauses[
+                                                                `diseaseTitle${option.toUpperCase()}`
+                                                            ][0]
+                                                        ) === false
+                                                    ) {
+                                                        return (
+                                                            <Option
+                                                                key={Math.random()}
+                                                                value={
+                                                                    underlyingCauses[
+                                                                        option
+                                                                    ]
+                                                                }
+                                                            >
+                                                                {`(${option}) ${
+                                                                    underlyingCauses[
+                                                                        option
+                                                                    ]
+                                                                        ? underlyingCauses[
+                                                                              option
+                                                                          ]
+                                                                        : ""
+                                                                }`}
+                                                            </Option>
+                                                        );
+                                                    } else if (
+                                                        option.includes(
+                                                            "disease"
+                                                        ) === false &&
+                                                        blacklistedValues.includes(
+                                                            underlyingCauses[
+                                                                `diseaseTitle${option.toUpperCase()}`
+                                                            ][0]
+                                                        ) === true &&
+                                                        !blackListedFound
+                                                    ) {
+                                                        setBlackListedFound(
+                                                            true
+                                                        );
+                                                    }
+                                                }
+                                            )}
+                                        </Select>
+                                    </Tooltip>
                                 }
                                 {/* End of Testing */}
                             </td>
