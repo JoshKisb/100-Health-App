@@ -14,6 +14,7 @@ import {
     Select,
     Tooltip,
     Modal,
+    Alert,
 } from "antd";
 import { observer } from "mobx-react";
 import { ICDField } from "./ICDField";
@@ -607,22 +608,6 @@ export const DataEntryForm = observer(() => {
             initialValues={store.defaultValues}
             onValuesChange={valuesChange}
         >
-            <Modal
-                title="Reminder"
-                visible={showPregnancyReminder}
-                onOk={() => {
-                    setShowPregnancyReminder(false);
-                }}
-                onCancel={() => {
-                    setShowPregnancyReminder(false);
-                }}
-            >
-                <p>
-                    Please Remember to fill in the section: For women, was the
-                    deceased pregnant or within 6 weeks of delivery?
-                </p>
-            </Modal>
-
             <Card
                 title={<Title level={2}>Death Certificate</Title>}
                 actions={[
@@ -2345,6 +2330,19 @@ export const DataEntryForm = observer(() => {
                                         For women, was the deceased pregnant or
                                         within 6 weeks of delivery?
                                     </b>
+                                    {showPregnancyReminder && (
+                                        <Alert
+                                            message="Reminder"
+                                            description="Please Remember to fill in the section: For women, was the
+                                                deceased pregnant or within 6 weeks of delivery?"
+                                            type="error"
+                                            closable
+                                            showIcon
+                                            onClose={() => {
+                                                setShowPregnancyReminder(false);
+                                            }}
+                                        />
+                                    )}
                                 </h3>
                             </td>
                             <td className="border p-1">
