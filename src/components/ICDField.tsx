@@ -1,6 +1,3 @@
-// For the new changes, check lines 37, 53,59-61,171-174
-// 204-232, 247-252, 256-268, 400
-//
 import React, { SFC, useState, useEffect } from "react";
 import * as ECT from "@whoicd/icd11ect";
 import { Button, Form, Input, Popconfirm } from "antd";
@@ -76,7 +73,6 @@ export const ICDField: SFC<ICD> = observer(
                             .getElementById(id)
                             ?.getElementsByClassName("entityDetailsContent")
                             ?.length;
-                        // repositionSearchResults();
                         if (resultsExist) {
                             // Hide the popup if it's visible
                             setPopConfirmVisible(false);

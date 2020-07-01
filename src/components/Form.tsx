@@ -132,6 +132,172 @@ export const DataEntryForm = observer(() => {
 
     const valuesChange = (changedValues: any, allValues: any) => {
         if (
+            changedValues.FhHPxY16vet &&
+            form.getFieldValue("FhHPxY16vet") == true
+        ) {
+            //Desease
+            //store.disableValue("FhHPxY16vet");//Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.gNM2Yhypydx &&
+            form.getFieldValue("gNM2Yhypydx") == true
+        ) {
+            //Accident
+            store.disableValue("FhHPxY16vet"); //Disease
+            // store.disableValue("gNM2Yhypydx");//accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.wX3i3gkTG4m &&
+            form.getFieldValue("wX3i3gkTG4m") == true
+        ) {
+            //Intentional self-harm
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            // store.disableValue("wX3i3gkTG4m");//Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.KsGOxFyzIs1 &&
+            form.getFieldValue("KsGOxFyzIs1") == true
+        ) {
+            //Assault
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            // store.disableValue("KsGOxFyzIs1");//Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.tYH7drlbNya &&
+            form.getFieldValue("tYH7drlbNya") == true
+        ) {
+            //Legal intervention
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            //store.disableValue("tYH7drlbNya");//Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.xDMX2CJ4Xw3 &&
+            form.getFieldValue("xDMX2CJ4Xw3") == true
+        ) {
+            //War
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            //store.disableValue("xDMX2CJ4Xw3");//War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.b4yPk98om7e &&
+            form.getFieldValue("b4yPk98om7e") == true
+        ) {
+            //Could not be determined
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            //store.disableValue("b4yPk98om7e");//Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.fQWuywOaoN2 &&
+            form.getFieldValue("fQWuywOaoN2") == true
+        ) {
+            //Pending investigation
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            //store.disableValue("fQWuywOaoN2");//Pending investigation
+            store.disableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
+            changedValues.o1hG9vr0peF &&
+            form.getFieldValue("o1hG9vr0peF") == true
+        ) {
+            //Unknown
+            store.disableValue("FhHPxY16vet"); //Disease
+            store.disableValue("gNM2Yhypydx"); //accident
+            store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.disableValue("KsGOxFyzIs1"); //Assault
+            store.disableValue("tYH7drlbNya"); //Legal intervention
+            store.disableValue("xDMX2CJ4Xw3"); //War
+            store.disableValue("b4yPk98om7e"); //Could not be determined
+            store.disableValue("fQWuywOaoN2"); //Pending investigation
+            //store.disableValue("o1hG9vr0peF");//Unknown
+        }
+
+        if (
+            !allValues.FhHPxY16vet &&
+            !allValues.gNM2Yhypydx &&
+            !allValues.wX3i3gkTG4m &&
+            !allValues.KsGOxFyzIs1 &&
+            !allValues.tYH7drlbNya &&
+            !allValues.xDMX2CJ4Xw3 &&
+            !allValues.b4yPk98om7e &&
+            !allValues.fQWuywOaoN2 &&
+            !allValues.o1hG9vr0peF
+        ) {
+            store.enableValue("FhHPxY16vet"); //Disease
+            store.enableValue("gNM2Yhypydx"); //accident
+            store.enableValue("wX3i3gkTG4m"); //Intentional self-harm
+            store.enableValue("KsGOxFyzIs1"); //Assault
+            store.enableValue("tYH7drlbNya"); //Legal intervention
+            store.enableValue("xDMX2CJ4Xw3"); //War
+            store.enableValue("b4yPk98om7e"); //Could not be determined
+            store.enableValue("fQWuywOaoN2"); //Pending investigation
+            store.enableValue("o1hG9vr0peF"); //Unknown
+        }
+
+        if (
             changedValues.e96GB4CXyd3 &&
             changedValues.e96GB4CXyd3 === "SX01-02" &&
             form.getFieldValue("q7e7FOXKnOf") > 10 &&
@@ -458,7 +624,7 @@ export const DataEntryForm = observer(() => {
             </Modal>
 
             <Card
-                title={<Title level={2}>New Death Certificate</Title>}
+                title={<Title level={2}>Death Certificate</Title>}
                 actions={[
                     <p>Inserting for {store.currentOrganisation} </p>,
                     !isEmpty(store.defaultValues) ? (
@@ -484,7 +650,7 @@ export const DataEntryForm = observer(() => {
                 bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
             >
                 <Form.Item
-                    label="Date of review"
+                    label="Date of Entry"
                     rules={[
                         {
                             type: "object",
@@ -685,7 +851,7 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     rules={[
                                         {
-                                            type: "number",
+                                            type: "integer",
                                             required: false,
                                             message:
                                                 "Enter a valid age below 120",
@@ -2267,7 +2433,7 @@ export const DataEntryForm = observer(() => {
                                         name="K5BDPJQk1BP"
                                         className="m-0"
                                     >
-                                        {optionSet("MD", "K5BDPJQk1BP")}
+                                        {optionSet("MD01", "K5BDPJQk1BP")}
                                     </Form.Item>
                                 ) : null}
                             </td>
