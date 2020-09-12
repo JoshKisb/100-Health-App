@@ -38,6 +38,18 @@ export const DataEntryForm = observer(() => {
       return;
     }, 1000)
   );
+
+  // Frame B hack
+  const [disableFrameB, setDisableFrameB] = useState(true);
+  const [frameBKey1, setFrameBKey1] = useState("1");
+  const [frameBKey2, setFrameBKey2] = useState("2");
+  const [frameBKey3, setFrameBKey3] = useState("3");
+  const [frameBKey4, setFrameBKey4] = useState("4");
+
+  // Fetal / Still born hack
+  const [disableFetal, setDisableFetal] = useState(false);
+  const [fetalDisableKey, setFetalDisableKey] = useState("1");
+
   const titleBackground = "#f5f4f4";
 
   // Testing
@@ -514,14 +526,30 @@ export const DataEntryForm = observer(() => {
     // console.log("working");
   };
 
-  const optionSet = (os: string, field: string) => {
+  const optionSet = (
+    os: string,
+    field: string,
+    optionalFunction?: Function,
+    disabled?: boolean,
+    optionalKey?: string
+  ) => {
     const options = optionSets ? optionSets[os] : [];
     if (options) {
       return (
         <Select
           style={{ width: "100%" }}
           size="large"
-          disabled={store.viewMode || store.allDisabled[field]}
+          disabled={disabled || store.viewMode || store.allDisabled[field]}
+          key={optionalKey || `${Math.random()}`}
+          onChange={
+            optionalFunction
+              ? (e: any) => {
+                  optionalFunction(e);
+                }
+              : (e: any) => {
+                  return;
+                }
+          }
         >
           {options.map((option: any) => (
             <Option key={option.code} value={option.code}>
@@ -1603,7 +1631,22 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="Kk0hmrJPR90" className="m-0">
-                    {optionSet("YN01", "Kk0hmrJPR90")}
+                    {optionSet("YN01", "Kk0hmrJPR90", (e: any) => {
+                      if (e !== "Yes") {
+                        // Disable the relevant fields
+                        setDisableFrameB(true);
+                        setFrameBKey1(`${parseInt(frameBKey1) + 1}`);
+                        setFrameBKey2(`${parseInt(frameBKey2) + 2}`);
+                        setFrameBKey3(`${parseInt(frameBKey3) + 3}`);
+                        setFrameBKey4(`${parseInt(frameBKey4) + 4}`);
+                      } else {
+                        setDisableFrameB(false);
+                        setFrameBKey1(`${parseInt(frameBKey1) + 1}`);
+                        setFrameBKey2(`${parseInt(frameBKey2) + 2}`);
+                        setFrameBKey3(`${parseInt(frameBKey3) + 3}`);
+                        setFrameBKey4(`${parseInt(frameBKey4) + 4}`);
+                      }
+                    })}
                   </Form.Item>
                 ) : null}
               </td>
@@ -1627,7 +1670,8 @@ export const DataEntryForm = observer(() => {
                   <DatePicker
                     disabledDate={notTomorrow}
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.j5TIQx3gHyF}
+                    disabled={disableFrameB}
+                    key={frameBKey1}
                   />
                 </Form.Item>
               </td>
@@ -1644,7 +1688,8 @@ export const DataEntryForm = observer(() => {
                 <Form.Item name="JhHwdQ337nn" className="m-0">
                   <Input
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.JhHwdQ337nn}
+                    disabled={disableFrameB}
+                    key={frameBKey2}
                   />
                 </Form.Item>
               </td>
@@ -1656,7 +1701,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="jY3K6Bv4o9Q" className="m-0">
-                    {optionSet("YN01", "jY3K6Bv4o9Q")}
+                    {optionSet(
+                      "YN01",
+                      "jY3K6Bv4o9Q",
+                      () => {},
+                      disableFrameB,
+                      frameBKey3
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -1668,7 +1719,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="UfG52s4YcUt" className="m-0">
-                    {optionSet("YN01", "UfG52s4YcUt")}
+                    {optionSet(
+                      "YN01",
+                      "UfG52s4YcUt",
+                      () => {},
+                      disableFrameB,
+                      frameBKey4
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -1953,7 +2010,16 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" colSpan={2}>
                 {optionSets ? (
                   <Form.Item name="ivnHp4M4hFF" className="m-0">
-                    {optionSet("YN01", "ivnHp4M4hFF")}
+                    {optionSet("YN01", "ivnHp4M4hFF", (e: any) => {
+                      if (e === "Yes") {
+                        // Disable the relevant fields
+                        setDisableFetal(true);
+                        setFetalDisableKey(`${parseInt(fetalDisableKey) + 1}`);
+                      } else {
+                        setDisableFetal(false);
+                        setFetalDisableKey(`${parseInt(fetalDisableKey) + 1}`);
+                      }
+                    })}
                   </Form.Item>
                 ) : null}
               </td>
@@ -1979,7 +2045,8 @@ export const DataEntryForm = observer(() => {
                 >
                   <InputNumber
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.jf9TogeSZpk}
+                    disabled={disableFetal}
+                    key={fetalDisableKey}
                   />
                 </Form.Item>
               </td>
