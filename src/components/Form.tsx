@@ -32,7 +32,6 @@ export const DataEntryForm = observer(() => {
   const [showBlackListWarning, setShowBlackListWarning] = useState(false);
   const [blackListedFound, setBlackListedFound] = useState(false);
   const [underlyingCauseKey, setUnderlyingCauseKey] = useState(Math.random());
-  const [showPregnancyReminder, setShowPregnancyReminder] = useState(false);
   const [timeoutToClosePopup, setTimeoutToClosePopup] = useState(
     setTimeout(() => {
       return;
@@ -41,6 +40,7 @@ export const DataEntryForm = observer(() => {
 
   // Frame B hack
   const [disableFrameB, setDisableFrameB] = useState(true);
+  const [disableFrameB2, setDisableFrameB2] = useState(true);
   const [frameBKey1, setFrameBKey1] = useState("1");
   const [frameBKey2, setFrameBKey2] = useState("2");
   const [frameBKey3, setFrameBKey3] = useState("3");
@@ -50,7 +50,14 @@ export const DataEntryForm = observer(() => {
   const [disableFetal, setDisableFetal] = useState(false);
   const [fetalDisableKey, setFetalDisableKey] = useState("1");
 
-  const titleBackground = "#f5f4f4";
+  // Check if woman was recently pregnant
+  const [showPregnancyReminder, setShowPregnancyReminder] = useState(false);
+  const [enablePregnantQn, setEnablePregnantQn] = useState(false);
+  const [enablePregnantQnKey, setEnablePregnantQnKey] = useState("1");
+  const [personsAge, setPersonsAge] = useState(1);
+  const [personsGender, setPersonsGender] = useState("");
+
+  const titleBackgroundColor = "#f5f4f4";
 
   // Testing
   type altSearchBooleansOptions = {
@@ -91,6 +98,8 @@ export const DataEntryForm = observer(() => {
     underlyingCauseObject
   );
 
+  const [underlyingCauseChosen, setUnderlyingCauseChosen] = useState(false);
+
   const [underlyingCauseAlt, setUnderlyingCauseAlt] = useState("");
   // End of Testing
 
@@ -112,21 +121,18 @@ export const DataEntryForm = observer(() => {
 
   const [testVal, setTestVal] = useState("");
   const buttonA = () => {
-    // console.log("button pressed");
     // form.setFieldsValue({ QHY3iYRLvMp: "" });
     // button()
     setTestVal("");
   };
   const [testVal2, setTestVal2] = useState("");
   const buttonB = () => {
-    // console.log("button pressed");
     // form.setFieldsValue({ QHY3iYRLvMp: "" });
     // button()
     setTestVal2("");
   };
   const [testVal3, setTestVal3] = useState("");
   const buttonC = () => {
-    // console.log("button pressed");
     // form.setFieldsValue({ QHY3iYRLvMp: "" });
     // button()
     setTestVal3("");
@@ -134,7 +140,6 @@ export const DataEntryForm = observer(() => {
 
   const [testVal4, setTestVal4] = useState("");
   const buttonD = () => {
-    // console.log("button pressed");
     // form.setFieldsValue({ QHY3iYRLvMp: "" });
     // button()
     setTestVal4("");
@@ -142,7 +147,6 @@ export const DataEntryForm = observer(() => {
 
   // const [testValUnderlying, setTestValUnderlying] = useState("");
   // const buttonUnderlying = () => {
-  //     console.log("button pressed");
   //     // form.setFieldsValue({ QHY3iYRLvMp: "" });
   //     // button()
   //     setTestValUnderlying("");
@@ -321,11 +325,18 @@ export const DataEntryForm = observer(() => {
       form.getFieldValue("q7e7FOXKnOf") > 10 &&
       form.getFieldValue("q7e7FOXKnOf") < 50
     ) {
-      // console.log(form.getFieldValue("q7e7FOXKnOf"));
+      console.log("WOMAN and old enough");
+      if (personsGender === "Male") {
+        setShowPregnancyReminder(false);
+        setEnablePregnantQn(false);
+        setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
+      } else {
+        setShowPregnancyReminder(true);
+        setEnablePregnantQn(true);
+        setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
+      }
+      //setEnablePregnantQn
 
-      // console.log("sex changed");
-
-      setShowPregnancyReminder(true);
       // window.alert(
       //     "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
       // );
@@ -380,14 +391,14 @@ export const DataEntryForm = observer(() => {
       }
     }
 
-    if (changedValues.jY3K6Bv4o9Q && changedValues.jY3K6Bv4o9Q !== "YN01-01") {
-      store.disableValue("UfG52s4YcUt");
-    } else if (
-      changedValues.jY3K6Bv4o9Q &&
-      changedValues.jY3K6Bv4o9Q === "YN01-01"
-    ) {
-      store.enableValue("UfG52s4YcUt");
-    }
+    // if (changedValues.jY3K6Bv4o9Q && changedValues.jY3K6Bv4o9Q !== "YN01-01") {
+    //   store.disableValue("UfG52s4YcUt");
+    // } else if (
+    //   changedValues.jY3K6Bv4o9Q &&
+    //   changedValues.jY3K6Bv4o9Q === "YN01-01"
+    // ) {
+    //   store.enableValue("UfG52s4YcUt");
+    // }
 
     if (changedValues.Ylht9kCLSRW) {
       store.enableValue("WkXxkKEJLsg");
@@ -476,15 +487,15 @@ export const DataEntryForm = observer(() => {
     }
 
     if (changedValues.e96GB4CXyd3 && changedValues.e96GB4CXyd3 !== "SX01-02") {
-      store.disableValue("zcn7acUB6x1");
+      // store.disableValue("zcn7acUB6x1");
       store.disableValue("KpfvNQSsWIw");
       store.disableValue("AJAraEcfH63");
       store.disableValue("RJhbkjYrODG");
       store.disableValue("ymyLrfEcYkD");
       store.disableValue("K5BDPJQk1BP");
       store.disableValue("Z41di0TRjIu");
+
       store.disableValue("uaxjt0inPNF");
-      console.log("not female");
     } else if (
       changedValues.e96GB4CXyd3 &&
       changedValues.e96GB4CXyd3 === "SX01-02"
@@ -507,11 +518,11 @@ export const DataEntryForm = observer(() => {
       // store.enableValue("UfG52s4YcUt");
     }
 
-    if (changedValues.jY3K6Bv4o9Q && changedValues.jY3K6Bv4o9Q !== "YN01-01") {
-      store.disableValue("UfG52s4YcUt");
-    } else {
-      store.enableValue("UfG52s4YcUt");
-    }
+    // if (changedValues.jY3K6Bv4o9Q && changedValues.jY3K6Bv4o9Q !== "YN01-01") {
+    //   store.disableValue("UfG52s4YcUt");
+    // } else {
+    //   store.enableValue("UfG52s4YcUt");
+    // }
 
     if (changedValues.j5TIQx3gHyF) {
       let weeks = moment(form.getFieldValue("i8rrl8YWxLF")).diff(
@@ -634,7 +645,13 @@ export const DataEntryForm = observer(() => {
           <Button size="large" onClick={store.showEvents}>
             Cancel
           </Button>,
-          <Button htmlType="submit" size="large" disabled={store.viewMode}>
+          <Button
+            htmlType="submit"
+            size="large"
+            disabled={
+              !underlyingCauseChosen || !personsGender || store.viewMode
+            }
+          >
             Save
           </Button>,
         ]}
@@ -801,6 +818,15 @@ export const DataEntryForm = observer(() => {
                     disabledDate={notTomorrow}
                     size="large"
                     disabled={store.viewMode || store.allDisabled.RbrUuKFSqkZ}
+                    onChange={(e: any) => {
+                      if (e?._d) {
+                        const birthDate = new Date(e?._d);
+                        const ageInYears = moment().diff(birthDate, "years");
+                        if (ageInYears < 50 && ageInYears > 10) {
+                          setPersonsAge(ageInYears);
+                        }
+                      }
+                    }}
                   />
                 </Form.Item>
               </td>
@@ -825,6 +851,27 @@ export const DataEntryForm = observer(() => {
                   <InputNumber
                     size="large"
                     disabled={store.viewMode || store.allDisabled.q7e7FOXKnOf}
+                    onChange={(e: any) => {
+                      console.log("Age changed to", e);
+
+                      setPersonsAge(e);
+                      if (personsGender === "Male") {
+                        setShowPregnancyReminder(false);
+                        setEnablePregnantQn(false);
+                        setEnablePregnantQnKey(
+                          `${parseInt(enablePregnantQnKey) + 1}`
+                        );
+                        return;
+                      }
+
+                      if (personsGender === "Female" && e < 50 && e > 10) {
+                        setShowPregnancyReminder(true);
+                        setEnablePregnantQn(true);
+                        setEnablePregnantQnKey(
+                          `${parseInt(enablePregnantQnKey) + 1}`
+                        );
+                      }
+                    }}
                   />
                 </Form.Item>
               </td>
@@ -843,7 +890,27 @@ export const DataEntryForm = observer(() => {
                     name="e96GB4CXyd3"
                     className="m-0"
                   >
-                    {optionSet("SX01", "e96GB4CXyd3")}
+                    {optionSet("SX01", "e96GB4CXyd3", (e: any) => {
+                      setPersonsGender(e);
+                      if (e === "Male") {
+                        setShowPregnancyReminder(false);
+                        setEnablePregnantQn(false);
+                        setEnablePregnantQnKey(
+                          `${parseInt(enablePregnantQnKey) + 1}`
+                        );
+                        return;
+                      }
+                      if (e === "Female") {
+                        console.log("Is female");
+                        if (personsAge < 50 && personsAge > 10) {
+                          setShowPregnancyReminder(true);
+                          setEnablePregnantQn(true);
+                          setEnablePregnantQnKey(
+                            `${parseInt(enablePregnantQnKey) + 1}`
+                          );
+                        }
+                      }
+                    })}
                   </Form.Item>
                 ) : null}
               </td>
@@ -894,7 +961,7 @@ export const DataEntryForm = observer(() => {
                       );
 
                       console.log(diff_date);
-                      console.log("function diffdate has been run ");
+                      // console.log("function diffdate has been run ");
 
                       if (diff_date < 25) {
                         window.alert(
@@ -922,7 +989,7 @@ export const DataEntryForm = observer(() => {
               <td
                 colSpan={7}
                 className="border p-1 text-lg"
-                style={{ background: titleBackground }}
+                style={{ background: titleBackgroundColor }}
               >
                 <h3
                   style={{
@@ -1440,6 +1507,8 @@ export const DataEntryForm = observer(() => {
                         }
                       }}
                       onChange={(e: any) => {
+                        console.log("Changing the underlying cause", e);
+                        setUnderlyingCauseChosen(true);
                         addDiseaseTitle(e);
                       }}
                     >
@@ -1611,7 +1680,7 @@ export const DataEntryForm = observer(() => {
               <td
                 colSpan={2}
                 className="border p-1 text-lg"
-                style={{ background: titleBackground }}
+                style={{ background: titleBackgroundColor }}
               >
                 <h3
                   style={{
@@ -1637,14 +1706,10 @@ export const DataEntryForm = observer(() => {
                         setDisableFrameB(true);
                         setFrameBKey1(`${parseInt(frameBKey1) + 1}`);
                         setFrameBKey2(`${parseInt(frameBKey2) + 2}`);
-                        setFrameBKey3(`${parseInt(frameBKey3) + 3}`);
-                        setFrameBKey4(`${parseInt(frameBKey4) + 4}`);
                       } else {
                         setDisableFrameB(false);
                         setFrameBKey1(`${parseInt(frameBKey1) + 1}`);
                         setFrameBKey2(`${parseInt(frameBKey2) + 2}`);
-                        setFrameBKey3(`${parseInt(frameBKey3) + 3}`);
-                        setFrameBKey4(`${parseInt(frameBKey4) + 4}`);
                       }
                     })}
                   </Form.Item>
@@ -1701,13 +1766,16 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="jY3K6Bv4o9Q" className="m-0">
-                    {optionSet(
-                      "YN01",
-                      "jY3K6Bv4o9Q",
-                      () => {},
-                      disableFrameB,
-                      frameBKey3
-                    )}
+                    {optionSet("YN01", "jY3K6Bv4o9Q", (e: any) => {
+                      console.log("Resetting frameBKey3", frameBKey3);
+                      if (e !== "Yes") {
+                        setDisableFrameB2(true);
+                      } else {
+                        setDisableFrameB2(false);
+                      }
+
+                      setFrameBKey3(`${parseInt(frameBKey3) + 3}`);
+                    })}
                   </Form.Item>
                 ) : null}
               </td>
@@ -1722,9 +1790,10 @@ export const DataEntryForm = observer(() => {
                     {optionSet(
                       "YN01",
                       "UfG52s4YcUt",
-                      () => {},
-                      disableFrameB,
-                      frameBKey4
+                      (e: any) => {},
+                      disableFrameB2,
+
+                      frameBKey3
                     )}
                   </Form.Item>
                 ) : null}
@@ -1739,7 +1808,7 @@ export const DataEntryForm = observer(() => {
               <td
                 colSpan={6}
                 className="border p-1 text-lg"
-                style={{ background: titleBackground }}
+                style={{ background: titleBackgroundColor }}
               >
                 <h3
                   style={{
@@ -1979,7 +2048,7 @@ export const DataEntryForm = observer(() => {
               <td
                 colSpan={4}
                 className="border p-1 text-lg"
-                style={{ background: titleBackground }}
+                style={{ background: titleBackgroundColor }}
               >
                 <h3
                   style={{
@@ -2130,7 +2199,7 @@ export const DataEntryForm = observer(() => {
             <tr>
               <td
                 className="border p-1 text-lg"
-                style={{ background: titleBackground }}
+                style={{ background: titleBackgroundColor }}
               >
                 <h3
                   style={{
@@ -2142,7 +2211,7 @@ export const DataEntryForm = observer(() => {
                     For women, was the deceased pregnant or within 6 weeks of
                     delivery?
                   </b>
-                  {showPregnancyReminder && (
+                  {showPregnancyReminder && personsGender === "Female" && (
                     <Alert
                       message="Reminder"
                       description="Please Remember to fill in the section: For women, was the
@@ -2160,7 +2229,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="zcn7acUB6x1" className="m-0">
-                    {optionSet("YN01", "zcn7acUB6x1")}
+                    {optionSet(
+                      "YN01",
+                      "zcn7acUB6x1",
+                      (e: any) => {},
+                      !enablePregnantQn,
+                      enablePregnantQnKey
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
