@@ -48,14 +48,38 @@ export const DataEntryForm = observer(() => {
 
   // Fetal / Still born hack
   const [disableFetal, setDisableFetal] = useState(false);
-  const [fetalDisableKey, setFetalDisableKey] = useState("1");
+  const [fetalDisableKey, setFetalDisableKey] = useState("5");
 
   // Check if woman was recently pregnant
   const [showPregnancyReminder, setShowPregnancyReminder] = useState(false);
   const [enablePregnantQn, setEnablePregnantQn] = useState(false);
-  const [enablePregnantQnKey, setEnablePregnantQnKey] = useState("1");
+  const [enablePregnantQnKey, setEnablePregnantQnKey] = useState("6");
   const [personsAge, setPersonsAge] = useState(1);
   const [personsGender, setPersonsGender] = useState("");
+  const [womanWasPregnant, setWomanWasPregnant] = useState(false);
+
+  // Keys related to was woman pregnant
+  const [pregnantKey1, setPregnantKey1] = useState("7");
+  const [pregnantKey2, setPregnantKey2] = useState("8");
+  const [pregnantKey3, setPregnantKey3] = useState("9");
+  const [pregnantKey4, setPregnantKey4] = useState("10");
+  const [pregnantKey5, setPregnantKey5] = useState("11");
+  const [pregnantKey6, setPregnantKey6] = useState("12");
+  const [pregnantKey7, setPregnantKey7] = useState("13");
+
+  const refreshAllPregnantKeys = (bool: boolean) => {
+    setWomanWasPregnant(bool);
+  };
+
+  useEffect(() => {
+    setPregnantKey1(`${Math.random()}`);
+    setPregnantKey2(`${Math.random()}`);
+    setPregnantKey3(`${Math.random()}`);
+    setPregnantKey4(`${Math.random()}`);
+    setPregnantKey5(`${Math.random()}`);
+    setPregnantKey6(`${Math.random()}`);
+    setPregnantKey7(`${Math.random()}`);
+  }, [womanWasPregnant]);
 
   const titleBackgroundColor = "#f5f4f4";
 
@@ -334,12 +358,11 @@ export const DataEntryForm = observer(() => {
         setShowPregnancyReminder(true);
         setEnablePregnantQn(true);
         setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
+        window.alert(
+          "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+        );
       }
       //setEnablePregnantQn
-
-      // window.alert(
-      //     "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-      // );
     }
 
     if (changedValues.RbrUuKFSqkZ) {
@@ -468,34 +491,33 @@ export const DataEntryForm = observer(() => {
       store.disableValue("jf9TogeSZpk");
     }
 
-    if (changedValues.zcn7acUB6x1 && changedValues.zcn7acUB6x1 !== "YN01-01") {
-      store.disableValue("KpfvNQSsWIw");
-      store.disableValue("AJAraEcfH63");
-      store.disableValue("RJhbkjYrODG");
-      store.disableValue("ymyLrfEcYkD");
-      store.disableValue("K5BDPJQk1BP");
-      store.disableValue("Z41di0TRjIu");
-      store.disableValue("uaxjt0inPNF");
-    } else if (changedValues.zcn7acUB6x1 === "YN01-01") {
-      store.enableValue("KpfvNQSsWIw");
-      store.enableValue("AJAraEcfH63");
-      store.enableValue("RJhbkjYrODG");
-      store.enableValue("ymyLrfEcYkD");
-      store.enableValue("K5BDPJQk1BP");
-      store.enableValue("Z41di0TRjIu");
-      store.enableValue("uaxjt0inPNF");
-    }
+    // if (changedValues.zcn7acUB6x1 && changedValues.zcn7acUB6x1 !== "YN01-01") {
+    //   store.disableValue("KpfvNQSsWIw");
+    //   store.disableValue("AJAraEcfH63");
+    //   store.disableValue("RJhbkjYrODG");
+    //   store.disableValue("ymyLrfEcYkD");
+    //   store.disableValue("K5BDPJQk1BP");
+    //   store.disableValue("Z41di0TRjIu");
+    //   store.disableValue("uaxjt0inPNF");
+    // } else if (changedValues.zcn7acUB6x1 === "YN01-01") {
+    //   store.enableValue("KpfvNQSsWIw");
+    //   store.enableValue("AJAraEcfH63");
+    //   store.enableValue("RJhbkjYrODG");
+    //   store.enableValue("ymyLrfEcYkD");
+    //   store.enableValue("K5BDPJQk1BP");
+    //   store.enableValue("Z41di0TRjIu");
+    //   store.enableValue("uaxjt0inPNF");
+    // }
 
     if (changedValues.e96GB4CXyd3 && changedValues.e96GB4CXyd3 !== "SX01-02") {
       // store.disableValue("zcn7acUB6x1");
-      store.disableValue("KpfvNQSsWIw");
-      store.disableValue("AJAraEcfH63");
-      store.disableValue("RJhbkjYrODG");
-      store.disableValue("ymyLrfEcYkD");
-      store.disableValue("K5BDPJQk1BP");
-      store.disableValue("Z41di0TRjIu");
-
-      store.disableValue("uaxjt0inPNF");
+      // store.disableValue("KpfvNQSsWIw");
+      // store.disableValue("AJAraEcfH63");
+      // store.disableValue("RJhbkjYrODG");
+      // store.disableValue("ymyLrfEcYkD");
+      // store.disableValue("K5BDPJQk1BP");
+      // store.disableValue("Z41di0TRjIu");
+      // store.disableValue("uaxjt0inPNF");
     } else if (
       changedValues.e96GB4CXyd3 &&
       changedValues.e96GB4CXyd3 === "SX01-02"
@@ -870,6 +892,9 @@ export const DataEntryForm = observer(() => {
                         setEnablePregnantQnKey(
                           `${parseInt(enablePregnantQnKey) + 1}`
                         );
+                        window.alert(
+                          "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+                        );
                       }
                     }}
                   />
@@ -907,6 +932,9 @@ export const DataEntryForm = observer(() => {
                           setEnablePregnantQn(true);
                           setEnablePregnantQnKey(
                             `${parseInt(enablePregnantQnKey) + 1}`
+                          );
+                          window.alert(
+                            "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
                           );
                         }
                       }
@@ -2114,7 +2142,7 @@ export const DataEntryForm = observer(() => {
                 >
                   <InputNumber
                     size="large"
-                    disabled={disableFetal}
+                    disabled={disableFetal || personsAge > 1}
                     key={fetalDisableKey}
                   />
                 </Form.Item>
@@ -2232,7 +2260,16 @@ export const DataEntryForm = observer(() => {
                     {optionSet(
                       "YN01",
                       "zcn7acUB6x1",
-                      (e: any) => {},
+                      (e: any) => {
+                        console.log("E is ", e);
+                        if (e === "Yes") {
+                          console.log("Setting pregnancy to true");
+                          refreshAllPregnantKeys(true);
+                        } else {
+                          console.log("Setting pregnancy to false");
+                          refreshAllPregnantKeys(false);
+                        }
+                      },
                       !enablePregnantQn,
                       enablePregnantQnKey
                     )}
@@ -2247,7 +2284,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="KpfvNQSsWIw" className="m-0">
-                    {optionSet("100ATPOINT", "KpfvNQSsWIw")}
+                    {optionSet(
+                      "100ATPOINT",
+                      "KpfvNQSsWIw",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey1
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -2260,7 +2303,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="AJAraEcfH63" className="m-0">
-                    {optionSet("YN01", "AJAraEcfH63")}
+                    {optionSet(
+                      "YN01",
+                      "AJAraEcfH63",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey2
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -2272,7 +2321,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="RJhbkjYrODG" className="m-0">
-                    {optionSet("100RefLevels", "RJhbkjYrODG")}
+                    {optionSet(
+                      "100RefLevels",
+                      "RJhbkjYrODG",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey3
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -2285,7 +2340,12 @@ export const DataEntryForm = observer(() => {
                 <Form.Item name="ymyLrfEcYkD" className="m-0">
                   <Input
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.ymyLrfEcYkD}
+                    disabled={
+                      store.viewMode ||
+                      store.allDisabled.ymyLrfEcYkD ||
+                      !womanWasPregnant
+                    }
+                    key={pregnantKey4}
                   />
                 </Form.Item>
               </td>
@@ -2297,7 +2357,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="K5BDPJQk1BP" className="m-0">
-                    {optionSet("MD01", "K5BDPJQk1BP")}
+                    {optionSet(
+                      "MD01",
+                      "K5BDPJQk1BP",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey5
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -2309,7 +2375,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="Z41di0TRjIu" className="m-0">
-                    {optionSet("PD01", "Z41di0TRjIu")}
+                    {optionSet(
+                      "PD01",
+                      "Z41di0TRjIu",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey6
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
@@ -2321,7 +2393,13 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 {optionSets ? (
                   <Form.Item name="uaxjt0inPNF" className="m-0">
-                    {optionSet("YN01", "uaxjt0inPNF")}
+                    {optionSet(
+                      "YN01",
+                      "uaxjt0inPNF",
+                      () => {},
+                      !womanWasPregnant,
+                      pregnantKey7
+                    )}
                   </Form.Item>
                 ) : null}
               </td>
