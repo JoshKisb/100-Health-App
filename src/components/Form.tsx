@@ -653,7 +653,7 @@ export const DataEntryForm = observer(() => {
       onValuesChange={valuesChange}
     >
       <Card
-        title={<Title level={2}>Death Certificate</Title>}
+        title={<Title level={2}>Medical Certificate of Cause of Death</Title>}
         actions={[
           <p>Inserting for {store.currentOrganisation} </p>,
           !isEmpty(store.defaultValues) ? (
