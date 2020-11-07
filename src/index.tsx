@@ -7,6 +7,7 @@ import { Provider } from '@dhis2/app-runtime';
 const appConfig = {
   baseUrl: process.env.REACT_APP_DHIS2_BASE_URL,
   apiVersion: 32,
+  
 }
 
 ReactDOM.render(<Provider config={appConfig}><App /></Provider>, document.getElementById('root'));

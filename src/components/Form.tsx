@@ -20,12 +20,19 @@ import { useStore } from "../Context";
 import { isEmpty } from "lodash";
 
 import moment from "moment";
+import DistSearchPopup from "../district_subcounty/DistSearchPopup2";
 const { Option } = Select;
 const { Title } = Typography;
 
 export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
+
+  // Searches (District and sub county)
+  let anyArrayType: any[] = [];
+  const [limitedArray, setLimitedArray] = useState(anyArrayType);
+  const [limitedArrayParent, setLimitedArrayParent] = useState("");
+  const [chosenDistrict, setChosenDistrict] = useState("");
 
   //blacklist
   const blacklistedValues = ["N"];
@@ -778,9 +785,18 @@ export const DataEntryForm = observer(() => {
               </td>
               <td className="border p-1">
                 <Form.Item name="u44XP9fZweA" className="m-0">
-                  <Input
+                  {/* <Input
                     size="large"
                     disabled={store.viewMode || store.allDisabled.u44XP9fZweA}
+                    onChange={(e)=>{setDistrictString(e.target.value)}}
+                  
+                  /> */}
+                  <DistSearchPopup
+                    limitedArray={limitedArray}
+                    disabled={store.viewMode || store.allDisabled.u44XP9fZweA}
+                    searchType="subCounty"
+                    setDictatedContent={setChosenDistrict}
+                    limitedArrayParent={limitedArrayParent}
                   />
                 </Form.Item>
               </td>
@@ -802,9 +818,12 @@ export const DataEntryForm = observer(() => {
               </td>
               <td className="border p-1">
                 <Form.Item name="t5nTEmlScSt" className="m-0">
-                  <Input
-                    size="large"
+                  <DistSearchPopup
                     disabled={store.viewMode || store.allDisabled.t5nTEmlScSt}
+                    searchType="district"
+                    setLimitedArray={setLimitedArray}
+                    dictatedContent={chosenDistrict}
+                    setLimitedArrayParent={setLimitedArrayParent}
                   />
                 </Form.Item>
               </td>

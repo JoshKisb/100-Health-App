@@ -2315,6 +2315,11 @@ base-64@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/base-64/-/base-64-0.1.0.tgz#780a99c84e7d600260361511c4877613bf24f6bb"
 
+base-64@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/base-64/-/base-64-1.0.0.tgz#09d0f2084e32a3fd08c2475b973788eee6ae8f4a"
+  integrity sha512-kwDPIFCGx0NZHog36dj+tHiwP4QMzsZ3AgMViUBKI0+V5n4U0ufTCUMhnQ04diaRI8EX/QcPfql7zlhZ7j4zgg==
+
 base64-js@^1.0.2:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.1.tgz#58ece8cb75dd07e71ed08c736abc5fac4dbf8df1"
@@ -9994,6 +9999,11 @@ string-length@^3.1.0:
   dependencies:
     astral-regex "^1.0.0"
     strip-ansi "^5.2.0"
+
+string-similarity@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/string-similarity/-/string-similarity-4.0.2.tgz#1dc29518d0e92e50509499ce2974368f77bbb1b1"
+  integrity sha512-eCsPPyoQBgY4TMpVD6DVfO7pLrimUONriaO4Xjp3WPUW0YnNLqdHgRj23xotLlqrL90eJhBeq3zdAJf2mQgfBQ==
 
 string-width@^1.0.1:
   version "1.0.2"

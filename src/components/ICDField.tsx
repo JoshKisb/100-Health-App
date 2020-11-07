@@ -10,7 +10,7 @@ import { useStore } from "../Context";
 import { any } from "prop-types";
 
 const mySettings = {
-  apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
+  apiServerUrl: "https://hmis-dev.health.go.ug",
   autoBind: false,
   wordsAvailable: false,
 };
@@ -264,6 +264,8 @@ export const ICDField: SFC<ICD> = observer(
       });
       // }
     };
+
+  
 
     return (
       <div style={styles.icdContainerStyles} id={id}>
