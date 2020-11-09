@@ -28,10 +28,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     searchType,
     dictatedContent,
     limitedArray = [],
-    setLimitedArray,
+    setLimitedArray = () => {},
     setDictatedContent,
     limitedArrayParent,
-    setLimitedArrayParent,
+    setLimitedArrayParent = () => {},
   }) => {
     //       // Searches (District and sub county)
     const [contentString, setContentString] = useState("");
@@ -77,6 +77,13 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             searchEntity(searchString);
           }, 600)
         );
+      }
+      if (
+        (setLimitedArrayParent && setLimitedArray && !searchString?.length) ||
+        searchString?.length < 2
+      ) {
+        setLimitedArrayParent("");
+        setLimitedArray([]);
       }
     }, [searchString]);
 
@@ -135,13 +142,6 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
         right: "0px",
         left: "0px",
         boxShadow: "5px 5px 3px rgba(0, 0, 0, 0.1)",
-
-        // transform:
-        //   !buttonIsDisabled && reposition
-        //     ? "translateY(-115%)"
-        //     : !buttonIsDisabled && !reposition
-        //     ? "translateY(3%)"
-        //     : "translateY(20%)",
       },
       singleResult: {
         borderBottom: "0.5px solid gray",

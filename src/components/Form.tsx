@@ -20,7 +20,8 @@ import { useStore } from "../Context";
 import { isEmpty } from "lodash";
 
 import moment from "moment";
-import DistSearchPopup from "../district_subcounty/DistSearchPopup2";
+import DistSearchPopup from "./DistrictSearch";
+import ApprovalRights from "./ApprovalRights";
 const { Option } = Select;
 const { Title } = Typography;
 
@@ -650,6 +651,17 @@ export const DataEntryForm = observer(() => {
   };
   // End of Testing
 
+  const styles = {
+    flexRow: {
+      display: "flex" as "flex",
+      justifyContent: "space-between",
+      paddingLeft: "1.5rem",
+      paddingRight: "1.5rem",
+      alignItems: "center",
+      // transform: "scale(0.8)",
+    },
+  };
+
   return (
     <Form
       form={form}
@@ -662,27 +674,37 @@ export const DataEntryForm = observer(() => {
       <Card
         title={<Title level={2}>Medical Certificate of Cause of Death</Title>}
         actions={[
-          <p>Inserting for {store.currentOrganisation} </p>,
-          !isEmpty(store.defaultValues) ? (
-            <Popconfirm
-              title="Sure to delete?"
-              onConfirm={() => store.deleteEvent()}
-            >
-              <Button size="large">Delete</Button>{" "}
-            </Popconfirm>
-          ) : null,
-          <Button size="large" onClick={store.showEvents}>
-            Cancel
-          </Button>,
-          <Button
-            htmlType="submit"
-            size="large"
-            disabled={
-              !underlyingCauseChosen || !personsGender || store.viewMode
-            }
-          >
-            Save
-          </Button>,
+          <React.Fragment>
+            <div style={styles.flexRow}>
+              <p style={{ margin: "0rem" }}>
+                Inserting for {store.currentOrganisation}{" "}
+              </p>
+              {!isEmpty(store.defaultValues) ? (
+                <Popconfirm
+                  title="Sure to delete?"
+                  onConfirm={() => store.deleteEvent()}
+                >
+                  <Button size="large">Delete</Button>{" "}
+                </Popconfirm>
+              ) : null}
+              <div>
+                <Button size="large" onClick={store.showEvents}>
+                  Cancel
+                </Button>
+
+                <Button
+                  htmlType="submit"
+                  size="large"
+                  disabled={
+                    !underlyingCauseChosen || !personsGender || store.viewMode
+                  }
+                >
+                  Save
+                </Button>
+              </div>
+            </div>
+          </React.Fragment>,
+          <ApprovalRights style={styles.flexRow} />,
         ]}
         type="inner"
         bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
