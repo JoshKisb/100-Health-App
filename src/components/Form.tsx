@@ -29,6 +29,9 @@ export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
 
+  // Approval STatus
+  const [approvalStatus, setApprovalStatus] = useState("Not Approved");
+
   // Searches (District and sub county)
   let anyArrayType: any[] = [];
   const [limitedArray, setLimitedArray] = useState(anyArrayType);
@@ -112,6 +115,8 @@ export const DataEntryForm = observer(() => {
   const [DKey, setDKey] = useState(Math.random());
 
   const [underlyingCauseCode, setUnderlyingCauseCode] = useState("");
+  const [underlyingCauseText, setUnderlyingCauseText] = useState("");
+  const [underlyingCauseURI, setUnderlyingCauseURI] = useState("");
 
   type underlyingCauseObjectOptions = {
     [key: string]: string;
@@ -125,6 +130,10 @@ export const DataEntryForm = observer(() => {
     diseaseTitleB: "",
     diseaseTitleC: "",
     diseaseTitleD: "",
+    diseaseURIA: "",
+    diseaseURIB: "",
+    diseaseURIC: "",
+    diseaseURID: "",
   };
   const [underlyingCauses, setUnderlyingCauses] = useState(
     underlyingCauseObject
@@ -138,6 +147,15 @@ export const DataEntryForm = observer(() => {
   const store = useStore();
 
   const onFinish = async (values: any) => {
+    // console.log("VALUES ARE", values);
+
+    // Force form to acknowledge controlled values
+    values.twVlVWM3ffz = approvalStatus;
+    values.dTd7txVzhgY = underlyingCauseCode; // ???
+    values.QTKk2Xt8KDu = underlyingCauseText; // text
+    values.sJhOdGLD5lj = underlyingCauseCode; // term = code
+    values.L97MrAMAav9 = underlyingCauseURI; // uri
+
     await store.addEvent(values);
   };
 
@@ -185,6 +203,7 @@ export const DataEntryForm = observer(() => {
   // };
 
   const valuesChange = (changedValues: any, allValues: any) => {
+    console.log("A value has changed", allValues);
     if (
       changedValues.FhHPxY16vet &&
       form.getFieldValue("FhHPxY16vet") == true
@@ -564,6 +583,8 @@ export const DataEntryForm = observer(() => {
       }
     }
 
+    console.log("Changed value is ", changedValues);
+
     // console.log("working");
   };
 
@@ -616,7 +637,8 @@ export const DataEntryForm = observer(() => {
   const editUnderlyingCauses = (
     id: string,
     value: string,
-    diseaseTitle?: string
+    diseaseTitle?: string,
+    uri?: string
   ) => {
     let inputID = id;
     let inputValue = value;
@@ -626,24 +648,38 @@ export const DataEntryForm = observer(() => {
     if (diseaseTitle) {
       newValues["diseaseTitle" + id.toUpperCase()] = diseaseTitle;
     }
+    if (uri) {
+      newValues["diseaseURI" + id.toUpperCase()] = uri;
+    }
     setUnderlyingCauses(newValues);
   };
 
   const addDiseaseTitle = (val: string) => {
     let keys = Object.keys(underlyingCauses);
     let titleToAdd = "";
+    let uriToAdd = "";
     keys.forEach((item) => {
       if (
         underlyingCauses[item] === val &&
         item.includes("disease") === false
       ) {
+        console.log("\n underlyingCauses[item] IS", underlyingCauses[item]);
+        console.log(
+          "\n diseaseTitle[item] IS",
+          underlyingCauses["diseaseTitle" + item.toUpperCase()],
+          "\n\n"
+        );
         titleToAdd = underlyingCauses["diseaseTitle" + item.toUpperCase()];
+        uriToAdd = underlyingCauses["diseaseURI" + item.toUpperCase()];
       }
     });
-    console.log("Adding disease title of ", titleToAdd);
+    console.log("\n\n Adding URI of ", uriToAdd, "\n\n");
 
     // This Updates the problematic field Next to State underlying cause
+    setUnderlyingCauseText(val);
     setUnderlyingCauseCode(titleToAdd);
+    setUnderlyingCauseURI(uriToAdd);
+    // console.log("\n\nCause (underlying):", titleToAdd, "\n\n");
     form.setFieldsValue({
       dTd7txVzhgY: titleToAdd,
     });
@@ -660,6 +696,13 @@ export const DataEntryForm = observer(() => {
       alignItems: "center",
       // transform: "scale(0.8)",
     },
+  };
+
+  const handleUpdateApproval = (update: any) => {
+    console.log("Update received as ", update);
+    setApprovalStatus(update);
+
+    // Force ant design to acknowledge the changed value
   };
 
   return (
@@ -704,7 +747,10 @@ export const DataEntryForm = observer(() => {
               </div>
             </div>
           </React.Fragment>,
-          <ApprovalRights style={styles.flexRow} />,
+          <ApprovalRights
+            style={styles.flexRow}
+            updateApprovalStatus={handleUpdateApproval}
+          />,
         ]}
         type="inner"
         bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
@@ -785,6 +831,26 @@ export const DataEntryForm = observer(() => {
                   <Input
                     size="large"
                     disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  name="twVlVWM3ffz"
+                  className="m-0"
+                  style={{ height: "0rem" }}
+                >
+                  <Input
+                    type="hidden"
+                    disabled={false}
+                    size="large"
+                    value={approvalStatus}
+                    defaultValue={approvalStatus}
+                    onChange={(e) => {
+                      console.log(
+                        "NEW VALUE OF APPROVAL STATUS IS ",
+                        e.target.value
+                      );
+                    }}
                   />
                 </Form.Item>
               </td>
@@ -1131,8 +1197,13 @@ export const DataEntryForm = observer(() => {
                   uriField="k9xdBQzYMXo"
                   searchQueryField="cSDJ9kSJkFP"
                   bestMatchTextField="ZwBcxhUGzMb"
-                  addUnderlyingCause={(value: any, title?: any) => {
-                    editUnderlyingCauses("a", title ? title : null, value);
+                  addUnderlyingCause={(value: any, title?: any, uri?: any) => {
+                    editUnderlyingCauses(
+                      "a",
+                      title ? title : null,
+                      value,
+                      uri ? uri : null
+                    );
                   }}
                   key={AKey}
                   resetUnderlyingCauseDropdown={setUnderlyingCauseKey}
@@ -1241,8 +1312,13 @@ export const DataEntryForm = observer(() => {
                   codeField="tuMMQsGtE69"
                   uriField="yftBZ5bSEOb"
                   key={BKey}
-                  addUnderlyingCause={(value: any, title?: any) => {
-                    editUnderlyingCauses("b", title ? title : null, value);
+                  addUnderlyingCause={(value: any, title?: any, uri?: any) => {
+                    editUnderlyingCauses(
+                      "b",
+                      title ? title : null,
+                      value,
+                      uri ? uri : null
+                    );
                   }}
                   resetUnderlyingCauseDropdown={setUnderlyingCauseKey}
                 />
@@ -1341,8 +1417,13 @@ export const DataEntryForm = observer(() => {
                   codeField="C8n6hBilwsX"
                   uriField="fJUy96o8akn"
                   key={CKey}
-                  addUnderlyingCause={(value: any, title?: any) => {
-                    editUnderlyingCauses("c", title ? title : null, value);
+                  addUnderlyingCause={(value: any, title?: any, uri?: any) => {
+                    editUnderlyingCauses(
+                      "c",
+                      title ? title : null,
+                      value,
+                      uri ? uri : null
+                    );
                   }}
                   resetUnderlyingCauseDropdown={setUnderlyingCauseKey}
                 />
@@ -1441,8 +1522,13 @@ export const DataEntryForm = observer(() => {
                   codeField="IeS8V8Yf40N"
                   uriField="S53kx50gjQn"
                   key={DKey}
-                  addUnderlyingCause={(value: any, title?: any) => {
-                    editUnderlyingCauses("d", title ? title : null, value);
+                  addUnderlyingCause={(value: any, title?: any, uri?: any) => {
+                    editUnderlyingCauses(
+                      "d",
+                      title ? title : null,
+                      value,
+                      uri ? uri : null
+                    );
                   }}
                   resetUnderlyingCauseDropdown={setUnderlyingCauseKey}
                 />

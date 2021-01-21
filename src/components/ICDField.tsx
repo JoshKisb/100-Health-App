@@ -116,12 +116,21 @@ export const ICDField: SFC<ICD> = observer(
           }
 
           // Testing
+          console.log("FULL SELECTED ENTITY IS ", selectedEntity);
           if (addUnderlyingCause) {
-            addUnderlyingCause(selectedEntity.code, selectedEntity.title); // Calls a function from the props that sets the underlying cause as the code
+            addUnderlyingCause(
+              selectedEntity.code,
+              selectedEntity.title,
+              selectedEntity.uri
+            ); // Calls a function from the props that sets the underlying cause as the code
           }
         } else {
           if (addUnderlyingCause) {
-            addUnderlyingCause(selectedEntity.title, selectedEntity.title);
+            addUnderlyingCause(
+              selectedEntity.title,
+              selectedEntity.title,
+              selectedEntity.uri
+            );
           }
           // End of Testing
         }
@@ -174,7 +183,7 @@ export const ICDField: SFC<ICD> = observer(
     const clear = () => {
       // Testing
       if (addUnderlyingCause) {
-        addUnderlyingCause("", ""); // Calls a function from the props that resets the underlying cause
+        addUnderlyingCause("", "", ""); // Calls a function from the props that resets the underlying cause
       }
       // End of Testing
 
@@ -264,8 +273,6 @@ export const ICDField: SFC<ICD> = observer(
       });
       // }
     };
-
-  
 
     return (
       <div style={styles.icdContainerStyles} id={id}>

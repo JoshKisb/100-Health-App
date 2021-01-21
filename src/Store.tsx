@@ -312,7 +312,10 @@ class Store {
 
   @action addEvent = async (form: any) => {
     const { eventDate, ...rest } = form;
+
+    console.log("FORM RECEIVED IS ", form);
     const dataValues = Object.entries(rest)
+
       .map(([dataElement, value]) => {
         if (value instanceof moment) {
           if (dataElement === "i8rrl8YWxLF") {
@@ -327,7 +330,7 @@ class Store {
         };
       })
       .filter((dv) => !!dv.value);
-
+    console.log("OBJECT ENTRIES ARE:", dataValues);
     let event: any = {
       attributeCategoryOptions: this.selectedNationality,
       orgUnit: this.selectedOrgUnit,
