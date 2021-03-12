@@ -17,7 +17,7 @@ import {
 import { observer } from "mobx-react";
 import { ICDField } from "./ICDField";
 import { useStore } from "../Context";
-import { isEmpty } from "lodash";
+import { isArray, isEmpty } from "lodash";
 
 import moment from "moment";
 import DistSearchPopup from "./DistrictSearch";
@@ -31,6 +31,13 @@ export const DataEntryForm = observer(() => {
 
   // Approval STatus
   const [approvalStatus, setApprovalStatus] = useState("Not Approved");
+  const [
+    approvalStatusFromEditedForm,
+    setApprovalStatusFromEditedForm,
+  ] = useState("");
+
+  // Editing status
+  const [editing, setEditing] = useState(false);
 
   // Searches (District and sub county)
   let anyArrayType: any[] = [];
@@ -151,7 +158,7 @@ export const DataEntryForm = observer(() => {
 
     // Force form to acknowledge controlled values
     values.twVlVWM3ffz = approvalStatus;
-    values.dTd7txVzhgY = underlyingCauseCode; // ???
+    // values.dTd7txVzhgY = underlyingCauseCode; // ???
     values.QTKk2Xt8KDu = underlyingCauseText; // text
     values.sJhOdGLD5lj = underlyingCauseCode; // term = code
     values.L97MrAMAav9 = underlyingCauseURI; // uri
@@ -676,6 +683,8 @@ export const DataEntryForm = observer(() => {
     console.log("\n\n Adding URI of ", uriToAdd, "\n\n");
 
     // This Updates the problematic field Next to State underlying cause
+    // console.log("Val is ", val)
+    // setUnderlyingCauseText(val.includes(")") ? val.split(")")[1].trim() : val);
     setUnderlyingCauseText(val);
     setUnderlyingCauseCode(titleToAdd);
     setUnderlyingCauseURI(uriToAdd);
@@ -704,6 +713,21 @@ export const DataEntryForm = observer(() => {
 
     // Force ant design to acknowledge the changed value
   };
+
+  useEffect(() => {
+    if (Object.keys(store.defaultValues).length) {
+      setEditing(true);
+      // Auto-populate form if it is an existing form being edited
+      if (store.defaultValues.QTKk2Xt8KDu) {
+        setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
+        setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
+        setUnderlyingCauseURI(`${store.defaultValues.L97MrAMAav9}`);
+      }
+      if (store.defaultValues.twVlVWM3ffz) {
+        setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
+      }
+    }
+  }, [store.defaultValues]);
 
   return (
     <Form
@@ -750,6 +774,7 @@ export const DataEntryForm = observer(() => {
           <ApprovalRights
             style={styles.flexRow}
             updateApprovalStatus={handleUpdateApproval}
+            statusReceived={approvalStatusFromEditedForm}
           />,
         ]}
         type="inner"
@@ -1631,76 +1656,150 @@ export const DataEntryForm = observer(() => {
                       color: "#000",
                     }}
                   >
-                    <Select
-                      key={underlyingCauseKey}
-                      style={{ width: "100%" }}
-                      size="large"
-                      disabled={store.viewMode}
-                      onDropdownVisibleChange={(change) => {
-                        // Inform user if any blacklisted values were found
+                    {editing ? (
+                      <Select
+                        key={underlyingCauseKey}
+                        style={{ width: "100%" }}
+                        size="large"
+                        disabled={store.viewMode}
+                        value={underlyingCauseText}
+                        onDropdownVisibleChange={(change) => {
+                          // Inform user if any blacklisted values were found
 
-                        if (
-                          change === true &&
-                          blackListedFound &&
-                          !showBlackListWarning
-                        ) {
-                          setShowBlackListWarning(true);
+                          if (
+                            change === true &&
+                            blackListedFound &&
+                            !showBlackListWarning
+                          ) {
+                            setShowBlackListWarning(true);
 
-                          // Hide the popup after 8 seconds
-                          let timeout = setTimeout(() => {
-                            setShowBlackListWarning(false);
-                          }, 8000);
+                            // Hide the popup after 8 seconds
+                            let timeout = setTimeout(() => {
+                              setShowBlackListWarning(false);
+                            }, 8000);
 
-                          setTimeoutToClosePopup(timeout);
-                        }
-                        if (!change && showBlackListWarning) {
-                          setShowBlackListWarning(false);
-
-                          if (timeoutToClosePopup) {
-                            clearTimeout(timeoutToClosePopup);
+                            setTimeoutToClosePopup(timeout);
                           }
-                        }
-                      }}
-                      onChange={(e: any) => {
-                        console.log("Changing the underlying cause", e);
-                        setUnderlyingCauseChosen(true);
-                        addDiseaseTitle(e);
-                      }}
-                    >
-                      {Object.keys(underlyingCauses).map((option: any) => {
-                        if (
-                          option.includes("disease") === false &&
-                          blacklistedValues.includes(
-                            underlyingCauses[
-                              `diseaseTitle${option.toUpperCase()}`
-                            ][0]
-                          ) === false
-                        ) {
-                          return (
-                            <Option
-                              key={Math.random()}
-                              value={underlyingCauses[option]}
-                            >
-                              {`(${option}) ${
-                                underlyingCauses[option]
-                                  ? underlyingCauses[option]
-                                  : ""
-                              }`}
-                            </Option>
-                          );
-                        } else if (
-                          option.includes("disease") === false &&
-                          blacklistedValues.includes(
-                            underlyingCauses[
-                              `diseaseTitle${option.toUpperCase()}`
-                            ][0]
-                          ) === true &&
-                          !blackListedFound
-                        ) {
-                          setBlackListedFound(true);
-                        }
-                      })}
-                    </Select>
+                          if (!change && showBlackListWarning) {
+                            setShowBlackListWarning(false);
+
+                            if (timeoutToClosePopup) {
+                              clearTimeout(timeoutToClosePopup);
+                            }
+                          }
+                        }}
+                        onChange={(e: any) => {
+                          console.log("Changing the underlying cause", e);
+                          setUnderlyingCauseChosen(true);
+                          addDiseaseTitle(e);
+                        }}
+                      >
+                        {Object.keys(underlyingCauses).map((option: any) => {
+                          if (
+                            option.includes("disease") === false &&
+                            blacklistedValues.includes(
+                              underlyingCauses[
+                                `diseaseTitle${option.toUpperCase()}`
+                              ][0]
+                            ) === false
+                          ) {
+                            return (
+                              <Option
+                                key={Math.random()}
+                                value={underlyingCauses[option]}
+                              >
+                                {`(${option}) ${
+                                  underlyingCauses[option]
+                                    ? underlyingCauses[option]
+                                    : ""
+                                }`}
+                              </Option>
+                            );
+                          } else if (
+                            option.includes("disease") === false &&
+                            blacklistedValues.includes(
+                              underlyingCauses[
+                                `diseaseTitle${option.toUpperCase()}`
+                              ][0]
+                            ) === true &&
+                            !blackListedFound
+                          ) {
+                            setBlackListedFound(true);
+                          }
+                        })}
+                      </Select>
+                    ) : (
+                      <Select
+                        key={underlyingCauseKey}
+                        style={{ width: "100%" }}
+                        size="large"
+                        disabled={store.viewMode}
+                        onDropdownVisibleChange={(change) => {
+                          // Inform user if any blacklisted values were found
+
+                          if (
+                            change === true &&
+                            blackListedFound &&
+                            !showBlackListWarning
+                          ) {
+                            setShowBlackListWarning(true);
+
+                            // Hide the popup after 8 seconds
+                            let timeout = setTimeout(() => {
+                              setShowBlackListWarning(false);
+                            }, 8000);
+
+                            setTimeoutToClosePopup(timeout);
+                          }
+                          if (!change && showBlackListWarning) {
+                            setShowBlackListWarning(false);
+
+                            if (timeoutToClosePopup) {
+                              clearTimeout(timeoutToClosePopup);
+                            }
+                          }
+                        }}
+                        onChange={(e: any) => {
+                          console.log("Changing the underlying cause", e);
+                          setUnderlyingCauseChosen(true);
+                          addDiseaseTitle(e);
+                        }}
+                      >
+                        {Object.keys(underlyingCauses).map((option: any) => {
+                          if (
+                            option.includes("disease") === false &&
+                            blacklistedValues.includes(
+                              underlyingCauses[
+                                `diseaseTitle${option.toUpperCase()}`
+                              ][0]
+                            ) === false
+                          ) {
+                            return (
+                              <Option
+                                key={Math.random()}
+                                value={underlyingCauses[option]}
+                              >
+                                {`(${option}) ${
+                                  underlyingCauses[option]
+                                    ? underlyingCauses[option]
+                                    : ""
+                                }`}
+                              </Option>
+                            );
+                          } else if (
+                            option.includes("disease") === false &&
+                            blacklistedValues.includes(
+                              underlyingCauses[
+                                `diseaseTitle${option.toUpperCase()}`
+                              ][0]
+                            ) === true &&
+                            !blackListedFound
+                          ) {
+                            setBlackListedFound(true);
+                          }
+                        })}
+                      </Select>
+                    )}
                   </Tooltip>
                 }
                 {/* End of Testing */}

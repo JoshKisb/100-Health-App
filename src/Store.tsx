@@ -492,6 +492,7 @@ class Store {
       "U18Tnfz9EKd",
     ];
     if (this.data && this.data.headers.length > 0 && this.currentEvent) {
+      // console.log("we have default values");
       const d = this.data.headers
         .map((c: any) => {
           let value = this.currentEvent[c.i];
@@ -505,7 +506,10 @@ class Store {
           return [c.name, value];
         })
         .filter((v: any) => !!v[1]);
-      return fromPairs(d);
+
+      const dFromPairs = fromPairs(d);
+
+      return dFromPairs;
     }
     return {};
   }

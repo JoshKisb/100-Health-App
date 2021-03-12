@@ -8,10 +8,11 @@ import { CheckCircleTwoTone } from "@ant-design/icons";
 interface SearchType {
   style?: any;
   updateApprovalStatus?: any;
+  statusReceived?: any;
 }
 let anyArrayType: any[] = [];
 export const DistrictSearchPopup: SFC<SearchType> = observer(
-  ({ style, updateApprovalStatus }) => {
+  ({ style, updateApprovalStatus, statusReceived }) => {
     const store = useStore();
     const [userIsAuthorized, setUserIsAuthorized] = useState(false);
     const [approved, setApproved] = useState(false);
@@ -33,6 +34,12 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     useEffect(() => {
       setinputKey(Math.random());
     }, [approvalText]);
+
+    useEffect(() => {
+      if (statusReceived) {
+        setApproved(statusReceived);
+      }
+    }, [statusReceived]);
 
     const checkApproval = async () => {
       const userIsApproved = await store.isUserApproved();
