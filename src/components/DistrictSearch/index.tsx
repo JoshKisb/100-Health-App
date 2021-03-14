@@ -20,6 +20,7 @@ interface SearchType {
   setDictatedContent?: any;
   limitedArrayParent?: string;
   setLimitedArrayParent?: any;
+  receiveOutput?: any;
 }
 let anyArrayType: any[] = [];
 export const DistrictSearchPopup: SFC<SearchType> = observer(
@@ -32,6 +33,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     setDictatedContent,
     limitedArrayParent,
     setLimitedArrayParent = () => {},
+    receiveOutput = () => {},
   }) => {
     //       // Searches (District and sub county)
     const [contentString, setContentString] = useState("");
@@ -89,8 +91,11 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
     useEffect(() => {
       if (dictatedContent?.length) {
+        if (searchString === dictatedContent) return;
         setDisableSearch(true);
         setSearchString(dictatedContent);
+        // Save the output
+        receiveOutput(dictatedContent);
       }
     }, [dictatedContent]);
 
@@ -99,6 +104,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
       setDropdownVisible(false);
       if (typeof item?.name === "string") {
         setSearchString(item.name);
+        // Save the output
+        receiveOutput(item.name);
       }
 
       // If this is a sub County that has been chosen, set the district
@@ -123,6 +130,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     useEffect(() => {
       if (limitedArray.length && searchString) {
         setSearchString("");
+        // Save the output
+        receiveOutput("");
         if (!showResultOverride) {
           setShowResultOverride(true);
         }

@@ -44,6 +44,8 @@ export const DataEntryForm = observer(() => {
   const [limitedArray, setLimitedArray] = useState(anyArrayType);
   const [limitedArrayParent, setLimitedArrayParent] = useState("");
   const [chosenDistrict, setChosenDistrict] = useState("");
+  const [chosenDistrictToSubmit, setChosenDistrictToSubmit] = useState("");
+  const [chosenSubCounty, setChosenSubcounty] = useState("");
 
   //blacklist
   const blacklistedValues = ["N"];
@@ -162,6 +164,8 @@ export const DataEntryForm = observer(() => {
     values.QTKk2Xt8KDu = underlyingCauseText; // text
     values.sJhOdGLD5lj = underlyingCauseCode; // term = code
     values.L97MrAMAav9 = underlyingCauseURI; // uri
+    values.u44XP9fZweA = chosenDistrictToSubmit; // district
+    values.t5nTEmlScSt = chosenSubCounty; // subcounty
 
     await store.addEvent(values);
   };
@@ -722,6 +726,9 @@ export const DataEntryForm = observer(() => {
         setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
         setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
         setUnderlyingCauseURI(`${store.defaultValues.L97MrAMAav9}`);
+        setChosenSubcounty(`${store.defaultValues.u44XP9fZweA}`);
+        setChosenDistrict(`${store.defaultValues.t5nTEmlScSt}`);
+        console.log("Chosen district is =>", store.defaultValues.t5nTEmlScSt);
       }
       if (store.defaultValues.twVlVWM3ffz) {
         setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
@@ -898,18 +905,14 @@ export const DataEntryForm = observer(() => {
               </td>
               <td className="border p-1">
                 <Form.Item name="u44XP9fZweA" className="m-0">
-                  {/* <Input
-                    size="large"
-                    disabled={store.viewMode || store.allDisabled.u44XP9fZweA}
-                    onChange={(e)=>{setDistrictString(e.target.value)}}
-                  
-                  /> */}
                   <DistSearchPopup
                     limitedArray={limitedArray}
                     disabled={store.viewMode || store.allDisabled.u44XP9fZweA}
                     searchType="subCounty"
                     setDictatedContent={setChosenDistrict}
                     limitedArrayParent={limitedArrayParent}
+                    dictatedContent={chosenSubCounty}
+                    receiveOutput={(text: any) => setChosenSubcounty(`${text}`)}
                   />
                 </Form.Item>
               </td>
@@ -937,6 +940,9 @@ export const DataEntryForm = observer(() => {
                     setLimitedArray={setLimitedArray}
                     dictatedContent={chosenDistrict}
                     setLimitedArrayParent={setLimitedArrayParent}
+                    receiveOutput={(text: any) =>
+                      setChosenDistrictToSubmit(`${text}`)
+                    }
                   />
                 </Form.Item>
               </td>
@@ -1661,8 +1667,8 @@ export const DataEntryForm = observer(() => {
                         key={underlyingCauseKey}
                         style={{ width: "100%" }}
                         size="large"
-                        disabled={store.viewMode}
                         value={underlyingCauseText}
+                        disabled={store.viewMode}
                         onDropdownVisibleChange={(change) => {
                           // Inform user if any blacklisted values were found
 
