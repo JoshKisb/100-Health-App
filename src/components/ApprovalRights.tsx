@@ -18,12 +18,13 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const [approved, setApproved] = useState(false);
     const [approvalText, setApprovalText] = useState("Not Approved");
     const [inputKey, setinputKey] = useState(Math.random());
+    const [userName, setUserName] = useState("");
 
     const toggleApproved = () => {
       const newApproved = !approved;
-      const text = newApproved ? "Approved" : "Not Approved";
+      const text = newApproved ? `Approved by ${userName}` : "Not Approved";
 
-      console.log("TExt is ", text);
+      console.log("Text is ", text);
       setApprovalText(text);
       setApproved(newApproved);
       if (updateApprovalStatus) {
@@ -44,7 +45,9 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const checkApproval = async () => {
       const userIsApproved = await store.isUserApproved();
       console.log("The user is approved", userIsApproved);
-      setUserIsAuthorized(userIsApproved);
+
+      setUserIsAuthorized(userIsApproved?.isApproved);
+      setUserName(userIsApproved?.userName);
       // return userIsApproved;
       // console.log("document.cookie", document.cookie);
       // console.log("Starting");
@@ -74,7 +77,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                 }
           }
         >
-          {!approved ? "Approve ?" : "Approved"}
+          {!approved ? "Approve ?" : approvalText}
           {approved && <CheckCircleTwoTone twoToneColor={"#28a745"} />}
         </Button>
       </div>

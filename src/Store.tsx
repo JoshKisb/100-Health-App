@@ -190,7 +190,7 @@ class Store {
   @action
   isUserApproved = async () => {
     try {
-      let userIsApproved = false;
+      let isApproved = false;
 
       // Get the logged in users data
       const data = await this.engine.query(query);
@@ -198,21 +198,27 @@ class Store {
 
       // Get the list of authorized users
       const result = await this.engine.link.fetch(
-        "/api/userGroups/nrzhDTtAEOM.json?fields=users[id, name]"
+        "/api/userGroups/nZNrVoI1MSU.json?fields=users[id, name]"
       );
 
       // Check if the logged in user exists in the list of authorized users
       const users = result.users;
       if (users && isArray(users)) {
         const matchingUser = users.find((item) => item.name === userName);
-        if (matchingUser) userIsApproved = true;
+        if (matchingUser) isApproved = true;
       }
 
       // If the user exists in the list of authorized users they are approved
-      return userIsApproved;
+      return {
+        isApproved,
+        userName,
+      };
     } catch (e) {
       console.log(e);
-      return false;
+      return {
+        isApproved: false,
+        userName: "",
+      };
     }
   };
 
