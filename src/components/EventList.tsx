@@ -38,6 +38,7 @@ export const EventList = observer(() => {
             rowClassName={() => "l"}
             onRow={(record, rowIndex) => {
               // Fix for age that doesn't show if its zero
+              console.log("Record is ", record);
               if (record && record["34"] === "") {
                 record["34"] = "0";
               }

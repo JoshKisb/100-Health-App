@@ -38,15 +38,29 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
     useEffect(() => {
       if (statusReceived) {
-        setApproved(statusReceived);
+        console.log("Status received is ", statusReceived);
+        const booleanApproved =
+          statusReceived && !statusReceived.includes("Not");
+        setApproved(booleanApproved);
+        if (booleanApproved) {
+          setApproved(true);
+          setApprovalText(statusReceived);
+          store.disableForm();
+        }
       }
     }, [statusReceived]);
 
     const checkApproval = async () => {
       const userIsApproved = await store.isUserApproved();
       console.log("The user is approved", userIsApproved);
+      if (userIsApproved?.canApprove) {
+        setUserIsAuthorized(userIsApproved?.canApprove);
+        setUserName(userIsApproved?.userName);
 
-      setUserIsAuthorized(userIsApproved?.isApproved);
+        // Check if a form has been approved
+        return;
+      }
+      setUserIsAuthorized(userIsApproved?.canApprove);
       setUserName(userIsApproved?.userName);
       // return userIsApproved;
       // console.log("document.cookie", document.cookie);

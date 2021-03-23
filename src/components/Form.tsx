@@ -725,10 +725,15 @@ export const DataEntryForm = observer(() => {
       if (store.defaultValues.QTKk2Xt8KDu) {
         setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
         setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
-        setUnderlyingCauseURI(`${store.defaultValues.L97MrAMAav9}`);
         setChosenSubcounty(`${store.defaultValues.u44XP9fZweA}`);
         setChosenDistrict(`${store.defaultValues.t5nTEmlScSt}`);
-        console.log("Chosen district is =>", store.defaultValues.t5nTEmlScSt);
+        setUnderlyingCauseChosen(true);
+        setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
+        setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
+        form.setFieldsValue({
+          q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
+        });
+        console.log("Chosen district is =>", store.defaultValues);
       }
       if (store.defaultValues.twVlVWM3ffz) {
         setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
@@ -762,7 +767,13 @@ export const DataEntryForm = observer(() => {
                 </Popconfirm>
               ) : null}
               <div>
-                <Button size="large" onClick={store.showEvents}>
+                <Button
+                  size="large"
+                  onClick={() => {
+                    store.showEvents();
+                    store.enableForm();
+                  }}
+                >
                   Cancel
                 </Button>
 

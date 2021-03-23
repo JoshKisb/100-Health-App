@@ -40,7 +40,8 @@
     "start": "react-app-rewired start",
     "build": "d2-manifest package.json ./public/manifest.webapp && react-app-rewired build && cd build",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "eject": "react-app-rewired eject",
+    "commit":"git add . && git commit && git push"
   },
   "eslintConfig": {
     "extends": "react-app"

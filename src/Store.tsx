@@ -48,6 +48,7 @@ class Store {
   @observable currentEvent: any;
   @observable viewMode = false;
   @observable editing = false;
+  @observable forceDisable = false;
   @observable availableDataElements = [];
   @observable ICDAltSearchtextA: any;
   @observable allDisabled: any = {
@@ -190,7 +191,7 @@ class Store {
   @action
   isUserApproved = async () => {
     try {
-      let isApproved = false;
+      let canApprove = false;
 
       // Get the logged in users data
       const data = await this.engine.query(query);
@@ -205,20 +206,36 @@ class Store {
       const users = result.users;
       if (users && isArray(users)) {
         const matchingUser = users.find((item) => item.name === userName);
-        if (matchingUser) isApproved = true;
+        if (matchingUser) canApprove = true;
       }
 
       // If the user exists in the list of authorized users they are approved
       return {
-        isApproved,
+        canApprove,
         userName,
       };
     } catch (e) {
       console.log(e);
       return {
-        isApproved: false,
+        canApprove: false,
         userName: "",
       };
+    }
+  };
+
+  @action disableForm = async () => {
+    try {
+      this.forceDisable = true;
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  @action enableForm = async () => {
+    try {
+      this.forceDisable = false;
+    } catch (e) {
+      console.log(e);
     }
   };
 
