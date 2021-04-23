@@ -41,9 +41,11 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
         console.log("Status received is ", statusReceived);
         const booleanApproved =
           statusReceived && !statusReceived.includes("Not");
+        console.log("Has the form been approved?", booleanApproved);
         setApproved(booleanApproved);
+
         if (booleanApproved) {
-          setApproved(true);
+          // setApproved(true);
           setApprovalText(statusReceived);
           store.disableForm();
         }
@@ -52,7 +54,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
     const checkApproval = async () => {
       const userIsApproved = await store.isUserApproved();
-      console.log("The user is approved", userIsApproved);
+      console.log("The user can approve? ", userIsApproved);
       if (userIsApproved?.canApprove) {
         setUserIsAuthorized(userIsApproved?.canApprove);
         setUserName(userIsApproved?.userName);
@@ -80,6 +82,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           size="large"
           htmlType="button"
           onClick={toggleApproved}
+          disabled={approved}
           style={
             approved
               ? {
