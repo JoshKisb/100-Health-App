@@ -22,12 +22,35 @@ import { isArray, isEmpty } from "lodash";
 import moment from "moment";
 import DistSearchPopup from "./DistrictSearch";
 import ApprovalRights from "./ApprovalRights";
+import Declarations from "./Declarations";
 const { Option } = Select;
 const { Title } = Typography;
 
 export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
+
+  // Declarations
+  const [declarations, setDeclarations] = useState({
+    u9tYUv6AM51: false,
+    ZXZZfzBpu8a: false,
+    cp5xzqVU2Vw: false,
+    lu9BiHPxNqH: "",
+  });
+  const [declarationsDefault, setDeclarationsDefault] = useState({
+    u9tYUv6AM51: false,
+    ZXZZfzBpu8a: false,
+    cp5xzqVU2Vw: false,
+    lu9BiHPxNqH: "",
+  });
+  const handleDeclarationOutput = (output: {
+    u9tYUv6AM51: false;
+    ZXZZfzBpu8a: false;
+    cp5xzqVU2Vw: false;
+    lu9BiHPxNqH: "";
+  }) => {
+    setDeclarations(output);
+  };
 
   // Approval STatus
   const [approvalStatus, setApprovalStatus] = useState("Not Approved");
@@ -166,6 +189,17 @@ export const DataEntryForm = observer(() => {
     values.L97MrAMAav9 = underlyingCauseURI; // uri
     values.u44XP9fZweA = chosenDistrictToSubmit; // district
     values.t5nTEmlScSt = chosenSubCounty; // subcounty
+
+    values = {
+      ...values,
+      ...declarations,
+    };
+    // Object.keys(declarations).forEach(item=>{
+    //   if(declarations[item]){
+    //     values[item]=declarations[item]
+    //   }
+
+    // })
 
     await store.addEvent(values);
   };
@@ -738,6 +772,12 @@ export const DataEntryForm = observer(() => {
       if (store.defaultValues.twVlVWM3ffz) {
         setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
       }
+      setDeclarationsDefault({
+        u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
+        ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
+        cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
+        lu9BiHPxNqH: `${store.defaultValues.lu9BiHPxNqH}`,
+      });
     }
   }, [store.defaultValues]);
 
@@ -781,7 +821,13 @@ export const DataEntryForm = observer(() => {
                   htmlType="submit"
                   size="large"
                   disabled={
-                    !underlyingCauseChosen || !personsGender || store.viewMode
+                    !underlyingCauseChosen ||
+                    !personsGender ||
+                    store.viewMode ||
+                    (!declarations.ZXZZfzBpu8a &&
+                      !declarations.cp5xzqVU2Vw &&
+                      !declarations.lu9BiHPxNqH &&
+                      !declarations.u9tYUv6AM51)
                   }
                 >
                   Save
@@ -2611,6 +2657,7 @@ export const DataEntryForm = observer(() => {
                 ) : null}
               </td>
             </tr>
+
             <tr>
               <td className="border p-1">
                 <b>Place of delivery</b>
@@ -2646,6 +2693,14 @@ export const DataEntryForm = observer(() => {
                   </Form.Item>
                 ) : null}
               </td>
+            </tr>
+
+            <tr>
+              <Declarations
+                titleBackgroundColor={titleBackgroundColor}
+                receiveOutput={handleDeclarationOutput}
+                receiveOldData={declarationsDefault}
+              />
             </tr>
           </tbody>
         </table>
