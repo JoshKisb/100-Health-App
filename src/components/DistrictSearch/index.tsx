@@ -2,15 +2,9 @@ import React, { SFC, useState, useEffect } from "react";
 import { Input } from "antd";
 import { observer } from "mobx-react";
 import searchArray from "./searchArray";
-import { organisationUnits as districts } from "./districts.json";
-import { organisationUnits as subCounties } from "./subCounties.json";
 import { useStore } from "../../Context";
 
-import {
-  CloseSquareOutlined,
-  LoadingOutlined,
-  RollbackOutlined,
-} from "@ant-design/icons";
+import { CloseSquareOutlined, LoadingOutlined } from "@ant-design/icons";
 
 // const getUrls =
 
@@ -23,13 +17,10 @@ export const validSearchTypes = {
 interface SearchType {
   disabled?: boolean;
   searchType: string;
-  // limitedArray?: any;
-  // setLimitedArray?: any
   dictatedContent?: string;
   parentName?: string;
   parentParentName?: string;
   setDictatedContent?: any;
-  // limitedArrayParent?: string;
   setParent?: any;
   receiveOutput?: any;
 }
@@ -42,7 +33,6 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     parentName,
     parentParentName,
     setDictatedContent,
-    // limitedArrayParent,
     setParent = () => {},
     receiveOutput = () => {},
   }) => {
@@ -102,7 +92,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     };
 
     useEffect(() => {
-      if (searchString?.length >= 2 && !disableSearch) {
+      if (searchString?.length >= 1 && !disableSearch) {
         setDropdownVisible(true);
         setLoading(true);
         if (searchTimeout) {
@@ -114,7 +104,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           }, 600)
         );
       }
-      if (!searchString?.length || searchString?.length < 2) {
+      if (!searchString?.length || searchString?.length < 1) {
         // setLimitedArrayParent("");
         setLimitedArray([]);
       }
@@ -296,10 +286,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           }}
           placeholder={
             searchType === validSearchTypes.subCounty
-              ? "Search for a Sub County..."
+              ? store?.activeLanguage?.lang?.["Search for a Sub County..."]
               : searchType === validSearchTypes.district
-              ? "Search for a District..."
-              : "Search for a Region..."
+              ? store?.activeLanguage?.lang?.["Search for a District..."]
+              : store?.activeLanguage?.lang?.["Search for a Region..."]
           }
         />
 
@@ -323,13 +313,14 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                       style={styles.topDistrict}
                       onClick={resetSubCountySearch}
                     >
-                      Show all{" "}
+                      {store?.activeLanguage?.lang?.["Show all"]}{" "}
                       {searchType === validSearchTypes.subCounty
-                        ? "subcounties "
+                        ? store?.activeLanguage?.lang?.["subcounties"] + " "
                         : searchType === validSearchTypes.district
-                        ? "districts "
-                        : "regions "}
-                      in {parentName || "Uganda"}
+                        ? store?.activeLanguage?.lang?.["districts"] + " "
+                        : store?.activeLanguage?.lang?.["regions"] + " "}
+                      {store?.activeLanguage?.lang?.["in"]}{" "}
+                      {parentName || store?.activeLanguage?.lang?.["Uganda"]}
                     </div>
                   ) : (
                     ""

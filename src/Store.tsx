@@ -31,6 +31,7 @@ class Store {
   @observable engine: any;
   @observable userOrgUnits: any = [];
   @observable selectedOrgUnit: any;
+  @observable activeLanguage: any;
   @observable programs = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
@@ -202,6 +203,10 @@ class Store {
       console.log(error);
       return false;
     }
+  };
+
+  @action setActiveLanguage = (lang: any) => {
+    this.activeLanguage = lang;
   };
 
   @action

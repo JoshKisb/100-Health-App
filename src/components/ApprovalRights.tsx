@@ -54,7 +54,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
     const checkApproval = async () => {
       const userIsApproved = await store.isUserApproved();
-      console.log("The user can approve? ", userIsApproved);
+      // console.log("The user can approve? ", userIsApproved);
       if (userIsApproved?.canApprove) {
         setUserIsAuthorized(userIsApproved?.canApprove);
         setUserName(userIsApproved?.userName);
@@ -94,7 +94,9 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                 }
           }
         >
-          {!approved ? "Approve ?" : approvalText}
+          {!approved
+            ? store?.activeLanguage?.lang?.["Approve ?"]
+            : approvalText}
           {approved && <CheckCircleTwoTone twoToneColor={"#28a745"} />}
         </Button>
       </div>

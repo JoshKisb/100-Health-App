@@ -44,6 +44,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const [examinedBeforeDeath, setExaminedBeforeDeath] = useState(false);
     const [conductedPostMortem, setConductedPostMortem] = useState(false);
     const [other, setOther] = useState("");
+    const store = useStore();
 
     const saveContent = () => {
       const result = {
@@ -86,7 +87,13 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                 color: "#000085",
               }}
             >
-              <b>I hereby certify that (tick as appropriate) :</b>
+              <b>
+                {
+                  store?.activeLanguage?.lang?.[
+                    "I hereby certify that (tick as appropriate) :"
+                  ]
+                }
+              </b>
             </h3>
           </td>
           <td
@@ -100,12 +107,19 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           the body d) Other (specify) ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> I attended the deceased before death</p>
+              <p>
+                {" "}
+                {
+                  store?.activeLanguage?.lang?.[
+                    "I attended the deceased before death"
+                  ]
+                }
+              </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              Yes{" "}
+              {store?.activeLanguage?.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={attendedBeforeDeath}
                 onClick={() => setAttendedBeforeDeath(!attendedBeforeDeath)}
@@ -118,12 +132,19 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           {/* b)  d) Other (specify) ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> I examined the body after death </p>
+              <p>
+                {" "}
+                {
+                  store?.activeLanguage?.lang?.[
+                    "I examined the body after death"
+                  ]
+                }{" "}
+              </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              Yes{" "}
+              {store?.activeLanguage?.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={examinedBeforeDeath}
                 onClick={() => setExaminedBeforeDeath(!examinedBeforeDeath)}
@@ -136,12 +157,19 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           {/* b)  d) Other (specify) ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> I conducted the post mortem of the body </p>
+              <p>
+                {" "}
+                {
+                  store?.activeLanguage?.lang?.[
+                    "I conducted the post mortem of the body"
+                  ]
+                }{" "}
+              </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              Yes{" "}
+              {store?.activeLanguage?.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={conductedPostMortem}
                 onClick={() => setConductedPostMortem(!conductedPostMortem)}
@@ -154,7 +182,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           {/* b)  d)  ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> Other (specify)</p>
+              <p> {store?.activeLanguage?.lang?.["Other (specify)"]}</p>
             </Form.Item>
           </td>
           <td className="border p-1">
@@ -167,7 +195,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                     setOther(`${e.target.value}`);
                   }
                 }}
-                placeholder="Specify"
+                placeholder={store?.activeLanguage?.lang?.["Specify"]}
               />
             </p>
           </td>
