@@ -4,6 +4,7 @@ import { observer } from "mobx-react";
 import searchArray from "./searchArray";
 import { organisationUnits as districts } from "./districts.json";
 import { organisationUnits as subCounties } from "./subCounties.json";
+import { useStore } from "../../Context";
 
 import {
   CloseSquareOutlined,
@@ -11,15 +12,25 @@ import {
   RollbackOutlined,
 } from "@ant-design/icons";
 
+// const getUrls =
+
+export const validSearchTypes = {
+  region: "region",
+  district: "district",
+  subCounty: "subCounty",
+};
+
 interface SearchType {
   disabled?: boolean;
   searchType: string;
-  limitedArray?: any;
-  setLimitedArray?: any;
+  // limitedArray?: any;
+  // setLimitedArray?: any
   dictatedContent?: string;
+  parentName?: string;
+  parentParentName?: string;
   setDictatedContent?: any;
-  limitedArrayParent?: string;
-  setLimitedArrayParent?: any;
+  // limitedArrayParent?: string;
+  setParent?: any;
   receiveOutput?: any;
 }
 let anyArrayType: any[] = [];
@@ -28,18 +39,20 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     disabled = false,
     searchType,
     dictatedContent,
-    limitedArray = [],
-    setLimitedArray = () => {},
+    parentName,
+    parentParentName,
     setDictatedContent,
-    limitedArrayParent,
-    setLimitedArrayParent = () => {},
+    // limitedArrayParent,
+    setParent = () => {},
     receiveOutput = () => {},
   }) => {
     //       // Searches (District and sub county)
+    const store = useStore();
     const [contentString, setContentString] = useState("");
     const [searchString, setSearchString] = useState("");
     const [searchTimeout, setSearchTimeout] = useState(setTimeout(() => {}, 0));
     const [disableSearch, setDisableSearch] = useState(false);
+    const [limitedArray, setLimitedArray] = useState(anyArrayType);
 
     const [showResultOverride, setShowResultOverride] = useState(true);
     const [subCountySearchTimeout, setSubCountySearchTimeout] = useState(
@@ -49,14 +62,35 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const [searchResults, setSearchResults] = useState(anyArrayType);
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [allRegions, setAllRegions] = useState(anyArrayType);
+    const [allDistricts, setAllDistricts] = useState(anyArrayType);
+    const [allSubCounties, setAllSubCounties] = useState(anyArrayType);
 
     const searchEntity = (text: string) => {
-      let itemToSearch = limitedArray?.length
-        ? limitedArray
-        : searchType === "subCounty"
-        ? subCounties
-        : districts;
-      let potentialResults = searchArray(text, itemToSearch, ["name"], "id");
+      // const find
+      const itemToSearch =
+        searchType === validSearchTypes.region
+          ? allRegions
+          : searchType === validSearchTypes.district && parentName
+          ? allRegions.find((reg) => reg.displayName === parentName).children
+          : searchType === validSearchTypes.subCounty && parentName
+          ? allDistricts.find((reg) => reg.displayName === parentName).children
+          : [];
+
+      // let itemToSearch = limitedArray?.length
+      //   ? limitedArray
+      //   : searchType === validSearchTypes.subCounty
+      //   ? allSubCounties
+      //   : searchType === validSearchTypes.district
+      //   ? allDistricts
+      //   : allRegions;
+
+      let potentialResults = searchArray(
+        text,
+        itemToSearch,
+        ["displayName"],
+        "id"
+      );
       if (!showResultOverride) {
         setShowResultOverride(true);
       }
@@ -80,11 +114,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           }, 600)
         );
       }
-      if (
-        (setLimitedArrayParent && setLimitedArray && !searchString?.length) ||
-        searchString?.length < 2
-      ) {
-        setLimitedArrayParent("");
+      if (!searchString?.length || searchString?.length < 2) {
+        // setLimitedArrayParent("");
         setLimitedArray([]);
       }
     }, [searchString]);
@@ -102,41 +133,40 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const captureItem = (item: any) => {
       setDisableSearch(true);
       setDropdownVisible(false);
-      if (typeof item?.name === "string") {
-        setSearchString(item.name);
+      if (typeof item?.displayName === "string") {
+        setSearchString(item.displayName);
         // Save the output
-        receiveOutput(item.name);
+        receiveOutput(item.displayName);
       }
 
       // If this is a sub County that has been chosen, set the district
-      if (searchType === "subCounty") {
+      if (searchType === validSearchTypes.subCounty) {
         if (setDictatedContent) {
-          let district = item.parent?.name;
+          let district = item.parent?.displayName;
           setDictatedContent(district);
         }
       }
 
       // If it's a district that has been chosen, set the subcounties under it such that they are the only results that can be returned
-      if (searchType === "district") {
-        if (setLimitedArray) {
-          setLimitedArray(item.children);
-        }
-        if (setLimitedArrayParent) {
-          setLimitedArrayParent(item.name);
+      if (searchType === validSearchTypes.district) {
+        setLimitedArray(item.children);
+
+        if (setParent) {
+          setParent(item.displayName);
         }
       }
     };
 
-    useEffect(() => {
-      if (limitedArray.length && searchString) {
-        setSearchString("");
-        // Save the output
-        receiveOutput("");
-        if (!showResultOverride) {
-          setShowResultOverride(true);
-        }
-      }
-    }, [limitedArray]);
+    // useEffect(() => {
+    //   if (limitedArray.length && searchString) {
+    //     setSearchString("");
+    //     // Save the output
+    //     receiveOutput("");
+    //     if (!showResultOverride) {
+    //       setShowResultOverride(true);
+    //     }
+    //   }
+    // }, [limitedArray]);
 
     const styles = {
       searchContainer: {
@@ -200,12 +230,61 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     }, [disableSearch]);
 
     const resetSubCountySearch = () => {
-      if (limitedArray?.length) {
-        setShowResultOverride(false);
-        setSearchResults(limitedArray);
-      }
+      const newArr =
+        searchType === validSearchTypes.region
+          ? allRegions
+          : searchType === validSearchTypes.district && parentName
+          ? allRegions.find((reg) => reg.displayName === parentName).children
+          : searchType === validSearchTypes.subCounty && parentName
+          ? allDistricts.find((reg) => reg.displayName === parentName).children
+          : [];
+
+      setShowResultOverride(false);
+      setSearchResults(newArr);
     };
 
+    const getData = async () => {
+      const allRegionsReceived = await store.getRegions();
+      const actualRegions = allRegionsReceived.organisationUnits;
+      let districtsArr = new Array();
+      let subCountiesArr = new Array();
+
+      // Populate Districts
+      actualRegions.forEach((it: any) => {
+        if (
+          typeof it === "object" &&
+          it.children &&
+          typeof it.children === "object"
+        ) {
+          districtsArr = [...it.children, ...districtsArr];
+        }
+      });
+
+      // Populate subCounties
+      districtsArr.forEach((it: any) => {
+        if (
+          typeof it === "object" &&
+          it.children &&
+          typeof it.children === "object"
+        ) {
+          subCountiesArr = [...it.children, ...subCountiesArr];
+        }
+      });
+
+      setAllRegions(actualRegions);
+      setAllDistricts(districtsArr);
+      setAllSubCounties(subCountiesArr);
+      // [allDistricts, setAllDistricts] = useState(anyArrayType);
+      // const [allSubCounties, setAllSubCounties]
+    };
+
+    useEffect(() => {
+      getData();
+    }, []);
+
+    useEffect(() => {
+      console.log("Parent name for ", searchType, " changed");
+    }, [parentName]);
     return (
       <React.Fragment>
         <Input
@@ -216,9 +295,11 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             setSearchString(e.target.value);
           }}
           placeholder={
-            searchType === "subCounty"
+            searchType === validSearchTypes.subCounty
               ? "Search for a Sub County..."
-              : "Search for a District..."
+              : searchType === validSearchTypes.district
+              ? "Search for a District..."
+              : "Search for a Region..."
           }
         />
 
@@ -237,12 +318,18 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
               {!loading ? (
                 <React.Fragment>
-                  {limitedArrayParent && showResultOverride ? (
+                  {showResultOverride ? (
                     <div
                       style={styles.topDistrict}
                       onClick={resetSubCountySearch}
                     >
-                      Show all subcounties in {limitedArrayParent}
+                      Show all{" "}
+                      {searchType === validSearchTypes.subCounty
+                        ? "subcounties "
+                        : searchType === validSearchTypes.district
+                        ? "districts "
+                        : "regions "}
+                      in {parentName || "Uganda"}
                     </div>
                   ) : (
                     ""
@@ -257,7 +344,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                             captureItem(item);
                           }}
                         >
-                          {item.name}
+                          {item.displayName}
                         </div>
                       ))
                     : ""}

@@ -20,7 +20,7 @@ import { useStore } from "../Context";
 import { isArray, isEmpty } from "lodash";
 
 import moment from "moment";
-import DistSearchPopup from "./DistrictSearch";
+import DistSearchPopup, { validSearchTypes } from "./DistrictSearch";
 import ApprovalRights from "./ApprovalRights";
 import Declarations from "./Declarations";
 const { Option } = Select;
@@ -54,10 +54,8 @@ export const DataEntryForm = observer(() => {
 
   // Approval STatus
   const [approvalStatus, setApprovalStatus] = useState("Not Approved");
-  const [
-    approvalStatusFromEditedForm,
-    setApprovalStatusFromEditedForm,
-  ] = useState("");
+  const [approvalStatusFromEditedForm, setApprovalStatusFromEditedForm] =
+    useState("");
 
   // Editing status
   const [editing, setEditing] = useState(false);
@@ -65,8 +63,11 @@ export const DataEntryForm = observer(() => {
   // Searches (District and sub county)
   let anyArrayType: any[] = [];
   const [limitedArray, setLimitedArray] = useState(anyArrayType);
-  const [limitedArrayParent, setLimitedArrayParent] = useState("");
+  const [limitedDistrictParent, setLimitedDistrictParent] = useState("");
+  const [limitedRegionParent, setLimitedRegionParent] = useState("");
+  const [chosenRegion, setChosenRegion] = useState("");
   const [chosenDistrict, setChosenDistrict] = useState("");
+  const [chosenRegionToSubmit, setChosenRegionToSubmit] = useState("");
   const [chosenDistrictToSubmit, setChosenDistrictToSubmit] = useState("");
   const [chosenSubCounty, setChosenSubcounty] = useState("");
 
@@ -136,9 +137,8 @@ export const DataEntryForm = observer(() => {
     c: true,
     d: true,
   };
-  const [altSearchIsDisabled, setAltSearchIsDisabled] = useState(
-    altSearchBooleans
-  );
+  const [altSearchIsDisabled, setAltSearchIsDisabled] =
+    useState(altSearchBooleans);
 
   //   ICD Field Keys
   const [AKey, setAKey] = useState(Math.random());
@@ -913,16 +913,30 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>Usual Residence (village)</b>
+                <b>Region</b>
               </td>
-              <td className="border p-1" colSpan={3}>
+              <td className="border p-1">
                 <Form.Item name="zwKo51BEayZ" className="m-0">
-                  <Input
+                  <DistSearchPopup
+                    disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
+                    searchType={validSearchTypes.region}
+                    // setLimitedArray={limitedRegionParent}
+                    dictatedContent={chosenDistrict}
+                    // setLimitedArrayParent={setLimitedRegionParent}
+                    receiveOutput={(text: any) =>
+                      setChosenRegionToSubmit(`${text}`)
+                    }
+                  />
+
+                  {/* <Input
                     size="large"
                     disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
-                  />
+                  /> */}
                 </Form.Item>
+              </td>
 
+              <td className="border p-1">{/* <b>Region2</b> */}</td>
+              <td className="border p-1">
                 <Form.Item
                   name="twVlVWM3ffz"
                   className="m-0"
@@ -947,36 +961,35 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>Usual Residence (Parish)</b>
+                <b>District</b>
               </td>
               <td className="border p-1">
-                <Form.Item name="bNpMzyShDCX" className="m-0">
+                <Form.Item name="t5nTEmlScSt" className="m-0">
+                  <DistSearchPopup
+                    disabled={
+                      store.viewMode ||
+                      store.allDisabled.t5nTEmlScSt ||
+                      !chosenRegionToSubmit
+                    }
+                    searchType={validSearchTypes.district}
+                    parentName={chosenRegionToSubmit}
+                    // setLimitedArray={setLimitedDistrictParent}
+                    dictatedContent={chosenDistrict}
+                    // setLimitedArrayParent={setLimitedRegionParent}
+                    receiveOutput={(text: any) =>
+                      setChosenDistrictToSubmit(`${text}`)
+                    }
+                  />
+                </Form.Item>
+                {/* <Form.Item name="bNpMzyShDCX" className="m-0">
                   <Input
                     size="large"
                     disabled={store.viewMode || store.allDisabled.bNpMzyShDCX}
                   />
-                </Form.Item>
+                </Form.Item> */}
               </td>
               <td className="border p-1">
-                <b>Usual Residence (Sub-county)</b>
-              </td>
-              <td className="border p-1">
-                <Form.Item name="u44XP9fZweA" className="m-0">
-                  <DistSearchPopup
-                    limitedArray={limitedArray}
-                    disabled={store.viewMode || store.allDisabled.u44XP9fZweA}
-                    searchType="subCounty"
-                    setDictatedContent={setChosenDistrict}
-                    limitedArrayParent={limitedArrayParent}
-                    dictatedContent={chosenSubCounty}
-                    receiveOutput={(text: any) => setChosenSubcounty(`${text}`)}
-                  />
-                </Form.Item>
-              </td>
-            </tr>
-            <tr>
-              <td className="border p-1">
-                <b>Usual Residence (County)</b>
+                <b>Occupation</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="b70okb06FWa" className="m-0">
@@ -986,12 +999,35 @@ export const DataEntryForm = observer(() => {
                   />
                 </Form.Item>
               </td>
+            </tr>
+            <tr>
               <td className="border p-1">
-                <b>Usual Residence (District)</b>
+                <b>Sub County</b>
+              </td>
+              <td className="border p-1">
+                <Form.Item name="u44XP9fZweA" className="m-0">
+                  <DistSearchPopup
+                    // limitedArray={limitedArray}
+                    parentName={chosenDistrictToSubmit}
+                    disabled={
+                      store.viewMode ||
+                      store.allDisabled.u44XP9fZweA ||
+                      !chosenDistrictToSubmit
+                    }
+                    searchType={validSearchTypes.subCounty}
+                    setDictatedContent={setChosenDistrict}
+                    // limitedArrayParent={limitedArrayParent}
+                    dictatedContent={chosenSubCounty}
+                    receiveOutput={(text: any) => setChosenSubcounty(`${text}`)}
+                  />
+                </Form.Item>
+              </td>
+              <td className="border p-1">
+                {/* <b>Usual Residence (District)</b> */}
               </td>
               <td className="border p-1">
                 <Form.Item name="t5nTEmlScSt" className="m-0">
-                  <DistSearchPopup
+                  {/* <DistSearchPopup
                     disabled={store.viewMode || store.allDisabled.t5nTEmlScSt}
                     searchType="district"
                     setLimitedArray={setLimitedArray}
@@ -1000,13 +1036,13 @@ export const DataEntryForm = observer(() => {
                     receiveOutput={(text: any) =>
                       setChosenDistrictToSubmit(`${text}`)
                     }
-                  />
+                  /> */}
                 </Form.Item>
               </td>
             </tr>
             <tr>
               <td className="border p-1">
-                <b>Occupation</b>
+                <b>Village</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="dsiwvNQLe5n" className="m-0">

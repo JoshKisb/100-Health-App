@@ -188,6 +188,22 @@ class Store {
     }
   };
 
+  @action getRegions = async () => {
+    try {
+      const url =
+        "/api/organisationUnits.json?level=2&paging=false&fields=id,displayName,children[id,displayName,children[id,displayName]]";
+
+      // Get the list regions, districts and sub counties
+      const result = await this.engine.link.fetch(url);
+
+      console.log("Result of district fetch is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   @action
   isUserApproved = async () => {
     try {
