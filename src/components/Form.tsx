@@ -951,7 +951,23 @@ export const DataEntryForm = observer(() => {
               </td>
             </tr>
             <tr>
+            <td className="border p-1">
+                <b>{activeLanguage.lang["Referred ?"]}</b>
+              </td>
               <td className="border p-1">
+              {optionSets ? (
+                  <Form.Item name="QDHeWslaEoH" className="m-0">
+                    {optionSet(
+                      "YN01",
+                      "QDHeWslaEoH",
+                      () => {},
+                      
+                    )}
+                  </Form.Item>
+                ) : null}
+                  
+                </td>
+                <td className="border p-1">
                 <b>{activeLanguage.lang["Name (Full name):"]}</b>
               </td>
               <td className="border p-1">
@@ -970,20 +986,51 @@ export const DataEntryForm = observer(() => {
                     disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
                   />
                 </Form.Item>
+                </td>
+
+            </tr>
+            <tr>
+            <td className="border p-1">
+                <b>{activeLanguage.lang["Referred From:"]}</b>
               </td>
               <td className="border p-1">
-                <b>
-                  {activeLanguage.lang["NIN (National Identification Number)"]}
-                </b>
-              </td>
-              <td className="border p-1">
-                <Form.Item name="MOstDqSY0gO" className="m-0">
+                <Form.Item
+                  /*rules={[
+                    {
+                      required: true,
+                      message: "Enter full name",
+                    },
+                  ]}
+                  name="ZYKmQ9GPOaF"*/
+                  className="m-0"
+                >
                   <Input
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.MOstDqSY0gO}
+                   // disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
                   />
                 </Form.Item>
-              </td>
+                </td>
+                <td className="border p-1">
+                <b>{activeLanguage.lang["NIN (National Identification Number)"]}</b>
+                </td>
+                <td className="border p-1">
+                <Form.Item
+                 /* rules={[
+                    {
+                      required: true,
+                      message: "Enter fu",
+                    },
+                  ]}*/
+                  name="MOstDqSY0gO"
+                  className="m-0"
+                >
+                  <Input
+                    size="large"
+                    disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
+                  />
+                </Form.Item>
+                </td>
+
             </tr>
 
             <tr>
@@ -1093,21 +1140,20 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                {/* <b>Usual Residence (District)</b> */}
+              <b>{activeLanguage.lang["Date of Birt Known ?"]}</b>
               </td>
               <td className="border p-1">
-                <Form.Item name="t5nTEmlScSt" className="m-0">
-                  {/* <DistSearchPopup
-                    disabled={store.viewMode || store.allDisabled.t5nTEmlScSt}
-                    searchType="district"
-                    setLimitedArray={setLimitedArray}
-                    dictatedContent={chosenDistrict}
-                    setLimitedArrayParent={setLimitedArrayParent}
-                    receiveOutput={(text: any) =>
-                      setChosenDistrictToSubmit(`${text}`)
-                    }
-                  /> */}
-                </Form.Item>
+              {optionSets ? (
+                  <Form.Item name="roxn33dtLLx" className="m-0">
+                    {optionSet(
+                      "YN01",
+                      "roxn33dtLLx",
+                      () => {},
+                      
+                    )}
+                  </Form.Item>
+                ) : null}
+
               </td>
             </tr>
             <tr>
@@ -1313,13 +1359,7 @@ export const DataEntryForm = observer(() => {
                     }}
                   />
                 </Form.Item>
-                {form.getFieldValue("i8rrl8YWxLF") -
-                  form.getFieldValue("RbrUuKFSqkZ") <
-                  0 && form.getFieldValue("i8rrl8YWxLF") != 0 ? (
-                  <span style={{ color: "Red" }}>
-                    {activeLanguage.lang["Date of Death cannot be before DOB"]}
-                  </span>
-                ) : null}
+               
               </td>
             </tr>
           </tbody>

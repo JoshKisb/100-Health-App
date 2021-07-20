@@ -136,6 +136,8 @@ class Store {
     ctbKSNV2cg7: false,
     T4uxg60Lalw: false,
     twVlVWM3ffz: false,
+    QDHeWslaEoH: false,
+    WqYvFt79TQB: false
   };
 
   @action showEvents = () => {

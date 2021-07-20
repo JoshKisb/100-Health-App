@@ -10,7 +10,9 @@ import { useStore } from "../Context";
 import { any } from "prop-types";
 
 const mySettings = {
-  apiServerUrl: "https://hmis-dev.health.go.ug",
+  //apiServerUrl: "https://hmis-dev.health.go.ug",
+  apiServerUrl: " https://icdapi.azurewebsites.net",
+  language: "fr",
   autoBind: false,
   wordsAvailable: false,
 };

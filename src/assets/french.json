@@ -16,7 +16,7 @@
     "Sex is required":"Le sexe est requis",
     "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?":"N'oubliez pas de remplir la section : Pour les femmes, la personne décédée était-elle enceinte ou dans les 6 semaines suivant l'accouchement ?",
     "Place of Birth":"Lieu de naissance",
-    "Date and time of death":"Date et heure de décès",
+    "Date and time of death":"Date de naissance ",
     "Please select date and time of death!":"Veuillez sélectionner la date et l'heure du décès!",
     "Select date and time of death":"Sélectionner la date et l'heure du décès",
     "Please remember that you should also complete the section 'Fetal or infant Death'":"N'oubliez pas que vous devez également remplir la section « Mort fœtale ou infantile",
@@ -84,13 +84,13 @@
     "I conducted the post mortem of the body":"J'ai procédé à l'autopsie du corps",
     "Other (specify)":"Autre (précisez)",
     "Specify":"Spécifier",
-    "Search for a Sub County...":"Rechercher un commune...",
-    "Search for a District...":"Recherche d’un district...",
+    "Search for a Sub County...":"Rechercher un sous-comté...",
+    "Search for a District...":"Recherche d'un quartier...",
     "Search for a Region...":"Rechercher une région...",
     "Show all":"Afficher toutes les",
     "in":"en",
     "Uganda":"Ouganda",
-    "subcounties":"Communes",
+    "subcounties":"sous-comtés",
     "regions":"régions",
     "districts":"les quartiers",
     "Inserting for":"Insertion pour",
@@ -98,6 +98,9 @@
     "Cancel":"Annuler",
     "Delete":"Effacer",
     "Save":"Sauvegarder",
-    "Approve ?":"Approuver ?" 
+    "Approve ?":"Approuver ?",
+    "Referred ?":"Référé de (niveau de soin) ?",
+    "Date of Birt Known ?":"date de naissance connue?",
+    "Referred From:" : "Renvoyé de :"
 
 }

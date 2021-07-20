@@ -98,5 +98,8 @@
     "Cancel":"Cancel",
     "Delete":"Delete",
     "Save":"Save",
-    "Approve ?":"Approve ?"
+    "Approve ?":"Approve ?",
+    "Referred ?":"Referred ?",
+    "Date of Birt Known ?":"Date of Birt Known ?",
+    "Referred From:" : "Referred From:"
 }
