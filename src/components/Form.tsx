@@ -951,18 +951,18 @@ export const DataEntryForm = observer(() => {
               </td>
             </tr>
             <tr>
-            <td className="border p-1">
+            <td className="border p-1" >
                 <b>{activeLanguage.lang["Referred ?"]}</b>
               </td>
-              <td className="border p-1">
+              <td className="border p-1" >
               {optionSets ? (
                   <Form.Item name="QDHeWslaEoH" className="m-0">
-                    {optionSet(
-                      "YN01",
-                      "QDHeWslaEoH",
+                    {optionSet("YN01", "QDHeWslaEoH" ,
                       () => {},
                       
                     )}
+
+
                   </Form.Item>
                 ) : null}
                   
@@ -1000,13 +1000,13 @@ export const DataEntryForm = observer(() => {
                       required: true,
                       message: "Enter full name",
                     },
-                  ]}
-                  name="ZYKmQ9GPOaF"*/
+                  ]}*/
+                  name="WqYvFt79TQB"
                   className="m-0"
                 >
                   <Input
                     size="large"
-                   // disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
+                    disabled={store.viewMode || store.allDisabled.WqYvFt79TQB}
                   />
                 </Form.Item>
                 </td>
