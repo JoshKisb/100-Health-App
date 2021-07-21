@@ -27,6 +27,7 @@ import Declarations from "./Declarations";
 // Languages
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
+import { AnyARecord } from "dns";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -199,6 +200,12 @@ export const DataEntryForm = observer(() => {
   const [underlyingCauseChosen, setUnderlyingCauseChosen] = useState(false);
 
   const [underlyingCauseAlt, setUnderlyingCauseAlt] = useState("");
+
+  // Handle auto calculate of unknown age
+  const [ageKnown, setAgeKnown] = useState(true);
+  const [forceResetDOB, setForceResetDOB] = useState(false);
+  const [actualTimeOfDeath, setActualTimeOfDeath] = useState(moment());
+
   // End of Testing
 
   const store = useStore();
@@ -272,14 +279,46 @@ export const DataEntryForm = observer(() => {
   //     setTestValUnderlying("");
   // };
 
+  const handleEstimateAge = () => {
+    if (ageKnown) return;
+
+    // const dateOfDeath = form.getFieldValue("i8rrl8YWxLF");
+    const dateOfDeath = moment(actualTimeOfDeath);
+    const ageOfIndividual = form.getFieldValue("q7e7FOXKnOf");
+    const dateOfBirth = form.getFieldValue("RbrUuKFSqkZ");
+
+    if (!dateOfDeath) return;
+
+    if (!ageOfIndividual) return;
+
+    let estimatedAge = dateOfDeath.subtract(ageOfIndividual, "years");
+
+    form.setFieldsValue({ RbrUuKFSqkZ: estimatedAge });
+    setForceResetDOB(true);
+  };
+
   const valuesChange = (changedValues: any, allValues: any) => {
-    console.log("A value has changed", allValues);
+    // Handling date of birth is unknown"
+    if (changedValues.roxn33dtLLx) {
+      if (`${changedValues.roxn33dtLLx}` === "Yes") {
+        setAgeKnown(true);
+      } else {
+        setAgeKnown(false);
+      }
+    }
+
+    // If the changed value is date of death or
+    if (changedValues.q7e7FOXKnOf || changedValues.i8rrl8YWxLF) {
+      console.log("Maybe we should estimate the age...");
+      handleEstimateAge();
+    }
+
     if (
       changedValues.FhHPxY16vet &&
       form.getFieldValue("FhHPxY16vet") == true
     ) {
       //Desease
-      //store.disableValue("FhHPxY16vet");//Disease
+      //store.disableValue("FhHPxY16vet"); //Disease
       store.disableValue("gNM2Yhypydx"); //accident
       store.disableValue("wX3i3gkTG4m"); //Intentional self-harm
       store.disableValue("KsGOxFyzIs1"); //Assault
@@ -497,16 +536,18 @@ export const DataEntryForm = observer(() => {
       }
     }
 
-    console.log("clear working");
+    // console.log("clear working");
     if (changedValues.sfpqAeqKeyQ) {
       form.setFieldsValue({ zD0E77W4rFs: null });
-      console.log("clear working");
+      // console.log("clear working");
     }
 
     if (changedValues.i8rrl8YWxLF) {
       if (
+        form.getFieldValue("RbrUuKFSqkZ") &&
         changedValues.i8rrl8YWxLF.isBefore(form.getFieldValue("RbrUuKFSqkZ"))
       ) {
+        console.log("SETTING DATE OF DEATH TO NULL");
         form.setFieldsValue({ i8rrl8YWxLF: null });
       }
     }
@@ -571,7 +612,11 @@ export const DataEntryForm = observer(() => {
 
     if (changedValues.U18Tnfz9EKd) {
       if (
-        changedValues.U18Tnfz9EKd.isBefore(form.getFieldValue("RbrUuKFSqkZ")) ||
+        (form.getFieldValue("RbrUuKFSqkZ") &&
+          form.getFieldValue("i8rrl8YWxLF") &&
+          changedValues.U18Tnfz9EKd.isBefore(
+            form.getFieldValue("RbrUuKFSqkZ")
+          )) ||
         changedValues.U18Tnfz9EKd.after(form.getFieldValue("i8rrl8YWxLF"))
       ) {
         form.setFieldsValue({ U18Tnfz9EKd: null });
@@ -643,7 +688,7 @@ export const DataEntryForm = observer(() => {
     //   store.enableValue("UfG52s4YcUt");
     // }
 
-    if (changedValues.j5TIQx3gHyF) {
+    if (changedValues.j5TIQx3gHyF && form.getFieldValue("i8rrl8YWxLF")) {
       let weeks = moment(form.getFieldValue("i8rrl8YWxLF")).diff(
         changedValues.RbrUuKFSqkZ,
         "weeks"
@@ -653,7 +698,7 @@ export const DataEntryForm = observer(() => {
       }
     }
 
-    console.log("Changed value is ", changedValues);
+    // console.log("Changed value is ", changedValues);
 
     // console.log("working");
   };
@@ -812,6 +857,27 @@ export const DataEntryForm = observer(() => {
     store.setActiveLanguage(allLanguages[0]);
   }, []);
 
+  useEffect(() => {
+    handleEstimateAge();
+  }, [ageKnown]);
+
+  useEffect(() => {
+    console.log("This is ", actualTimeOfDeath);
+    handleEstimateAge();
+  }, [actualTimeOfDeath]);
+
+  useEffect(() => {
+    if (forceResetDOB) {
+      setTimeout(() => {
+        console.log("LINE 874: time of Death =>", actualTimeOfDeath);
+        console.log("LINE 880: time of Birth =>", actualTimeOfDeath);
+        console.log("LINE 884: Age =>", actualTimeOfDeath);
+        handleEstimateAge();
+        setForceResetDOB(false);
+      }, 10);
+    }
+  }, [forceResetDOB]);
+
   return (
     <Form
       form={form}
@@ -951,23 +1017,17 @@ export const DataEntryForm = observer(() => {
               </td>
             </tr>
             <tr>
-            <td className="border p-1" >
+              <td className="border p-1">
                 <b>{activeLanguage.lang["Referred ?"]}</b>
               </td>
-              <td className="border p-1" >
-              {optionSets ? (
+              <td className="border p-1">
+                {optionSets ? (
                   <Form.Item name="QDHeWslaEoH" className="m-0">
-                    {optionSet("YN01", "QDHeWslaEoH" ,
-                      () => {},
-                      
-                    )}
-
-
+                    {optionSet("YN01", "QDHeWslaEoH", () => {})}
                   </Form.Item>
                 ) : null}
-                  
-                </td>
-                <td className="border p-1">
+              </td>
+              <td className="border p-1">
                 <b>{activeLanguage.lang["Name (Full name):"]}</b>
               </td>
               <td className="border p-1">
@@ -986,11 +1046,10 @@ export const DataEntryForm = observer(() => {
                     disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
                   />
                 </Form.Item>
-                </td>
-
+              </td>
             </tr>
             <tr>
-            <td className="border p-1">
+              <td className="border p-1">
                 <b>{activeLanguage.lang["Referred From:"]}</b>
               </td>
               <td className="border p-1">
@@ -1009,13 +1068,15 @@ export const DataEntryForm = observer(() => {
                     disabled={store.viewMode || store.allDisabled.WqYvFt79TQB}
                   />
                 </Form.Item>
-                </td>
-                <td className="border p-1">
-                <b>{activeLanguage.lang["NIN (National Identification Number)"]}</b>
-                </td>
-                <td className="border p-1">
+              </td>
+              <td className="border p-1">
+                <b>
+                  {activeLanguage.lang["NIN (National Identification Number)"]}
+                </b>
+              </td>
+              <td className="border p-1">
                 <Form.Item
-                 /* rules={[
+                  /* rules={[
                     {
                       required: true,
                       message: "Enter fu",
@@ -1029,8 +1090,7 @@ export const DataEntryForm = observer(() => {
                     disabled={store.viewMode || store.allDisabled.ZYKmQ9GPOaF}
                   />
                 </Form.Item>
-                </td>
-
+              </td>
             </tr>
 
             <tr>
@@ -1140,20 +1200,16 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-              <b>{activeLanguage.lang["Date of Birt Known ?"]}</b>
+                <b>{activeLanguage.lang["Date of Birth Known ?"]}</b>
               </td>
               <td className="border p-1">
-              {optionSets ? (
+                {optionSets ? (
                   <Form.Item name="roxn33dtLLx" className="m-0">
-                    {optionSet(
-                      "YN01",
-                      "roxn33dtLLx",
-                      () => {},
-                      
-                    )}
+                    {optionSet("YN01", "roxn33dtLLx", (k: any) => {
+                      // console.log("k occurred me", k);
+                    })}
                   </Form.Item>
                 ) : null}
-
               </td>
             </tr>
             <tr>
@@ -1172,33 +1228,42 @@ export const DataEntryForm = observer(() => {
                 <b>{activeLanguage.lang["Date of Birth"]}</b>
               </td>
               <td className="border p-1">
-                <Form.Item
-                  rules={[
-                    {
-                      type: "object",
-                      required: true,
-                      message: "Please select date!",
-                    },
-                  ]}
-                  name="RbrUuKFSqkZ"
-                  className="m-0"
-                >
-                  <DatePicker
-                    disabledDate={notTomorrow}
-                    size="large"
-                    placeholder={activeLanguage.lang["Select a Date"]}
-                    disabled={store.viewMode || store.allDisabled.RbrUuKFSqkZ}
-                    onChange={(e: any) => {
-                      if (e?._d) {
-                        const birthDate = new Date(e?._d);
-                        const ageInYears = moment().diff(birthDate, "years");
-                        if (ageInYears < 50 && ageInYears > 10) {
-                          setPersonsAge(ageInYears);
+                {!forceResetDOB ? (
+                  <Form.Item
+                    rules={[
+                      {
+                        type: "object",
+                        required: true,
+                        message: "Please select date!",
+                      },
+                    ]}
+                    name="RbrUuKFSqkZ"
+                    className="m-0"
+                  >
+                    <DatePicker
+                      disabledDate={notTomorrow}
+                      size="large"
+                      placeholder={activeLanguage.lang["Select a Date"]}
+                      disabled={store.viewMode || store.allDisabled.RbrUuKFSqkZ}
+                      onChange={(e: any) => {
+                        if (e?._d) {
+                          console.log("Date of birth has changed", e);
+                          // const birthDate = new Date(e?._d);
+                          // const ageInYears = moment().diff(birthDate, "years");
+                          const ageInYears = moment().diff(e, "years");
+                          if (ageInYears < 50 && ageInYears > 10) {
+                            setPersonsAge(ageInYears);
+                            // q7e7FOXKnOf
+                            // form.setFieldsValue({
+                            //   RbrUuKFSqkZ: ageInYears,
+                            // });
+                            // store.setFie
+                          }
                         }
-                      }
-                    }}
-                  />
-                </Form.Item>
+                      }}
+                    />
+                  </Form.Item>
+                ) : null}
               </td>
             </tr>
             <tr>
@@ -1340,13 +1405,15 @@ export const DataEntryForm = observer(() => {
                       var hours = minutes * 60;
                       var days = hours * 24;
 
+                      console.log("Time of death has changed to", e);
+                      setActualTimeOfDeath(e);
                       var foo_date1 = form.getFieldValue("RbrUuKFSqkZ");
                       var foo_date2 = form.getFieldValue("i8rrl8YWxLF");
                       var diff_date = Math.round(
                         (foo_date2 - foo_date1) / days
                       );
 
-                      console.log(diff_date);
+                      console.log("diff_date is ", diff_date);
                       // console.log("function diffdate has been run ");
 
                       if (diff_date < 25) {
@@ -1359,7 +1426,6 @@ export const DataEntryForm = observer(() => {
                     }}
                   />
                 </Form.Item>
-               
               </td>
             </tr>
           </tbody>
