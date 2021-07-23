@@ -215,6 +215,7 @@ export const DataEntryForm = observer(() => {
 
     // Force form to acknowledge controlled values
     values.twVlVWM3ffz = approvalStatus;
+    values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
     // values.dTd7txVzhgY = underlyingCauseCode; // ???
     values.QTKk2Xt8KDu = underlyingCauseText; // text
     values.sJhOdGLD5lj = underlyingCauseCode; // term = code
@@ -834,11 +835,13 @@ export const DataEntryForm = observer(() => {
         setUnderlyingCauseChosen(true);
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
         setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
+        setChosenRegion(`${store.defaultValues.zwKo51BEayZ}`);
         form.setFieldsValue({
           q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
         });
         console.log("Chosen district is =>", store.defaultValues);
       }
+
       if (store.defaultValues.twVlVWM3ffz) {
         setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
       }
@@ -1103,11 +1106,12 @@ export const DataEntryForm = observer(() => {
                     disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
                     searchType={validSearchTypes.region}
                     // setLimitedArray={limitedRegionParent}
-                    dictatedContent={chosenDistrict}
+                    dictatedContent={chosenRegion}
                     // setLimitedArrayParent={setLimitedRegionParent}
-                    receiveOutput={(text: any) =>
-                      setChosenRegionToSubmit(`${text}`)
-                    }
+                    receiveOutput={(text: any) => {
+                      // console.log("Chosen region is ", text);
+                      setChosenRegionToSubmit(`${text}`);
+                    }}
                   />
 
                   {/* <Input
