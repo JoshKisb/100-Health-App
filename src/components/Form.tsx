@@ -2400,7 +2400,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>Disease</b>
+                   <b>{activeLanguage.lang["Disease"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2912,24 +2912,7 @@ export const DataEntryForm = observer(() => {
                 ) : null}
               </td>
             </tr>
-            <tr>
-              <td className="border p-1">
-                <b>{activeLanguage.lang["Referred from (level of care)"]}</b>
-              </td>
-              <td className="border p-1">
-                {optionSets ? (
-                  <Form.Item name="RJhbkjYrODG" className="m-0">
-                    {optionSet(
-                      "100RefLevels",
-                      "RJhbkjYrODG",
-                      () => {},
-                      !womanWasPregnant,
-                      pregnantKey3
-                    )}
-                  </Form.Item>
-                ) : null}
-              </td>
-            </tr>
+            
             <tr>
               <td className="border p-1">
                 <b>{activeLanguage.lang["Parity"]}</b>

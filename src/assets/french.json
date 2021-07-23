@@ -16,7 +16,7 @@
     "Sex is required":"Le sexe est requis",
     "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?":"N'oubliez pas de remplir la section : Pour les femmes, la personne décédée était-elle enceinte ou dans les 6 semaines suivant l'accouchement ?",
     "Place of Birth":"Lieu de naissance",
-    "Date and time of death":"Date de naissance ",
+    "Date and time of death":"Date et heure du décès",
     "Please select date and time of death!":"Veuillez sélectionner la date et l'heure du décès!",
     "Select date and time of death":"Sélectionner la date et l'heure du décès",
     "Please remember that you should also complete the section 'Fetal or infant Death'":"N'oubliez pas que vous devez également remplir la section « Mort fœtale ou infantile",
@@ -49,7 +49,7 @@
     "Could not be determined":"Ne peut être déterminée",
     "Legal intervention":"Intervention légale",
     "Pending investigation":"Investigation en cours",
-    "Intentional self-harm":"Automutilation intentionnelle",
+    "Intentional self-harm":"Suicide",
     "War":"Guerre",
     "Unknown":"Inconnue",
     "If external cause or poisoning":"Si cause externe ou empoisonnement",
@@ -84,8 +84,8 @@
     "I conducted the post mortem of the body":"J'ai procédé à l'autopsie du corps",
     "Other (specify)":"Autre (précisez)",
     "Specify":"Spécifier",
-    "Search for a Sub County...":"Rechercher un sous-comté...",
-    "Search for a District...":"Recherche d'un quartier...",
+    "Search for a Sub County...":"Rechercher un Commune...",
+    "Search for a District...":"Recherche d'un District...",
     "Search for a Region...":"Rechercher une région...",
     "Show all":"Afficher toutes les",
     "in":"en",
@@ -100,7 +100,7 @@
     "Save":"Sauvegarder",
     "Approve ?":"Approuver ?",
     "Referred ?":"Référé de (niveau de soin) ?",
-    "Date of Birth Known ?":"date de naissance connue?",
-    "Referred From:" : "Renvoyé de :"
+    "Date of Birth Known ?":"Date de naissance inconnu",
+    "Referred From:" : "Autre structure"
 
 }
