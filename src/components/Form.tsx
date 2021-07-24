@@ -835,8 +835,8 @@ export const DataEntryForm = observer(() => {
       if (store.defaultValues.QTKk2Xt8KDu) {
         setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
         setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
-        setChosenSubcounty(`${store.defaultValues.u44XP9fZweA}`);
-        setChosenDistrict(`${store.defaultValues.t5nTEmlScSt}`);
+        setChosenSubcounty(`${store.defaultValues.t5nTEmlScSt}`);
+        setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
         setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
         setUnderlyingCauseChosen(true);
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
