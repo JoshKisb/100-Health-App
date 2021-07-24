@@ -99,8 +99,10 @@
     "Delete":"Effacer",
     "Save":"Sauvegarder",
     "Approve ?":"Approuver ?",
-    "Referred ?":"Référé de (niveau de soin) ?",
+    "Referred":"Référé de (niveau de soin)",
     "Date of Birth Known ?":"Date de naissance inconnu",
-    "Referred From:" : "Autre structure"
-
+    "Referred From:" : "Autre structure",
+    "Search for a Health Facility...":"Rechercher un établissement de santé...",
+    "health facilities":"établissements de santé",
+    "No":"Non"
 }

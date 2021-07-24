@@ -93,8 +93,11 @@ export const DataEntryForm = observer(() => {
   const [limitedRegionParent, setLimitedRegionParent] = useState("");
   const [chosenRegion, setChosenRegion] = useState("");
   const [chosenDistrict, setChosenDistrict] = useState("");
+  const [chosenFacility, setChosenFacility] = useState("");
+
   const [chosenRegionToSubmit, setChosenRegionToSubmit] = useState("");
   const [chosenDistrictToSubmit, setChosenDistrictToSubmit] = useState("");
+  const [chosenFacilityToSubmit, setChosenFacilityToSubmit] = useState("");
   const [chosenSubCounty, setChosenSubcounty] = useState("");
 
   //blacklist
@@ -222,6 +225,7 @@ export const DataEntryForm = observer(() => {
     values.L97MrAMAav9 = underlyingCauseURI; // uri
     values.u44XP9fZweA = chosenDistrictToSubmit; // district
     values.t5nTEmlScSt = chosenSubCounty; // subcounty
+    values.QDHeWslaEoH = chosenFacility;
 
     values = {
       ...values,
@@ -301,6 +305,7 @@ export const DataEntryForm = observer(() => {
   const valuesChange = (changedValues: any, allValues: any) => {
     // Handling date of birth is unknown"
     if (changedValues.roxn33dtLLx) {
+      console.log("Roxx changed to ", changedValues.roxn33dtLLx);
       if (`${changedValues.roxn33dtLLx}` === "Yes") {
         setAgeKnown(true);
       } else {
@@ -832,6 +837,7 @@ export const DataEntryForm = observer(() => {
         setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
         setChosenSubcounty(`${store.defaultValues.u44XP9fZweA}`);
         setChosenDistrict(`${store.defaultValues.t5nTEmlScSt}`);
+        setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
         setUnderlyingCauseChosen(true);
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
         setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
@@ -839,7 +845,7 @@ export const DataEntryForm = observer(() => {
         form.setFieldsValue({
           q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
         });
-        console.log("Chosen district is =>", store.defaultValues);
+        // console.log("Chosen district is =>", store.defaultValues);
       }
 
       if (store.defaultValues.twVlVWM3ffz) {
@@ -1021,14 +1027,26 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage.lang["Referred ?"]}</b>
+                <b>{activeLanguage.lang["Referred"]}</b>
               </td>
               <td className="border p-1">
-                {optionSets ? (
+                {/* Add the facilities dropdown here */}
+                <DistSearchPopup
+                  disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
+                  searchType={validSearchTypes.facility}
+                  // setLimitedArray={limitedRegionParent}
+                  dictatedContent={chosenFacility}
+                  // setLimitedArrayParent={setLimitedRegionParent}
+                  receiveOutput={(text: any) => {
+                    // console.log("Chosen region is ", text);
+                    setChosenFacilityToSubmit(`${text}`);
+                  }}
+                />
+                {/* {optionSets ? (
                   <Form.Item name="QDHeWslaEoH" className="m-0">
                     {optionSet("YN01", "QDHeWslaEoH", () => {})}
                   </Form.Item>
-                ) : null}
+                ) : null} */}
               </td>
               <td className="border p-1">
                 <b>{activeLanguage.lang["Name (Full name):"]}</b>
@@ -1207,13 +1225,39 @@ export const DataEntryForm = observer(() => {
                 <b>{activeLanguage.lang["Date of Birth Known ?"]}</b>
               </td>
               <td className="border p-1">
-                {optionSets ? (
+                <Checkbox
+                  disabled={store.viewMode || store.allDisabled.roxn33dtLLx}
+                  checked={ageKnown}
+                  // onClick={() => form.setFieldsValue({ roxn33dtLLx: "Yes" })}
+                  onChange={(val: any) => {
+                    // console.log("VAL IS ", val?.target?.checked);
+                    setAgeKnown(val?.target?.checked);
+                    form.setFieldsValue({ roxn33dtLLx: "Yes" });
+                  }}
+                >
+                  {activeLanguage.lang["Yes"]}
+                </Checkbox>
+
+                <Checkbox
+                  // onChange={(val: any) => console.log("VAL IS ", val?.target)}
+                  disabled={store.viewMode || store.allDisabled.roxn33dtLLx}
+                  checked={!ageKnown}
+                  onChange={(val: any) => {
+                    // console.log("VAL IS ", val?.target?.checked);
+                    setAgeKnown(!val?.target?.checked);
+                    form.setFieldsValue({ roxn33dtLLx: "No" });
+                  }}
+                >
+                  {activeLanguage.lang["No"]}
+                </Checkbox>
+
+                {/* {optionSets ? (
                   <Form.Item name="roxn33dtLLx" className="m-0">
                     {optionSet("YN01", "roxn33dtLLx", (k: any) => {
                       // console.log("k occurred me", k);
                     })}
                   </Form.Item>
-                ) : null}
+                ) : null} */}
               </td>
             </tr>
             <tr>
@@ -2400,7 +2444,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                   <b>{activeLanguage.lang["Disease"]}</b>
+                <b>{activeLanguage.lang["Disease"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2912,7 +2956,7 @@ export const DataEntryForm = observer(() => {
                 ) : null}
               </td>
             </tr>
-            
+
             <tr>
               <td className="border p-1">
                 <b>{activeLanguage.lang["Parity"]}</b>

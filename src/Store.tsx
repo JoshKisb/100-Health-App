@@ -137,7 +137,7 @@ class Store {
     T4uxg60Lalw: false,
     twVlVWM3ffz: false,
     QDHeWslaEoH: false,
-    WqYvFt79TQB: false
+    WqYvFt79TQB: false,
   };
 
   @action showEvents = () => {
@@ -200,6 +200,22 @@ class Store {
       const result = await this.engine.link.fetch(url);
 
       console.log("Result of district fetch is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  @action getFacilities = async () => {
+    try {
+      const url =
+        "/api/organisationUnits.json?level=5&paging=false&fields=id,displayName";
+
+      // Get the list of all facilities (level 5)
+      const result = await this.engine.link.fetch(url);
+
+      console.log("Result of facilities fetch is ", result);
       return result;
     } catch (error) {
       console.log(error);

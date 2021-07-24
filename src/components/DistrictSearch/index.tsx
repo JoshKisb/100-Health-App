@@ -12,6 +12,7 @@ export const validSearchTypes = {
   region: "region",
   district: "district",
   subCounty: "subCounty",
+  facility: "facility",
 };
 
 interface SearchType {
@@ -55,11 +56,14 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const [allRegions, setAllRegions] = useState(anyArrayType);
     const [allDistricts, setAllDistricts] = useState(anyArrayType);
     const [allSubCounties, setAllSubCounties] = useState(anyArrayType);
+    const [allFacilities, setAllFacilities] = useState(anyArrayType);
 
     const searchEntity = (text: string) => {
       // const find
       const itemToSearch =
-        searchType === validSearchTypes.region
+        searchType === validSearchTypes.facility
+          ? allFacilities
+          : searchType === validSearchTypes.region
           ? allRegions
           : searchType === validSearchTypes.district && parentName
           ? allRegions.find((reg) => reg.displayName === parentName).children
@@ -221,7 +225,9 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
     const resetSubCountySearch = () => {
       const newArr =
-        searchType === validSearchTypes.region
+        searchType === validSearchTypes.facility
+          ? allFacilities
+          : searchType === validSearchTypes.region
           ? allRegions
           : searchType === validSearchTypes.district && parentName
           ? allRegions.find((reg) => reg.displayName === parentName).children
@@ -234,6 +240,14 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     };
 
     const getData = async () => {
+      if (searchType === validSearchTypes.facility) {
+        const facilities = await store.getFacilities();
+        const actualFacilities = facilities.organisationUnits;
+        console.log("Actual facilities are", actualFacilities);
+        setAllFacilities(actualFacilities);
+
+        return;
+      }
       const allRegionsReceived = await store.getRegions();
       const actualRegions = allRegionsReceived.organisationUnits;
       let districtsArr = new Array();
@@ -289,7 +303,9 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
               ? store?.activeLanguage?.lang?.["Search for a Sub County..."]
               : searchType === validSearchTypes.district
               ? store?.activeLanguage?.lang?.["Search for a District..."]
-              : store?.activeLanguage?.lang?.["Search for a Region..."]
+              : searchType === validSearchTypes.region
+              ? store?.activeLanguage?.lang?.["Search for a Region..."]
+              : store?.activeLanguage?.lang?.["Search for a Health Facility..."]
           }
         />
 
@@ -318,6 +334,9 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                         ? store?.activeLanguage?.lang?.["subcounties"] + " "
                         : searchType === validSearchTypes.district
                         ? store?.activeLanguage?.lang?.["districts"] + " "
+                        : searchType === validSearchTypes.facility
+                        ? store?.activeLanguage?.lang?.["health facilities"] +
+                          " "
                         : store?.activeLanguage?.lang?.["regions"] + " "}
                       {store?.activeLanguage?.lang?.["in"]}{" "}
                       {parentName || store?.activeLanguage?.lang?.["Uganda"]}

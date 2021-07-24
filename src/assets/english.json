@@ -99,7 +99,10 @@
     "Delete":"Delete",
     "Save":"Save",
     "Approve ?":"Approve ?",
-    "Referred ?":"Referred ?",
+    "Referred":"Referred",
     "Date of Birth Known ?":"Date of Birth Known ?",
-    "Referred From:" : "Referred From:"
+    "Referred From:" : "Referred From:",
+    "Search for a Health Facility...":"Search for a Health Facility...",
+    "health facilities":"health facilities",
+    "No":"No"
 }
