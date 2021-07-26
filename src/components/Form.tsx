@@ -1230,9 +1230,10 @@ export const DataEntryForm = observer(() => {
                   checked={ageKnown}
                   // onClick={() => form.setFieldsValue({ roxn33dtLLx: "Yes" })}
                   onChange={(val: any) => {
-                    // console.log("VAL IS ", val?.target?.checked);
+                    console.log("VAL IS ", val?.target?.checked);
                     setAgeKnown(val?.target?.checked);
                     form.setFieldsValue({ roxn33dtLLx: "Yes" });
+                    store.disableValue("q7e7FOXKnOf");
                   }}
                 >
                   {activeLanguage.lang["Yes"]}
@@ -1243,9 +1244,13 @@ export const DataEntryForm = observer(() => {
                   disabled={store.viewMode || store.allDisabled.roxn33dtLLx}
                   checked={!ageKnown}
                   onChange={(val: any) => {
-                    // console.log("VAL IS ", val?.target?.checked);
+                   
+                     console.log("VAL IS ", val?.target?.checked);
                     setAgeKnown(!val?.target?.checked);
                     form.setFieldsValue({ roxn33dtLLx: "No" });
+                    
+                    
+                    store.enableValue("q7e7FOXKnOf");
                   }}
                 >
                   {activeLanguage.lang["No"]}
