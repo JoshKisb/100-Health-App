@@ -1,3 +1,4 @@
+// referredValueSavedHere
 import React, { useEffect, useState } from "react";
 import {
   Button,
@@ -217,6 +218,7 @@ export const DataEntryForm = observer(() => {
     // console.log("VALUES ARE", values);
 
     // Force form to acknowledge controlled values
+    values.referredValueSavedHere = chosenFacilityToSubmit || chosenFacility;
     values.twVlVWM3ffz = approvalStatus;
     values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
     // values.dTd7txVzhgY = underlyingCauseCode; // ???
@@ -842,6 +844,7 @@ export const DataEntryForm = observer(() => {
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
         setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
         setChosenRegion(`${store.defaultValues.zwKo51BEayZ}`);
+        setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
         form.setFieldsValue({
           q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
         });
@@ -1244,12 +1247,10 @@ export const DataEntryForm = observer(() => {
                   disabled={store.viewMode || store.allDisabled.roxn33dtLLx}
                   checked={!ageKnown}
                   onChange={(val: any) => {
-                   
-                     console.log("VAL IS ", val?.target?.checked);
+                    console.log("VAL IS ", val?.target?.checked);
                     setAgeKnown(!val?.target?.checked);
                     form.setFieldsValue({ roxn33dtLLx: "No" });
-                    
-                    
+
                     store.enableValue("q7e7FOXKnOf");
                   }}
                 >
@@ -1297,7 +1298,11 @@ export const DataEntryForm = observer(() => {
                       disabledDate={notTomorrow}
                       size="large"
                       placeholder={activeLanguage.lang["Select a Date"]}
-                      disabled={store.viewMode || store.allDisabled.RbrUuKFSqkZ}
+                      disabled={
+                        store.viewMode ||
+                        store.allDisabled.RbrUuKFSqkZ ||
+                        !ageKnown
+                      }
                       onChange={(e: any) => {
                         if (e?._d) {
                           console.log("Date of birth has changed", e);
@@ -1321,7 +1326,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>Age</b>
+                <b>{activeLanguage.lang["Age"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1339,7 +1344,11 @@ export const DataEntryForm = observer(() => {
                 >
                   <InputNumber
                     size="large"
-                    disabled={store.viewMode || store.allDisabled.q7e7FOXKnOf}
+                    disabled={
+                      store.viewMode ||
+                      store.allDisabled.q7e7FOXKnOf ||
+                      ageKnown
+                    }
                     onChange={(e: any) => {
                       // console.log("Age changed to", e);
 
