@@ -218,7 +218,6 @@ export const DataEntryForm = observer(() => {
     // console.log("VALUES ARE", values);
 
     // Force form to acknowledge controlled values
-    values.referredValueSavedHere = chosenFacilityToSubmit || chosenFacility;
     values.twVlVWM3ffz = approvalStatus;
     values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
     // values.dTd7txVzhgY = underlyingCauseCode; // ???
@@ -227,8 +226,8 @@ export const DataEntryForm = observer(() => {
     values.L97MrAMAav9 = underlyingCauseURI; // uri
     values.u44XP9fZweA = chosenDistrictToSubmit; // district
     values.t5nTEmlScSt = chosenSubCounty; // subcounty
-    values.QDHeWslaEoH = chosenFacility;
-
+    values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
+    console.log("Saved ", chosenFacilityToSubmit);
     values = {
       ...values,
       ...declarations,
@@ -844,7 +843,7 @@ export const DataEntryForm = observer(() => {
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
         setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
         setChosenRegion(`${store.defaultValues.zwKo51BEayZ}`);
-        setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
+        // setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
         form.setFieldsValue({
           q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
         });
@@ -1041,8 +1040,9 @@ export const DataEntryForm = observer(() => {
                   dictatedContent={chosenFacility}
                   // setLimitedArrayParent={setLimitedRegionParent}
                   receiveOutput={(text: any) => {
-                    // console.log("Chosen region is ", text);
+                    console.log("Chosen facility is:", text);
                     setChosenFacilityToSubmit(`${text}`);
+                    setChosenFacility(`${text}`);
                   }}
                 />
                 {/* {optionSets ? (
