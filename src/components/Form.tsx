@@ -215,18 +215,32 @@ export const DataEntryForm = observer(() => {
   const store = useStore();
 
   const onFinish = async (values: any) => {
-    // console.log("VALUES ARE", values);
-
     // Force form to acknowledge controlled values
-    values.twVlVWM3ffz = approvalStatus;
-    values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
-    // values.dTd7txVzhgY = underlyingCauseCode; // ???
-    values.QTKk2Xt8KDu = underlyingCauseText; // text
-    values.sJhOdGLD5lj = underlyingCauseCode; // term = code
-    values.L97MrAMAav9 = underlyingCauseURI; // uri
-    values.u44XP9fZweA = chosenDistrictToSubmit; // district
-    values.t5nTEmlScSt = chosenSubCounty; // subcounty
-    values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
+    if (approvalStatus) {
+      values.twVlVWM3ffz = approvalStatus;
+    }
+    if (chosenRegionToSubmit || chosenRegion) {
+      values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
+    }
+    // if() values.dTd7txVzhgY = underlyingCauseCode; // ???
+    if (underlyingCauseText) {
+      values.QTKk2Xt8KDu = underlyingCauseText;
+    } // text
+    if (underlyingCauseCode) {
+      values.sJhOdGLD5lj = underlyingCauseCode;
+    } // term = code
+    if (underlyingCauseURI) {
+      values.L97MrAMAav9 = underlyingCauseURI;
+    } // uri
+    if (chosenDistrictToSubmit) {
+      values.u44XP9fZweA = chosenDistrictToSubmit;
+    } // district
+    if (chosenSubCounty) {
+      values.t5nTEmlScSt = chosenSubCounty;
+    } // subcounty
+    if (chosenFacilityToSubmit || chosenFacility) {
+      values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
+    }
     console.log("Saved ", chosenFacilityToSubmit);
     values = {
       ...values,
@@ -835,15 +849,31 @@ export const DataEntryForm = observer(() => {
       // Auto-populate form if it is an existing form being edited
       if (store.defaultValues.QTKk2Xt8KDu) {
         setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
+      }
+      if (store.defaultValues.sJhOdGLD5lj) {
         setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
+      }
+      if (store.defaultValues.t5nTEmlScSt) {
         setChosenSubcounty(`${store.defaultValues.t5nTEmlScSt}`);
+      }
+      if (store.defaultValues.u44XP9fZweA) {
         setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
+      }
+      if (store.defaultValues.QDHeWslaEoH) {
         setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
-        setUnderlyingCauseChosen(true);
+      }
+      setUnderlyingCauseChosen(true);
+      if (store.defaultValues.e96GB4CXyd3) {
         setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
+      }
+      if (store.defaultValues.q7e7FOXKnOf) {
         setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
+      }
+      if (store.defaultValues.zwKo51BEayZ) {
         setChosenRegion(`${store.defaultValues.zwKo51BEayZ}`);
-        // setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
+      }
+      // setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
+      if (store.defaultValues.q7e7FOXKnOf) {
         form.setFieldsValue({
           q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
         });
@@ -853,12 +883,22 @@ export const DataEntryForm = observer(() => {
       if (store.defaultValues.twVlVWM3ffz) {
         setApprovalStatusFromEditedForm(`${store.defaultValues.twVlVWM3ffz}`);
       }
-      setDeclarationsDefault({
-        u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
-        ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
-        cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
-        lu9BiHPxNqH: `${store.defaultValues.lu9BiHPxNqH}`,
-      });
+
+      if (store.defaultValues.lu9BiHPxNqH) {
+        setDeclarationsDefault({
+          u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
+          ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
+          cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
+          lu9BiHPxNqH: `${store.defaultValues.lu9BiHPxNqH}`,
+        });
+      } else {
+        setDeclarationsDefault({
+          u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
+          ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
+          cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
+          lu9BiHPxNqH: "",
+        });
+      }
     }
   }, [store.defaultValues]);
 
