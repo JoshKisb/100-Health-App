@@ -558,7 +558,8 @@ class Store {
       const d = this.data.headers
         .map((c: any) => {
           let value = this.currentEvent[c.i];
-          if (dates.indexOf(c.name) !== -1) {
+
+          if (dates.indexOf(c.name) !== -1 && value !== "") {
             value = moment(value);
           } else if (value === "true") {
             value = true;

@@ -844,6 +844,7 @@ export const DataEntryForm = observer(() => {
   };
 
   useEffect(() => {
+    console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
     if (Object.keys(store.defaultValues).length) {
       setEditing(true);
       // Auto-populate form if it is an existing form being edited
@@ -2404,6 +2405,7 @@ export const DataEntryForm = observer(() => {
                     size="large"
                     disabled={disableFrameB}
                     key={frameBKey1}
+                    // value={store.defaultValues.j5TIQx3gHyF?._d==="invalid"}
                   />
                 </Form.Item>
               </td>

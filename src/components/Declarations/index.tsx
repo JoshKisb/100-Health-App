@@ -191,7 +191,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                 size="large"
                 value={other}
                 onChange={(e) => {
-                  if (e && e.target && e.target.value) {
+                  if (e?.target?.value || e?.target?.value === "") {
                     setOther(`${e.target.value}`);
                   }
                 }}
