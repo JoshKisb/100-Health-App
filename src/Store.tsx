@@ -191,6 +191,59 @@ class Store {
     }
   };
 
+  @action getAllLanguages = async () => {
+    try {
+      const url = `/api/dataStore/Languages`;
+
+      const result = await this.engine.link.fetch(url);
+
+      console.log("Result of getting all languages is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  @action getSingleLanguage = async (languageName?: string) => {
+    try {
+      const url = `/api/dataStore/Languages/${languageName}`;
+
+      const result = await this.engine.link.fetch(url);
+
+      console.log("Result of getting single language is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  @action saveNewLang = async (languageName?: string, languageObject?: any) => {
+    try {
+      const url = `/api/dataStore/Languages/${languageName}`;
+
+      console.log("ENGINE IS ", this.engine);
+
+      const postObject = JSON.stringify(languageObject);
+
+      const result = await this.engine.link.fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: postObject,
+      });
+
+      console.log("Result of posting new language is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   @action getRegions = async () => {
     try {
       const url =
