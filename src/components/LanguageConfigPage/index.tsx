@@ -5,7 +5,7 @@ import englishDefault from "../../assets/english.json";
 import frenchDefault from "../../assets/french.json";
 import { useStore } from "../../Context";
 import { CheckCircleTwoTone } from "@ant-design/icons";
-import { Button, Select } from "antd";
+import { Button, notification, Select } from "antd";
 import ConfigurationPage from "./ConfigurationPage";
 import MetaDataConfig from "./MetaDataConfig";
 import Metadata2 from "./../../language_integration/metadata2.json";
@@ -27,6 +27,7 @@ const LanguageConfigPage = () => {
 
   const setLanguage = (lang: any) => store.setActiveLanguage(lang);
   const getLanguages = async () => {};
+
   const chooseLanguage = (lang: any) => {
     const actualLang = languagesList.find((it) => it.LanguageName === lang);
     setLanguage(actualLang);
@@ -37,9 +38,13 @@ const LanguageConfigPage = () => {
   };
 
   const saveAllNewData = async () => {
-    console.log("Data is done baby");
-    // store.saveNewLang(newLanguage?.LanguageName, newLanguage);
-
+    store.saveNewLang(newLanguage?.LanguageName, newLanguage);
+    notification.success({
+      message: "Update",
+      description: "Language saved successfully",
+      onClick: () => {},
+      duration: 2,
+    });
     // store.getAllLanguages();
 
     store.getSingleLanguage("English");
@@ -47,6 +52,16 @@ const LanguageConfigPage = () => {
 
   const handleAddLangConfig = (result: any) => {
     setNewLanguage(result);
+    if (!result?.LanguageName) {
+      notification.error({
+        message: "Validation Error!",
+        description:
+          "Please name your language first. This is the first field on the form",
+        onClick: () => {},
+        duration: 2,
+      });
+      return;
+    }
     setConfigStep(2);
   };
 
