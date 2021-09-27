@@ -121,7 +121,9 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
               ))}
             </Select>
             <div className="button-container">
-              <Button type="primary">Confirm Selection</Button>
+              <Button type="primary" onClick={next}>
+                Confirm Selection
+              </Button>
               <Button
                 type="primary"
                 ghost
