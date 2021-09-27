@@ -52,10 +52,6 @@ const { Title } = Typography;
 export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
-  const [activeLanguage, setActiveLanguage] = useState(allLanguages[0]);
-  const [activeLanguageString, setActiveLanguageString] = useState(
-    allLanguages[0].langName
-  );
 
   // Declarations
   const [declarations, setDeclarations] = useState({
@@ -213,6 +209,12 @@ export const DataEntryForm = observer(() => {
   // End of Testing
 
   const store = useStore();
+  const [activeLanguage, setActiveLanguage] = useState(
+    store.activeLanguage || allLanguages[0]
+  );
+  const [activeLanguageString, setActiveLanguageString] = useState(
+    store.activeLanguage?.LanguageName || allLanguages[0].langName
+  );
 
   const onFinish = async (values: any) => {
     // Force form to acknowledge controlled values

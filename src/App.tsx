@@ -31,6 +31,10 @@ export const App = observer(() => {
     );
   }, [store.organisationUnits]);
 
+  const goToNextPage = () => {
+    store.showForm();
+  };
+
   return (
     <StoreContext.Provider value={store}>
       <HeaderBar
@@ -45,7 +49,7 @@ export const App = observer(() => {
       />
       {store.currentPage === "1" ? (
         <div className="p-2">
-          <LanguageConfigPage />
+          <LanguageConfigPage next={goToNextPage} />
         </div>
       ) : (
         <div className="p-2">
