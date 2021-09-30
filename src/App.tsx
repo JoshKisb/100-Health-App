@@ -31,7 +31,11 @@ export const App = observer(() => {
     );
   }, [store.organisationUnits]);
 
-  const goToNextPage = () => {
+  const goToEvents = () => {
+    store.showEvents();
+  };
+
+  const goToForm = () => {
     store.showForm();
   };
 
@@ -49,12 +53,12 @@ export const App = observer(() => {
       />
       {store.currentPage === "1" ? (
         <div className="p-2">
-          <LanguageConfigPage next={goToNextPage} />
+          <LanguageConfigPage next={goToEvents} />
         </div>
       ) : (
         <div className="p-2">
           <OrgUnitTree />
-          {store.currentPage === "2" ? <DataEntryForm /> : <EventList />}
+          {store.currentPage === "3" ? <DataEntryForm /> : <EventList />}
         </div>
       )}
     </StoreContext.Provider>

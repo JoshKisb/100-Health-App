@@ -89,7 +89,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             >
               <b>
                 {
-                  store?.activeLanguage?.lang?.[
+                  store?.activeLanguage?.[
                     "I hereby certify that (tick as appropriate) :"
                   ]
                 }
@@ -110,7 +110,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
               <p>
                 {" "}
                 {
-                  store?.activeLanguage?.lang?.[
+                  store?.activeLanguage?.[
                     "I attended the deceased before death"
                   ]
                 }
@@ -119,7 +119,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.lang?.["Yes"]}{" "}
+              {store?.activeLanguage?.["Yes"]}{" "}
               <Checkbox
                 checked={attendedBeforeDeath}
                 onClick={() => setAttendedBeforeDeath(!attendedBeforeDeath)}
@@ -135,16 +135,14 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
               <p>
                 {" "}
                 {
-                  store?.activeLanguage?.lang?.[
-                    "I examined the body after death"
-                  ]
+                  store?.activeLanguage?.["I examined the body after death"]
                 }{" "}
               </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.lang?.["Yes"]}{" "}
+              {store?.activeLanguage?.["Yes"]}{" "}
               <Checkbox
                 checked={examinedBeforeDeath}
                 onClick={() => setExaminedBeforeDeath(!examinedBeforeDeath)}
@@ -160,7 +158,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
               <p>
                 {" "}
                 {
-                  store?.activeLanguage?.lang?.[
+                  store?.activeLanguage?.[
                     "I conducted the post mortem of the body"
                   ]
                 }{" "}
@@ -169,7 +167,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.lang?.["Yes"]}{" "}
+              {store?.activeLanguage?.["Yes"]}{" "}
               <Checkbox
                 checked={conductedPostMortem}
                 onClick={() => setConductedPostMortem(!conductedPostMortem)}
@@ -182,7 +180,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           {/* b)  d)  ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> {store?.activeLanguage?.lang?.["Other (specify)"]}</p>
+              <p> {store?.activeLanguage?.["Other (specify)"]}</p>
             </Form.Item>
           </td>
           <td className="border p-1">
@@ -195,7 +193,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                     setOther(`${e.target.value}`);
                   }
                 }}
-                placeholder={store?.activeLanguage?.lang?.["Specify"]}
+                placeholder={store?.activeLanguage?.["Specify"]}
               />
             </p>
           </td>

@@ -1,7 +1,6 @@
 import { action, computed, observable } from "mobx";
 import { flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
-import { CodeSandboxCircleFilled } from "@ant-design/icons";
 
 const query = {
   me: {
@@ -145,9 +144,10 @@ class Store {
     this.edit();
     this.currentEvent = null;
     this.editing = false;
-    this.currentPage = "1";
+    this.currentPage = "2";
   };
-  @action showForm = () => (this.currentPage = "2");
+  @action showForm = () => (this.currentPage = "3");
+  @action showLang = () => (this.currentPage = "1");
   @action setEngine = (engine: any) => (this.engine = engine);
   @action edit = () => (this.viewMode = false);
   @action view = () => (this.viewMode = true);
@@ -194,11 +194,20 @@ class Store {
   @action getAllLanguages = async () => {
     try {
       const url = `/api/dataStore/Languages`;
+      const singleLang = (id: any) => `/api/dataStore/Languages/${id}`;
 
       const result = await this.engine.link.fetch(url);
 
-      console.log("Result of getting all languages is ", result);
-      return result;
+      let res: any = [];
+
+      let r;
+      for (r = 0; r < result?.length; r++) {
+        let newRes = await this.engine.link.fetch(singleLang(result[r]));
+        res.push(newRes);
+      }
+
+      console.log("Result of getting all languages is ", res);
+      return res;
     } catch (error) {
       console.log(error);
       return false;
@@ -219,13 +228,20 @@ class Store {
     }
   };
 
-  @action saveNewLang = async (languageName?: string, languageObject?: any) => {
+  @action saveNewLang = async (
+    languageName?: string,
+    language?: any,
+    meta?: any
+  ) => {
     try {
       const url = `/api/dataStore/Languages/${languageName}`;
 
       console.log("ENGINE IS ", this.engine);
 
-      const postObject = JSON.stringify(languageObject);
+      const postObject = JSON.stringify({
+        language,
+        meta,
+      });
 
       const result = await this.engine.link.fetch(url, {
         method: "POST",
@@ -237,6 +253,28 @@ class Store {
       });
 
       console.log("Result of posting new language is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  @action postLanguageMeta = async (meta?: any) => {
+    try {
+      const url =
+        "/api/metadata.json?importMode=COMMIT&identifier=UID&importReportMode=ERRORS&preheatMode=REFERENCE&importStrategy=CREATE_AND_UPDATE&atomicMode=ALL&mergeMode=MERGE&flushMode=AUTO&skipSharing=true&skipValidation=true&async=true&inclusionStrategy=NON_NULL&format=json";
+      const postObject = JSON.stringify(meta);
+
+      const result = await this.engine.link.fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: postObject,
+      });
+      console.log("Result of posting new meta is ", result);
       return result;
     } catch (error) {
       console.log(error);
