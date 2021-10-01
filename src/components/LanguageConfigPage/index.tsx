@@ -157,7 +157,12 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
 
           if (results?.data && typeof results?.data === typeof []) {
             results.data.forEach((it: typeof templateT) => {
-              if (it["English Version"] && `${it["Your Language"]}`) {
+              if (
+                it["English Version"] &&
+                `${it["Your Language"]}` &&
+                `${it["Your Language"]}` !== "" &&
+                it["Your Language"] !== null
+              ) {
                 finalRes[it["English Version"]] = `${it["Your Language"]}`;
               }
             });
