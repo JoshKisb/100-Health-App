@@ -77,10 +77,13 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       await store.postLanguageMeta(meta);
     };
     const getLanguages = async () => {
-      const allLanguages = await store.getAllLanguages().then((res) => {
-        setLoading(false);
-        return res;
-      });
+      const allLanguages = await store
+        .getAllLanguages()
+        .then((res) => {
+          setLoading(false);
+          return res;
+        })
+        .catch((err) => setLoading(false));
 
       setLanguagesList(allLanguages);
       console.log("Languages are", allLanguages);
@@ -105,13 +108,12 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       if (chosenLang?.language.LanguageName) {
         setCurrentLanguageID(chosenLang.language?.LanguageID);
         setCurrentLanguageName(chosenLang.language?.LanguageName);
-        await setLanguageMeta(chosenLang?.meta).then((res) =>
-          setLoading(false)
-        );
+        await setLanguageMeta(chosenLang?.meta)
+          .then((res) => setLoading(false))
+          .catch((err) => setLoading(false));
       } else {
         setLoading(false);
       }
-
       next();
     };
 
@@ -131,6 +133,11 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         },
         onClose: () => {
           setLoading(true);
+          notification.info({
+            message: "Update",
+            description: "Getting new languages list from store",
+            duration: 2,
+          });
           getLanguages();
         },
         duration: 2,
@@ -150,7 +157,9 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
 
           if (results?.data && typeof results?.data === typeof []) {
             results.data.forEach((it: typeof templateT) => {
-              finalRes[it["English Version"]] = it["Your Language"];
+              if (it["English Version"] && `${it["Your Language"]}`) {
+                finalRes[it["English Version"]] = `${it["Your Language"]}`;
+              }
             });
           }
 
@@ -350,14 +359,15 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
                 chooseLanguage(e);
               }}
             >
-              {languagesList.map((option: any) => (
-                <Option
-                  key={option.language.LanguageName}
-                  value={option.language.LanguageName}
-                >
-                  {option.language.LanguageName}
-                </Option>
-              ))}
+              {languagesList?.length &&
+                languagesList.map((option: any) => (
+                  <Option
+                    key={option.language.LanguageName}
+                    value={option.language.LanguageName}
+                  >
+                    {option.language.LanguageName}
+                  </Option>
+                ))}
             </Select>
           </Spin>
           <div className="button-container">
