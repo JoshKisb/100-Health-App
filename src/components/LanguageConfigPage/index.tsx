@@ -329,12 +329,43 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       // Validation error messages
       if (!noNewFields || !allFieldsPresent || someFieldsEmpty) {
         if (!noNewFields) {
+          let theNewFields = [""];
+
+          newMetaFields.forEach((item, index) => {
+            if (!allFields.includes(item)) {
+              if (theNewFields[0] === "") {
+                theNewFields[0] = `Found new field ${item} on line ${
+                  index + 2
+                }`;
+              } else {
+                theNewFields.push(
+                  `Found new field ${item} on line ${index + 2}`
+                );
+              }
+            }
+          });
+          if (typeof theNewFields?.[0] === "string") {
+            console.log("New fields are ", theNewFields);
+          }
+
           notification.error({
             message: "Validation Error!",
-            description:
-              "Did you add any new fields not present in the template to your METADATA CONFIG csv?",
+            description: (
+              <span>
+                Did you add any new fields not present in the template to your
+                METADATA csv?
+                <br />
+                <br />
+                {theNewFields.map((item, index) => (
+                  <>
+                    ({index + 1}). {item}
+                    <br />
+                  </>
+                ))}
+              </span>
+            ),
             onClick: () => {},
-            duration: 3,
+            duration: 10,
           });
           setUploadingMetadata(false);
           return setNewMetadataValid(false);
