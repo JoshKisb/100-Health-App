@@ -1,5 +1,5 @@
 "use strict";
-import oldMeta from "./metadata.json";
+import oldMeta from "./fm2.json";
 import fullMetaData from "./fullMetaData.json";
 const _ = require("lodash");
 
@@ -8,36 +8,45 @@ export const generateMetadataNames = () => {
     oldMeta[key].map((it) => it.name)
   );
   let data = [];
-  data1.forEach((it) => (data = [...data, ...it]));
+  let lengthEst = 0;
+  data1.forEach((it) => (lengthEst = Number(lengthEst) + Number(it.length)));
+  data1.forEach((it) => data.push(...it));
+  console.log("Data 1 is ", lengthEst, data1);
   data = data.map((key) => ({
     eng: key,
     other: "",
   }));
+
+  console.log("Data is ", data);
   return data;
 };
 
 export const generateNewMetaObject = (input) => {
+  // categoryOptions categoryOptionCombos categories  optionSets options
   let newMeta = _.cloneDeep(oldMeta);
+
   const categoryOptionsStartIndex = 0;
   const categoryOptionCombosStartIndex =
     newMeta.categoryOptions.length + categoryOptionsStartIndex;
+
   const categoriesStartIndex =
     newMeta.categoryOptionCombos.length + categoryOptionCombosStartIndex;
+
   const optionSetsStartIndex = newMeta.categories.length + categoriesStartIndex;
+
   const optionsStartIndex = newMeta.optionSets.length + optionSetsStartIndex;
 
   // Populate the respective values into a new metadata object;
   // categoryOptions
   let a;
+  let aa = 0;
   for (a = categoryOptionsStartIndex; a < categoryOptionCombosStartIndex; a++) {
-    const currentVal = newMeta.categoryOptions[a];
+    const currentVal = newMeta.categoryOptions[aa];
     if (currentVal?.name) {
       currentVal.name = input[a];
-
-      newMeta.categoryOptions = [
-        ...newMeta.categoryOptions.filter((it) => it.id !== currentVal.id),
-        currentVal,
-      ];
+      console.log("Currently inside category Options fixing ", currentVal);
+      newMeta.categoryOptions[aa] = currentVal;
+      aa = Number(aa) + Number(1);
     }
   }
 
@@ -48,7 +57,7 @@ export const generateNewMetaObject = (input) => {
     const currentVal = newMeta.categoryOptionCombos[bb];
 
     if (currentVal?.name) {
-      currentVal.name = input[b];
+      currentVal.name = `${input[b]}`;
       newMeta.categoryOptionCombos[bb] = currentVal;
       bb = Number(bb) + Number(1);
     }
@@ -61,7 +70,7 @@ export const generateNewMetaObject = (input) => {
     const currentVal = newMeta.categories[cc];
 
     if (currentVal?.name) {
-      currentVal.name = input[c];
+      currentVal.name = `${input[c]}`;
       newMeta.categories[cc] = currentVal;
       cc = Number(cc) + Number(1);
     }
@@ -74,7 +83,7 @@ export const generateNewMetaObject = (input) => {
     const currentVal = newMeta.optionSets[dd];
 
     if (currentVal?.name) {
-      currentVal.name = input[d];
+      currentVal.name = `${input[d]}`;
       newMeta.optionSets[dd] = currentVal;
       dd = Number(dd) + Number(1);
     }
@@ -87,7 +96,7 @@ export const generateNewMetaObject = (input) => {
     const currentVal = newMeta.options[ee];
 
     if (currentVal?.name) {
-      currentVal.name = input[e];
+      currentVal.name = `${input[e]}`;
       newMeta.options[ee] = currentVal;
       ee = Number(ee) + Number(1);
     }
@@ -110,5 +119,6 @@ export const generateNewMetaObject = (input) => {
     metaFullClone[key] = valToReplaceWith;
   });
 
+  console.log("Meta full clone is ", metaFullClone);
   return metaFullClone;
 };

@@ -4,7 +4,8 @@ import { observer } from "mobx-react";
 import englishDefault from "../../assets/english.json";
 import englishMeta from "./fullMetaData.json";
 import { useStore } from "../../Context";
-import { Button, notification, Select, Spin } from "antd";
+import { Button, notification, Select, Spin, Progress } from "antd";
+import { CheckCircleOutlined } from "@ant-design/icons";
 import MetaDataConfig from "./MetaDataConfig";
 import { CSVLink } from "react-csv";
 import Papa from "papaparse";
@@ -15,6 +16,14 @@ import {
 
 let templateT: any = {};
 templateT["LanguageID"] = `any`;
+
+const ICDLanguages: typeof templateT = {
+  Arabic: "ar",
+  English: "en",
+  French: "fr",
+  Spanish: "es",
+  Chinese: "zh",
+};
 
 let UITranslationTemplateData: { eng: string; other: string }[] = Object.keys(
   englishDefault
@@ -47,6 +56,8 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         meta: englishMeta,
       },
     ]);
+    const defaultICDLang = "Select ICD Classification Language";
+    const [chosenICDLang, setChosenICDLang] = useState(defaultICDLang);
     const uiTranslationUploader = useRef<HTMLInputElement>(null);
     const metadataTranslationUploader = useRef<HTMLInputElement>(null);
     const langDefault = "Select a Language";
@@ -75,9 +86,10 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
     };
     const setLanguageMeta = async (meta: any) => {
       await store.postLanguageMeta(meta);
+      // await store.postLanguageMeta(englishMeta);
     };
     const getLanguages = async () => {
-      const allLanguages = await store
+      let allLanguages = await store
         .getAllLanguages()
         .then((res) => {
           setLoading(false);
@@ -85,6 +97,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         })
         .catch((err) => setLoading(false));
 
+      allLanguages = allLanguages.filter((it: any) => it.language);
       setLanguagesList(allLanguages);
       console.log("Languages are", allLanguages);
     };
@@ -98,16 +111,41 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       // return;
 
       if (actualLang?.language && actualLang.meta) {
+        setCurrentLanguageName(lang);
         setChosenLang(actualLang);
       }
     };
 
     const confirmLangChoice = async () => {
       setLoading(true);
+      // Notify setting language
+      notification.info({
+        message: "Update",
+        description: "Setting Chosen language for UI",
+        duration: 2,
+      });
       await setLanguage(chosenLang.language);
+
+      // Notify setting ICD Lang
+      // Set ICD Lang
+      notification.info({
+        message: "Update",
+        description: "Setting Chosen language for ICD Clasification",
+        duration: 2,
+      });
+      const icdLang = ICDLanguages[`${chosenICDLang}`];
+      store.setICDLang(icdLang);
+
       if (chosenLang?.language.LanguageName) {
         setCurrentLanguageID(chosenLang.language?.LanguageID);
         setCurrentLanguageName(chosenLang.language?.LanguageName);
+
+        // Notify posting meta
+        notification.info({
+          message: "Update",
+          description: "Setting Metadata",
+          duration: 2,
+        });
         await setLanguageMeta(chosenLang?.meta)
           .then((res) => setLoading(false))
           .catch((err) => setLoading(false));
@@ -124,6 +162,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         newMetadataObj
       );
 
+      console.log("Just saved", newMetadataObj);
       notification.success({
         message: "Update",
         description: "Language saved successfully",
@@ -374,12 +413,33 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
                   </Option>
                 ))}
             </Select>
+
+            <Select
+              style={{ width: "100%", marginTop: "1rem" }}
+              size="large"
+              key={`${Math.random()}`}
+              value={chosenICDLang}
+              onChange={(e: any) => {
+                setChosenICDLang(e);
+              }}
+            >
+              {Object.keys(ICDLanguages)?.map((option: any) => (
+                <Option key={option} value={option}>
+                  {option}
+                </Option>
+              ))}
+            </Select>
           </Spin>
+
           <div className="button-container">
             <Button
               type="primary"
               onClick={confirmLangChoice}
-              disabled={loading}
+              disabled={
+                loading ||
+                chosenICDLang === defaultICDLang ||
+                currentLanguageName === langDefault
+              }
             >
               Confirm Selection
             </Button>
@@ -410,7 +470,16 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
             </CSVLink>
 
             <Button type="primary" onClick={handleInitiateUIUpload}>
-              Upload UI Configuration CSV
+              {newLangValid ? (
+                <CheckCircleOutlined
+                  style={{
+                    color: "#ffffff",
+                    marginRight: "10px",
+                    fontSize: "17px",
+                  }}
+                />
+              ) : null}{" "}
+              <span>Upload UI Configuration CSV</span>
             </Button>
             <input
               style={{ display: "none" }}
@@ -434,7 +503,16 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
             </CSVLink>
 
             <Button type="primary" onClick={handleInitiateMetaUpload}>
-              Upload Metadata Configuration CSV
+              {newMetadataValid ? (
+                <CheckCircleOutlined
+                  style={{
+                    color: "#ffffff",
+                    marginRight: "10px",
+                    fontSize: "17px",
+                  }}
+                />
+              ) : null}{" "}
+              <span>Upload Metadata Configuration CSV</span>
             </Button>
             <input
               style={{ display: "none" }}

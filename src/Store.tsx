@@ -31,6 +31,7 @@ class Store {
   @observable userOrgUnits: any = [];
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
+  @observable ICDLang: any;
   @observable programs = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
@@ -196,7 +197,11 @@ class Store {
       const url = `/api/dataStore/Languages`;
       const singleLang = (id: any) => `/api/dataStore/Languages/${id}`;
 
-      const result = await this.engine.link.fetch(url);
+      const result = await this.engine.link.fetch(url).catch((err: any) => err);
+
+      if (!result?.length) {
+        return [];
+      }
 
       let res: any = [];
 
@@ -234,14 +239,32 @@ class Store {
     meta?: any
   ) => {
     try {
-      const url = `/api/dataStore/Languages/${languageName}`;
-
-      console.log("ENGINE IS ", this.engine);
+      const nameSpaceUrl = `/api/dataStore/Languages`;
+      const url = `${nameSpaceUrl}/${languageName}`;
 
       const postObject = JSON.stringify({
         language,
         meta,
       });
+
+      let nameSpaceExists = await this.engine.link
+        .fetch(nameSpaceUrl)
+        .catch((err: any) => err);
+
+      if (!nameSpaceExists?.length) {
+        // Create the name space
+        await this.engine.link.fetch(`${nameSpaceUrl}/placeholder`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
+        });
+
+        nameSpaceExists = await this.engine.link
+          .fetch(nameSpaceUrl)
+          .catch((err: any) => err)?.length;
+      }
 
       const result = await this.engine.link.fetch(url, {
         method: "POST",
@@ -252,7 +275,6 @@ class Store {
         body: postObject,
       });
 
-      console.log("Result of posting new language is ", result);
       return result;
     } catch (error) {
       console.log(error);
@@ -262,9 +284,12 @@ class Store {
 
   @action postLanguageMeta = async (meta?: any) => {
     try {
+      const url2 = "/api/29/metadata";
       const url =
         "/api/metadata.json?importMode=COMMIT&identifier=UID&importReportMode=ERRORS&preheatMode=REFERENCE&importStrategy=CREATE_AND_UPDATE&atomicMode=ALL&mergeMode=MERGE&flushMode=AUTO&skipSharing=true&skipValidation=true&async=true&inclusionStrategy=NON_NULL&format=json";
+
       const postObject = JSON.stringify(meta);
+      console.log("Meta object is ", postObject);
 
       const result = await this.engine.link.fetch(url, {
         method: "POST",
@@ -316,6 +341,10 @@ class Store {
 
   @action setActiveLanguage = (lang: any) => {
     this.activeLanguage = lang;
+  };
+
+  @action setICDLang = (lang: any) => {
+    this.ICDLang = lang;
   };
 
   @action

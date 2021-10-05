@@ -15,6 +15,7 @@ export const ICDDialog: SFC<ICDProps> = ({ visible, handleOk, field }) => {
   const mySettings = {
     apiServerUrl: "https://icd11restapi-developer-test.azurewebsites.net",
     autoBind: false,
+    language: store.ICDLang,
   };
   const myCallbacks = {
     selectedEntityFunction: (selectedEntity: any) => {
