@@ -146,9 +146,10 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           description: "Setting Metadata",
           duration: 2,
         });
-        await setLanguageMeta(chosenLang?.meta)
-          .then((res) => setLoading(false))
-          .catch((err) => setLoading(false));
+        setLoading(false);
+        // await setLanguageMeta(chosenLang?.meta)
+        //   .then((res) => setLoading(false))
+        //   .catch((err) => setLoading(false));
       } else {
         setLoading(false);
       }
