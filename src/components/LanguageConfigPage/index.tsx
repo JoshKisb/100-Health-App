@@ -14,6 +14,11 @@ import {
   generateNewMetaObject,
 } from "./metaTranslation";
 
+const csvNames = {
+  meta: "METADATA_TRANSLATION_TEMPLATE.csv",
+  ui: "UI_TRANSLATION_TEMPLATE.csv",
+};
+
 let templateT: any = {};
 templateT["LanguageID"] = `any`;
 
@@ -225,12 +230,15 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           let vals = [""];
           if (results?.data && typeof results?.data === typeof []) {
             results.data.forEach((it: typeof templateT, index) => {
-              if (index === 0) {
-                fields = [it["English Version"]];
-                vals = [it["Your Language"]];
-              } else {
-                fields.push(it["English Version"]);
-                vals.push(it["Your Language"]);
+              const valsExist = it["English Version"] && it["Your Language"];
+              if (valsExist) {
+                if (fields[0] === "") {
+                  fields = [it["English Version"]];
+                  vals = [it["Your Language"]];
+                } else {
+                  fields.push(it["English Version"]);
+                  vals.push(it["Your Language"]);
+                }
               }
             });
           }
@@ -274,8 +282,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         if (!noNewFields) {
           notification.error({
             message: "Validation Error!",
-            description:
-              "Did you add any new fields not present in the template to your UI CONFIG csv?",
+            description: `Did you add any new fields not present in the template to your ${csvNames.meta}?`,
             onClick: () => {},
             duration: 3,
           });
@@ -284,8 +291,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         if (!allFieldsPresent) {
           notification.error({
             message: "Validation Error!",
-            description:
-              "Some of the fields provided in the template UI CONFIG csv are missing in your UI CONFIG csv !",
+            description: `Some of the fields provided in the template ${csvNames.meta} are missing in your submission!`,
             onClick: () => {},
             duration: 3,
           });
@@ -294,7 +300,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         if (someFieldsEmpty) {
           notification.error({
             message: "Validation Error!",
-            description: "Some of the values in your UI CONFIG csv are empty!",
+            description: `Some of the values in your ${csvNames.meta} are empty!`,
             onClick: () => {},
             duration: 3,
           });
@@ -353,7 +359,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
             description: (
               <span>
                 Did you add any new fields not present in the template to your
-                METADATA csv?
+                {" " + csvNames.meta}?
                 <br />
                 <br />
                 {theNewFields.map((item, index) => (
@@ -374,7 +380,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         if (someFieldsEmpty) {
           notification.error({
             message: "Validation Error!",
-            description: "Some of the values in your METADATA csv are empty!",
+            description: `Some of the values in your ${csvNames.meta} are empty!`,
             onClick: () => {},
             duration: 3,
           });
@@ -385,8 +391,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         if (!allFieldsPresent) {
           notification.error({
             message: "Validation Error!",
-            description:
-              "Some of the fields provided in the template METADATA CONFIG csv are missing in your METADATA CONFIG csv!",
+            description: `Some of the fields provided in the template ${csvNames.meta} csv are missing in your submission!`,
             onClick: () => {},
             duration: 3,
           });
@@ -396,8 +401,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       } else {
         notification.success({
           message: "Validation Passed!",
-          description:
-            "Your METADATA translation passed all validation checks!",
+          description: `Your ${csvNames.meta} translation passed all validation checks!`,
           onClick: () => {},
           duration: 2,
         });
@@ -493,7 +497,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
             <CSVLink
               data={UITranslationTemplateData}
               headers={templateHeaders}
-              filename={"UI_TRANSLATION_TEMPLATE.csv"}
+              filename={csvNames.ui}
               target="_blank"
             >
               <Button type="primary" ghost>
@@ -526,7 +530,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
             <CSVLink
               data={MetaTranslationTemplateData}
               headers={templateHeaders}
-              filename={"METADATA_TRANSLATION_TEMPLATE.csv"}
+              filename={csvNames.meta}
               target="_blank"
             >
               <Button type="primary" ghost>
