@@ -132135,7 +132135,7 @@
          "created":"2019-07-08T16:25:35.332",
          "name":"HMIS 100 - Medical Certificate of Cause of Death",
          "shortName":"HMIS 100 - Medical Certificate of Cause of Death",
-         "code":"PAUL TEST TWO fixed",
+         "code":"HMIS100",
          "ignoreOverdueEvents":false,
          "skipOffline":false,
          "onlyEnrollOnce":false,

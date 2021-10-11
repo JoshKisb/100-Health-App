@@ -16,6 +16,14 @@ const query = {
         "organisationUnits[id,name],programStages[programStageDataElements[displayInReports,dataElement[id,name]]]",
     },
   },
+  categories: {
+    resource: "categories.json",
+    params: {
+      fields: "name,id,code,categoryOptions[id,name]",
+      paging: "false",
+      filter: "code:in:[RT01]",
+    },
+  },
   options: {
     resource: "optionSets.json",
     params: {
@@ -25,10 +33,25 @@ const query = {
     },
   },
 };
+const categoryOptionCombos = [
+  {
+    name: "1. National",
+    id: "l4UMmqvSBe5",
+  },
+  {
+    name: "2. Foreigner",
+    id: "VJU0bY182ND",
+  },
+  {
+    name: "3. Refugee",
+    id: "wUteK0Om3qP",
+  },
+];
 
 class Store {
   @observable engine: any;
   @observable userOrgUnits: any = [];
+  @observable nationalitySelect: any;
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
   @observable ICDLang: any;
@@ -45,7 +68,7 @@ class Store {
   @observable sorter = "created:desc";
   @observable search = "";
   @observable currentPage = "1";
-  @observable programOrganisationUnits = [];
+  @observable programOrganisationUnits = []; /** !!!!!!!!!! */
   @observable currentEvent: any;
   @observable viewMode = false;
   @observable editing = false;
@@ -155,6 +178,7 @@ class Store {
   @action setCurrentEvent = (event: any) => (this.currentEvent = event);
   @action setSelectedNationality = async (nationality: any) => {
     try {
+      console.log("Nationality is ", nationality);
       this.selectedNationality = nationality;
       if (this.canInsert) {
         await this.queryEvents();
@@ -170,6 +194,11 @@ class Store {
   loadUserOrgUnits = async () => {
     try {
       const data = await this.engine.query(query);
+      console.log("DATA categories IS ", Object.keys(data), data.categories);
+      // const test13 = data.categories?.categories?.[0].categoryOptions || [];
+      this.nationalitySelect =
+        data.categories?.categories?.[0].categoryOptions || [];
+      // console.log("test13", test13);
       this.userOrgUnits = data.me.organisationUnits;
       const options = data.options.optionSets
         .filter((o: any) => {
@@ -178,8 +207,10 @@ class Store {
         .map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
-      const units = data.program.organisationUnits;
-      this.programOrganisationUnits = units;
+      const units = data.program.organisationUnits; /** !!!!!!!!!! */
+      console.log("DATA IS", data);
+      console.log("UNITS ARE", units);
+      this.programOrganisationUnits = units; /** !!!!!!!!!! */
       this.optionSets = fromPairs(options);
       const programStage = data.program.programStages[0];
       this.availableDataElements = programStage.programStageDataElements.map(
@@ -284,9 +315,13 @@ class Store {
 
   @action postLanguageMeta = async (meta?: any) => {
     try {
-      const url2 = "/api/29/metadata";
-      const url =
+      const updateUrl = "/api/29/metadata";
+      const postUrl =
         "/api/metadata.json?importMode=COMMIT&identifier=UID&importReportMode=ERRORS&preheatMode=REFERENCE&importStrategy=CREATE_AND_UPDATE&atomicMode=ALL&mergeMode=MERGE&flushMode=AUTO&skipSharing=true&skipValidation=true&async=true&inclusionStrategy=NON_NULL&format=json";
+
+      const data = await this.engine.query(query);
+      const metaExists = !!data.program.programStages[0];
+      let url = metaExists ? updateUrl : postUrl;
 
       const postObject = JSON.stringify(meta);
       console.log("Meta object is ", postObject);
@@ -650,7 +685,13 @@ class Store {
   @computed get currentOrganisation() {
     const current: any = this.programOrganisationUnits.find(
       (u: any) => u.id === this.selectedOrgUnit
-    );
+    ); /** !!!!!!!!!! */
+
+    // this.programOrganisationUnits.forEach((val) =>
+    //   console.log("OR UNIT IS ", val)
+    // );
+    // console.log("programOrganisationUnits are", this.programOrganisationUnits);
+    // console.log("and selectedOrgUnit is ", this.selectedOrgUnit);
     if (current) {
       return current.name;
     }
@@ -658,6 +699,9 @@ class Store {
   }
 
   @computed get canInsert() {
+    console.log("this.selectedOrgUnit is ", this.selectedOrgUnit);
+    console.log("this.selectedNationality is ", this.selectedNationality);
+    console.log("this.currentOrganisation is ", this.currentOrganisation);
     return (
       this.selectedOrgUnit &&
       this.selectedNationality &&

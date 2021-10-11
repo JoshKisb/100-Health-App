@@ -14,6 +14,7 @@ import {
   generateNewMetaObject,
 } from "./metaTranslation";
 
+// console.log("Window location is ", window.location.origin);
 const csvNames = {
   meta: "METADATA_TRANSLATION_TEMPLATE.csv",
   ui: "UI_TRANSLATION_TEMPLATE.csv",
@@ -23,11 +24,11 @@ let templateT: any = {};
 templateT["LanguageID"] = `any`;
 
 const ICDLanguages: typeof templateT = {
-  Arabic: "ar",
+  // Arabic: "ar",
   English: "en",
   French: "fr",
-  Spanish: "es",
-  Chinese: "zh",
+  // Spanish: "es",
+  // Chinese: "zh",
 };
 
 let UITranslationTemplateData: { eng: string; other: string }[] = Object.keys(
@@ -51,7 +52,6 @@ interface LanguageConfigPageTypes {
   next?: any;
 }
 
-// console.log("MetaTranslationTemplateData is ", MetaTranslationTemplateData);
 const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
   ({ next }) => {
     const store = useStore();
@@ -91,7 +91,6 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
     };
     const setLanguageMeta = async (meta: any) => {
       await store.postLanguageMeta(meta);
-      // await store.postLanguageMeta(englishMeta);
     };
     const getLanguages = async () => {
       let allLanguages = await store
@@ -108,12 +107,9 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
     };
 
     const chooseLanguage = async (lang: any) => {
-      console.log("Choosing ", lang);
       const actualLang = languagesList.find(
         (it) => it.language.LanguageName === lang
       );
-      console.log("Language is ", actualLang);
-      // return;
 
       if (actualLang?.language && actualLang.meta) {
         setCurrentLanguageName(lang);
@@ -151,10 +147,10 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           description: "Setting Metadata",
           duration: 2,
         });
-        setLoading(false);
-        // await setLanguageMeta(chosenLang?.meta)
-        //   .then((res) => setLoading(false))
-        //   .catch((err) => setLoading(false));
+        // setLoading(false);
+        await setLanguageMeta(chosenLang?.meta)
+          .then((res) => setLoading(false))
+          .catch((err) => setLoading(false));
       } else {
         setLoading(false);
       }
@@ -314,7 +310,6 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           duration: 2,
         });
         setNewLangValid(true);
-        // Configure the metadata into a new object here.
       }
     }, [newLanguageObj]);
 
@@ -406,11 +401,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           duration: 2,
         });
 
-        // console.log("\n\nnewMetadataObj is ", newMetadataObj);
-        // console.log("\n\nnewMetaVals is ", newMetaVals);
-
         setNewMetadataObj(generateNewMetaObject(newMetaVals));
-        // const newMetadataToSend = generateNewMetaObject(newMetaVals);
         setNewMetadataValid(true);
       }
       setUploadingMetadata(false);
