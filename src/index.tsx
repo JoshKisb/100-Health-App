@@ -9,7 +9,8 @@ const dynamicBaseUrl = window.location.origin.includes("local")
   : window.location.origin;
 const appConfig = {
   // baseUrl: process.env.REACT_APP_DHIS2_BASE_URL,
-  baseUrl: dynamicBaseUrl,
+  // baseUrl: dynamicBaseUrl,
+  baseUrl: "https://mis.baylor-uganda.org/act2/",
   apiVersion: 32,
 };
 
