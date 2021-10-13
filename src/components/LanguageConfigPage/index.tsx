@@ -45,6 +45,10 @@ const templateHeaders = [
   { label: "English Version", key: "eng" },
   { label: "Your Language", key: "other" },
 ];
+const englishDefaultLang = {
+  language: englishDefault,
+  meta: englishMeta,
+};
 
 const { Option } = Select;
 
@@ -99,11 +103,24 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           setLoading(false);
           return res;
         })
-        .catch((err) => setLoading(false));
+        .catch((err) => {
+          setLoading(false);
+          return [];
+        });
 
       allLanguages = allLanguages.filter((it: any) => it.language);
+
+      // Show default language in case there is none in the state
+      if (!allLanguages.length) {
+        setLoading(true);
+        allLanguages = [
+          {
+            language: englishDefault,
+            meta: englishMeta,
+          },
+        ];
+      }
       setLanguagesList(allLanguages);
-      console.log("Languages are", allLanguages);
     };
 
     const chooseLanguage = async (lang: any) => {
