@@ -40,11 +40,12 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
       lu9BiHPxNqH: "",
     },
   }) => {
+    const store = useStore();
     const [attendedBeforeDeath, setAttendedBeforeDeath] = useState(false);
     const [examinedBeforeDeath, setExaminedBeforeDeath] = useState(false);
     const [conductedPostMortem, setConductedPostMortem] = useState(false);
+    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage);
     const [other, setOther] = useState("");
-    const store = useStore();
 
     const saveContent = () => {
       const result = {
@@ -74,6 +75,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
      */
     // const [attendedBeforeDeath, setAttendedBeforeDeath] = useState("")
 
+    useEffect(() => {
+      setActiveLanguage(store.activeLanguage);
+    }, [store.activeLanguage]);
+
     return (
       <Fragment>
         <tr>
@@ -89,7 +94,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             >
               <b>
                 {
-                  store?.activeLanguage?.[
+                  activeLanguage.lang?.[
                     "I hereby certify that (tick as appropriate) :"
                   ]
                 }
@@ -109,17 +114,13 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             <Form.Item name="Z41di0TRjIu" className="m-0">
               <p>
                 {" "}
-                {
-                  store?.activeLanguage?.[
-                    "I attended the deceased before death"
-                  ]
-                }
+                {activeLanguage.lang?.["I attended the deceased before death"]}
               </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.["Yes"]}{" "}
+              {activeLanguage.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={attendedBeforeDeath}
                 onClick={() => setAttendedBeforeDeath(!attendedBeforeDeath)}
@@ -134,15 +135,13 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
             <Form.Item name="Z41di0TRjIu" className="m-0">
               <p>
                 {" "}
-                {
-                  store?.activeLanguage?.["I examined the body after death"]
-                }{" "}
+                {activeLanguage.lang?.["I examined the body after death"]}{" "}
               </p>
             </Form.Item>
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.["Yes"]}{" "}
+              {activeLanguage.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={examinedBeforeDeath}
                 onClick={() => setExaminedBeforeDeath(!examinedBeforeDeath)}
@@ -158,7 +157,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
               <p>
                 {" "}
                 {
-                  store?.activeLanguage?.[
+                  activeLanguage.lang?.[
                     "I conducted the post mortem of the body"
                   ]
                 }{" "}
@@ -167,7 +166,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           </td>
           <td className="border p-1">
             <p>
-              {store?.activeLanguage?.["Yes"]}{" "}
+              {activeLanguage.lang?.["Yes"]}{" "}
               <Checkbox
                 checked={conductedPostMortem}
                 onClick={() => setConductedPostMortem(!conductedPostMortem)}
@@ -180,7 +179,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           {/* b)  d)  ………………………………… */}
           <td className="border p-1">
             <Form.Item name="Z41di0TRjIu" className="m-0">
-              <p> {store?.activeLanguage?.["Other (specify)"]}</p>
+              <p> {activeLanguage.lang?.["Other (specify)"]}</p>
             </Form.Item>
           </td>
           <td className="border p-1">
@@ -193,7 +192,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                     setOther(`${e.target.value}`);
                   }
                 }}
-                placeholder={store?.activeLanguage?.["Specify"]}
+                placeholder={activeLanguage.lang?.["Specify"]}
               />
             </p>
           </td>

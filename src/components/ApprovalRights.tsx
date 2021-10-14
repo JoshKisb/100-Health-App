@@ -15,6 +15,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
   ({ style, updateApprovalStatus, statusReceived }) => {
     const store = useStore();
     const [userIsAuthorized, setUserIsAuthorized] = useState(false);
+    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage);
     const [approved, setApproved] = useState(false);
     const [approvalText, setApprovalText] = useState("Not Approved");
     const [inputKey, setinputKey] = useState(Math.random());
@@ -68,6 +69,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
       checkApproval();
     }, []);
 
+    useEffect(() => {
+      setActiveLanguage(store.activeLanguage);
+    }, [store.activeLanguage]);
+
     return userIsAuthorized ? (
       <div>
         <Button
@@ -86,9 +91,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                 }
           }
         >
-          {!approved
-            ? store?.activeLanguage?.lang?.["Approve ?"]
-            : approvalText}
+          {!approved ? activeLanguage.lang?.["Approve ?"] : approvalText}
           {approved && <CheckCircleTwoTone twoToneColor={"#28a745"} />}
         </Button>
       </div>
