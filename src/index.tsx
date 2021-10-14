@@ -15,7 +15,7 @@ if (window.location.pathname) {
 }
 
 const actualBaseUrl = pathname
-  ? `${dynamicBaseUrl}${pathname}`
+  ? `${dynamicBaseUrl}${pathname}/`
   : dynamicBaseUrl;
 
 console.log("actualBaseUrl is ", actualBaseUrl);
