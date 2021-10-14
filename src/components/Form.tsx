@@ -933,6 +933,10 @@ export const DataEntryForm = observer(() => {
     }
   }, [forceResetDOB]);
 
+  useEffect(() => {
+    setActiveLanguage(store.activeLanguage);
+  }, [store.activeLanguage]);
+
   return (
     <Form
       form={form}
@@ -945,21 +949,22 @@ export const DataEntryForm = observer(() => {
       <Card
         title={
           <Title level={2}>
-            {activeLanguage["Medical Certificate of Cause of Death"]}
+            {activeLanguage?.lang["Medical Certificate of Cause of Death"]}
           </Title>
         }
         actions={[
           <React.Fragment>
             <div style={styles.flexRow}>
               <p style={{ margin: "0rem" }}>
-                {activeLanguage["Inserting for"]} {store.currentOrganisation}{" "}
+                {activeLanguage?.lang["Inserting for"]}{" "}
+                {store.currentOrganisation}{" "}
               </p>
               {!isEmpty(store.defaultValues) ? (
                 <Popconfirm
-                  title={activeLanguage["Sure to delete?"]}
+                  title={activeLanguage?.lang["Sure to delete?"]}
                   onConfirm={() => store.deleteEvent()}
                 >
-                  <Button size="large">{activeLanguage["Delete"]}</Button>{" "}
+                  <Button size="large">{activeLanguage?.lang["Delete"]}</Button>{" "}
                 </Popconfirm>
               ) : null}
               <div>
@@ -970,7 +975,7 @@ export const DataEntryForm = observer(() => {
                     store.enableForm();
                   }}
                 >
-                  {activeLanguage["Cancel"]}
+                  {activeLanguage?.lang["Cancel"]}
                 </Button>
 
                 <Button
@@ -986,7 +991,7 @@ export const DataEntryForm = observer(() => {
                       !declarations.u9tYUv6AM51)
                   }
                 >
-                  {activeLanguage["Save"]}
+                  {activeLanguage?.lang["Save"]}
                 </Button>
               </div>
             </div>
@@ -1001,12 +1006,12 @@ export const DataEntryForm = observer(() => {
         bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
       >
         <Form.Item
-          label={activeLanguage["Date of Entry"]}
+          label={activeLanguage?.lang["Date of Entry"]}
           rules={[
             {
               type: "object",
               required: true,
-              message: activeLanguage["Please select date!"],
+              message: activeLanguage?.lang["Please select date!"],
             },
           ]}
           name="eventDate"
@@ -1016,7 +1021,7 @@ export const DataEntryForm = observer(() => {
             disabledDate={notTomorrow}
             size="large"
             disabled={store.viewMode}
-            placeholder={activeLanguage["Select a Date"]}
+            placeholder={activeLanguage?.lang["Select a Date"]}
           />
         </Form.Item>
 
@@ -1054,7 +1059,11 @@ export const DataEntryForm = observer(() => {
             <tr>
               <td className="border p-1" colSpan={2}>
                 <b>
-                  {activeLanguage["Ministry of Health National Case Number"]}
+                  {
+                    activeLanguage?.lang[
+                      "Ministry of Health National Case Number"
+                    ]
+                  }
                 </b>
               </td>
               <td className="border p-1" colSpan={2}>
@@ -1068,7 +1077,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Referred"]}</b>
+                <b>{activeLanguage?.lang["Referred"]}</b>
               </td>
               <td className="border p-1">
                 {/* Add the facilities dropdown here */}
@@ -1091,7 +1100,7 @@ export const DataEntryForm = observer(() => {
                 ) : null} */}
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Name (Full name):"]}</b>
+                <b>{activeLanguage?.lang["Name (Full name):"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1113,7 +1122,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Referred From:"]}</b>
+                <b>{activeLanguage?.lang["Referred From:"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1133,7 +1142,9 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["NIN (National Identification Number)"]}</b>
+                <b>
+                  {activeLanguage?.lang["NIN (National Identification Number)"]}
+                </b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1156,7 +1167,7 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Region"]}</b>
+                <b>{activeLanguage?.lang["Region"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="zwKo51BEayZ" className="m-0">
@@ -1200,7 +1211,7 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["District"]}</b>
+                <b>{activeLanguage?.lang["District"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="t5nTEmlScSt" className="m-0">
@@ -1228,7 +1239,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item> */}
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Occupation"]}</b>
+                <b>{activeLanguage?.lang["Occupation"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="b70okb06FWa" className="m-0">
@@ -1241,7 +1252,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Sub-County"]}</b>
+                <b>{activeLanguage?.lang["Sub-County"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="u44XP9fZweA" className="m-0">
@@ -1262,7 +1273,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Date of Birth Known ?"]}</b>
+                <b>{activeLanguage?.lang["Date of Birth Known ?"]}</b>
               </td>
               <td className="border p-1">
                 <Checkbox
@@ -1276,7 +1287,7 @@ export const DataEntryForm = observer(() => {
                     store.disableValue("q7e7FOXKnOf");
                   }}
                 >
-                  {activeLanguage["Yes"]}
+                  {activeLanguage?.lang["Yes"]}
                 </Checkbox>
 
                 <Checkbox
@@ -1291,7 +1302,7 @@ export const DataEntryForm = observer(() => {
                     store.enableValue("q7e7FOXKnOf");
                   }}
                 >
-                  {activeLanguage["No"]}
+                  {activeLanguage?.lang["No"]}
                 </Checkbox>
 
                 {/* {optionSets ? (
@@ -1305,7 +1316,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Village"]}</b>
+                <b>{activeLanguage?.lang["Village"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="dsiwvNQLe5n" className="m-0">
@@ -1316,7 +1327,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Date of Birth"]}</b>
+                <b>{activeLanguage?.lang["Date of Birth"]}</b>
               </td>
               <td className="border p-1">
                 {!forceResetDOB ? (
@@ -1334,7 +1345,7 @@ export const DataEntryForm = observer(() => {
                     <DatePicker
                       disabledDate={notTomorrow}
                       size="large"
-                      placeholder={activeLanguage["Select a Date"]}
+                      placeholder={activeLanguage?.lang["Select a Date"]}
                       disabled={
                         store.viewMode ||
                         store.allDisabled.RbrUuKFSqkZ ||
@@ -1363,7 +1374,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Age"]}</b>
+                <b>{activeLanguage?.lang["Age"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1371,7 +1382,8 @@ export const DataEntryForm = observer(() => {
                     {
                       type: "integer",
                       required: false,
-                      message: activeLanguage["Enter a valid age below 120"],
+                      message:
+                        activeLanguage?.lang["Enter a valid age below 120"],
                       max: 120,
                     },
                   ]}
@@ -1405,7 +1417,7 @@ export const DataEntryForm = observer(() => {
                           `${parseInt(enablePregnantQnKey) + 1}`
                         );
                         window.alert(
-                          activeLanguage[
+                          activeLanguage?.lang[
                             "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
                           ]
                         );
@@ -1415,7 +1427,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Sex"]}</b>
+                <b>{activeLanguage?.lang["Sex"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (
@@ -1423,7 +1435,7 @@ export const DataEntryForm = observer(() => {
                     rules={[
                       {
                         required: true,
-                        message: activeLanguage["Sex is required"],
+                        message: activeLanguage?.lang["Sex is required"],
                       },
                     ]}
                     name="e96GB4CXyd3"
@@ -1448,7 +1460,7 @@ export const DataEntryForm = observer(() => {
                             `${parseInt(enablePregnantQnKey) + 1}`
                           );
                           window.alert(
-                            activeLanguage[
+                            activeLanguage?.lang[
                               "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
                             ]
                           );
@@ -1461,7 +1473,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Place of Birth"]}</b>
+                <b>{activeLanguage?.lang["Place of Birth"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="xNCSFrgdUgi" className="m-0">
@@ -1472,7 +1484,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Date and time of death"]}</b>
+                <b>{activeLanguage?.lang["Date and time of death"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -1481,7 +1493,9 @@ export const DataEntryForm = observer(() => {
                       type: "object",
                       required: true,
                       message:
-                        activeLanguage["Please select date and time of death!"],
+                        activeLanguage?.lang[
+                          "Please select date and time of death!"
+                        ],
                     },
                   ]}
                   name="i8rrl8YWxLF"
@@ -1493,7 +1507,7 @@ export const DataEntryForm = observer(() => {
                     showTime
                     format="YYYY-MM-DD HH:mm:ss"
                     placeholder={
-                      activeLanguage["Select date and time of death"]
+                      activeLanguage?.lang["Select date and time of death"]
                     }
                     disabled={store.viewMode || store.allDisabled.i8rrl8YWxLF}
                     onChange={(e: any) => {
@@ -1514,7 +1528,7 @@ export const DataEntryForm = observer(() => {
 
                       if (diff_date < 25) {
                         window.alert(
-                          activeLanguage[
+                          activeLanguage?.lang[
                             "Please remember that you should also complete the section 'Fetal or infant Death'"
                           ]
                         );
@@ -1541,7 +1555,7 @@ export const DataEntryForm = observer(() => {
                     color: "#000085",
                   }}
                 >
-                  {activeLanguage["Frame A: Medical Data. Part 1 and 2"]}
+                  {activeLanguage?.lang["Frame A: Medical Data. Part 1 and 2"]}
                 </h3>
               </td>
             </tr>
@@ -1559,25 +1573,31 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" />
               <td className="border p-1">
                 {" "}
-                <b>{activeLanguage["Cause of death"]}</b>{" "}
+                <b>{activeLanguage?.lang["Cause of death"]}</b>{" "}
               </td>
               <td className="border p-1">
                 {" "}
-                <b>{activeLanguage["Code"]}</b>{" "}
+                <b>{activeLanguage?.lang["Code"]}</b>{" "}
               </td>
               <td className="border p-1">
                 {" "}
-                <b>{activeLanguage["Cause of Death Free Text"]}</b>{" "}
+                <b>{activeLanguage?.lang["Cause of Death Free Text"]}</b>{" "}
               </td>
               <td className="border p-1">
                 {" "}
                 <b>
-                  {activeLanguage["Time interval type from onset to death"]}
+                  {
+                    activeLanguage?.lang[
+                      "Time interval type from onset to death"
+                    ]
+                  }
                 </b>
               </td>
               <td className="border p-1">
                 {" "}
-                <b>{activeLanguage["Time interval from onset to death"]}</b>
+                <b>
+                  {activeLanguage?.lang["Time interval from onset to death"]}
+                </b>
               </td>
             </tr>
             <tr>
@@ -1585,7 +1605,7 @@ export const DataEntryForm = observer(() => {
                 {" "}
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "Report disease or condition directly leading to death on line"
                     ]
                   }
@@ -1658,7 +1678,7 @@ export const DataEntryForm = observer(() => {
                       </td>
                       <td>
                         <Popconfirm
-                          title={activeLanguage["Sure to add coded COD"]}
+                          title={activeLanguage?.lang["Sure to add coded COD"]}
                           onConfirm={() => {
                             buttonA();
 
@@ -1707,7 +1727,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" rowSpan={3}>
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "Report chain of events 'due to' (b to d) in order (if applicable)"
                     ]
                   }
@@ -1771,7 +1791,7 @@ export const DataEntryForm = observer(() => {
                       </td>
                       <td>
                         <Popconfirm
-                          title={activeLanguage["Sure to add coded COD"]}
+                          title={activeLanguage?.lang["Sure to add coded COD"]}
                           onConfirm={() => {
                             buttonB();
 
@@ -1877,7 +1897,7 @@ export const DataEntryForm = observer(() => {
                       </td>
                       <td>
                         <Popconfirm
-                          title={activeLanguage["Sure to add coded COD"]}
+                          title={activeLanguage?.lang["Sure to add coded COD"]}
                           onConfirm={() => {
                             buttonC();
 
@@ -1981,7 +2001,7 @@ export const DataEntryForm = observer(() => {
                       </td>
                       <td>
                         <Popconfirm
-                          title={activeLanguage["Sure to add coded COD"]}
+                          title={activeLanguage?.lang["Sure to add coded COD"]}
                           onConfirm={() => {
                             buttonD();
 
@@ -2027,7 +2047,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1" colSpan={2}>
-                <b>{activeLanguage["State the underlying cause"]}</b>
+                <b>{activeLanguage?.lang["State the underlying cause"]}</b>
               </td>
               <td className="border p-1" colSpan={2}>
                 {/* Testing */}
@@ -2043,7 +2063,7 @@ export const DataEntryForm = observer(() => {
                 {
                   <Tooltip
                     title={
-                      activeLanguage[
+                      activeLanguage?.lang[
                         "NOTE: any values whose code begins with N are injuries and as such cannot be selected as an underlying cause of death."
                       ]
                     }
@@ -2234,7 +2254,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" colSpan={2}>
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "Other significant conditions contributing to death (time intervals can be included in brackets after the condition)"
                     ]
                   }
@@ -2336,7 +2356,7 @@ export const DataEntryForm = observer(() => {
                   }}
                 >
                   {" "}
-                  {activeLanguage["Frame B: Other medical data"]}
+                  {activeLanguage?.lang["Frame B: Other medical data"]}
                 </h3>
               </td>
             </tr>
@@ -2344,7 +2364,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "Was surgery performed within the last 4 weeks?"
                     ]
                   }
@@ -2371,7 +2391,13 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["If yes please specify date of surgery"]}</b>
+                <b>
+                  {
+                    activeLanguage?.lang[
+                      "If yes please specify date of surgery"
+                    ]
+                  }
+                </b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2381,7 +2407,7 @@ export const DataEntryForm = observer(() => {
                     {
                       type: "object",
                       required: false,
-                      message: activeLanguage["Please select date!"],
+                      message: activeLanguage?.lang["Please select date!"],
                     },
                   ]}
                 >
@@ -2400,7 +2426,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "If yes please specify reason for surgery (disease or condition)"
                     ]
                   }
@@ -2418,7 +2444,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Was an autopsy requested?"]}</b>
+                <b>{activeLanguage?.lang["Was an autopsy requested?"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (
@@ -2441,7 +2467,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "If yes were the findings used in the certification?"
                     ]
                   }
@@ -2479,13 +2505,13 @@ export const DataEntryForm = observer(() => {
                     color: "#000085",
                   }}
                 >
-                  <b>{activeLanguage["Manner of death"]}</b>
+                  <b>{activeLanguage?.lang["Manner of death"]}</b>
                 </h3>
               </td>
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Disease"]}</b>
+                <b>{activeLanguage?.lang["Disease"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2496,12 +2522,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.FhHPxY16vet}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Assault"]}</b>
+                <b>{activeLanguage?.lang["Assault"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2512,12 +2538,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.KsGOxFyzIs1}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Could not be determined"]}</b>{" "}
+                <b>{activeLanguage?.lang["Could not be determined"]}</b>{" "}
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2528,7 +2554,7 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.b4yPk98om7e}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
@@ -2546,12 +2572,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.gNM2Yhypydx}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Legal intervention"]}</b>
+                <b>{activeLanguage?.lang["Legal intervention"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2562,12 +2588,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.tYH7drlbNya}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Pending investigation"]}</b>
+                <b>{activeLanguage?.lang["Pending investigation"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2578,14 +2604,14 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.fQWuywOaoN2}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Intentional self-harm"]}</b>
+                <b>{activeLanguage?.lang["Intentional self-harm"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2596,12 +2622,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.wX3i3gkTG4m}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["War"]}</b>
+                <b>{activeLanguage?.lang["War"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2612,12 +2638,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.xDMX2CJ4Xw3}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Unknown"]}</b>
+                <b>{activeLanguage?.lang["Unknown"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2628,14 +2654,14 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.o1hG9vr0peF}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
             </tr>
             <tr>
               <td className="border p-1" colSpan={2}>
-                <b>{activeLanguage["If external cause or poisoning"]}</b>
+                <b>{activeLanguage?.lang["If external cause or poisoning"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item
@@ -2646,12 +2672,12 @@ export const DataEntryForm = observer(() => {
                   <Checkbox
                     disabled={store.viewMode || store.allDisabled.AZSlwlRAFig}
                   >
-                    {activeLanguage["Yes"]}
+                    {activeLanguage?.lang["Yes"]}
                   </Checkbox>
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Date of injury"]}</b>
+                <b>{activeLanguage?.lang["Date of injury"]}</b>
               </td>
               <td className="border p-1" colSpan={2}>
                 <Form.Item
@@ -2661,7 +2687,8 @@ export const DataEntryForm = observer(() => {
                     {
                       type: "object",
                       required: false,
-                      message: activeLanguage["Please select date of injury"],
+                      message:
+                        activeLanguage?.lang["Please select date of injury"],
                     },
                   ]}
                 >
@@ -2677,7 +2704,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" colSpan={3}>
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "Please describe how external cause occurred (If poisoning please specify poisoning agent)"
                     ]
                   }
@@ -2695,7 +2722,11 @@ export const DataEntryForm = observer(() => {
             <tr>
               <td className="border p-1" colSpan={3}>
                 <b>
-                  {activeLanguage["Place of occurrence of the external cause"]}
+                  {
+                    activeLanguage?.lang[
+                      "Place of occurrence of the external cause"
+                    ]
+                  }
                 </b>
               </td>
               <td className="border p-1" colSpan={3}>
@@ -2724,13 +2755,13 @@ export const DataEntryForm = observer(() => {
                     color: "#000085",
                   }}
                 >
-                  {activeLanguage["Fetal or infant death"]}
+                  {activeLanguage?.lang["Fetal or infant death"]}
                 </h3>
               </td>
             </tr>
             <tr>
               <td className="border p-1" colSpan={2}>
-                <b>{activeLanguage["Multiple pregnancy"]}</b>
+                <b>{activeLanguage?.lang["Multiple pregnancy"]}</b>
               </td>
               <td className="border p-1" colSpan={2}>
                 {optionSets ? (
@@ -2742,7 +2773,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1" colSpan={2}>
-                <b>{activeLanguage["Stillborn?"]}</b>
+                <b>{activeLanguage?.lang["Stillborn?"]}</b>
               </td>
               <td className="border p-1" colSpan={2}>
                 {optionSets ? (
@@ -2765,7 +2796,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1">
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "If death within 24 hrs specify the number of hours survived"
                     ]
                   }
@@ -2779,7 +2810,8 @@ export const DataEntryForm = observer(() => {
                     {
                       type: "number",
                       required: false,
-                      message: activeLanguage["Can not be more than 24 hours"],
+                      message:
+                        activeLanguage?.lang["Can not be more than 24 hours"],
                       max: 24,
                     },
                   ]}
@@ -2792,7 +2824,7 @@ export const DataEntryForm = observer(() => {
                 </Form.Item>
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Birth weight (in grams)"]}</b>
+                <b>{activeLanguage?.lang["Birth weight (in grams)"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="xAWYJtQsg8M" className="m-0">
@@ -2805,7 +2837,7 @@ export const DataEntryForm = observer(() => {
                 form.getFieldValue("xAWYJtQsg8M") > 10000 ? (
                   <span style={{ color: "red" }}>
                     {
-                      activeLanguage[
+                      activeLanguage?.lang[
                         "Weight should be between 100 and 1000 grams"
                       ]
                     }
@@ -2816,7 +2848,11 @@ export const DataEntryForm = observer(() => {
             <tr>
               <td className="border p-1">
                 <b>
-                  {activeLanguage["Number of completed weeks of pregnancy"]}
+                  {
+                    activeLanguage?.lang[
+                      "Number of completed weeks of pregnancy"
+                    ]
+                  }
                 </b>
               </td>
               <td className="border p-1">
@@ -2830,7 +2866,7 @@ export const DataEntryForm = observer(() => {
                 form.getFieldValue("lQ1Byr04JTx") > 55 ? (
                   <span style={{ color: "red" }}>
                     {
-                      activeLanguage[
+                      activeLanguage?.lang[
                         "Completed weeks of death should be between 10 and 54 weeks"
                       ]
                     }
@@ -2838,7 +2874,7 @@ export const DataEntryForm = observer(() => {
                 ) : null}
               </td>
               <td className="border p-1">
-                <b>{activeLanguage["Age of mother (years)"]}</b>
+                <b>{activeLanguage?.lang["Age of mother (years)"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="DdfDMFW4EJ9" className="m-0">
@@ -2852,7 +2888,7 @@ export const DataEntryForm = observer(() => {
                 form.getFieldValue("DdfDMFW4EJ9") > 60 ? (
                   <span style={{ color: "orange" }}>
                     {
-                      activeLanguage[
+                      activeLanguage?.lang[
                         "Mothers age is not between 10 and 60 years"
                       ]
                     }
@@ -2865,7 +2901,7 @@ export const DataEntryForm = observer(() => {
               <td className="border p-1" colSpan={2}>
                 <b>
                   {
-                    activeLanguage[
+                    activeLanguage?.lang[
                       "If the death was perinatal, please state conditions of mother that affected the fetus and newborn"
                     ]
                   }
@@ -2898,16 +2934,16 @@ export const DataEntryForm = observer(() => {
                 >
                   <b>
                     {
-                      activeLanguage[
+                      activeLanguage?.lang[
                         "For women, was the deceased pregnant or within 6 weeks of delivery?"
                       ]
                     }
                   </b>
                   {showPregnancyReminder && personsGender === "Female" && (
                     <Alert
-                      message={activeLanguage["Reminder"]}
+                      message={activeLanguage?.lang["Reminder"]}
                       description={
-                        activeLanguage[
+                        activeLanguage?.lang[
                           "Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
                         ]
                       }
@@ -2946,7 +2982,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["At what point?"]}</b>
+                <b>{activeLanguage?.lang["At what point?"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (
@@ -2966,7 +3002,11 @@ export const DataEntryForm = observer(() => {
             <tr>
               <td className="border p-1">
                 <b>
-                  {activeLanguage["Did the pregnancy contribute to death?"]}
+                  {
+                    activeLanguage?.lang[
+                      "Did the pregnancy contribute to death?"
+                    ]
+                  }
                 </b>
               </td>
               <td className="border p-1">
@@ -2986,7 +3026,7 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Parity"]}</b>
+                <b>{activeLanguage?.lang["Parity"]}</b>
               </td>
               <td className="border p-1">
                 <Form.Item name="ymyLrfEcYkD" className="m-0">
@@ -3004,7 +3044,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Mode of delivery"]}</b>
+                <b>{activeLanguage?.lang["Mode of delivery"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (
@@ -3023,7 +3063,7 @@ export const DataEntryForm = observer(() => {
 
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Place of delivery"]}</b>
+                <b>{activeLanguage?.lang["Place of delivery"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (
@@ -3041,7 +3081,7 @@ export const DataEntryForm = observer(() => {
             </tr>
             <tr>
               <td className="border p-1">
-                <b>{activeLanguage["Delivered by skilled attendant"]}</b>
+                <b>{activeLanguage?.lang["Delivered by skilled attendant"]}</b>
               </td>
               <td className="border p-1">
                 {optionSets ? (

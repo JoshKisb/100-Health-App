@@ -168,10 +168,10 @@ class Store {
     this.edit();
     this.currentEvent = null;
     this.editing = false;
-    this.currentPage = "2";
+    this.currentPage = "1";
   };
   @action showForm = () => (this.currentPage = "3");
-  @action showLang = () => (this.currentPage = "1");
+  @action showLang = () => (this.currentPage = "2");
   @action setEngine = (engine: any) => (this.engine = engine);
   @action edit = () => (this.viewMode = false);
   @action view = () => (this.viewMode = true);
@@ -194,8 +194,7 @@ class Store {
   loadUserOrgUnits = async () => {
     try {
       const data = await this.engine.query(query);
-      console.log("DATA categories IS ", Object.keys(data), data.categories);
-      // const test13 = data.categories?.categories?.[0].categoryOptions || [];
+
       this.nationalitySelect =
         data.categories?.categories?.[0].categoryOptions || [];
       // console.log("test13", test13);
@@ -207,10 +206,9 @@ class Store {
         .map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
-      const units = data.program.organisationUnits; /** !!!!!!!!!! */
-      console.log("DATA IS", data);
-      console.log("UNITS ARE", units);
-      this.programOrganisationUnits = units; /** !!!!!!!!!! */
+      const units = data.program.organisationUnits;
+
+      this.programOrganisationUnits = units;
       this.optionSets = fromPairs(options);
       const programStage = data.program.programStages[0];
       this.availableDataElements = programStage.programStageDataElements.map(
@@ -223,7 +221,11 @@ class Store {
     }
   };
 
-  @action getAllLanguages = async () => {
+  @action getAllLanguages = async (
+    languageName?: string,
+    language?: any,
+    meta?: any
+  ) => {
     try {
       const url = `/api/dataStore/Languages`;
       const singleLang = (id: any) => `/api/dataStore/Languages/${id}`;
@@ -256,7 +258,6 @@ class Store {
 
       const result = await this.engine.link.fetch(url);
 
-      console.log("Result of getting single language is ", result);
       return result;
     } catch (error) {
       console.log(error);
@@ -313,6 +314,44 @@ class Store {
     }
   };
 
+  @action saveActiveLanguage = async (
+    langName?: string,
+    language?: any,
+    isUpdate?: boolean
+  ) => {
+    console.log(
+      "\n\n",
+      "Result of getting ActiveLanguage language is ",
+      false,
+      "\n\n"
+    );
+    try {
+      const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
+      const postObject = JSON.stringify({
+        language,
+      });
+
+      console.log("Post object for active lang is ", postObject);
+
+      const result = await this.engine.link.fetch(url, {
+        method: isUpdate ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: postObject,
+      });
+
+      // const result = await this.engine.link.fetch(url);
+      console.log("\n\nResult is ", result);
+
+      return result;
+    } catch (error) {
+      console.log("\n\nResult is ", error);
+      console.log(error);
+      return false;
+    }
+  };
+
   @action postLanguageMeta = async (meta?: any) => {
     try {
       const updateUrl = "/api/29/metadata";
@@ -340,6 +379,32 @@ class Store {
       console.log(error);
       return false;
     }
+  };
+
+  @action getActiveLanguage = async (defaultLang?: any) => {
+    try {
+      const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
+
+      const result = await this.engine.link.fetch(url);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  @action checkIfAdmin = async () => {
+    const userDetails = await this.engine.query({
+      me: {
+        resource: "me.json",
+        params: {
+          fields: "*,organisationUnits[*]",
+        },
+      },
+    });
+    // console.log("Result is ", userDetails?.me.code);
+    return userDetails?.me?.code === "admin";
   };
 
   @action getRegions = async () => {

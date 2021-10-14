@@ -11,13 +11,12 @@ export const generateMetadataNames = () => {
   let lengthEst = 0;
   data1.forEach((it) => (lengthEst = Number(lengthEst) + Number(it.length)));
   data1.forEach((it) => data.push(...it));
-  console.log("Data 1 is ", lengthEst, data1);
+
   data = data.map((key) => ({
     eng: key,
     other: "",
   }));
 
-  console.log("Data is ", data);
   return data;
 };
 

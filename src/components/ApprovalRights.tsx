@@ -58,18 +58,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
       if (userIsApproved?.canApprove) {
         setUserIsAuthorized(userIsApproved?.canApprove);
         setUserName(userIsApproved?.userName);
-
-        // Check if a form has been approved
         return;
       }
       setUserIsAuthorized(userIsApproved?.canApprove);
       setUserName(userIsApproved?.userName);
-      // return userIsApproved;
-      // console.log("document.cookie", document.cookie);
-      // console.log("Starting");
-      // const result = await fetch("https://hmis-dev.health.go.ug/api/me?");
-      // console.log("Result is ", result);
-      // const result
     };
 
     useEffect(() => {

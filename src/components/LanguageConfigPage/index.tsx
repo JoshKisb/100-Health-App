@@ -142,6 +142,13 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
         description: "Setting Chosen language for UI",
         duration: 2,
       });
+
+      // Update the active language
+      await store.saveActiveLanguage(
+        chosenLang.language.LanguageName,
+        chosenLang.language,
+        true // Update is true
+      );
       await setLanguage(chosenLang.language);
 
       // Notify setting ICD Lang
