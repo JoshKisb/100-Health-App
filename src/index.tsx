@@ -22,8 +22,8 @@ console.log("actualBaseUrl is ", actualBaseUrl);
 
 const appConfig = {
   // baseUrl: process.env.REACT_APP_DHIS2_BASE_URL,
-  baseUrl: "https://qihmisug.org/dhis/",
-  // baseUrl: actualBaseUrl,
+  // baseUrl: "https://qihmisug.org/dhis/",
+  baseUrl: actualBaseUrl,
   apiVersion: 32,
 };
 
