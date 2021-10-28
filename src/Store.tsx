@@ -1,4 +1,4 @@
-import { action, computed, observable } from "mobx";
+import { action, computed, observable, toJS } from "mobx";
 import { flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
@@ -200,8 +200,40 @@ class Store {
 
       console.log('loadUserOrgUnits:', data)
 
-      this.nationalitySelect =
-        data.categories?.categories?.[0].categoryOptions || [];
+
+      let al = this.activeLanguage?.lang ?? this.activeLanguage;
+      al = toJS(al)
+      console.log("ActiveLang1 ", al)
+      console.log("ActiveLang2 ", al.LanguageName)
+
+      const metaQ = {
+        meta : {
+          resource: `dataStore/Languages/${al.LanguageName}`,
+          params: {
+            fields: [
+              "meta"
+            ]
+          }
+        }
+      }
+
+      const d2 = await this.engine.query(metaQ);
+
+
+      const langNats = d2.meta?.meta?.categories?.find((p: any) => p.code == 'RT01')
+      const langOptions = langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
+      const langValues = d2.meta?.meta?.categoryOptionCombos || [];
+
+      let lcategories = [];
+      for(let i = 0; i < langOptions.length; i++) {
+        const id = langOptions[i];
+        lcategories.push(langValues.find((l: any) => l.categoryOptions[0]?.id == id));
+      }
+      
+
+      console.log("cates", lcategories)
+
+      this.nationalitySelect = lcategories || [];
       // console.log("test13", test13);
       this.userOrgUnits = data.me.organisationUnits;
       const options = data.options.optionSets
@@ -391,7 +423,6 @@ class Store {
       const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
 
       const result = await this.engine.link.fetch(url);
-
       return result;
     } catch (error) {
       console.log(error);

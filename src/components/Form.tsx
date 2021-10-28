@@ -45,7 +45,7 @@ const allLanguages = [
     lang: frenchString,
   },
 ];
-const BASE_URL = process.env.NODE_ENV=== 'development' ? `${process.env.REACT_APP_DHIS2_BASE_URL}` : '/';
+// const BASE_URL = process.env.NODE_ENV=== 'development' ? `${process.env.REACT_APP_DHIS2_BASE_URL}` : '/';
 // console.log(BASE_URL);
 
 const customFieldsReservedIds = [
@@ -67,9 +67,13 @@ const { Title } = Typography;
 export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
-  const [activeLanguage, setActiveLanguage] = useState(allLanguages[0]);
+  
+  const store = useStore();
+  const [activeLanguage, setActiveLanguage] = useState(
+    store.activeLanguage || allLanguages[0]
+  );
   const [activeLanguageString, setActiveLanguageString] = useState(
-    allLanguages[0].langName
+    store.activeLanguage?.LanguageName || allLanguages[0].langName
   );
 
   // Declarations
@@ -227,8 +231,7 @@ export const DataEntryForm = observer(() => {
 
   // End of Testing
 
-  const store = useStore();
-
+  
   const onFinish = async (values: any) => {
     // Force form to acknowledge controlled values
     if (approvalStatus) {
@@ -919,9 +922,9 @@ export const DataEntryForm = observer(() => {
   }, [store.defaultValues]);
 
   useEffect(() => {
-    setActiveLanguage(allLanguages[0]);
-    setActiveLanguageString(allLanguages[0].langName);
-    store.setActiveLanguage(allLanguages[0]);
+    // setActiveLanguage(allLanguages[0]);
+    // setActiveLanguageString(allLanguages[0].langName);
+    // store.setActiveLanguage(allLanguages[0]);
   }, []);
 
   useEffect(() => {
@@ -966,33 +969,24 @@ export const DataEntryForm = observer(() => {
   
     React.useEffect(() => {
       // console.log(customRowLength);
-      fetch(
-        `${BASE_URL}api/dataStore/Attributes/Attributes`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-          },
-        }
+      store.engine.link.fetch(
+        `/api/dataStore/Attributes/Attributes`
       )
-        .then((raw) => raw.json())
-        .then((res) => {
+        .then((raw: any) => raw.json())
+        .then((res: any) => {
           // console.log(res);
           if (res.status === "ERROR") {
             if (res.httpStatus === "Not Found") {
-              fetch(
-                `${BASE_URL}api/dataStore/Attributes/Attributes`,
-                {
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-                  },
+              store.engine.link.fetch(
+                `/api/dataStore/Attributes/Attributes`,
+                {                               
                   method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
                   body: JSON.stringify([]),
                 }
-              ).catch((error) => {
+              ).catch((error: any) => {
                 console.log(error);
               });
             }
@@ -1003,7 +997,7 @@ export const DataEntryForm = observer(() => {
             setCustomRows(res);
             setCustomRowLength(res.length);
             const keys = Object.keys(usedCustomIds.current);
-            Object.keys(usedCustomIds.current).forEach((id) => {
+            Object.keys(usedCustomIds.current).forEach((id: any) => {
               usedCustomIds.current[id] = false;
             });
             // console.log(usedCustomIds.current);
@@ -1015,7 +1009,7 @@ export const DataEntryForm = observer(() => {
             // console.log(usedCustomIds.current);
           }
         })
-        .catch((error) => {
+        .catch((error: any) => {
           console.log(error);
         });
     }, [customRowLength]);
@@ -1083,20 +1077,18 @@ export const DataEntryForm = observer(() => {
           // aggregationLevels: [],
         };
   
-        fetch(
-          `${BASE_URL}api/29/dataElements/BflLLM6wTq5?mergeMode=REPLACE`,
+        store.engine.link.fetch(
+          `/api/dataElements/BflLLM6wTq5?mergeMode=REPLACE`,
           {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-            },
             method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
             body: JSON.stringify(attachPayload),
           }
         )
-          .then((raw) => raw.json())
-          .then((res) => {
+          .then((raw: any) => raw.json())
+          .then((res: any) => {
             console.log(res);
             if (res) {
               const dataElement = {
@@ -1110,15 +1102,13 @@ export const DataEntryForm = observer(() => {
                 categoryCombo: { id: "bjDvmb4bfuf" },
                 legendSets: [],
               } as any;
-              fetch(
-                `${BASE_URL}api/dataStore/Attributes/Attributes`,
+              store.engine.link.fetch(
+                `/api/dataStore/Attributes/Attributes`,
                 {
-                  headers: {
-                    Accept: "application/json",
-                    "Content-Type": "application/json",
-                    Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-                  },
                   method: "PUT",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
                   body: JSON.stringify([
                     ...customRows,
                     {
@@ -1127,8 +1117,8 @@ export const DataEntryForm = observer(() => {
                   ]),
                 }
               )
-                .then((raw) => raw.json())
-                .then(async (res) => {
+                .then((raw: any) => raw.json())
+                .then(async (res: any) => {
                   // console.log(res);
                   // attachPayload.programStages[0].programStageDataElements.push({
                   //   created: "2019-09-23T22:45:37.606",
@@ -1206,20 +1196,15 @@ export const DataEntryForm = observer(() => {
     }, [customFieldName, customRowLength, customRows, fetching, usedCustomIds]);
     React.useEffect(() => {
       if (deleting) {
-        fetch(
-          `${BASE_URL}api/dataStore/Attributes/Attributes`,
+        store.engine.link.fetch(
+          `/api/dataStore/Attributes/Attributes`,
           {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-            },
             method: "PUT",
             body: JSON.stringify([...customRows]),
           }
         )
-          .then((raw) => raw.json())
-          .then((res) => {
+          .then((raw: any) => raw.json())
+          .then((res: any) => {
             // console.log(res);
             if (res.httpStatusCode === 200) {
               setCustomRowLength(customRowLength - 1);

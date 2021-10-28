@@ -39,6 +39,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
 
     useEffect(() => {
       if (store.nationalitySelect?.length) {
+        console.log("categoryOptionCombos", store.nationalitySelect)
         setCategoryOptionCombos(store.nationalitySelect);
       }
     }, [store.nationalitySelect]);
