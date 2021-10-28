@@ -19,7 +19,7 @@ export const App = observer(() => {
   useEffect(() => {
     if (store?.organisationUnits?.length) return;
     async function test() {
-      console.log("Fetching...");
+      console.log("Fetching orgs...");
       await store.loadUserOrgUnits();
     }
     test();

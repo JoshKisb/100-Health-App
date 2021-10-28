@@ -1,6 +1,7 @@
 import { action, computed, observable } from "mobx";
 import { flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
+import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 
 const query = {
   me: {
@@ -70,6 +71,7 @@ class Store {
   @observable currentPage = "1";
   @observable programOrganisationUnits = []; /** !!!!!!!!!! */
   @observable currentEvent: any;
+  @observable programExists = null;
   @observable viewMode = false;
   @observable editing = false;
   @observable forceDisable = false;
@@ -192,8 +194,11 @@ class Store {
 
   @action
   loadUserOrgUnits = async () => {
+    console.log("we are in the function now", query);
     try {
       const data = await this.engine.query(query);
+
+      console.log('loadUserOrgUnits:', data)
 
       this.nationalitySelect =
         data.categories?.categories?.[0].categoryOptions || [];
@@ -217,7 +222,7 @@ class Store {
         }
       );
     } catch (e) {
-      console.log(e);
+      console.log('errrruuuooorrrr', e);
     }
   };
 
@@ -446,6 +451,38 @@ class Store {
   @action setICDLang = (lang: any) => {
     this.ICDLang = lang;
   };
+
+  @action checkProgramExists = async () => {
+    if (this.programExists)
+      return true;
+
+    const programData = await this.engine.query({    
+      programs:{
+          resource: "programs",
+          params: {
+              fields: [
+                  'id',
+                  'name'
+              ]
+          }
+      }
+  
+    });
+
+    this.programExists = programData.programs.programs.some((p: any) => p.id == this.program);
+    return this.programExists;
+  }
+
+  @action createProgram = async () => {
+    const metaUrl = `/api/metadata`
+    await this.engine.link.fetch(metaUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(englishMeta),
+    });
+  }
 
   @action
   isUserApproved = async () => {

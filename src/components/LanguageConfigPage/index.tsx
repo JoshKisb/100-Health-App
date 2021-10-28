@@ -56,7 +56,7 @@ interface LanguageConfigPageTypes {
   next?: any;
 }
 
-const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
+const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
   ({ next }) => {
     const store = useStore();
     const [languagesList, setLanguagesList] = useState([
@@ -588,6 +588,73 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       </div>
     );
   }
+);
+
+
+const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
+  ({ next }) => {
+
+    const store = useStore();
+    const [loading, setLoading] = useState(false);
+    const [exists, setExists] = useState(false);
+
+    const checkForProgram = async () => {
+      let existsn = await store
+        .checkProgramExists()
+        .then((res) => {
+          setLoading(false);
+          if (res)
+          setExists(true);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setExists(false);
+        });
+    }
+
+    const createProgram = async () => {
+      setLoading(true);
+      await store
+        .createProgram()
+        .then((res) => {
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+        });
+    }
+
+    useEffect(() => {
+      setLoading(true);
+      checkForProgram();
+      // getLanguages();
+    }, []);
+
+    if (exists) {
+      return (<RealLanguageConfigPage next={next} />);
+    } else {
+      return (
+            <div className="lang-config-form-container">
+              <Spin spinning={loading}>
+                <div className="button-container">
+                  <Button
+                    className="p-3"
+                    type="primary"
+                    onClick={createProgram}
+                  >
+                    <h4>Create 100 Health Program</h4>
+                  </Button>
+                </div>
+              </Spin>
+            </div>
+          );
+      
+      }
+    
+
+
+  }
+
 );
 
 export default LanguageConfigPage;
