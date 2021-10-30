@@ -15,15 +15,18 @@ export const App = observer(() => {
   const engine = useDataEngine();
   store.setEngine(engine);
   const [loading, setLoading] = useState(false);
+  const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
-    if (store?.organisationUnits?.length) return;
+    if (store?.organisationUnits?.length || fetching) return;
     async function test() {
+      setFetching(true);
       console.log("Fetching orgs...");
       await store.loadUserOrgUnits();
+      setFetching(false);
     }
     test();
-  });
+  }, []);
 
   useEffect(() => {
     console.log(

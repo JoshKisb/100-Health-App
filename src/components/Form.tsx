@@ -742,6 +742,7 @@ export const DataEntryForm = observer(() => {
     // console.log("working");
   };
 
+  
   const optionSet = (
     os: string,
     field: string,
@@ -954,58 +955,90 @@ export const DataEntryForm = observer(() => {
     const [customRowLength, setCustomRowLength] = React.useState(0);
     const [creatingCustomField, setCreatingFiled] = React.useState(false);
     const [customFieldName, setCustomFieldName] = React.useState("");
-    const usedCustomIds = React.useRef(
-      Object.fromEntries(
-        customFieldsReservedIds.map(({ id }) => [id, false])
-      )
-    );
+    // const usedCustomIds = React.useRef(
+    //   Object.fromEntries(
+    //     customFieldsReservedIds.map(({ id }) => [id, false])
+    //   )
+    // );
   
     // const customRowsRef = React.useRef(
     //   [] as { name: string; id: string | null }[]
     // );
+
+    const createDataElement = async (name: string) => {
+      const attachPayload = {
+        "aggregationType": "NONE",
+        "code": `${customFieldName}`,
+        "domainType": "TRACKER",
+        "valueType": "TEXT",
+        "name": customFieldName,
+        "shortName": `${customFieldName}`,
+        "categoryCombo": {
+          "id": "bjDvmb4bfuf"
+        },
+        "legendSets": []
+      }
+      
+      await store.engine.link.fetch(
+        `/api/29/schemas/dataElement`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(attachPayload),
+        }
+      );
+
+      const res = await store.engine.link.fetch(
+        `/api/29/dataElements`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(attachPayload),
+        }
+      ).catch((err: any) => {
+        console.log(err);
+      });
+
+      console.log("res", res.response);
+      return res.response?.uid;
+    }
+
     const [customRows, setCustomRows] = React.useState(
       [] as { name: string; id: string | null }[]
     );
+
+
   
     React.useEffect(() => {
-      // console.log(customRowLength);
+      console.log('customRowLength', customRowLength);
       store.engine.link.fetch(
         `/api/dataStore/Attributes/Attributes`
-      )
-        .then((raw: any) => raw.json())
-        .then((res: any) => {
-          // console.log(res);
-          if (res.status === "ERROR") {
-            if (res.httpStatus === "Not Found") {
-              store.engine.link.fetch(
-                `/api/dataStore/Attributes/Attributes`,
-                {                               
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify([]),
-                }
-              ).catch((error: any) => {
-                console.log(error);
-              });
-            }
+      ).then((res: any) => {
+          console.log("CustomRows", res);
+          
+            if (!res || res == {}) {
+             
+            
             setCustomRows([]);
             setCustomRowLength(0);
           } else {
             // console.log(res);
             setCustomRows(res);
             setCustomRowLength(res.length);
-            const keys = Object.keys(usedCustomIds.current);
-            Object.keys(usedCustomIds.current).forEach((id: any) => {
-              usedCustomIds.current[id] = false;
-            });
-            // console.log(usedCustomIds.current);
-            res.forEach((row: { id: string }) => {
-              if (keys.includes(row.id)) {
-                usedCustomIds.current[row.id] = true;
-              }
-            });
+            // const keys = Object.keys(usedCustomIds.current);
+            // Object.keys(usedCustomIds.current).forEach((id: any) => {
+            //   usedCustomIds.current[id] = false;
+            // });
+            // // console.log(usedCustomIds.current);
+            // res.forEach((row: { id: string }) => {
+            //   if (keys.includes(row.id)) {
+            //     usedCustomIds.current[row.id] = true;
+            //   }
+            // });
             // console.log(usedCustomIds.current);
           }
         })
@@ -1040,160 +1073,140 @@ export const DataEntryForm = observer(() => {
         }
         // console.log(usedCustomIds.current)
         // find first unused
-        let idx = Object.keys(usedCustomIds.current).findIndex((k)=>{
-          // console.log(usedCustomIds.current[k])
-          return !usedCustomIds.current[k];
-        })
-        // console.log(idx);
-        idx = idx > -1 ? idx : 0;
-        let field = { ...customRows[idx] };
-        // console.log(customRowLength);
-        // console.log(customFieldsReservedIds[idx]);
+        // let idx = Object.keys(usedCustomIds.current).findIndex((k)=>{
+        //   // console.log(usedCustomIds.current[k])
+        //   return !usedCustomIds.current[k];
+        // })
+        // // console.log(idx);
+        // idx = idx > -1 ? idx : 0;
+        // let field = { ...customRows[idx] };
+        // // console.log(customRowLength);
+        // // console.log(customFieldsReservedIds[idx]);
   
-        field.id = customFieldsReservedIds[idx].id;
-        usedCustomIds.current[field.id] = true;
+        // field.id = customFieldsReservedIds[idx].id;
+        // usedCustomIds.current[field.id] = true;
   
-        const attachPayload = {
-          aggregationType: "NONE",
-          code: customFieldName,
-          domainType: "TRACKER",
-          // publicAccess: "rw------",
-          // lastUpdated: "2021-10-06T13:41:20.427",
-          valueType: "TEXT",
-          formName: customFieldName,
-          id: field.id,
-          // created: "2021-10-06T11:38:18.755",
-          // attributeValues: [],
-          // zeroIsSignificant: false,
-          name: customFieldName,
-          shortName: customFieldName,
-          categoryCombo: { id: "bjDvmb4bfuf" },
-          // lastUpdatedBy: { id: "M5zQapPyTZI" },
-          // user: { id: "M5zQapPyTZI" },
-          // translations: [],
-          // userGroupAccesses: [],
-          // userAccesses: [],
-          // legendSets: [],
-          // aggregationLevels: [],
-        };
-  
-        store.engine.link.fetch(
-          `/api/dataElements/BflLLM6wTq5?mergeMode=REPLACE`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(attachPayload),
-          }
-        )
-          .then((raw: any) => raw.json())
-          .then((res: any) => {
-            console.log(res);
-            if (res) {
-              const dataElement = {
-                aggregationType: "NONE",
-                domainType: "TRACKER",
-                valueType: "TEXT",
-                name: customFieldName,
-                shortName: field.id,
-                id: field.id,
-                code: field.id,
-                categoryCombo: { id: "bjDvmb4bfuf" },
-                legendSets: [],
-              } as any;
-              store.engine.link.fetch(
-                `/api/dataStore/Attributes/Attributes`,
-                {
-                  method: "PUT",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify([
-                    ...customRows,
-                    {
-                      ...dataElement,
+        // const attachPayload = {
+        //   aggregationType: "NONE",
+        //   code: customFieldName,
+        //   domainType: "TRACKER",
+        //   // publicAccess: "rw------",
+        //   // lastUpdated: "2021-10-06T13:41:20.427",
+        //   valueType: "TEXT",
+        //   formName: customFieldName,
+        //   id: field.id,
+        //   // created: "2021-10-06T11:38:18.755",
+        //   // attributeValues: [],
+        //   // zeroIsSignificant: false,
+        //   name: customFieldName,
+        //   shortName: customFieldName,
+        //   categoryCombo: { id: "bjDvmb4bfuf" },
+        //   // lastUpdatedBy: { id: "M5zQapPyTZI" },
+        //   // user: { id: "M5zQapPyTZI" },
+        //   // translations: [],
+        //   // userGroupAccesses: [],
+        //   // userAccesses: [],
+        //   // legendSets: [],
+        //   // aggregationLevels: [],
+        // };
+
+        createDataElement(customFieldName)
+          .then( async (uid: any) => {
+            console.log(uid);
+            if (uid) {
+
+              const prog = await store.engine.link.fetch(`/api/programs/${store.program}?fields=programStages[allowGenerateNextVisit,publicAccess,lastUpdated,id,generatedByEnrollmentDate,created,attributeValues,name,hideDueDate,enableUserAssignment,minDaysFromStart,executionDateLabel,preGenerateUID,openAfterEnrollment,repeatable,remindCompleted,displayGenerateEventBox,validationStrategy,autoGenerateEvent,blockEntryForm,dataEntryForm,programStageDataElements,program,lastUpdatedBy,user,programStageDataElements[created,lastUpdated,id,displayInReports,skipSynchronization,renderOptionsAsRadio,compulsory,allowProvidedElsewhere,sortOrder,allowFutureDate,programStage,dataElement[id,domainType,displayName,valueType]],translations,userGroupAccesses,userAccesses,notificationTemplates,programStageSections]`);
+
+              let stages = prog.programStages[0];
+              const stageId = stages?.id;
+              const dEs = stages?.programStageDataElements;
+
+              dEs.push({
+                "id": customFieldsReservedIds[customRowLength].id,
+                "dataElement": {
+                  "id": uid,
+                  "displayName": customFieldName,
+                  "valueType": "TEXT"
+                },
+                "programStage": {
+                  "id": stageId
+                },
+                "sortOrder": dEs.length + 1
+              });
+
+              stages.programStageDataElements = dEs;
+
+              const payload = prog.programStages;
+              payload[0] = stages;
+              console.log("Stages", payload);
+
+              store.engine.link.fetch('/api/29/metadata', {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({programStages: payload})
+
+              }).catch((err: any) => {
+                  setFetching(false);
+                  console.log("Error", err);
+              }).then(() => {
+               
+
+                const dataElement = {
+                  aggregationType: "NONE",
+                  domainType: "TRACKER",
+                  valueType: "TEXT",
+                  name: customFieldName,
+                  shortName: uid,
+                  id: uid,
+                  code: uid,
+                  categoryCombo: { id: "bjDvmb4bfuf" },
+                  legendSets: [],
+                } as any;
+
+                store.engine.link.fetch(
+                  `/api/dataStore/Attributes/Attributes`,
+                  {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/json",
                     },
-                  ]),
-                }
-              )
-                .then((raw: any) => raw.json())
-                .then(async (res: any) => {
-                  // console.log(res);
-                  // attachPayload.programStages[0].programStageDataElements.push({
-                  //   created: "2019-09-23T22:45:37.606",
-                  //   lastUpdated: "2021-07-23T12:27:11.001",
-                  //   id: "XUBVTLxuIvM",
-                  //   displayInReports: false,
-                  //   skipSynchronization: false,
-                  //   renderOptionsAsRadio: false,
-                  //   compulsory: true,
-                  //   allowProvidedElsewhere: false,
-                  //   allowFutureDate: false,
-                  //   // programStage: { id: "aKclf7Yl1PE" },
-                  //   dataElement: dataElement,
-                  // } as any);
-  
-                  // customRows.forEach((d) => {
-                  //   attachPayload.programStages[0].programStageDataElements.push({
-                  //     created: "2019-09-23T22:45:37.606",
-                  //     lastUpdated: "2021-07-23T12:27:11.001",
-                  //     id: "XUBVTLxuIvM",
-                  //     displayInReports: false,
-                  //     skipSynchronization: false,
-                  //     renderOptionsAsRadio: false,
-                  //     compulsory: true,
-                  //     allowProvidedElsewhere: false,
-                  //     allowFutureDate: false,
-                  //     programStage: { id: "aKclf7Yl1PE" },
-                  //     dataElement: d,
-                  //   } as any);
-                  // });
-  
-                  if (res.httpStatusCode === 200) {
-                    // try {
-                    //   const attached = await fetch(
-                    //     `${BASE_URL}api/29/metadata`,
-                    //     {
-                    //       headers: {
-                    //         Accept: "application/json",
-                    //         "Content-Type": "application/json",
-                    //         Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
-                    //       },
-                    //       method: "POST",
-                    //       body: JSON.stringify(attachPayload),
-                    //     }
-                    //   ).then((raw) => raw.json());
-                    //   console.log(attached);
-                    // } catch (e) {
-                    //   console.log(e);
-                    // }
+                    body: JSON.stringify([
+                      ...customRows,
+                      {
+                        ...dataElement,
+                      },
+                    ]),
+                  }
+                ).then(async (res: any) => {
+
                     setCustomRowLength(customRowLength + 1);
-                    // const newArray = [...customRowsRef.current];
-                    // newArray.push({ ...field, name: customFieldName });
-                    // customRowsRef.current = [...newArray];
-                    // setCustomRows(customRowsRef.current);
+                    
                     setCustomFieldName("");
                     setFetching(false);
-                  } else {
-                    alert(`${res.httpStatus}: ${res.message}`);
-                  }
-                })
-                .catch(() => {
-                  setFetching(false);
-                  alert("Error");
-                });
+                  }).catch((err: any) => {
+                    setFetching(false);
+                    console.log("Err", err);
+                    // alert("Error");
+                  });
+                 
+                    
+                 
+              })
+              
             } else {
               alert("failed to get id");
             }
             setFetching(false);
           })
-          .catch(() => {
-            alert("Error");
+          .catch((err: any) => {
+            console.log("Error", err);
             setFetching(false);
           });
       }
-    }, [customFieldName, customRowLength, customRows, fetching, usedCustomIds]);
+    }, [customFieldName, customRowLength, customRows, fetching]);
+
     React.useEffect(() => {
       if (deleting) {
         store.engine.link.fetch(
@@ -1214,9 +1227,10 @@ export const DataEntryForm = observer(() => {
             }
             setDeleting(false);
           })
-          .catch(() => {
+          .catch((err: any) => {
             setDeleting(false);
-            alert("Error");
+            console.log("Error deleting", err)
+            // alert("Error");
           });
       }
     }, [customFieldName, customRowLength, customRows, deleting]);

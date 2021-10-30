@@ -634,8 +634,8 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       return (<RealLanguageConfigPage next={next} />);
     } else {
       return (
-            <div className="lang-config-form-container">
-              <Spin spinning={loading}>
+          <div className="lang-config-form-container">
+              { loading ? (<Spin spinning={loading}></Spin>):(
                 <div className="button-container">
                   <Button
                     className="p-3"
@@ -644,9 +644,9 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
                   >
                     <h4>Create 100 Health Program</h4>
                   </Button>
-                </div>
-              </Spin>
             </div>
+            ) }
+        </div>
           );
       
       }
