@@ -66,8 +66,8 @@
   },
   "manifest.webapp": {
     "version": "1.0.0",
-    "name": "HMIS 100 - Medical Certificate of Cause of Death",
-    "description": "HMIS 100 - Medical Certificate of Cause of Death",
+    "name": " Medical Certificate of Cause of Death",
+    "description": " Medical Certificate of Cause of Death",
     "launch_path": "index.html",
     "icons": {
       "16": "assets/icons/image001.png",
