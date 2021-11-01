@@ -1032,13 +1032,19 @@ export const DataEntryForm = observer(() => {
       [] as { name: string; id: string | null }[]
     );
 
-
+    const checkAttributesNamespaceExists = async() => {
+      if (store.attributesExist == null)
+        await store.checkAttributesNamespaceExists();
+    }
   
     React.useEffect(() => {
       console.log('customRowLength', customRowLength);
-      store.engine.link.fetch(
-        `/api/dataStore/Attributes/Attributes`
-      ).then((res: any) => {
+
+      checkAttributesNamespaceExists().then(() => {
+      
+        store.engine.link.fetch(
+          `/api/dataStore/Attributes/Attributes`
+        ).then((res: any) => {
           console.log("CustomRows", res);
           
             if (!res || res == {}) {
@@ -1066,6 +1072,8 @@ export const DataEntryForm = observer(() => {
         .catch((error: any) => {
           console.log(error);
         });
+      
+      })
     }, [customRowLength]);
   
     // React.useEffect(() => {

@@ -77,6 +77,7 @@ class Store {
   @observable forceDisable = false;
   @observable availableDataElements = [];
   @observable ICDAltSearchtextA: any;
+  @observable attributesExist: boolean | null = null;
   @observable allDisabled: any = {
     ZKBE8Xm9DJG: false,
     ZYKmQ9GPOaF: false,
@@ -291,6 +292,30 @@ class Store {
       return false;
     }
   };
+
+  @action checkAttributesNamespaceExists = async () => {
+    const nameSpaceUrl = `/api/dataStore/Attributes`;
+    let nameSpaceExists = await this.engine.link
+      .fetch(nameSpaceUrl)
+      .catch((err: any) => err);
+
+    if (!nameSpaceExists?.length) {
+      // Create the name space
+      await this.engine.link.fetch(`${nameSpaceUrl}/Attributes`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify([]),
+      });
+
+      nameSpaceExists = await this.engine.link
+        .fetch(nameSpaceUrl)
+        .catch((err: any) => err)?.length;
+
+      this.attributesExist = !!nameSpaceExists;
+    }
+  }
 
   @action getSingleLanguage = async (languageName?: string) => {
     try {
