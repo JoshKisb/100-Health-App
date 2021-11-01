@@ -200,41 +200,6 @@ class Store {
 
       console.log('loadUserOrgUnits:', data)
 
-
-      let al = this.activeLanguage?.lang ?? this.activeLanguage;
-      al = toJS(al)
-      console.log("ActiveLang1 ", al)
-      console.log("ActiveLang2 ", al.LanguageName)
-
-      const metaQ = {
-        meta : {
-          resource: `dataStore/Languages/${al.LanguageName}`,
-          params: {
-            fields: [
-              "meta"
-            ]
-          }
-        }
-      }
-
-      const d2 = await this.engine.query(metaQ);
-
-
-      const langNats = d2.meta?.meta?.categories?.find((p: any) => p.code == 'RT01')
-      const langOptions = langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
-      const langValues = d2.meta?.meta?.categoryOptionCombos || [];
-
-      let lcategories = [];
-      for(let i = 0; i < langOptions.length; i++) {
-        const id = langOptions[i];
-        lcategories.push(langValues.find((l: any) => l.categoryOptions[0]?.id == id));
-      }
-      
-
-      console.log("cates", lcategories)
-
-      this.nationalitySelect = lcategories || [];
-      // console.log("test13", test13);
       this.userOrgUnits = data.me.organisationUnits;
       const options = data.options.optionSets
         .filter((o: any) => {
@@ -253,6 +218,44 @@ class Store {
           return { ...de.dataElement, selected: de.displayInReports };
         }
       );
+
+      if (!!this.activeLanguage?.lang) {
+        let al = this.activeLanguage?.lang;
+        al = toJS(al)
+        console.log("ActiveLang1 ", al)
+        console.log("ActiveLang2 ", al.LanguageName)
+
+        const metaQ = {
+          meta : {
+            resource: `dataStore/Languages/${al.LanguageName}`,
+            params: {
+              fields: [
+                "meta"
+              ]
+            }
+          }
+        }
+
+        const d2 = await this.engine.query(metaQ);
+
+
+        const langNats = d2.meta?.meta?.categories?.find((p: any) => p.code == 'RT01')
+        const langOptions = langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
+        const langValues = d2.meta?.meta?.categoryOptionCombos || [];
+
+        let lcategories = [];
+        for(let i = 0; i < langOptions.length; i++) {
+          const id = langOptions[i];
+          lcategories.push(langValues.find((l: any) => l.categoryOptions[0]?.id == id));
+        }
+      
+
+        console.log("cates", lcategories)
+
+        this.nationalitySelect = lcategories || [];
+      }
+      // console.log("test13", test13);
+      
     } catch (e) {
       console.log('errrruuuooorrrr', e);
     }

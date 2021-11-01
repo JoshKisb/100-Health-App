@@ -50,7 +50,7 @@ export const App = observer(() => {
       store.setActiveLanguage({ lang: activeLanguage.language });
     } else {
       // Post a new default language as English and set it as the active language.
-      store.setActiveLanguage(englishDefault);
+      store.setActiveLanguage({ lang: englishDefault});
       await store.saveActiveLanguage(
         englishDefault?.LanguageName,
         englishDefault

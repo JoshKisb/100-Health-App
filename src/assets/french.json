@@ -106,5 +106,10 @@
     "Referred From:" : "Autre structure",
     "Search for a Health Facility...":"Rechercher un établissement de santé...",
     "health facilities":"établissements de santé",
-    "No":"Non"
+    "No":"Non",
+    "Nationality": "Nationalité",
+    "Please select health centre": "Veuillez sélectionner le centre de santé",
+    "Edit Event": "Modifier l'événement",
+    "Add Event": "Ajouter un évènement",
+    "Change Language": "Changer de langue"
 }

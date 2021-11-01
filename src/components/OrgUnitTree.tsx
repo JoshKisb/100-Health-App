@@ -31,6 +31,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     const store = useStore();
     const [showWarn, setShowWarn] = useState(false);
     const [showLangWarn, setShowLangWarn] = useState(false);
+    const activeLanguage = store.activeLanguage;
 
     const onLoadData = async (treeNode: any) => {
       await store.loadOrganisationUnitsChildren(treeNode.id);
@@ -45,7 +46,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     }, [store.nationalitySelect]);
 
     useEffect(() => {
-      if (!categoryOptionCombos?.length) {
+      if (!store.userOrgUnits?.length) {
         store.loadUserOrgUnits().then(() => {
           setUnits(store.organisationUnits);
         });
@@ -94,7 +95,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
               style={{ width: "100%" }}
               value={store.selectedOrgUnit}
               dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
-              placeholder="Please select health centre"
+              placeholder={ activeLanguage?.lang["Please select health centre"] }
               onChange={store.setSelectedOrgUnit}
               loadData={onLoadData}
               treeData={units}
@@ -104,7 +105,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
             <Select
               style={{ width: "100%" }}
               allowClear={true}
-              placeholder="Nationality"
+              placeholder={ activeLanguage?.lang["Nationality"] }
               onChange={store.setSelectedNationality}
               size="large"
               value={store.selectedNationality}
@@ -132,7 +133,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                 onClick={store.viewMode ? store.editEvent : store.showForm}
                 disabled={!store.canInsert || store.forceDisable}
               >
-                {store.viewMode ? "Edit Event" : "Add Event"}
+                {store.viewMode ? activeLanguage?.lang["Edit Event"] : activeLanguage?.lang["Add Event"] }
               </Button>
             </div>
           </Popover>
@@ -153,7 +154,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                 onClick={showLangConfig}
                 disabled={!userIsAuthorized}
               >
-                Change Language
+                { activeLanguage?.lang["Change Language"] }
               </Button>
             </div>
           </Popover>

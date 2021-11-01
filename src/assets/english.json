@@ -106,5 +106,10 @@
     "Referred From:" : "Referred From:",
     "Search for a Health Facility...":"Search for a Health Facility...",
     "health facilities":"health facilities",
-    "No":"No"
+    "No":"No",
+    "Nationality": "Nationality",
+    "Please select health centre": "Please select health centre",
+    "Edit Event": "Edit Event",
+    "Add Event": "Add Event",
+    "Change Language": "Change Language"
 }

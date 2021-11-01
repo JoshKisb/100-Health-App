@@ -807,12 +807,32 @@ export const DataEntryForm = observer(() => {
       newValues["diseaseURI" + id.toUpperCase()] = uri;
     }
     setUnderlyingCauses(newValues);
+
+    let mainCause = "";
+
+    if (!!newValues["d"]) {
+      mainCause = newValues["d"];
+    } else if (!!newValues["c"]) {
+      mainCause = newValues["c"];
+    } else if (!!newValues["b"]) {
+      mainCause = newValues["b"];
+    } else if (!!newValues["a"]) {
+      mainCause = newValues["a"];
+    } 
+
+    addDiseaseTitle(mainCause);
+
+    console.log("editUnderlyingCauses...", newValues)
+    console.log("mainCause", mainCause);
+    console.log("underlyingCauseText...", underlyingCauseText)
   };
 
   const addDiseaseTitle = (val: string) => {
     let keys = Object.keys(underlyingCauses);
     let titleToAdd = "";
     let uriToAdd = "";
+
+    console.log("Inside addDiseaseTitle, val =>", val)
     keys.forEach((item) => {
       if (
         underlyingCauses[item] === val &&
@@ -829,6 +849,7 @@ export const DataEntryForm = observer(() => {
       }
     });
     console.log("\n\n Adding URI of ", uriToAdd, "\n\n");
+    console.log("UCT", val);
 
     // This Updates the problematic field Next to State underlying cause
     // console.log("Val is ", val)
@@ -2551,6 +2572,7 @@ export const DataEntryForm = observer(() => {
                         key={underlyingCauseKey}
                         style={{ width: "100%" }}
                         size="large"
+                        value={underlyingCauseText}
                         disabled={store.viewMode}
                         onDropdownVisibleChange={(change) => {
                           // Inform user if any blacklisted values were found
