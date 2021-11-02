@@ -55,7 +55,7 @@ class Store {
   @observable nationalitySelect: any;
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
-  @observable ICDLang: any;
+  @observable ICDLang: any =  "en";
   @observable programs = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
@@ -223,9 +223,7 @@ class Store {
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
         al = toJS(al)
-        console.log("ActiveLang1 ", al)
-        console.log("ActiveLang2 ", al.LanguageName)
-
+        
         const metaQ = {
           meta : {
             resource: `dataStore/Languages/${al.LanguageName}`,
@@ -379,6 +377,36 @@ class Store {
     }
   };
 
+  @action saveICDLang = async (langCode: string) => {
+    try {
+      const url = `/api/dataStore/ActiveLanguage/ICDLanguage`;
+      const postObject = JSON.stringify({
+        language: langCode,
+      });
+
+      console.log("Post object for icd lang is ", postObject);
+
+      const isUpdate = true;
+
+      const result = await this.engine.link.fetch(url, {
+        method: isUpdate ? "PUT" : "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: postObject,
+      });
+
+      // const result = await this.engine.link.fetch(url);
+      console.log("\n\nResult is ", result);
+
+      return result;
+    } catch (error) {
+      console.log("\n\nResult is ", error);
+      console.log(error);
+      return false;
+    }
+  }
+
   @action saveActiveLanguage = async (
     langName?: string,
     language?: any,
@@ -458,6 +486,19 @@ class Store {
     }
   };
 
+
+  @action getICDLanguage = async (defaultLang?: any) => {
+    try {
+      const url = `/api/dataStore/ActiveLanguage/ICDLanguage`;
+
+      const result = await this.engine.link.fetch(url);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
   @action checkIfAdmin = async () => {
     const userDetails = await this.engine.query({
       me: {
@@ -528,6 +569,7 @@ class Store {
   
     });
 
+    this.programExists = programData.programs.programs.some((p: any) => p.id == this.program);
     this.programExists = programData.programs.programs.some((p: any) => p.id == this.program);
     return this.programExists;
   }

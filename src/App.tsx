@@ -63,6 +63,14 @@ export const App = observer(() => {
       );
     }
     setLoading(false);
+
+    const ICDLanguage = await store.getICDLanguage();
+    console.log("ICDLanguage found is ", ICDLanguage);
+    if (ICDLanguage?.language) {
+      // Set the UI values
+      console.log("Setting active language now");
+      store.setICDLang(ICDLanguage.language);
+    }
   };
 
   useEffect(() => {

@@ -9,13 +9,7 @@ import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import { any } from "prop-types";
 
-const mySettings = {
-  //apiServerUrl: "https://hmis-dev.health.go.ug",
-  apiServerUrl: " https://icdapi.azurewebsites.net",
-  language: "fr",
-  autoBind: false,
-  wordsAvailable: false,
-};
+
 
 const state = {
   field1: "",
@@ -64,6 +58,14 @@ export const ICDField: SFC<ICD> = observer(
     const [value, setValue] = useState("");
     const [visible, setVisible] = useState(!form.getFieldValue(field));
     const store = useStore();
+
+    const mySettings = {
+      //apiServerUrl: "https://hmis-dev.health.go.ug",
+      apiServerUrl: " https://icdapi.azurewebsites.net",
+      language: store.ICDLang,
+      autoBind: false,
+      wordsAvailable: false,
+    };
 
     const myCallbacks = {
       // Testing

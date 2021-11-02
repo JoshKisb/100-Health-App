@@ -159,6 +159,7 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
         duration: 2,
       });
       const icdLang = ICDLanguages[`${chosenICDLang}`];
+      store.saveICDLang(icdLang);
       store.setICDLang(icdLang);
 
       if (chosenLang?.language.LanguageName) {
