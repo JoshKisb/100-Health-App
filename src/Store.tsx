@@ -55,7 +55,7 @@ class Store {
   @observable nationalitySelect: any;
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
-  @observable ICDLang: any =  "en";
+  @observable ICDLang: any =  null;
   @observable programs = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
@@ -386,7 +386,7 @@ class Store {
 
       console.log("Post object for icd lang is ", postObject);
 
-      const isUpdate = true;
+      const isUpdate = this.ICDLang != null;
 
       const result = await this.engine.link.fetch(url, {
         method: isUpdate ? "PUT" : "POST",
