@@ -377,39 +377,11 @@ class Store {
     }
   };
 
-  @action saveICDLang = async (langCode: string) => {
-    try {
-      const url = `/api/dataStore/ActiveLanguage/ICDLanguage`;
-      const postObject = JSON.stringify({
-        language: langCode,
-      });
-
-      console.log("Post object for icd lang is ", postObject);
-
-      const isUpdate = this.ICDLang != null;
-
-      const result = await this.engine.link.fetch(url, {
-        method: isUpdate ? "PUT" : "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: postObject,
-      });
-
-      // const result = await this.engine.link.fetch(url);
-      console.log("\n\nResult is ", result);
-
-      return result;
-    } catch (error) {
-      console.log("\n\nResult is ", error);
-      console.log(error);
-      return false;
-    }
-  }
-
+ 
   @action saveActiveLanguage = async (
     langName?: string,
     language?: any,
+    ICDLang?: string,
     isUpdate?: boolean
   ) => {
     console.log(
@@ -422,6 +394,7 @@ class Store {
       const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
       const postObject = JSON.stringify({
         language,
+        ICDLang,
       });
 
       console.log("Post object for active lang is ", postObject);

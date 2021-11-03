@@ -143,10 +143,12 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
         duration: 2,
       });
 
+      const icdLang = ICDLanguages[`${chosenICDLang}`];
       // Update the active language
       await store.saveActiveLanguage(
         chosenLang.language.LanguageName,
         chosenLang.language,
+        icdLang,
         true // Update is true
       );
       await setLanguage(chosenLang.language);
@@ -158,8 +160,7 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
         description: "Setting Chosen language for ICD Clasification",
         duration: 2,
       });
-      const icdLang = ICDLanguages[`${chosenICDLang}`];
-      store.saveICDLang(icdLang);
+      
       store.setICDLang(icdLang);
 
       if (chosenLang?.language.LanguageName) {

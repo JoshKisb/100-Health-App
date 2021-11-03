@@ -48,12 +48,14 @@ export const App = observer(() => {
       // Set the UI values
       console.log("Setting active language now");
       store.setActiveLanguage({ lang: activeLanguage.language });
+      store.setICDLang(activeLanguage.ICDLang ?? "en");
     } else {
       // Post a new default language as English and set it as the active language.
       store.setActiveLanguage({ lang: englishDefault});
       await store.saveActiveLanguage(
         englishDefault?.LanguageName,
-        englishDefault
+        englishDefault,
+        activeLanguage?.ICDLang ?? "en"
       );
       await store.postLanguageMeta(englishMeta);
       await store.saveNewLang(
@@ -64,13 +66,6 @@ export const App = observer(() => {
     }
     setLoading(false);
 
-    const ICDLanguage = await store.getICDLanguage();
-    console.log("ICDLanguage found is ", ICDLanguage);
-    if (ICDLanguage?.language) {
-      // Set the UI values
-      console.log("Setting active language now");
-      store.setICDLang(ICDLanguage.language);
-    }
   };
 
   useEffect(() => {
