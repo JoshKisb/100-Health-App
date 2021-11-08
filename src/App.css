@@ -117,3 +117,37 @@
   animation: spin 3s infinite;
   animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
+#topdiseaseswrapper {
+  position: relative;
+  max-width: 1024px;
+  margin: 15px auto;
+}
+
+#topdiseases {
+  margin-top: 15px;
+}
+
+.chartOpts {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  display: flex;
+}
+.chartPicker {
+  display: flex;
+}
+.chartPicker button {
+  width: 40px;
+  height: 40px;
+  margin-left: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-date-range {
+  margin-left: 12px;
+  max-width: 220px;
+}

@@ -997,7 +997,7 @@ export const DataEntryForm = observer(() => {
         "categoryCombo": {
           "id": "bjDvmb4bfuf"
         },
-        "legendSets": []
+        "legendSets": [] as any
       }
       
       await store.engine.link.fetch(

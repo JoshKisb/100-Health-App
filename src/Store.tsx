@@ -78,6 +78,8 @@ class Store {
   @observable availableDataElements = [];
   @observable ICDAltSearchtextA: any;
   @observable attributesExist: boolean | null = null;
+  @observable topDiseases: any;
+  @observable loadingTopDiseases: boolean = false;
   @observable allDisabled: any = {
     ZKBE8Xm9DJG: false,
     ZYKmQ9GPOaF: false,
@@ -183,6 +185,7 @@ class Store {
     try {
       console.log("Nationality is ", nationality);
       this.selectedNationality = nationality;
+      this.queryTopEvents();
       if (this.canInsert) {
         await this.queryEvents();
       } else {
@@ -240,12 +243,12 @@ class Store {
 
         const langNats = d2.meta?.meta?.categories?.find((p: any) => p.code == 'RT01')
         const langOptions = langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
-        const langValues = d2.meta?.meta?.categoryOptionCombos || [];
+        const langValues = d2.meta?.meta?.categoryOptions || [];
 
         let lcategories = [];
         for(let i = 0; i < langOptions.length; i++) {
           const id = langOptions[i];
-          lcategories.push(langValues.find((l: any) => l.categoryOptions[0]?.id == id));
+          lcategories.push(langValues.find((l: any) => l.id == id));
         }
       
 
@@ -638,6 +641,7 @@ class Store {
   @action setSelectedOrgUnit = async (val: any) => {
     try {
       this.selectedOrgUnit = val;
+      this.queryTopEvents();
       if (this.canInsert) {
         await this.queryEvents();
       } else {
@@ -647,6 +651,54 @@ class Store {
       console.log(e);
     }
   };
+
+  @action queryTopEvents = async () => {
+    
+      this.loadingTopDiseases = true;
+      const query1 = {
+        events: {
+          resource: "events/query.json",
+          params: {
+            paging: "false",
+            programStage: this.programStage,
+            ... (this.selectedOrgUnit && {orgUnit: this.selectedOrgUnit}),
+            totalPages: "true",
+            ... (this.selectedNationality && {
+              attributeCc: this.attributeCC,
+              attributeCos: this.selectedNationality
+            }),
+            includeAllDataElements: "true",
+            order: this.sorter
+          },
+        },
+      };
+      try {
+
+        const res = await this.engine.query(query1);
+        const data = res.events;
+        
+        let diseases: any = {};
+       
+        const { headers, rows } = data;
+        const codIndex = headers.findIndex((h: any) => h.name === 'QTKk2Xt8KDu')
+
+          for (var i = 0; i < rows.length; i++) {
+            const name: string = rows[i][codIndex];
+            if (!diseases[name])
+              diseases[name] = {name, count: 0};
+
+            diseases[name].count += 1;
+          }
+
+          console.log(diseases);
+          this.topDiseases = Object.values(diseases).sort((a: any, b: any) => a.count - b.count).slice(0, 10);
+          this.loadingTopDiseases = false;
+      } catch (e) {
+        console.log(e);
+        this.loadingTopDiseases = false;
+      }
+    
+  }
 
   @action queryEvents = async () => {
     if (this.canInsert) {
@@ -868,6 +920,17 @@ class Store {
     // );
     // console.log("programOrganisationUnits are", this.programOrganisationUnits);
     // console.log("and selectedOrgUnit is ", this.selectedOrgUnit);
+    if (current) {
+      return current.name;
+    }
+    return "";
+  }
+
+  @computed get selectedOrgUnitName() {
+    const current: any = this.userOrgUnits.find(
+      (u: any) => u.id === this.selectedOrgUnit
+    ); 
+
     if (current) {
       return current.name;
     }
