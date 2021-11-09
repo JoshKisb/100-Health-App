@@ -124,6 +124,9 @@ export const EventList = observer(() => {
   }, [store.loadingTopDiseases])
 
   useEffect(() => {
+    console.log("EventList:hook nationalitySelect", store.nationalitySelect);
+    if (!store.nationalitySelect) return;
+    
     chart.current = Highcharts.chart('topdiseases', colOptions);
 
     store.selectedDateRange = [
@@ -140,7 +143,7 @@ export const EventList = observer(() => {
     })
     
     store.queryEvents();
-  }, [store]);
+  }, [store?.nationalitySelect]);
 
 
   const handleSelect = (ranges) => {

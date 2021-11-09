@@ -21,10 +21,11 @@ const { Option } = Select;
 
 interface OrgUnitTreeTypes {
   loading?: boolean;
+  fetching?: boolean;
 }
 
 export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
-  ({ loading }) => {
+  ({ loading, fetching }) => {
     const [categoryOptionCombos, setCategoryOptionCombos] = useState([]);
     const [userIsAuthorized, setUserIsAuthorized] = useState(false);
     const [units, setUnits] = useState([]);
@@ -46,12 +47,10 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     }, [store.nationalitySelect]);
 
     useEffect(() => {
-      if (!store.userOrgUnits?.length) {
-        store.loadUserOrgUnits().then(() => {
+      if (store.userOrgUnits?.length) {
           setUnits(store.organisationUnits);
-        });
       }
-    }, [store]);
+    }, [store, fetching]);
 
     const checkIfLangWarnApplies = async () => {
       if (!userIsAuthorized) {

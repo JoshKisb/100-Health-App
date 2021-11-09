@@ -18,7 +18,7 @@ export const App = observer(() => {
   const [fetching, setFetching] = useState(false);
 
   useEffect(() => {
-    if (store?.organisationUnits?.length || fetching) return;
+    if (store?.organisationUnits?.length || store?.fetchingOrgUnits) return;
     async function test() {
       setFetching(true);
       console.log("Fetching orgs...");
@@ -90,7 +90,7 @@ export const App = observer(() => {
         </div>
       ) : (
         <div className="p-2">
-          <OrgUnitTree loading={loading} />
+          <OrgUnitTree loading={loading || fetching} fetching={fetching} />
           {/* <DataEntryForm /> */}
           {store.currentPage === "3" ? <DataEntryForm /> : <EventList />}
         </div>
