@@ -42,6 +42,9 @@ export const EventList = observer(() => {
             }
         },
         series: [{ name: "Deaths"} as any],
+        credits: {
+            enabled: false
+        }
     };
 
     let pieOptions = {
@@ -71,7 +74,10 @@ export const EventList = observer(() => {
             name: 'Deaths',
             colorByPoint: true,
             data: [{}]
-        } as any]
+        } as any],
+        credits: {
+            enabled: false
+        }
     }
 
   const changeChartType = (chartType: string) => {
