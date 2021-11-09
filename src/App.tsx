@@ -44,7 +44,7 @@ export const App = observer(() => {
     setLoading(true);
     const activeLanguage = await store.getActiveLanguage();
     console.log("activeLanguage found is ", activeLanguage);
-    if (activeLanguage?.language) {
+    if (!!activeLanguage?.language) {
       // Set the UI values
       console.log("Setting active language now");
       store.setActiveLanguage({ lang: activeLanguage.language });

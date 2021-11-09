@@ -4,10 +4,16 @@ import { useStore } from "../Context";
 import { Table, Card, Drawer, List, Checkbox } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, {Options} from 'highcharts';  
+import moment, { Moment } from 'moment';
 
 import { DatePicker } from 'antd';
 const { RangePicker } = DatePicker;
 
+
+const defaultRange: any = [
+  moment().subtract(1, 'years'),
+  moment()
+]
 
 export const EventList = observer(() => {
   const store = useStore();
@@ -108,7 +114,8 @@ export const EventList = observer(() => {
         let title = "Top 10 causes of death";
         if (!!store.selectedOrgUnitName)
           title = `${title} in ${store.selectedOrgUnitName}`;
-        chart.current.setTitle({text: store.selectedOrgUnitName});
+        setChartTitle(title);
+        chart.current.setTitle({text: title});
         chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
         chart.current.series[0].setData(sortedDiseases.map((d: any) => d.count), true); //setting data
       }
@@ -119,6 +126,10 @@ export const EventList = observer(() => {
   useEffect(() => {
     chart.current = Highcharts.chart('topdiseases', colOptions);
 
+    store.selectedDateRange = [
+      defaultRange[0].format("YYYY-MM-DD"),
+      defaultRange[1].format("YYYY-MM-DD"),
+    ];
     store.queryTopEvents().then(() => {
       if (!!store.topDiseases) {
         const sortedDiseases = store.topDiseases;
@@ -127,33 +138,20 @@ export const EventList = observer(() => {
       }
       chart.current.hideLoading();
     })
-
-    // if (myPicker.current != null) {
-    //   new Litepicker({ 
-    //       element: myPicker.current, 
-    //       singleMode: false,
-    //       setup: (picker) => {
-    //         picker.on('selected', (date1: any, date2: any) => {
-    //            console.log("Date 1", date1)
-    //            console.log("Date 2", date2)
-    //         });
-    //       },
-    //   });
-    // }
-
+    
     store.queryEvents();
   }, [store]);
 
 
-  const handleSelect = (ranges: any) => {
-    console.log(ranges);
-    // setSelectionRange(ranges.selection);
-    // {
-    //   selection: {
-    //     startDate: [native Date Object],
-    //     endDate: [native Date Object],
-    //   }
-    // }
+  const handleSelect = (ranges) => {
+    if (!ranges) {
+      store.clearSelectedDateRange();
+    } else {
+      const startDate = ranges[0].format("YYYY-MM-DD")
+      const endDate = ranges[1].format("YYYY-MM-DD")
+
+      store.changeSelectedDateRange(startDate, endDate);
+    }
   }
 
   return (
@@ -171,7 +169,7 @@ export const EventList = observer(() => {
           </div>
 
           <div className="chart-date-range">
-            <RangePicker onChange={handleSelect} />
+            <RangePicker defaultValue={defaultRange} onChange={handleSelect} />
           </div>
         </div>
       </div>

@@ -56,7 +56,7 @@ class Store {
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
   @observable ICDLang: any =  null;
-  @observable programs = [];
+  @observable programs: any = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
   @observable page = 1;
@@ -80,6 +80,7 @@ class Store {
   @observable attributesExist: boolean | null = null;
   @observable topDiseases: any;
   @observable loadingTopDiseases: boolean = false;
+  @observable selectedDateRange: [string, string] | null = null;
   @observable allDisabled: any = {
     ZKBE8Xm9DJG: false,
     ZYKmQ9GPOaF: false,
@@ -225,7 +226,6 @@ class Store {
 
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
-        al = toJS(al)
         
         const metaQ = {
           meta : {
@@ -331,6 +331,17 @@ class Store {
     }
   };
 
+  @action checkLanguagesExistInDataStore = async () => {
+    const nameSpaceUrl = `/api/dataStore/Languages`;
+    try {
+      const res = await this.engine.link.fetch(nameSpaceUrl)
+      return (!!res?.length)
+    } catch (error) {
+      return false;
+    }
+    
+  }
+
   @action saveNewLang = async (
     languageName?: string,
     language?: any,
@@ -340,16 +351,16 @@ class Store {
       const nameSpaceUrl = `/api/dataStore/Languages`;
       const url = `${nameSpaceUrl}/${languageName}`;
 
+      console.log("Saving new language", languageName);
+
       const postObject = JSON.stringify({
         language,
         meta,
       });
 
-      let nameSpaceExists = await this.engine.link
-        .fetch(nameSpaceUrl)
-        .catch((err: any) => err);
+      let nameSpaceExists = await this.checkLanguagesExistInDataStore();
 
-      if (!nameSpaceExists?.length) {
+      if (!nameSpaceExists) {
         // Create the name space
         await this.engine.link.fetch(`${nameSpaceUrl}/placeholder`, {
           method: "POST",
@@ -359,9 +370,7 @@ class Store {
           body: JSON.stringify({}),
         });
 
-        nameSpaceExists = await this.engine.link
-          .fetch(nameSpaceUrl)
-          .catch((err: any) => err)?.length;
+        // nameSpaceExists = await checkLanguagesExistInDataStore();
       }
 
       const result = await this.engine.link.fetch(url, {
@@ -652,6 +661,16 @@ class Store {
     }
   };
 
+  @action changeSelectedDateRange = async(start: string, end: string) => {
+    this.selectedDateRange = [start, end];
+    await this.queryTopEvents();
+  }
+
+  @action clearSelectedDateRange = async() => {
+    this.selectedDateRange = null;
+    await this.queryTopEvents();
+  }
+
   @action queryTopEvents = async () => {
     
       this.loadingTopDiseases = true;
@@ -661,14 +680,21 @@ class Store {
           params: {
             paging: "false",
             programStage: this.programStage,
-            ... (this.selectedOrgUnit && {orgUnit: this.selectedOrgUnit}),
+            ... (this.selectedOrgUnit && {
+              orgUnit: this.selectedOrgUnit, 
+              ouMode: 'DESCENDANTS'
+            }),
             totalPages: "true",
             ... (this.selectedNationality && {
               attributeCc: this.attributeCC,
               attributeCos: this.selectedNationality
             }),
             includeAllDataElements: "true",
-            order: this.sorter
+            order: this.sorter,
+            ...(this.selectedDateRange && {
+              startDate: this.selectedDateRange[0],
+              endDate: this.selectedDateRange[1],
+            })
           },
         },
       };
@@ -691,7 +717,7 @@ class Store {
           }
 
           console.log(diseases);
-          this.topDiseases = Object.values(diseases).sort((a: any, b: any) => a.count - b.count).slice(0, 10);
+          this.topDiseases = Object.values(diseases).sort((a: any, b: any) => a.count - b.count).slice(-10);
           this.loadingTopDiseases = false;
       } catch (e) {
         console.log(e);
