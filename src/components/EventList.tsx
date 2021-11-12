@@ -5,8 +5,8 @@ import { Table, Card, Drawer, List, Checkbox } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, {Options} from 'highcharts';  
 import moment, { Moment } from 'moment';
-import { DatePicker, Input } from 'antd';
-import { AudioOutlined } from '@ant-design/icons';
+import { DatePicker, Input, Menu, Dropdown, Button, Form } from 'antd';
+import { AudioOutlined, DownOutlined } from '@ant-design/icons';
 
 require('highcharts/modules/exporting')(Highcharts);
 
@@ -19,12 +19,50 @@ const defaultRange: any = [
   moment()
 ]
 
+const FilterMenu = observer(({ field, onUpdate }) => {
+  const store = useStore();
+  const [value, setValue] = useState(store.filters[field]?.value ?? "");
+
+  const onFinish = () => {
+    store.filters[field].value = value;
+    store.queryEvents();
+    onUpdate();
+  }
+
+  const onChange = (e) => {
+    console.log(e.target.value);
+    setValue(e.target.value);
+  }
+
+  return (
+    <Menu>
+      <div style={{ padding: '8px 12px' }}>
+       
+
+            <div style={{ margin: '8px 0px' }}>
+              <Input placeholder="Contains text" onChange={onChange} value={value}  />
+            </div>
+
+           
+              <Button type="primary" htmlType="button" onClick={onFinish}>
+                Update
+              </Button>
+        
+      </div>
+    </Menu>
+  );
+
+});
+
 export const EventList = observer(() => {
   const store = useStore();
   const [visible, setVisible] = useState(false);
   const [searching, setSearching] = useState(false);
    const [open, setOpen] = useState(false);
    const [chartTitle, setChartTitle] = useState("Top 10 causes of death")
+   const [filtersInitialized, setFiltersInitialized] = useState(false);
+   const [visibleStates, setVisibleStates] = useState({});
+   const dropdowns = useRef([]);
    // const myPicker = useRef<HTMLInputElement|null>(null);
 
 
@@ -153,8 +191,18 @@ export const EventList = observer(() => {
       chart.current.hideLoading();
     })
     
-    store.queryEvents();
+    store.queryEvents().then(() => {
+      
+    });
   }, [store?.nationalitySelect]);
+
+  useEffect(() => {
+    if (filtersInitialized || !store?.data?.headers) return;
+    console.log("Setting inital filters")
+    store.setInitialFilters()
+    
+    setFiltersInitialized(true);
+  }, [store?.data?.headers])
 
 
   const handleSelect = (ranges) => {
@@ -185,10 +233,12 @@ export const EventList = observer(() => {
       setSearching(false);
     });
   }
+  
 
   return (
     <div>
       <div id="topdiseaseswrapper">
+      
         <div id="topdiseases" style={{ width: "100%", height: "400px", marginBottom: "20px" }}></div>
         <div className="chartOpts">
           <div className="chartPicker">
@@ -204,6 +254,7 @@ export const EventList = observer(() => {
             <RangePicker defaultValue={defaultRange} onChange={handleSelect} />
           </div>
         </div>
+       
       </div>
       {store.data ? (
         <Card
@@ -216,7 +267,18 @@ export const EventList = observer(() => {
             />
           }
         >
-          <Search placeholder="Search..." onSearch={onSearch} style={{ width: 400 }} />
+        
+          <div style={{ padding: '15px', display: "flex", gap: "10px" }} ref={outside}>
+            {Object.keys(store.filters).map((field: any) => (
+              <Dropdown key={field} overlay={(<FilterMenu field={field} onUpdate={() => {}} />)} trigger={['click']}
+              >
+               <Button onClick={e => e.preventDefault()}>
+                    {store.filters[field]?.title} {!!store.filters[field]?.value && ` :${store.filters[field]?.value}`} <DownOutlined />
+                </Button>
+              </Dropdown>
+            ))}
+          </div>
+          
           <Table
             rowKey={(record: any) => record[0]}
             dataSource={store.data.rows}

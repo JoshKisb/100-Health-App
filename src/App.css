@@ -120,8 +120,10 @@
 
 #topdiseaseswrapper {
   position: relative;
-  max-width: 1080px;
+  max-width: 1240px;
   margin: 15px auto;
+  border:  1px solid #b9a9a9;
+  padding: 15px 10px;
 }
 
 #topdiseases {
@@ -130,8 +132,8 @@
 
 .chartOpts {
   position: absolute;
-  top: 0px;
-  right: 5px;
+  top: 15px;
+  right: 15px;
   display: flex;
 }
 .chartPicker {

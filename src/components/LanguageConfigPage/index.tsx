@@ -622,6 +622,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
           setLoading(false);
         })
         .catch((err) => {
+          console.log("Error creating program", err)
           setLoading(false);
         });
     }
@@ -644,7 +645,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
                     type="primary"
                     onClick={createProgram}
                   >
-                    <h4>Create 100 Health Program</h4>
+                    <h4>Install Metadata</h4>
                   </Button>
             </div>
             ) }
