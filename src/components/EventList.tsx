@@ -5,9 +5,13 @@ import { Table, Card, Drawer, List, Checkbox } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, {Options} from 'highcharts';  
 import moment, { Moment } from 'moment';
+import { DatePicker, Input } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
 
-import { DatePicker } from 'antd';
+require('highcharts/modules/exporting')(Highcharts);
+
 const { RangePicker } = DatePicker;
+const { Search } = Input;
 
 
 const defaultRange: any = [
@@ -18,6 +22,7 @@ const defaultRange: any = [
 export const EventList = observer(() => {
   const store = useStore();
   const [visible, setVisible] = useState(false);
+  const [searching, setSearching] = useState(false);
    const [open, setOpen] = useState(false);
    const [chartTitle, setChartTitle] = useState("Top 10 causes of death")
    // const myPicker = useRef<HTMLInputElement|null>(null);
@@ -163,6 +168,24 @@ export const EventList = observer(() => {
     }
   }
 
+  const suffix = (
+    <AudioOutlined
+      style={{
+        fontSize: 16,
+        color: '#1890ff',
+      }}
+    />
+  );
+
+  const onSearch = value => {
+    store.search = value;
+    console.log(value);
+    setSearching(true);
+    store.queryEvents().then(() => {
+      setSearching(false);
+    });
+  }
+
   return (
     <div>
       <div id="topdiseaseswrapper">
@@ -193,6 +216,7 @@ export const EventList = observer(() => {
             />
           }
         >
+          <Search placeholder="Search..." onSearch={onSearch} style={{ width: 400 }} />
           <Table
             rowKey={(record: any) => record[0]}
             dataSource={store.data.rows}
@@ -200,7 +224,7 @@ export const EventList = observer(() => {
             rowClassName={() => "l"}
             onRow={(record, rowIndex) => {
               // Fix for age that doesn't show if its zero
-              console.log("Record is ", record);
+              // console.log("Record is ", record);
               if (record && record["34"] === "") {
                 record["34"] = "0";
               }

@@ -82,6 +82,7 @@ class Store {
   @observable topDiseases: any;
   @observable loadingTopDiseases: boolean = false;
   @observable selectedDateRange: [string, string] | null = null;
+  @observable searchIds: any;
   @observable allDisabled: any = {
     ZKBE8Xm9DJG: false,
     ZYKmQ9GPOaF: false,
@@ -676,6 +677,67 @@ class Store {
     await this.queryTopEvents();
   }
 
+  @action getSearchIds = async() => {
+    return new Promise(resolve => {
+      console.log("COLS", this.columns);
+      const queries = this.columns.map(c => {
+        return {
+          events: {
+            resource: "events/query.json",
+            params: {
+              pager: false,
+              programStage: this.programStage,
+              orgUnit: this.selectedOrgUnit,
+              attributeCc: this.attributeCC,
+              attributeCos: this.selectedNationality,
+              includeAllDataElements: "true",
+              order: this.sorter,
+              filter: `${c.key}:LIKE:${this.search}`
+              // query: this.search === "" ? "" : `LIKE:${this.search}`,
+            },
+          },
+        };
+      });
+
+      let promises = queries.map(q => this.engine.query(q).catch(e => null));
+      Promise.all(promises).then(results => {
+        console.log("PROMISE ALL", results)
+        let dataSet = {};
+        let headers = [];
+
+        results.forEach(res => {
+          if (!!res) {
+            headers = res.events.headers;
+            console.log("REs: ", res);
+            
+            const idx = res.events.headers.find(h => h.name === "event");
+            res.events.rows.forEach(r => {
+              dataSet[r[idx]] = r;
+            })
+            
+          }
+        });
+
+        this.searchIds = dataSet;
+        console.log("Search Ids", this.searchIds)
+
+        this.data = Object.values(dataSet);
+        this.data.headers = headers.map((a: any, i: number) => {
+          return {
+            ...a,
+            i,
+          };
+        });
+        this.total = this.data.length;
+
+        resolve();
+      }).catch(err => {
+        console.log(err)
+      });  
+
+    })
+  }
+
   @action queryTopEvents = async () => {
     
       this.loadingTopDiseases = true;
@@ -777,35 +839,81 @@ class Store {
 
   @action queryEvents = async () => {
     if (this.canInsert) {
-      const query1 = {
-        events: {
-          resource: "events/query.json",
-          params: {
-            page: this.page,
-            pageSize: this.pageSize,
-            programStage: this.programStage,
-            orgUnit: this.selectedOrgUnit,
-            totalPages: "true",
-            attributeCc: this.attributeCC,
-            attributeCos: this.selectedNationality,
-            includeAllDataElements: "true",
-            order: this.sorter,
-            query: this.search === "" ? "" : `LIKE:${this.search}`,
+      if (!this.search) {
+        const query1 = {
+          events: {
+            resource: "events/query.json",
+            params: {
+              page: this.page,
+              pageSize: this.pageSize,
+              programStage: this.programStage,
+              orgUnit: this.selectedOrgUnit,
+              totalPages: "true",
+              attributeCc: this.attributeCC,
+              attributeCos: this.selectedNationality,
+              includeAllDataElements: "true",
+              order: this.sorter,
+              // query: this.search === "" ? "" : `LIKE:${this.search}`,
+            },
           },
-        },
-      };
-      try {
-        const data = await this.engine.query(query1);
-        this.data = data.events;
-        this.data.headers = this.data.headers.map((a: any, i: number) => {
-          return {
-            ...a,
-            i,
-          };
-        });
-        this.total = this.data.metaData.pager.total;
-      } catch (e) {
-        console.log(e);
+        };
+
+        try {
+          const data = await this.engine.query(query1);
+          this.data = data.events;
+          this.data.headers = this.data.headers.map((a: any, i: number) => {
+            return {
+              ...a,
+              i,
+            };
+          });
+          this.total = this.data.metaData.pager.total;
+        } catch (e) {
+          console.log(e);
+        }
+      } else {        
+
+        // if page = 1, then lets get list of ids
+        // keep in store and fetch by id.
+        // to keep query short we will slice ids based on curr page
+
+        
+        await this.getSearchIds();  
+
+        // const query1 = {
+        //   events: {
+        //     resource: "events/query.json",
+        //     params: {
+        //       page: this.page,
+        //       pageSize: this.pageSize,
+        //       programStage: this.programStage,
+        //       orgUnit: this.selectedOrgUnit,
+        //       totalPages: "true",
+        //       attributeCc: this.attributeCC,
+        //       attributeCos: this.selectedNationality,
+        //       includeAllDataElements: "true",
+        //       order: this.sorter,
+        //       filter: `event:in:${JSON.stringify(this.searchIds)}`
+        //       // query: this.search === "" ? "" : `LIKE:${this.search}`,
+        //     },
+        //   },
+        // };   
+
+        // console.log("Search Query:", query1);   
+
+        // try {
+        //   const data = await this.engine.query(query1);
+        //   this.data = data.events;
+        //   this.data.headers = this.data.headers.map((a: any, i: number) => {
+        //     return {
+        //       ...a,
+        //       i,
+        //     };
+        //   });
+        //   this.total = this.data.metaData.pager.total;
+        // } catch (e) {
+        //   console.log(e);
+        // }
       }
     }
   };
