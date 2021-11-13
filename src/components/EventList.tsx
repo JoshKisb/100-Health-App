@@ -6,7 +6,8 @@ import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, {Options} from 'highcharts';  
 import moment, { Moment } from 'moment';
 import { DatePicker, Input, Menu, Dropdown, Button, Form, Popover } from 'antd';
-import { AudioOutlined, DownOutlined } from '@ant-design/icons';
+import { AudioOutlined, DownOutlined, LoadingOutlined, DownloadOutlined } from '@ant-design/icons';
+import { CSVLink } from "react-csv";
 
 require('highcharts/modules/exporting')(Highcharts);
 
@@ -65,6 +66,9 @@ export const EventList = observer(() => {
    const [filtersInitialized, setFiltersInitialized] = useState(false);
    const [visibleStates, setVisibleStates] = useState({});
    const dropdowns = useRef([]);
+   const [downloadData, setDownloadData] = useState([]);
+   const [downloadng, setDownloadng] = useState(false);
+   const csvBtn = useRef(null);
    // const myPicker = useRef<HTMLInputElement|null>(null);
 
 
@@ -235,6 +239,22 @@ export const EventList = observer(() => {
       setSearching(false);
     });
   }
+
+  const handleDownload = () => {
+    
+      setDownloadng(true);
+      store.downloadData().then((dd) => {
+        setDownloadData(dd);
+        let btn = csvBtn.current;
+        if (!!btn)
+          btn.link.click();
+        setDownloadng(false);
+        
+      }).catch(e => {
+        setDownloadng(false)
+      });
+    
+  }
   
 
   return (
@@ -263,10 +283,29 @@ export const EventList = observer(() => {
           title="Cases"
           bodyStyle={{ maxWidth: "100vw", padding: 0, margin: 0 }}
           extra={
-            <SettingOutlined
-              style={{ fontSize: "24px" }}
-              onClick={showDrawer}
-            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <SettingOutlined
+                style={{ fontSize: "24px" }}
+                onClick={showDrawer}
+              />
+              <CSVLink
+                ref={csvBtn}
+                data={downloadData}
+                filename={"cod-cases.csv"}
+                style={{display:'none'}}
+               />
+              
+              { !downloadng ?
+                (<DownloadOutlined
+                  style={{ fontSize: "24px" }}
+                  onClick={handleDownload}
+                />)
+               : 
+               (<LoadingOutlined
+                style={{ fontSize: "24px" }}
+               />)
+              }
+            </div>
           }
         >
         

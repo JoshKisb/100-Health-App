@@ -830,6 +830,66 @@ class Store {
     }
   };
 
+  @action downloadData = async () => {
+    
+      if (this.canInsert) {
+        
+          let query1: any = {
+            events: {
+              resource: "events/query.json",
+              params: {
+                pager: false,                
+                programStage: this.programStage,
+                orgUnit: this.selectedOrgUnit,
+                totalPages: "true",
+                attributeCc: this.attributeCC,
+                attributeCos: this.selectedNationality,
+                includeAllDataElements: "true",
+                order: this.sorter,
+                // query: this.search === "" ? "" : `LIKE:${this.search}`,
+              },
+            },
+          };
+
+          if (!!this.filters) {
+            query1.events.params['filter'] = [];
+            Object.keys(this.filters).forEach(key => {
+              if (!!this.filters[key]?.value)
+                query1.events.params.filter.push(`${key}:LIKE:${this.filters[key].value}`)
+            })
+          }
+
+          console.log(query1);
+
+          try {
+            const data = await this.engine.query(query1);
+
+            let dd = [];
+            let headerIndexes = [];
+
+            dd.push(this.columns.map(c => c.title));
+
+            this.columns.forEach((h, idx) => {
+              headerIndexes.push(data.events.headers.findIndex(eh => eh.name == h.key))
+            })
+
+            data.events.rows.forEach(e => {
+              dd.push(headerIndexes.map(idx => e[idx]))
+            });
+
+            console.log("Download data", dd);
+            return dd;
+              
+            
+            
+          } catch (e) {
+            console.log(e);
+          }
+        
+      }
+    
+  }
+
   @action handleChange = async (pagination: any, filters: any, sorter: any) => {
     const order =
       sorter.field && sorter.order
