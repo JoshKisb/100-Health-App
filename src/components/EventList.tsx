@@ -5,7 +5,7 @@ import { Table, Card, Drawer, List, Checkbox } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, {Options} from 'highcharts';  
 import moment, { Moment } from 'moment';
-import { DatePicker, Input, Menu, Dropdown, Button, Form } from 'antd';
+import { DatePicker, Input, Menu, Dropdown, Button, Form, Popover } from 'antd';
 import { AudioOutlined, DownOutlined } from '@ant-design/icons';
 
 require('highcharts/modules/exporting')(Highcharts);
@@ -19,14 +19,15 @@ const defaultRange: any = [
   moment()
 ]
 
-const FilterMenu = observer(({ field, onUpdate }) => {
+const FilterMenu = observer(({ field }) => {
   const store = useStore();
+  const [visible, setVisible] = useState(false);
   const [value, setValue] = useState(store.filters[field]?.value ?? "");
 
   const onFinish = () => {
     store.filters[field].value = value;
     store.queryEvents();
-    onUpdate();
+    setVisible(false);
   }
 
   const onChange = (e) => {
@@ -34,22 +35,23 @@ const FilterMenu = observer(({ field, onUpdate }) => {
     setValue(e.target.value);
   }
 
-  return (
-    <Menu>
+  return (<Popover placement="bottom" visible={visible} onVisibleChange={setVisible} content={(
       <div style={{ padding: '8px 12px' }}>
-       
-
             <div style={{ margin: '8px 0px' }}>
               <Input placeholder="Contains text" onChange={onChange} value={value}  />
             </div>
 
-           
-              <Button type="primary" htmlType="button" onClick={onFinish}>
-                Update
-              </Button>
+            <Button type="primary" htmlType="button" onClick={onFinish}>
+              Update
+            </Button>
         
       </div>
-    </Menu>
+    )} trigger="click">
+        <Button>{store.filters[field]?.title} {!!store.filters[field]?.value && `: ${store.filters[field]?.value}`} <DownOutlined /></Button>
+      </Popover>
+    
+      
+    
   );
 
 });
@@ -268,14 +270,9 @@ export const EventList = observer(() => {
           }
         >
         
-          <div style={{ padding: '15px', display: "flex", gap: "10px" }} ref={outside}>
+          <div style={{ padding: '15px', display: "flex", gap: "10px" }}>
             {Object.keys(store.filters).map((field: any) => (
-              <Dropdown key={field} overlay={(<FilterMenu field={field} onUpdate={() => {}} />)} trigger={['click']}
-              >
-               <Button onClick={e => e.preventDefault()}>
-                    {store.filters[field]?.title} {!!store.filters[field]?.value && ` :${store.filters[field]?.value}`} <DownOutlined />
-                </Button>
-              </Dropdown>
+              <FilterMenu key={field} field={field}  />
             ))}
           </div>
           

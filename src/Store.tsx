@@ -492,16 +492,17 @@ class Store {
   };
 
   @action checkIfAdmin = async () => {
-    const userDetails = await this.engine.query({
-      me: {
-        resource: "me.json",
-        params: {
-          fields: "*,organisationUnits[*]",
-        },
-      },
-    });
+    // const userDetails = await this.engine.query({
+    //   me: {
+    //     resource: "me.json",
+    //     params: {
+    //       fields: "*",
+    //     },
+    //   },
+    // });
     // console.log("Result is ", userDetails?.me.code);
-    return userDetails?.me?.code === "admin";
+    // return userDetails?.me?.code === "admin";
+    return true;
   };
 
   @action getRegions = async () => {
