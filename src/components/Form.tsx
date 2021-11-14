@@ -857,6 +857,7 @@ export const DataEntryForm = observer(() => {
     setUnderlyingCauseText(val);
     setUnderlyingCauseCode(titleToAdd);
     setUnderlyingCauseURI(uriToAdd);
+    setUnderlyingCauseChosen(true);
     // console.log("\n\nCause (underlying):", titleToAdd, "\n\n");
     form.setFieldsValue({
       dTd7txVzhgY: titleToAdd,
