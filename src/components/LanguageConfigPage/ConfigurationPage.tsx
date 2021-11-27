@@ -116,7 +116,7 @@ const ConfigurationPage: FunctionComponent<ConfigurationPageTypes> = observer(
           </div>
 
           <div className="button-container-alt">
-            <Button type="danger" ghost onClick={handleCancel}>
+            <Button danger ghost onClick={handleCancel}>
               Cancel
             </Button>
             <Button

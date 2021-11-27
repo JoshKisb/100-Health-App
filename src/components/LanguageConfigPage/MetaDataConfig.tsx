@@ -29,7 +29,7 @@ const MetaDataConfig: FunctionComponent<MetaDataConfigTypes> = observer(
 
           <div className="button-container-alt">
             <Button
-              type="danger"
+              danger
               ghost
               // onClick={handleCancel}
             >

@@ -886,6 +886,7 @@ export const DataEntryForm = observer(() => {
 
   useEffect(() => {
     console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
+    console.log("defaultValues: ", store.defaultValues)
     if (Object.keys(store.defaultValues).length) {
       setEditing(true);
       // Auto-populate form if it is an existing form being edited
@@ -1286,45 +1287,47 @@ export const DataEntryForm = observer(() => {
         actions={[
           <React.Fragment>
             <div style={styles.flexRow}>
-              <p style={{ margin: "0rem" }}>
-                {activeLanguage.lang["Inserting for"]}{" "}
-                {store.currentOrganisation}{" "}
-              </p>
-              {!isEmpty(store.defaultValues) ? (
-                <Popconfirm
-                  title={activeLanguage.lang["Sure to delete?"]}
-                  onConfirm={() => store.deleteEvent()}
-                >
-                  <Button size="large">{activeLanguage.lang["Delete"]}</Button>{" "}
-                </Popconfirm>
-              ) : null}
-              <div>
-                <Button
-                  size="large"
-                  onClick={() => {
-                    store.showEvents();
-                    store.enableForm();
-                  }}
-                >
-                  {activeLanguage.lang["Cancel"]}
-                </Button>
+              <>
+                <p style={{ margin: "0rem" }}>
+                  {activeLanguage.lang["Inserting for"]}{" "}
+                  {store.currentOrganisation}{" "}
+                </p>
+                {!isEmpty(store.defaultValues) ? (
+                  <Popconfirm
+                    title={activeLanguage.lang["Sure to delete?"]}
+                    onConfirm={() => store.deleteEvent()}
+                  >
+                    <><Button size="large">{activeLanguage.lang["Delete"]}</Button>{" "}</>
+                  </Popconfirm>
+                ) : null}
+                <div>
+                  <Button
+                    size="large"
+                    onClick={() => {
+                      store.showEvents();
+                      store.enableForm();
+                    }}
+                  >
+                    {activeLanguage.lang["Cancel"]}
+                  </Button>
 
-                <Button
-                  htmlType="submit"
-                  size="large"
-                  disabled={
-                    !underlyingCauseChosen ||
-                    !personsGender ||
-                    store.viewMode ||
-                    (!declarations.ZXZZfzBpu8a &&
-                      !declarations.cp5xzqVU2Vw &&
-                      !declarations.lu9BiHPxNqH &&
-                      !declarations.u9tYUv6AM51)
-                  }
-                >
-                  {activeLanguage.lang["Save"]}
-                </Button>
-              </div>
+                  <Button
+                    htmlType="submit"
+                    size="large"
+                    disabled={
+                      !underlyingCauseChosen ||
+                      !personsGender ||
+                      store.viewMode ||
+                      (!declarations.ZXZZfzBpu8a &&
+                        !declarations.cp5xzqVU2Vw &&
+                        !declarations.lu9BiHPxNqH &&
+                        !declarations.u9tYUv6AM51)
+                    }
+                  >
+                    {activeLanguage.lang["Save"]}
+                  </Button>
+                </div>
+              </>
             </div>
           </React.Fragment>,
           <ApprovalRights
@@ -1356,7 +1359,7 @@ export const DataEntryForm = observer(() => {
           />
         </Form.Item>
 
-        <Form.Item
+        {/*<Form.Item
           label={activeLanguage.lang.Languages}
           style={{ marginTop: "1rem" }}
           name="language"
@@ -1383,7 +1386,7 @@ export const DataEntryForm = observer(() => {
               </Option>
             ))}
           </Select>
-        </Form.Item>
+        </Form.Item>*/}
 
         <table className="my-2 w-full border-collapse">
           <tbody>
@@ -1886,9 +1889,11 @@ export const DataEntryForm = observer(() => {
                           name={id as string}
                           className="m-0"
                           style={{ flexGrow: 1 }}
+                          initialValue={store.defaultValues[id]}
                         >
                           <Input
                             size="large"
+                            disabled={ store.viewMode }
                             // disabled={
                             //     store.viewMode ||
                             //     store.allDisabled.ZKBE8Xm9DJG
