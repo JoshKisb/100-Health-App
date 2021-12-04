@@ -619,7 +619,7 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       await store
         .createProgram()
         .then((res) => {
-          setLoading(false);
+          checkForProgram();
         })
         .catch((err) => {
           console.log("Error creating program", err)

@@ -501,8 +501,8 @@ class Store {
           },
         },
       });
-      // console.log("Result is ", userDetails?.me.code);
-      return userDetails?.me?.userCredentials?.userRoles?.some(r => r.id === "LhJXzR7wLec");
+      console.log("check if admin Result is ", userDetails?.me.code);
+      return userDetails?.me?.userCredentials?.userRoles?.some(r => r.id === "yrB6vc5Ip3r");
     } catch (e) {
       console.log(e)
       return false;
