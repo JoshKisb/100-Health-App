@@ -153,3 +153,27 @@
   margin-left: 12px;
   max-width: 220px;
 }
+
+.ptarrow {
+  color: black;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.red-arr {
+  color:  red;
+}
+
+.green-arr {
+  color: green;
+}
+
+.ptlabel {
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -10,6 +10,8 @@ import { AudioOutlined, DownOutlined, LoadingOutlined, DownloadOutlined } from '
 import { CSVLink } from "react-csv";
 
 require('highcharts/modules/exporting')(Highcharts);
+Highcharts.AST.allowedTags.push('svg');
+Highcharts.AST.allowedAttributes.push('viewBox');
 
 const { RangePicker } = DatePicker;
 const { Search } = Input;
@@ -17,7 +19,8 @@ const { Search } = Input;
 
 const defaultRange: any = [
   moment().subtract(1, 'years'),
-  moment()
+  moment(),
+  moment().subtract(2, 'years'),
 ]
 
 const FilterMenu = observer(({ field }) => {
@@ -57,17 +60,22 @@ const FilterMenu = observer(({ field }) => {
 
 });
 
+const arrowDown = '<svg class="ptarrow" fill="green" viewBox="0 0 1024 1024"><path d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"/>'
+const arrowUp = '<svg class="ptarrow" fill="red" viewBox="0 0 256 256"><path d="M215.39111,163.06152A8.00015,8.00015,0,0,1,208,168H48a7.99981,7.99981,0,0,1-5.65674-13.65674l80-80a8,8,0,0,1,11.31348,0l80,80A7.99982,7.99982,0,0,1,215.39111,163.06152Z"/></svg>';
+const dash = '<svg class="ptarrow" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M2 8a1 1 0 011-1h10a1 1 0 110 2H3a1 1 0 01-1-1z" fill="#2f7ed8"/></svg>'
+
 export const EventList = observer(() => {
   const store = useStore();
   const [visible, setVisible] = useState(false);
   const [searching, setSearching] = useState(false);
    const [open, setOpen] = useState(false);
-   const [chartTitle, setChartTitle] = useState("Top 10 causes of death")
+   const [chartTitle, setChartTitle] = useState("Top 20 causes of death")
    const [filtersInitialized, setFiltersInitialized] = useState(false);
    const [visibleStates, setVisibleStates] = useState({});
    const dropdowns = useRef([]);
    const [downloadData, setDownloadData] = useState([]);
    const [downloadng, setDownloadng] = useState(false);
+   const [currChartType, setCurrChartType] = useState("column");
    const csvBtn = useRef(null);
    // const myPicker = useRef<HTMLInputElement|null>(null);
 
@@ -91,6 +99,18 @@ export const EventList = observer(() => {
             }
         },
         series: [{ name: "Deaths"} as any],
+        tooltip: {
+          useHTML: true,
+          pointFormatter: function() {
+            let point: any = this;  
+            let arrow = '';
+            
+            const disease = store?.topDiseases[point.x]
+            arrow = disease.count > disease.prev ? arrowUp : disease.count == disease.prev ? dash : arrowDown 
+            
+            return `<div class="ptlabel">${point.series?.name}: <b>${point.y}</b>${arrow}</div>`;
+          } 
+        },
         credits: {
             enabled: false
         }
@@ -107,7 +127,17 @@ export const EventList = observer(() => {
             text: chartTitle
         },
         tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+          useHTML: true,
+          pointFormatter: function() {
+            let point: any = this;  
+            let arrow = '';
+
+            console.log(point);
+            
+            const disease = store?.topDiseases[point.x]
+            arrow = disease.count > disease.prev ? arrowUp : disease.count == disease.prev ? dash : arrowDown 
+            return `<div class="ptlabel">${point.series.name}: <b>${parseFloat(point.percentage).toFixed(1)}%</b>${arrow}</div>`
+          } 
         },
         plotOptions: {
             pie: {
@@ -115,7 +145,19 @@ export const EventList = observer(() => {
                 cursor: 'pointer',
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                    useHTML: true,
+                    formatter: function() {
+                      const pointd: any = this;
+                      const point = pointd.point;
+
+                      let arrow = '';
+                      
+                      const disease = store?.topDiseases[point.x]
+                      if (!!disease)
+                        arrow = disease.count > disease.prev ? arrowUp : disease.count == disease.prev ? dash : arrowDown 
+
+                      return `<div class="ptlabel"><b>${point.name}</b>: ${parseFloat(point.percentage).toFixed(1)}:% ${arrow}</div>`;
+                    }
                 }
             }
         },
@@ -132,6 +174,7 @@ export const EventList = observer(() => {
   const changeChartType = (chartType: string) => {
     console.log(chart.current);
     let opts = null;
+    setCurrChartType(chartType);
     if (chartType == 'pie') {
       opts = pieOptions;
       if (!!store.topDiseases)
@@ -140,7 +183,9 @@ export const EventList = observer(() => {
       opts = colOptions ?? {};
       if (!!store.topDiseases && opts !== undefined) {
         opts.xAxis[0].categories = store.topDiseases?.map((d: any) => d?.name);
-        opts.series[0].data = store.topDiseases?.map((d: any) => d.count)
+        opts.series[0].data = store.topDiseases?.map((d: any) => {
+          return { y: d.count, color: d.count > d.prev ? 'red': d.count == d.prev ? '#2f7ed8': 'green'}
+        })
       }
     }
 
@@ -166,13 +211,18 @@ export const EventList = observer(() => {
     else {
       if (!!store.topDiseases) {
         const sortedDiseases = store.topDiseases;
-        let title = "Top 10 causes of death";
+        let title = "Top 20 causes of death";
         if (!!store.selectedOrgUnitName)
           title = `${title} in ${store.selectedOrgUnitName}`;
         setChartTitle(title);
         chart.current.setTitle({text: title});
         chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
-        chart.current.series[0].setData(sortedDiseases.map((d: any) => d.count), true); //setting data
+        chart.current.series[0].setData(sortedDiseases.map((d: any) => {
+          if (currChartType == "column") 
+            return { y: d.count, color: d.count > d.prev ? 'red': d.count == d.prev ? '#2f7ed8': 'green'}
+          else 
+            return d.count;
+        }), true); //setting data
       }
       chart.current.hideLoading();
     }
@@ -187,12 +237,18 @@ export const EventList = observer(() => {
     store.selectedDateRange = [
       defaultRange[0].format("YYYY-MM-DD"),
       defaultRange[1].format("YYYY-MM-DD"),
+      defaultRange[2].format("YYYY-MM-DD"),
     ];
     store.queryTopEvents().then(() => {
       if (!!store.topDiseases) {
         const sortedDiseases = store.topDiseases;
         chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
-        chart.current.series[0].setData(sortedDiseases.map((d: any) => d.count), true); //setting data
+        chart.current.series[0].setData(sortedDiseases.map((d: any) => {
+          if (currChartType == "column") 
+            return { y: d.count, color: d.count > d.prev ? 'red': d.count == d.prev ? '#2f7ed8': 'green'}
+          else 
+            return d.count;
+        }), true); //setting data
       }
       chart.current.hideLoading();
     })
@@ -217,8 +273,11 @@ export const EventList = observer(() => {
     } else {
       const startDate = ranges[0].format("YYYY-MM-DD")
       const endDate = ranges[1].format("YYYY-MM-DD")
+      const duration = ranges[1].diff(ranges[0], 'days');
 
-      store.changeSelectedDateRange(startDate, endDate);
+      const prevDate = ranges[0].subtract(duration, 'days').format("YYYY-MM-DD");
+
+      store.changeSelectedDateRange(startDate, endDate, prevDate);
     }
   }
 

@@ -81,7 +81,7 @@ class Store {
   @observable attributesExist: boolean | null = null;
   @observable topDiseases: any;
   @observable loadingTopDiseases: boolean = false;
-  @observable selectedDateRange: [string, string] | null = null;
+  @observable selectedDateRange: [string, string, string] | null = null;
   @observable searchIds: any;
   @observable filters: any = {};
   @observable allDisabled: any = {
@@ -673,8 +673,8 @@ class Store {
     }
   };
 
-  @action changeSelectedDateRange = async(start: string, end: string) => {
-    this.selectedDateRange = [start, end];
+  @action changeSelectedDateRange = async(start: string, end: string, prev: string) => {
+    this.selectedDateRange = [start, end, prev];
     await this.queryTopEvents();
   }
 
@@ -689,6 +689,7 @@ class Store {
       
       try {
         let data = null;
+        let prevData = null;
 
         if (!!this.selectedNationality) {
           const query1 = {
@@ -716,9 +717,43 @@ class Store {
 
           const res = await this.engine.query(query1);
           data = res.events;
+
+          if (!!this.selectedDateRange) {
+            // let query2 = Object.assign({}, query1);
+            // query2.events.params.startDate = this.selectedDateRange[2];
+            // query2.events.params.endDate = this.selectedDateRange[0];
+            const query2 = {
+              events: {
+                resource: "events/query.json",
+                params: {
+                  paging: "false",
+                  programStage: this.programStage,
+                  ... (this.selectedOrgUnit && {
+                    orgUnit: this.selectedOrgUnit, 
+                    ouMode: 'DESCENDANTS'
+                  }),
+                  totalPages: "true",
+                  attributeCc: this.attributeCC,
+                  attributeCos: this.selectedNationality,
+                  includeAllDataElements: "true",
+                  order: this.sorter,
+                  ...(this.selectedDateRange && {
+                    startDate: this.selectedDateRange[2],
+                    endDate: this.selectedDateRange[0],
+                  })
+                },
+              },
+            };
+            const res2 = await this.engine.query(query2);
+
+            prevData = res2.events;
+          }
         } else {
           let query1 = {}
-          console.log("queryTopEvents: nationalitySelect", this.nationalitySelect)
+          let query2 = {}
+
+          console.log(this.selectedDateRange);
+          
           for (let i = 0; i < this.nationalitySelect?.length; i++) {
             const id = this.nationalitySelect[i].id;
             query1[`event_${id}`] = {
@@ -740,6 +775,32 @@ class Store {
                     endDate: this.selectedDateRange[1],
                   })
                 },
+              };
+
+              if (!!this.selectedDateRange) {
+                // query2[`event_${id}`] = Object.assign({}, query1[`event_${id}`]);
+                // query2[`event_${id}`].params.startDate = this.selectedDateRange[2];
+                // query2[`event_${id}`].params.endDate = this.selectedDateRange[0];
+                query2[`event_${id}`] = {
+                    resource: "events/query.json",
+                    params: {
+                      paging: "false",
+                      programStage: this.programStage,
+                      ... (this.selectedOrgUnit && {
+                        orgUnit: this.selectedOrgUnit, 
+                        ouMode: 'DESCENDANTS'
+                      }),
+                      totalPages: "true",
+                      attributeCc: this.attributeCC,
+                      attributeCos: id,
+                      includeAllDataElements: "true",
+                      order: this.sorter,
+                      ...(this.selectedDateRange && {
+                        startDate: this.selectedDateRange[2],
+                        endDate: this.selectedDateRange[0],
+                      })
+                    },
+                  };
               }
           }
           
@@ -754,11 +815,41 @@ class Store {
               data.rows?.concat(res[`event_${id}`].rows)
             }
           }
+
+          if (!!this.selectedDateRange) {            
+            console.log("Query2", query2);
+            const res2 = await this.engine.query(query2);
+            console.log("Result2", res2)
+            for (let i = 0; i < this.nationalitySelect?.length; i++) {
+              const id = this.nationalitySelect[i].id;
+              if (i == 0) {
+                prevData = res2[`event_${id}`]
+              } else {
+                prevData.rows?.concat(res2[`event_${id}`].rows)
+              }
+            }            
+          }
+
         }
         
         
         let diseases: any = {};
-       
+       let prevDiseases: any = {};
+
+        if (!!prevData) {
+          
+          const codIndex = prevData.headers.findIndex((h: any) => h.name === 'QTKk2Xt8KDu')
+
+            for (var i = 0; i < prevData.rows.length; i++) {
+              const name: string = prevData.rows[i][codIndex];
+              if (!prevDiseases[name])
+                prevDiseases[name] = 0;
+
+              prevDiseases[name] += 1;
+            }
+
+        }
+
         if (!!data) {
           const { headers, rows } = data;
           const codIndex = headers.findIndex((h: any) => h.name === 'QTKk2Xt8KDu')
@@ -766,14 +857,24 @@ class Store {
             for (var i = 0; i < rows.length; i++) {
               const name: string = rows[i][codIndex];
               if (!diseases[name])
-                diseases[name] = {name, count: 0};
+                diseases[name] = {name, count: 0, prev: prevDiseases[name] ?? 0};
 
               diseases[name].count += 1;
             }
+            
         }
 
-        console.log(diseases);
-        this.topDiseases = Object.values(diseases)?.sort((a: any, b: any) => a.count - b.count)?.slice(-10);
+        
+        
+        
+
+            console.log("prevDiseases", prevDiseases)
+
+
+        
+        this.topDiseases = Object.values(diseases)?.sort((a: any, b: any) => a.count - b.count)?.slice(-20);
+        
+        console.log("topDiseases", this.topDiseases)
         this.loadingTopDiseases = false;
       } catch (e) {
         console.log(e);
