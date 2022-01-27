@@ -11,6 +11,12 @@ import { StoreContext } from "./Context";
 import { EventList } from "./components/EventList";
 import LanguageConfigPage from "./components/LanguageConfigPage";
 
+
+const extraHeaders =
+  process.env.NODE_ENV === "development"
+    ? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
+    : {};
+
 export const App = observer(() => {
   const engine = useDataEngine();
   store.setEngine(engine);

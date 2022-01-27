@@ -2,6 +2,11 @@ import { action, computed, observable, runInAction } from "mobx";
 import { flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
+import { CauseOfDeathFilter } from "./filters";
+
+const extraHeaders = window.location.origin.includes("local")
+  ? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
+  : {};
 
 const query = {
   me: {
@@ -56,7 +61,7 @@ class Store {
   @observable nationalitySelect: any;
   @observable selectedOrgUnit: any;
   @observable activeLanguage: any;
-  @observable ICDLang: any =  null;
+  @observable ICDLang: any = null;
   @observable programs: any = [];
   @observable selectedNationality: any;
   @observable optionSets: any;
@@ -80,6 +85,9 @@ class Store {
   @observable ICDAltSearchtextA: any;
   @observable attributesExist: boolean | null = null;
   @observable topDiseases: any;
+  @observable allDiseases: any;
+  @observable totalCauseDeathCount: number = 0;
+  @observable totalDeathCount: number = 0;
   @observable loadingTopDiseases: boolean = false;
   @observable selectedDateRange: [string, string, string] | null = null;
   @observable searchIds: any;
@@ -207,7 +215,7 @@ class Store {
     try {
       const data = await this.engine.query(query);
 
-      console.log('loadUserOrgUnits:', data)
+      console.log("loadUserOrgUnits:", data);
 
       this.userOrgUnits = data.me.organisationUnits;
       this.fetchingOrgUnits = false;
@@ -232,40 +240,38 @@ class Store {
 
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
-        
+
         const metaQ = {
-          meta : {
+          meta: {
             resource: `dataStore/Languages/${al.LanguageName}`,
             params: {
-              fields: [
-                "meta"
-              ]
-            }
-          }
-        }
+              fields: ["meta"],
+            },
+          },
+        };
 
         const d2 = await this.engine.query(metaQ);
 
-
-        const langNats = d2.meta?.meta?.categories?.find((p: any) => p.code == 'RT01')
-        const langOptions = langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
+        const langNats = d2.meta?.meta?.categories?.find(
+          (p: any) => p.code == "RT01"
+        );
+        const langOptions =
+          langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
         const langValues = d2.meta?.meta?.categoryOptions || [];
 
         let lcategories = [];
-        for(let i = 0; i < langOptions.length; i++) {
+        for (let i = 0; i < langOptions.length; i++) {
           const id = langOptions[i];
           lcategories.push(langValues.find((l: any) => l.id == id));
         }
-      
 
-        console.log("cates", lcategories)
+        console.log("cates", lcategories);
 
         this.nationalitySelect = lcategories || [];
       }
       // console.log("test13", test13);
-      
     } catch (e) {
-      console.log('errrruuuooorrrr', e);
+      console.log("errrruuuooorrrr", e);
       this.fetchingOrgUnits = false;
     }
   };
@@ -323,7 +329,7 @@ class Store {
 
       this.attributesExist = !!nameSpaceExists;
     }
-  }
+  };
 
   @action getSingleLanguage = async (languageName?: string) => {
     try {
@@ -341,13 +347,12 @@ class Store {
   @action checkLanguagesExistInDataStore = async () => {
     const nameSpaceUrl = `/api/dataStore/Languages`;
     try {
-      const res = await this.engine.link.fetch(nameSpaceUrl)
-      return (!!res?.length)
+      const res = await this.engine.link.fetch(nameSpaceUrl);
+      return !!res?.length;
     } catch (error) {
       return false;
     }
-    
-  }
+  };
 
   @action saveNewLang = async (
     languageName?: string,
@@ -396,7 +401,6 @@ class Store {
     }
   };
 
- 
   @action saveActiveLanguage = async (
     langName?: string,
     language?: any,
@@ -478,7 +482,6 @@ class Store {
     }
   };
 
-
   @action getICDLanguage = async (defaultLang?: any) => {
     try {
       const url = `/api/dataStore/ActiveLanguage/ICDLanguage`;
@@ -502,9 +505,11 @@ class Store {
         },
       });
       console.log("check if admin Result is ", userDetails?.me.code);
-      return userDetails?.me?.userCredentials?.userRoles?.some(r => r.id === "yrB6vc5Ip3r");
+      return userDetails?.me?.userCredentials?.userRoles?.some(
+        (r) => r.id === "yrB6vc5Ip3r"
+      );
     } catch (e) {
-      console.log(e)
+      console.log(e);
       return false;
     }
   };
@@ -550,37 +555,37 @@ class Store {
   };
 
   @action checkProgramExists = async () => {
-    if (this.programExists)
-      return true;
+    if (this.programExists) return true;
 
-    const programData = await this.engine.query({    
-      programs:{
-          resource: "programs",
-          params: {
-              fields: [
-                  'id',
-                  'name'
-              ]
-          }
-      }
-  
+    const programData = await this.engine.query({
+      programs: {
+        resource: "programs",
+        params: {
+          fields: ["id", "name"],
+        },
+      },
     });
 
-    this.programExists = programData.programs.programs.some((p: any) => p.id == this.program);
-    this.programExists = programData.programs.programs.some((p: any) => p.id == this.program);
+    this.programExists = programData.programs.programs.some(
+      (p: any) => p.id == this.program
+    );
+    this.programExists = programData.programs.programs.some(
+      (p: any) => p.id == this.program
+    );
     return this.programExists;
-  }
+  };
 
   @action createProgram = async () => {
-    const metaUrl = `/api/metadata`
+    const metaUrl = `/api/metadata`;
     await this.engine.link.fetch(metaUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        ...extraHeaders,
       },
       body: JSON.stringify(englishMeta),
     });
-  }
+  };
 
   @action
   isUserApproved = async () => {
@@ -673,34 +678,68 @@ class Store {
     }
   };
 
-  @action changeSelectedDateRange = async(start: string, end: string, prev: string) => {
+  @action changeSelectedDateRange = async (
+    start: string,
+    end: string,
+    prev: string
+  ) => {
     this.selectedDateRange = [start, end, prev];
     await this.queryTopEvents();
-  }
+  };
 
-  @action clearSelectedDateRange = async() => {
+  @action clearSelectedDateRange = async () => {
     this.selectedDateRange = null;
     await this.queryTopEvents();
-  }
+  };
 
-  @action queryTopEvents = async () => {
-    
-      this.loadingTopDiseases = true;
-      
-      try {
-        let data = null;
-        let prevData = null;
+  @action queryTopEvents = async (filterByCause?: string) => {
+    this.loadingTopDiseases = true;
+    this.totalCauseDeathCount = 0;
+    this.totalDeathCount = 0;
+    try {
+      let data = null;
+      let prevData = null;
 
-        if (!!this.selectedNationality) {
-          const query1 = {
+      if (!!this.selectedNationality) {
+        const query1 = {
+          events: {
+            resource: "events/query.json",
+            params: {
+              paging: "false",
+              programStage: this.programStage,
+              ...(this.selectedOrgUnit && {
+                orgUnit: this.selectedOrgUnit,
+                ouMode: "DESCENDANTS",
+              }),
+              totalPages: "true",
+              attributeCc: this.attributeCC,
+              attributeCos: this.selectedNationality,
+              includeAllDataElements: "true",
+              order: this.sorter,
+              ...(this.selectedDateRange && {
+                startDate: this.selectedDateRange[0],
+                endDate: this.selectedDateRange[1],
+              }),
+            },
+          },
+        };
+
+        const res = await this.engine.query(query1);
+        data = res.events;
+
+        if (!!this.selectedDateRange) {
+          // let query2 = Object.assign({}, query1);
+          // query2.events.params.startDate = this.selectedDateRange[2];
+          // query2.events.params.endDate = this.selectedDateRange[0];
+          const query2 = {
             events: {
               resource: "events/query.json",
               params: {
                 paging: "false",
                 programStage: this.programStage,
-                ... (this.selectedOrgUnit && {
-                  orgUnit: this.selectedOrgUnit, 
-                  ouMode: 'DESCENDANTS'
+                ...(this.selectedOrgUnit && {
+                  orgUnit: this.selectedOrgUnit,
+                  ouMode: "DESCENDANTS",
                 }),
                 totalPages: "true",
                 attributeCc: this.attributeCC,
@@ -708,292 +747,278 @@ class Store {
                 includeAllDataElements: "true",
                 order: this.sorter,
                 ...(this.selectedDateRange && {
-                  startDate: this.selectedDateRange[0],
-                  endDate: this.selectedDateRange[1],
-                })
+                  startDate: this.selectedDateRange[2],
+                  endDate: this.selectedDateRange[0],
+                }),
               },
             },
           };
+          const res2 = await this.engine.query(query2);
 
-          const res = await this.engine.query(query1);
-          data = res.events;
+          prevData = res2.events;
+        }
+      } else {
+        let query1 = {};
+        let query2 = {};
+
+        console.log(this.selectedDateRange);
+
+        for (let i = 0; i < this.nationalitySelect?.length; i++) {
+          const id = this.nationalitySelect[i].id;
+          query1[`event_${id}`] = {
+            resource: "events/query.json",
+            params: {
+              paging: "false",
+              programStage: this.programStage,
+              ...(this.selectedOrgUnit && {
+                orgUnit: this.selectedOrgUnit,
+                ouMode: "DESCENDANTS",
+              }),
+              totalPages: "true",
+              attributeCc: this.attributeCC,
+              attributeCos: id,
+              includeAllDataElements: "true",
+              order: this.sorter,
+              ...(this.selectedDateRange && {
+                startDate: this.selectedDateRange[0],
+                endDate: this.selectedDateRange[1],
+              }),
+            },
+          };
 
           if (!!this.selectedDateRange) {
-            // let query2 = Object.assign({}, query1);
-            // query2.events.params.startDate = this.selectedDateRange[2];
-            // query2.events.params.endDate = this.selectedDateRange[0];
-            const query2 = {
-              events: {
-                resource: "events/query.json",
-                params: {
-                  paging: "false",
-                  programStage: this.programStage,
-                  ... (this.selectedOrgUnit && {
-                    orgUnit: this.selectedOrgUnit, 
-                    ouMode: 'DESCENDANTS'
-                  }),
-                  totalPages: "true",
-                  attributeCc: this.attributeCC,
-                  attributeCos: this.selectedNationality,
-                  includeAllDataElements: "true",
-                  order: this.sorter,
-                  ...(this.selectedDateRange && {
-                    startDate: this.selectedDateRange[2],
-                    endDate: this.selectedDateRange[0],
-                  })
-                },
+            // query2[`event_${id}`] = Object.assign({}, query1[`event_${id}`]);
+            // query2[`event_${id}`].params.startDate = this.selectedDateRange[2];
+            // query2[`event_${id}`].params.endDate = this.selectedDateRange[0];
+            query2[`event_${id}`] = {
+              resource: "events/query.json",
+              params: {
+                paging: "false",
+                programStage: this.programStage,
+                ...(this.selectedOrgUnit && {
+                  orgUnit: this.selectedOrgUnit,
+                  ouMode: "DESCENDANTS",
+                }),
+                totalPages: "true",
+                attributeCc: this.attributeCC,
+                attributeCos: id,
+                includeAllDataElements: "true",
+                order: this.sorter,
+                ...(this.selectedDateRange && {
+                  startDate: this.selectedDateRange[2],
+                  endDate: this.selectedDateRange[0],
+                }),
               },
             };
-            const res2 = await this.engine.query(query2);
-
-            prevData = res2.events;
           }
-        } else {
-          let query1 = {}
-          let query2 = {}
+        }
 
-          console.log(this.selectedDateRange);
-          
-          for (let i = 0; i < this.nationalitySelect?.length; i++) {
-            const id = this.nationalitySelect[i].id;
-            query1[`event_${id}`] = {
-                resource: "events/query.json",
-                params: {
-                  paging: "false",
-                  programStage: this.programStage,
-                  ... (this.selectedOrgUnit && {
-                    orgUnit: this.selectedOrgUnit, 
-                    ouMode: 'DESCENDANTS'
-                  }),
-                  totalPages: "true",
-                  attributeCc: this.attributeCC,
-                  attributeCos: id,
-                  includeAllDataElements: "true",
-                  order: this.sorter,
-                  ...(this.selectedDateRange && {
-                    startDate: this.selectedDateRange[0],
-                    endDate: this.selectedDateRange[1],
-                  })
-                },
-              };
-
-              if (!!this.selectedDateRange) {
-                // query2[`event_${id}`] = Object.assign({}, query1[`event_${id}`]);
-                // query2[`event_${id}`].params.startDate = this.selectedDateRange[2];
-                // query2[`event_${id}`].params.endDate = this.selectedDateRange[0];
-                query2[`event_${id}`] = {
-                    resource: "events/query.json",
-                    params: {
-                      paging: "false",
-                      programStage: this.programStage,
-                      ... (this.selectedOrgUnit && {
-                        orgUnit: this.selectedOrgUnit, 
-                        ouMode: 'DESCENDANTS'
-                      }),
-                      totalPages: "true",
-                      attributeCc: this.attributeCC,
-                      attributeCos: id,
-                      includeAllDataElements: "true",
-                      order: this.sorter,
-                      ...(this.selectedDateRange && {
-                        startDate: this.selectedDateRange[2],
-                        endDate: this.selectedDateRange[0],
-                      })
-                    },
-                  };
-              }
+        console.log("Query", query1);
+        const res = await this.engine.query(query1);
+        console.log("Result", res);
+        for (let i = 0; i < this.nationalitySelect?.length; i++) {
+          const id = this.nationalitySelect[i].id;
+          if (i == 0) {
+            data = res[`event_${id}`];
+          } else {
+            data.rows?.concat(res[`event_${id}`].rows);
           }
-          
-          console.log("Query", query1);
-          const res = await this.engine.query(query1);
-          console.log("Result", res)
+        }
+
+        if (!!this.selectedDateRange) {
+          console.log("Query2", query2);
+          const res2 = await this.engine.query(query2);
+          console.log("Result2", res2);
           for (let i = 0; i < this.nationalitySelect?.length; i++) {
             const id = this.nationalitySelect[i].id;
             if (i == 0) {
-              data = res[`event_${id}`]
+              prevData = res2[`event_${id}`];
             } else {
-              data.rows?.concat(res[`event_${id}`].rows)
+              prevData.rows?.concat(res2[`event_${id}`].rows);
             }
           }
-
-          if (!!this.selectedDateRange) {            
-            console.log("Query2", query2);
-            const res2 = await this.engine.query(query2);
-            console.log("Result2", res2)
-            for (let i = 0; i < this.nationalitySelect?.length; i++) {
-              const id = this.nationalitySelect[i].id;
-              if (i == 0) {
-                prevData = res2[`event_${id}`]
-              } else {
-                prevData.rows?.concat(res2[`event_${id}`].rows)
-              }
-            }            
-          }
-
         }
-        
-        
-        let diseases: any = {};
-       let prevDiseases: any = {};
-
-        if (!!prevData) {
-          
-          const codIndex = prevData.headers.findIndex((h: any) => h.name === 'QTKk2Xt8KDu')
-
-            for (var i = 0; i < prevData.rows.length; i++) {
-              const name: string = prevData.rows[i][codIndex];
-              if (!prevDiseases[name])
-                prevDiseases[name] = 0;
-
-              prevDiseases[name] += 1;
-            }
-
-        }
-
-        if (!!data) {
-          const { headers, rows } = data;
-          const codIndex = headers.findIndex((h: any) => h.name === 'QTKk2Xt8KDu')
-
-            for (var i = 0; i < rows.length; i++) {
-              const name: string = rows[i][codIndex];
-              if (!diseases[name])
-                diseases[name] = {name, count: 0, prev: prevDiseases[name] ?? 0};
-
-              diseases[name].count += 1;
-            }
-            
-        }
-
-        
-        
-        
-
-            console.log("prevDiseases", prevDiseases)
-
-
-        
-        this.topDiseases = Object.values(diseases)?.sort((a: any, b: any) => a.count - b.count)?.slice(-20);
-        
-        console.log("topDiseases", this.topDiseases)
-        this.loadingTopDiseases = false;
-      } catch (e) {
-        console.log(e);
-        this.loadingTopDiseases = false;
       }
-    
-  }
+
+      let diseases: any = {};
+      let prevDiseases: any = {};
+
+      if (!!prevData) {
+        const { codIndex } = getHeaderIndexes(prevData.headers);
+        console.log(prevData.headers);
+        console.log(prevData.rows);
+        for (var i = 0; i < prevData.rows.length; i++) {
+          const name: string = prevData.rows[i][codIndex];
+          if (!prevDiseases[name]) prevDiseases[name] = 0;
+          prevDiseases[name] += 1;
+        }
+      }
+
+      if (!!data) {
+        const { headers, rows } = data;
+        const {
+          codIndex,
+          causeOfDeathIndex,
+          birthIndex,
+          deathIndex,
+          sexIndex,
+        } = getHeaderIndexes(headers);
+
+        for (var i = 0; i < rows.length; i++) {
+          const name: string = rows[i][codIndex];
+          const code: string = data.rows[i][causeOfDeathIndex];
+          const dob: string = data.rows[i][birthIndex];
+          const dod: string = data.rows[i][deathIndex];
+          const gender: string = data.rows[i][sexIndex];
+          if (!diseases[name])
+            diseases[name] = {
+              name,
+              code,
+              affected: [{ dob, dod, gender }],
+              count: 0,
+              prev: prevDiseases[name] ?? 0,
+            };
+
+          diseases[name].count += 1;
+          diseases[name].affected.push({ dob, dod, gender });
+        }
+        this.totalDeathCount = rows.length;
+      }
+
+      console.log("prevDiseases", prevDiseases);
+
+      this.totalCauseDeathCount = 0;
+      if (filterByCause) {
+        console.log("---------------------------------");
+        const f = new CauseOfDeathFilter();
+        diseases = f.apply(diseases, filterByCause);
+        Object.keys(diseases).forEach(
+          (k) => (this.totalCauseDeathCount += diseases[k].count)
+        );
+      }
+
+      this.allDiseases = diseases;
+
+      this.topDiseases = Object.values(diseases)
+        ?.sort((a: any, b: any) => a.count - b.count)
+        ?.slice(-20);
+
+      console.log("topDiseases", this.topDiseases);
+      this.loadingTopDiseases = false;
+    } catch (e) {
+      console.log(e);
+      this.loadingTopDiseases = false;
+    }
+  };
 
   @action queryEvents = async () => {
     if (this.canInsert) {
-      
-        let query1: any = {
-          events: {
-            resource: "events/query.json",
-            params: {
-              page: this.page,
-              pageSize: this.pageSize,
-              programStage: this.programStage,
-              orgUnit: this.selectedOrgUnit,
-              totalPages: "true",
-              attributeCc: this.attributeCC,
-              attributeCos: this.selectedNationality,
-              includeAllDataElements: "true",
-              order: this.sorter,
-              // query: this.search === "" ? "" : `LIKE:${this.search}`,
-            },
+      let query1: any = {
+        events: {
+          resource: "events/query.json",
+          params: {
+            page: this.page,
+            pageSize: this.pageSize,
+            programStage: this.programStage,
+            orgUnit: this.selectedOrgUnit,
+            totalPages: "true",
+            attributeCc: this.attributeCC,
+            attributeCos: this.selectedNationality,
+            includeAllDataElements: "true",
+            order: this.sorter,
+            // query: this.search === "" ? "" : `LIKE:${this.search}`,
           },
-        };
+        },
+      };
 
-        if (!!this.filters) {
-          query1.events.params['filter'] = [];
-          Object.keys(this.filters).forEach(key => {
-            if (!!this.filters[key]?.value)
-              query1.events.params.filter.push(`${key}:LIKE:${this.filters[key].value}`)
-          })
-        }
+      if (!!this.filters) {
+        query1.events.params["filter"] = [];
+        Object.keys(this.filters).forEach((key) => {
+          if (!!this.filters[key]?.value)
+            query1.events.params.filter.push(
+              `${key}:LIKE:${this.filters[key].value}`
+            );
+        });
+      }
 
-        console.log(query1);
+      console.log(query1);
 
-        try {
-          const data = await this.engine.query(query1);
+      try {
+        const data = await this.engine.query(query1);
 
-          runInAction(() => {
-            this.data = data.events;
-            this.data.headers = this.data.headers.map((a: any, i: number) => {
-              return {
-                ...a,
-                i,
-              };
-            });
-            this.total = this.data.metaData.pager.total;  
-          })
-          
-        } catch (e) {
-          console.log(e);
-        }
-      
+        runInAction(() => {
+          this.data = data.events;
+
+          this.data.headers = this.data.headers.map((a: any, i: number) => {
+            return {
+              ...a,
+              i,
+            };
+          });
+          this.total = this.data.metaData.pager.total;
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
   @action downloadData = async () => {
-    
-      if (this.canInsert) {
-        
-          let query1: any = {
-            events: {
-              resource: "events/query.json",
-              params: {
-                pager: false,                
-                programStage: this.programStage,
-                orgUnit: this.selectedOrgUnit,
-                totalPages: "true",
-                attributeCc: this.attributeCC,
-                attributeCos: this.selectedNationality,
-                includeAllDataElements: "true",
-                order: this.sorter,
-                // query: this.search === "" ? "" : `LIKE:${this.search}`,
-              },
-            },
-          };
+    if (this.canInsert) {
+      let query1: any = {
+        events: {
+          resource: "events/query.json",
+          params: {
+            pager: false,
+            programStage: this.programStage,
+            orgUnit: this.selectedOrgUnit,
+            totalPages: "true",
+            attributeCc: this.attributeCC,
+            attributeCos: this.selectedNationality,
+            includeAllDataElements: "true",
+            order: this.sorter,
+            // query: this.search === "" ? "" : `LIKE:${this.search}`,
+          },
+        },
+      };
 
-          if (!!this.filters) {
-            query1.events.params['filter'] = [];
-            Object.keys(this.filters).forEach(key => {
-              if (!!this.filters[key]?.value)
-                query1.events.params.filter.push(`${key}:LIKE:${this.filters[key].value}`)
-            })
-          }
-
-          console.log(query1);
-
-          try {
-            const data = await this.engine.query(query1);
-
-            let dd = [];
-            let headerIndexes = [];
-
-            dd.push(this.columns.map(c => c.title));
-
-            this.columns.forEach((h, idx) => {
-              headerIndexes.push(data.events.headers.findIndex(eh => eh.name == h.key))
-            })
-
-            data.events.rows.forEach(e => {
-              dd.push(headerIndexes.map(idx => e[idx]))
-            });
-
-            console.log("Download data", dd);
-            return dd;
-              
-            
-            
-          } catch (e) {
-            console.log(e);
-          }
-        
+      if (!!this.filters) {
+        query1.events.params["filter"] = [];
+        Object.keys(this.filters).forEach((key) => {
+          if (!!this.filters[key]?.value)
+            query1.events.params.filter.push(
+              `${key}:LIKE:${this.filters[key].value}`
+            );
+        });
       }
-    
-  }
+
+      console.log(query1);
+
+      try {
+        const data = await this.engine.query(query1);
+
+        let dd = [];
+        let headerIndexes = [];
+
+        dd.push(this.columns.map((c) => c.title));
+
+        this.columns.forEach((h, idx) => {
+          headerIndexes.push(
+            data.events.headers.findIndex((eh) => eh.name == h.key)
+          );
+        });
+
+        data.events.rows.forEach((e) => {
+          dd.push(headerIndexes.map((idx) => e[idx]));
+        });
+
+        console.log("Download data", dd);
+        return dd;
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
 
   @action handleChange = async (pagination: any, filters: any, sorter: any) => {
     const order =
@@ -1084,16 +1109,16 @@ class Store {
 
   @action setInitialFilters = () => {
     let filters = {};
-    console.log("COLS", this.columns)
-    this.columns.slice(0, 4).forEach(c => {
+    console.log("COLS", this.columns);
+    this.columns.slice(0, 4).forEach((c) => {
       filters[c.key] = {
         value: "",
         title: c.title,
       };
     });
-    console.log(filters)
+    console.log(filters);
     this.filters = filters;
-  }
+  };
 
   @action causeOfDeathAltSearch = (e: any) => {
     try {
@@ -1202,7 +1227,7 @@ class Store {
   @computed get selectedOrgUnitName() {
     const current: any = this.userOrgUnits.find(
       (u: any) => u.id === this.selectedOrgUnit
-    ); 
+    );
 
     if (current) {
       return current.name;
@@ -1255,3 +1280,14 @@ class Store {
 }
 
 export const store = new Store();
+
+function getHeaderIndexes(headers: Array<any>) {
+  const codIndex = headers.findIndex((h: any) => h.name === "QTKk2Xt8KDu");
+  const causeOfDeathIndex = headers.findIndex(
+    (h: any) => h.name === "sJhOdGLD5lj"
+  );
+  const birthIndex = headers.findIndex((h: any) => h.name === "RbrUuKFSqkZ");
+  const deathIndex = headers.findIndex((h: any) => h.name === "i8rrl8YWxLF");
+  const sexIndex = headers.findIndex((h: any) => h.name === "e96GB4CXyd3");
+  return { codIndex, causeOfDeathIndex, birthIndex, deathIndex, sexIndex };
+}

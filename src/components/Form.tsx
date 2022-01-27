@@ -1,5 +1,5 @@
 // referredValueSavedHere
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Button,
   Card,
@@ -15,7 +15,9 @@ import {
   Modal,
   Alert,
 } from "antd";
+import ReactToPrint from "react-to-print";
 import { observer } from "mobx-react";
+import { FormPrint } from "./FormPrint";
 import { ICDField } from "./ICDField";
 import { useStore } from "../Context";
 import { isArray, isEmpty } from "lodash";
@@ -67,7 +69,7 @@ const { Title } = Typography;
 export const DataEntryForm = observer(() => {
   const [form] = Form.useForm();
   const [optionSets, setOptionSets] = useState<any>();
-  
+
   const store = useStore();
   const [activeLanguage, setActiveLanguage] = useState(
     store.activeLanguage || allLanguages[0]
@@ -231,7 +233,6 @@ export const DataEntryForm = observer(() => {
 
   // End of Testing
 
-  
   const onFinish = async (values: any) => {
     // Force form to acknowledge controlled values
     if (approvalStatus) {
@@ -742,7 +743,6 @@ export const DataEntryForm = observer(() => {
     // console.log("working");
   };
 
-  
   const optionSet = (
     os: string,
     field: string,
@@ -818,13 +818,13 @@ export const DataEntryForm = observer(() => {
       mainCause = newValues["b"];
     } else if (!!newValues["a"]) {
       mainCause = newValues["a"];
-    } 
+    }
 
     addDiseaseTitle(mainCause);
 
-    console.log("editUnderlyingCauses...", newValues)
+    console.log("editUnderlyingCauses...", newValues);
     console.log("mainCause", mainCause);
-    console.log("underlyingCauseText...", underlyingCauseText)
+    console.log("underlyingCauseText...", underlyingCauseText);
   };
 
   const addDiseaseTitle = (val: string) => {
@@ -832,7 +832,7 @@ export const DataEntryForm = observer(() => {
     let titleToAdd = "";
     let uriToAdd = "";
 
-    console.log("Inside addDiseaseTitle, val =>", val)
+    console.log("Inside addDiseaseTitle, val =>", val);
     keys.forEach((item) => {
       if (
         underlyingCauses[item] === val &&
@@ -886,7 +886,7 @@ export const DataEntryForm = observer(() => {
 
   useEffect(() => {
     console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
-    console.log("defaultValues: ", store.defaultValues)
+    console.log("defaultValues: ", store.defaultValues);
     if (Object.keys(store.defaultValues).length) {
       setEditing(true);
       // Auto-populate form if it is an existing form being edited
@@ -974,84 +974,79 @@ export const DataEntryForm = observer(() => {
 
   // add field
 
-    // add row state
-    const [customRowLength, setCustomRowLength] = React.useState(0);
-    const [creatingCustomField, setCreatingFiled] = React.useState(false);
-    const [customFieldName, setCustomFieldName] = React.useState("");
-    // const usedCustomIds = React.useRef(
-    //   Object.fromEntries(
-    //     customFieldsReservedIds.map(({ id }) => [id, false])
-    //   )
-    // );
-  
-    // const customRowsRef = React.useRef(
-    //   [] as { name: string; id: string | null }[]
-    // );
+  // add row state
+  const [customRowLength, setCustomRowLength] = React.useState(0);
+  const [creatingCustomField, setCreatingFiled] = React.useState(false);
+  const [customFieldName, setCustomFieldName] = React.useState("");
+  // const usedCustomIds = React.useRef(
+  //   Object.fromEntries(
+  //     customFieldsReservedIds.map(({ id }) => [id, false])
+  //   )
+  // );
 
-    const createDataElement = async (name: string) => {
-      const attachPayload = {
-        "aggregationType": "NONE",
-        "code": `${customFieldName}`,
-        "domainType": "TRACKER",
-        "valueType": "TEXT",
-        "name": customFieldName,
-        "shortName": `${customFieldName}`,
-        "categoryCombo": {
-          "id": "bjDvmb4bfuf"
+  // const customRowsRef = React.useRef(
+  //   [] as { name: string; id: string | null }[]
+  // );
+
+  const createDataElement = async (name: string) => {
+    const attachPayload = {
+      aggregationType: "NONE",
+      code: `${customFieldName}`,
+      domainType: "TRACKER",
+      valueType: "TEXT",
+      name: customFieldName,
+      shortName: `${customFieldName}`,
+      categoryCombo: {
+        id: "bjDvmb4bfuf",
+      },
+      legendSets: [] as any,
+    };
+
+    await store.engine.link.fetch(`/api/29/schemas/dataElement`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
+      },
+      body: JSON.stringify(attachPayload),
+    });
+
+    const res = await store.engine.link
+      .fetch(`/api/29/dataElements`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}`,
         },
-        "legendSets": [] as any
-      }
-      
-      await store.engine.link.fetch(
-        `/api/29/schemas/dataElement`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(attachPayload),
-        }
-      );
-
-      const res = await store.engine.link.fetch(
-        `/api/29/dataElements`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(attachPayload),
-        }
-      ).catch((err: any) => {
+        body: JSON.stringify(attachPayload),
+      })
+      .catch((err: any) => {
         console.log(err);
       });
 
-      console.log("res", res.response);
-      return res.response?.uid;
-    }
+    console.log("res", res.response);
+    return res.response?.uid;
+  };
 
-    const [customRows, setCustomRows] = React.useState(
-      [] as { name: string; id: string | null }[]
-    );
+  const [customRows, setCustomRows] = React.useState(
+    [] as { name: string; id: string | null }[]
+  );
 
-    const checkAttributesNamespaceExists = async() => {
-      if (store.attributesExist == null)
-        await store.checkAttributesNamespaceExists();
-    }
-  
-    React.useEffect(() => {
-      console.log('customRowLength', customRowLength);
+  const checkAttributesNamespaceExists = async () => {
+    if (store.attributesExist == null)
+      await store.checkAttributesNamespaceExists();
+  };
 
-      checkAttributesNamespaceExists().then(() => {
-      
-        store.engine.link.fetch(
-          `/api/dataStore/Attributes/Attributes`
-        ).then((res: any) => {
+  React.useEffect(() => {
+    console.log("customRowLength", customRowLength);
+
+    checkAttributesNamespaceExists().then(() => {
+      store.engine.link
+        .fetch(`/api/dataStore/Attributes/Attributes`)
+        .then((res: any) => {
           console.log("CustomRows", res);
-          
-            if (!res || res == {}) {
-             
-            
+
+          if (!res || res == {}) {
             setCustomRows([]);
             setCustomRowLength(0);
           } else {
@@ -1074,116 +1069,116 @@ export const DataEntryForm = observer(() => {
         .catch((error: any) => {
           console.log(error);
         });
-      
-      })
-    }, [customRowLength]);
-  
-    // React.useEffect(() => {
-    //   if (customRowLength > 0) {
-    //     console.log(customRowLength);
-    //     const newArray = [...customRowsRef.current];
-    //     newArray.push({ name: customFieldName, id: null });
-    //     customRowsRef.current = [...newArray];
-    //     setCustomRows(customRowsRef.current);
-    //   }
-    // }, [customFieldName, customRowLength]);
-  
-    const [fetching, setFetching] = React.useState(false);
-    const [deleting, setDeleting] = React.useState(false);
-    // console.log(process.env.REACT_APP_DHIS2_AUTHORIZATION);
-    React.useEffect(() => {
-      if (fetching) {
-        if (
-          customRows.find(({ name }) => {
-            return name.toLowerCase() === customFieldName.toLowerCase();
-          })
-        ) {
-          alert(`${customFieldName} Already exists`);
-          setFetching(false);
-          return;
-        }
-        // console.log(usedCustomIds.current)
-        // find first unused
-        // let idx = Object.keys(usedCustomIds.current).findIndex((k)=>{
-        //   // console.log(usedCustomIds.current[k])
-        //   return !usedCustomIds.current[k];
-        // })
-        // // console.log(idx);
-        // idx = idx > -1 ? idx : 0;
-        // let field = { ...customRows[idx] };
-        // // console.log(customRowLength);
-        // // console.log(customFieldsReservedIds[idx]);
-  
-        // field.id = customFieldsReservedIds[idx].id;
-        // usedCustomIds.current[field.id] = true;
-  
-        // const attachPayload = {
-        //   aggregationType: "NONE",
-        //   code: customFieldName,
-        //   domainType: "TRACKER",
-        //   // publicAccess: "rw------",
-        //   // lastUpdated: "2021-10-06T13:41:20.427",
-        //   valueType: "TEXT",
-        //   formName: customFieldName,
-        //   id: field.id,
-        //   // created: "2021-10-06T11:38:18.755",
-        //   // attributeValues: [],
-        //   // zeroIsSignificant: false,
-        //   name: customFieldName,
-        //   shortName: customFieldName,
-        //   categoryCombo: { id: "bjDvmb4bfuf" },
-        //   // lastUpdatedBy: { id: "M5zQapPyTZI" },
-        //   // user: { id: "M5zQapPyTZI" },
-        //   // translations: [],
-        //   // userGroupAccesses: [],
-        //   // userAccesses: [],
-        //   // legendSets: [],
-        //   // aggregationLevels: [],
-        // };
+    });
+  }, [customRowLength]);
 
-        createDataElement(customFieldName)
-          .then( async (uid: any) => {
-            console.log(uid);
-            if (uid) {
+  // React.useEffect(() => {
+  //   if (customRowLength > 0) {
+  //     console.log(customRowLength);
+  //     const newArray = [...customRowsRef.current];
+  //     newArray.push({ name: customFieldName, id: null });
+  //     customRowsRef.current = [...newArray];
+  //     setCustomRows(customRowsRef.current);
+  //   }
+  // }, [customFieldName, customRowLength]);
 
-              const prog = await store.engine.link.fetch(`/api/programs/${store.program}?fields=programStages[allowGenerateNextVisit,publicAccess,lastUpdated,id,generatedByEnrollmentDate,created,attributeValues,name,hideDueDate,enableUserAssignment,minDaysFromStart,executionDateLabel,preGenerateUID,openAfterEnrollment,repeatable,remindCompleted,displayGenerateEventBox,validationStrategy,autoGenerateEvent,blockEntryForm,dataEntryForm,programStageDataElements,program,lastUpdatedBy,user,programStageDataElements[created,lastUpdated,id,displayInReports,skipSynchronization,renderOptionsAsRadio,compulsory,allowProvidedElsewhere,sortOrder,allowFutureDate,programStage,dataElement[id,domainType,displayName,valueType]],translations,userGroupAccesses,userAccesses,notificationTemplates,programStageSections]`);
+  const [fetching, setFetching] = React.useState(false);
+  const [deleting, setDeleting] = React.useState(false);
+  // console.log(process.env.REACT_APP_DHIS2_AUTHORIZATION);
+  React.useEffect(() => {
+    if (fetching) {
+      if (
+        customRows.find(({ name }) => {
+          return name.toLowerCase() === customFieldName.toLowerCase();
+        })
+      ) {
+        alert(`${customFieldName} Already exists`);
+        setFetching(false);
+        return;
+      }
+      // console.log(usedCustomIds.current)
+      // find first unused
+      // let idx = Object.keys(usedCustomIds.current).findIndex((k)=>{
+      //   // console.log(usedCustomIds.current[k])
+      //   return !usedCustomIds.current[k];
+      // })
+      // // console.log(idx);
+      // idx = idx > -1 ? idx : 0;
+      // let field = { ...customRows[idx] };
+      // // console.log(customRowLength);
+      // // console.log(customFieldsReservedIds[idx]);
 
-              let stages = prog.programStages[0];
-              const stageId = stages?.id;
-              const dEs = stages?.programStageDataElements;
+      // field.id = customFieldsReservedIds[idx].id;
+      // usedCustomIds.current[field.id] = true;
 
-              dEs.push({
-                "id": customFieldsReservedIds[customRowLength].id,
-                "dataElement": {
-                  "id": uid,
-                  "displayName": customFieldName,
-                  "valueType": "TEXT"
-                },
-                "programStage": {
-                  "id": stageId
-                },
-                "sortOrder": dEs.length + 1
-              });
+      // const attachPayload = {
+      //   aggregationType: "NONE",
+      //   code: customFieldName,
+      //   domainType: "TRACKER",
+      //   // publicAccess: "rw------",
+      //   // lastUpdated: "2021-10-06T13:41:20.427",
+      //   valueType: "TEXT",
+      //   formName: customFieldName,
+      //   id: field.id,
+      //   // created: "2021-10-06T11:38:18.755",
+      //   // attributeValues: [],
+      //   // zeroIsSignificant: false,
+      //   name: customFieldName,
+      //   shortName: customFieldName,
+      //   categoryCombo: { id: "bjDvmb4bfuf" },
+      //   // lastUpdatedBy: { id: "M5zQapPyTZI" },
+      //   // user: { id: "M5zQapPyTZI" },
+      //   // translations: [],
+      //   // userGroupAccesses: [],
+      //   // userAccesses: [],
+      //   // legendSets: [],
+      //   // aggregationLevels: [],
+      // };
 
-              stages.programStageDataElements = dEs;
+      createDataElement(customFieldName)
+        .then(async (uid: any) => {
+          console.log(uid);
+          if (uid) {
+            const prog = await store.engine.link.fetch(
+              `/api/programs/${store.program}?fields=programStages[allowGenerateNextVisit,publicAccess,lastUpdated,id,generatedByEnrollmentDate,created,attributeValues,name,hideDueDate,enableUserAssignment,minDaysFromStart,executionDateLabel,preGenerateUID,openAfterEnrollment,repeatable,remindCompleted,displayGenerateEventBox,validationStrategy,autoGenerateEvent,blockEntryForm,dataEntryForm,programStageDataElements,program,lastUpdatedBy,user,programStageDataElements[created,lastUpdated,id,displayInReports,skipSynchronization,renderOptionsAsRadio,compulsory,allowProvidedElsewhere,sortOrder,allowFutureDate,programStage,dataElement[id,domainType,displayName,valueType]],translations,userGroupAccesses,userAccesses,notificationTemplates,programStageSections]`
+            );
 
-              const payload = prog.programStages;
-              payload[0] = stages;
-              console.log("Stages", payload);
+            let stages = prog.programStages[0];
+            const stageId = stages?.id;
+            const dEs = stages?.programStageDataElements;
 
-              store.engine.link.fetch('/api/29/metadata', {
+            dEs.push({
+              id: customFieldsReservedIds[customRowLength].id,
+              dataElement: {
+                id: uid,
+                displayName: customFieldName,
+                valueType: "TEXT",
+              },
+              programStage: {
+                id: stageId,
+              },
+              sortOrder: dEs.length + 1,
+            });
+
+            stages.programStageDataElements = dEs;
+
+            const payload = prog.programStages;
+            payload[0] = stages;
+            console.log("Stages", payload);
+
+            store.engine.link
+              .fetch("/api/29/metadata", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({programStages: payload})
-
-              }).catch((err: any) => {
-                  setFetching(false);
-                  console.log("Error", err);
-              }).then(() => {
-               
-
+                body: JSON.stringify({ programStages: payload }),
+              })
+              .catch((err: any) => {
+                setFetching(false);
+                console.log("Error", err);
+              })
+              .then(() => {
                 const dataElement = {
                   aggregationType: "NONE",
                   domainType: "TRACKER",
@@ -1196,9 +1191,8 @@ export const DataEntryForm = observer(() => {
                   legendSets: [],
                 } as any;
 
-                store.engine.link.fetch(
-                  `/api/dataStore/Attributes/Attributes`,
-                  {
+                store.engine.link
+                  .fetch(`/api/dataStore/Attributes/Attributes`, {
                     method: "PUT",
                     headers: {
                       "Content-Type": "application/json",
@@ -1209,66 +1203,61 @@ export const DataEntryForm = observer(() => {
                         ...dataElement,
                       },
                     ]),
-                  }
-                ).then(async (res: any) => {
-
+                  })
+                  .then(async (res: any) => {
                     setCustomRowLength(customRowLength + 1);
-                    
+
                     setCustomFieldName("");
                     setFetching(false);
-                  }).catch((err: any) => {
+                  })
+                  .catch((err: any) => {
                     setFetching(false);
                     console.log("Err", err);
                     // alert("Error");
                   });
-                 
-                    
-                 
-              })
-              
-            } else {
-              alert("failed to get id");
-            }
-            setFetching(false);
-          })
-          .catch((err: any) => {
-            console.log("Error", err);
-            setFetching(false);
-          });
-      }
-    }, [customFieldName, customRowLength, customRows, fetching]);
-
-    React.useEffect(() => {
-      if (deleting) {
-        store.engine.link.fetch(
-          `/api/dataStore/Attributes/Attributes`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify([...customRows]),
+              });
+          } else {
+            alert("failed to get id");
           }
-        )
-          .then((raw: any) => raw.json())
-          .then((res: any) => {
-            // console.log(res);
-            if (res.httpStatusCode === 200) {
-              setCustomRowLength(customRowLength - 1);
-              setDeleting(false);
-            } else {
-              alert(`${res.httpStatus}: ${res.message}`);
-            }
-            setDeleting(false);
-          })
-          .catch((err: any) => {
-            setDeleting(false);
-            console.log("Error deleting", err)
-            // alert("Error");
-          });
-      }
-    }, [customFieldName, customRowLength, customRows, deleting]);
+          setFetching(false);
+        })
+        .catch((err: any) => {
+          console.log("Error", err);
+          setFetching(false);
+        });
+    }
+  }, [customFieldName, customRowLength, customRows, fetching]);
 
+  React.useEffect(() => {
+    if (deleting) {
+      store.engine.link
+        .fetch(`/api/dataStore/Attributes/Attributes`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify([...customRows]),
+        })
+        .then((raw: any) => raw.json())
+        .then((res: any) => {
+          // console.log(res);
+          if (res.httpStatusCode === 200) {
+            setCustomRowLength(customRowLength - 1);
+            setDeleting(false);
+          } else {
+            alert(`${res.httpStatus}: ${res.message}`);
+          }
+          setDeleting(false);
+        })
+        .catch((err: any) => {
+          setDeleting(false);
+          console.log("Error deleting", err);
+          // alert("Error");
+        });
+    }
+  }, [customFieldName, customRowLength, customRows, deleting]);
+
+  const printComponentRef = useRef(null);
   return (
     <Form
       form={form}
@@ -1297,7 +1286,11 @@ export const DataEntryForm = observer(() => {
                     title={activeLanguage.lang["Sure to delete?"]}
                     onConfirm={() => store.deleteEvent()}
                   >
-                    <><Button size="large">{activeLanguage.lang["Delete"]}</Button>{" "}</>
+                    <>
+                      <Button size="large">
+                        {activeLanguage.lang["Delete"]}
+                      </Button>{" "}
+                    </>
                   </Popconfirm>
                 ) : null}
                 <div>
@@ -1330,15 +1323,39 @@ export const DataEntryForm = observer(() => {
               </>
             </div>
           </React.Fragment>,
-          <ApprovalRights
-            style={styles.flexRow}
-            updateApprovalStatus={handleUpdateApproval}
-            statusReceived={approvalStatusFromEditedForm}
-          />,
+          <div style={{ display: "flex" }}>
+            <ApprovalRights
+              style={styles.flexRow}
+              updateApprovalStatus={handleUpdateApproval}
+              statusReceived={approvalStatusFromEditedForm}
+            />
+            <ReactToPrint
+              trigger={() => (
+                <Button htmlType="button" size="large">
+                  Print
+                </Button>
+              )}
+              content={() => printComponentRef.current}
+            />
+          </div>,
         ]}
         type="inner"
         bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
       >
+        <div style={{ display: "none" }}>
+          <FormPrint
+            ref={printComponentRef}
+            form={form}
+            certified={
+              !!declarations.ZXZZfzBpu8a ||
+              !!declarations.cp5xzqVU2Vw ||
+              !!declarations.lu9BiHPxNqH ||
+              !!declarations.u9tYUv6AM51
+            }
+            formVals={form.getFieldsValue(true)}
+            eventDate={form.getFieldValue("eventDate")}
+          />
+        </div>
         <Form.Item
           label={activeLanguage.lang["Date of Entry"]}
           rules={[
@@ -1893,7 +1910,7 @@ export const DataEntryForm = observer(() => {
                         >
                           <Input
                             size="large"
-                            disabled={ store.viewMode }
+                            disabled={store.viewMode}
                             // disabled={
                             //     store.viewMode ||
                             //     store.allDisabled.ZKBE8Xm9DJG

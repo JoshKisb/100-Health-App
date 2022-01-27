@@ -241,6 +241,7 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
     };
 
     const uploadMetaCSV = (e: any) => {
+      
       setUploadingMetadata(true);
       const fileReceived = e.target.files[0];
 
@@ -264,10 +265,14 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
               }
             });
           }
-
+          // setUploadingMetadata(false);
           setNewMetaFields(fields);
           setNewMetaVals(vals);
         },
+        error: function(e){
+          setUploadingMetadata(false);
+          console.log(e);
+        }
       });
     };
 
@@ -340,7 +345,9 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
     }, [newLanguageObj]);
 
     useEffect(() => {
+      console.log(newMetaFields, newMetaVals);
       if (!uploadingMetadata) return;
+      
       if (!(newMetaFields.length > 1) || !(newMetaVals.length > 1)) return;
 
       // Validating the new metadata
