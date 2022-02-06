@@ -508,14 +508,26 @@ export const EventList = observer(() => {
                 minWidth: "160px",
               }}
             >
-              <Select.Option value="">None</Select.Option>
-              <Select.Option value="Malaria Deaths">
-                Malaria Deaths
-              </Select.Option>
+              <Select.Option value="">All Diseases</Select.Option>
+              <Select.Option value="Malaria Deaths">Malaria Deaths</Select.Option>
               <Select.Option value="TB Deaths">TB Deaths</Select.Option>
-              <Select.Option value="HIV Related Deaths">
-                HIV Related Deaths
-              </Select.Option>
+              <Select.Option value="HIV Related Deaths">HIV Related Deaths</Select.Option>
+              <Select.Option value="Deaths from cardiovascular diseases">Cardiovascular Disease</Select.Option>
+              <Select.Option value="Cancer Deaths">Cancer</Select.Option>
+              <Select.Option value="Obstructive Pulmonary Disease">Chronic Obstructive Pulmonary Disease</Select.Option>
+              <Select.Option value="Diabetes Mellitus">Diabetes Mellitus</Select.Option>
+              <Select.Option value="Premature noncommunicable disease (NCD)">Premature noncommunicable disease (NCD)</Select.Option>
+              <Select.Option value="covid19">covid-19</Select.Option>
+              <Select.Option value="pneumonia">pneumonia</Select.Option>
+              <Select.Option value="Road traffic accidents">Road traffic accidents</Select.Option>
+              <Select.Option value="Suicide">Suicide</Select.Option>
+              <Select.Option value="Maternal deaths">Maternal deaths</Select.Option>
+              <Select.Option value="injuries">Traffic Injuries</Select.Option>
+              <Select.Option value="Total NCD Deaths">Total Deaths from NCDs</Select.Option>
+              <Select.Option value="Total Communicable Deaths">Total Deaths from communicable Diseases</Select.Option>
+              
+              
+
               // 41 and 77
             </Select>
             <Select
