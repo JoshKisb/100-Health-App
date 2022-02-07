@@ -20,6 +20,8 @@ const csvNames = {
   ui: "UI_TRANSLATION_TEMPLATE.csv",
 };
 
+const languageEncoding = require("detect-file-encoding-and-language");
+
 let templateT: any = {};
 templateT["LanguageID"] = `any`;
 
@@ -216,12 +218,17 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
       store.getSingleLanguage("English");
     };
 
-    const uploadUICSV = (e: any) => {
+    const uploadUICSV = async (e: any) => {
       const fileReceived = e.target.files[0];
+      const fileinfo = await languageEncoding(fileReceived)
+      const { encoding } = fileinfo;
+
+      console.log("encoding ui csv", fileinfo)
 
       Papa.parse(fileReceived, {
         header: true,
         dynamicTyping: true,
+        encoding: encoding || "",
         complete: function (results) {
           let finalRes: typeof templateT = {};
 
@@ -243,14 +250,18 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
       });
     };
 
-    const uploadMetaCSV = (e: any) => {
+    const uploadMetaCSV = async (e: any) => {
       
       setUploadingMetadata(true);
       const fileReceived = e.target.files[0];
+      const { encoding } = await languageEncoding(fileReceived)
+
+      console.log("encoding meta csv", encoding)
 
       Papa.parse(fileReceived, {
         header: true,
         dynamicTyping: true,
+        encoding: encoding || "",
         complete: function (results) {
           let fields = [""];
           let vals = [""];
