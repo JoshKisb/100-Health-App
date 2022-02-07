@@ -285,7 +285,13 @@ class Store {
       const url = `/api/dataStore/Languages`;
       const singleLang = (id: any) => `/api/dataStore/Languages/${id}`;
 
-      const result = await this.engine.link.fetch(url).catch((err: any) => err);
+      const options = {
+        headers: {
+          Accept: "application/json; charset=utf-8"
+        }
+      }
+
+      const result = await this.engine.link.fetch(url, options).catch((err: any) => err);
 
       if (!result?.length) {
         return [];
@@ -295,7 +301,7 @@ class Store {
 
       let r;
       for (r = 0; r < result?.length; r++) {
-        let newRes = await this.engine.link.fetch(singleLang(result[r]));
+        let newRes = await this.engine.link.fetch(singleLang(result[r]), options);
         res.push(newRes);
       }
 
@@ -334,8 +340,13 @@ class Store {
   @action getSingleLanguage = async (languageName?: string) => {
     try {
       const url = `/api/dataStore/Languages/${languageName}`;
+      const options = {
+        headers: {
+          Accept: "application/json; charset=utf-8"
+        }
+      }
 
-      const result = await this.engine.link.fetch(url);
+      const result = await this.engine.link.fetch(url, options);
 
       return result;
     } catch (error) {
@@ -473,8 +484,13 @@ class Store {
   @action getActiveLanguage = async (defaultLang?: any) => {
     try {
       const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
+      const options = {
+        headers: {
+          Accept: "application/json; charset=utf-8"
+        }
+      }
 
-      const result = await this.engine.link.fetch(url);
+      const result = await this.engine.link.fetch(url, options);
       return result;
     } catch (error) {
       console.log(error);

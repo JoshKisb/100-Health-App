@@ -110,6 +110,7 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
 
       allLanguages = allLanguages.filter((it: any) => it.language);
 
+
       // Show default language in case there is none in the state
       if (!allLanguages.length) {
         setLoading(true);
@@ -120,6 +121,8 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
           },
         ];
       }
+
+      console.log("AllLang", allLanguages.map(l => l.language.LanguageName))
       setLanguagesList(allLanguages);
     };
 
