@@ -15,6 +15,20 @@ import {
 import { CSVLink } from "react-csv";
 import { GenderFilter, MortalityFilter } from "../filters";
 
+import englishString from "./../assets/english.json";
+import frenchString from "./../assets/french.json";
+
+const allLanguages = [
+  {
+    langName: "English",
+    lang: englishString,
+  },
+  {
+    langName: "French",
+    lang: frenchString,
+  },
+];
+
 require("highcharts/modules/exporting")(Highcharts);
 
 // const extraHeaders =
@@ -104,6 +118,14 @@ export const EventList = observer(() => {
   const [currChartType, setCurrChartType] = useState("column");
   const csvBtn = useRef(null);
   // const myPicker = useRef<HTMLInputElement|null>(null);
+
+  const [activeLanguage, setActiveLanguage] = useState(
+    store.activeLanguage || allLanguages[0]
+  );
+
+  useEffect(() => {
+    setActiveLanguage(store?.activeLanguage || allLanguages[0])
+  }, [store?.activeLanguage])
 
   let chart: any = useRef(null);
   const colOptions: any = {
@@ -494,7 +516,7 @@ export const EventList = observer(() => {
             }}
           >
             <Select
-              placeholder={"Filter Deaths"}
+              placeholder={activeLanguage.lang["Filter Deaths"]}
               onChange={(e) => {
                 if (e) {
                   setCauseOfDeath(e);
@@ -508,23 +530,23 @@ export const EventList = observer(() => {
                 minWidth: "160px",
               }}
             >
-              <Select.Option value="">All Diseases</Select.Option>
-              <Select.Option value="Malaria Deaths">Malaria Deaths</Select.Option>
-              <Select.Option value="TB Deaths">TB Deaths</Select.Option>
-              <Select.Option value="HIV Related Deaths">HIV Related Deaths</Select.Option>
-              <Select.Option value="Deaths from cardiovascular diseases">Cardiovascular Disease</Select.Option>
-              <Select.Option value="Cancer Deaths">Cancer</Select.Option>
-              <Select.Option value="Obstructive Pulmonary Disease">Chronic Obstructive Pulmonary Disease</Select.Option>
-              <Select.Option value="Diabetes Mellitus">Diabetes Mellitus</Select.Option>
-              <Select.Option value="Premature noncommunicable disease (NCD)">Premature noncommunicable disease (NCD)</Select.Option>
-              <Select.Option value="covid19">covid-19</Select.Option>
-              <Select.Option value="pneumonia">pneumonia</Select.Option>
-              <Select.Option value="Road traffic accidents">Road traffic accidents</Select.Option>
-              <Select.Option value="Suicide">Suicide</Select.Option>
-              <Select.Option value="Maternal deaths">Maternal deaths</Select.Option>
-              <Select.Option value="injuries">Traffic Injuries</Select.Option>
-              <Select.Option value="Total NCD Deaths">Total Deaths from NCDs</Select.Option>
-              <Select.Option value="Total Communicable Deaths">Total Deaths from communicable Diseases</Select.Option>
+              <Select.Option value="">{activeLanguage.lang["All Diseases"]}</Select.Option>
+              <Select.Option value="Malaria Deaths">{activeLanguage.lang["Malaria Deaths"]}</Select.Option>
+              <Select.Option value="TB Deaths">{activeLanguage.lang["TB Deaths"]}</Select.Option>
+              <Select.Option value="HIV Related Deaths">{activeLanguage.lang["HIV Related Deaths"]}</Select.Option>
+              <Select.Option value="Deaths from cardiovascular diseases">{activeLanguage.lang["Cardiovascular Disease"]}</Select.Option>
+              <Select.Option value="Cancer Deaths">{activeLanguage.lang["Cancer"]}</Select.Option>
+              <Select.Option value="Obstructive Pulmonary Disease">{activeLanguage.lang["Chronic Obstructive Pulmonary Disease"]}</Select.Option>
+              <Select.Option value="Diabetes Mellitus">{activeLanguage.lang["Diabetes Mellitus"]}</Select.Option>
+              <Select.Option value="Premature noncommunicable disease (NCD)">{activeLanguage.lang["Premature noncommunicable disease (NCD)"]}</Select.Option>
+              <Select.Option value="covid19">{activeLanguage.lang["covid-19"]}</Select.Option>
+              <Select.Option value="pneumonia">{activeLanguage.lang["pneumonia"]}</Select.Option>
+              <Select.Option value="Road traffic accidents">{activeLanguage.lang["Road traffic accidents"]}</Select.Option>
+              <Select.Option value="Suicide">{activeLanguage.lang["Suicide"]}</Select.Option>
+              <Select.Option value="Maternal deaths">{activeLanguage.lang["Maternal deaths"]}</Select.Option>
+              <Select.Option value="injuries">{activeLanguage.lang["Traffic Injuries"]}</Select.Option>
+              <Select.Option value="Total NCD Deaths">{activeLanguage.lang["Total Deaths from NCDs"]}</Select.Option>
+              <Select.Option value="Total Communicable Deaths">{activeLanguage.lang["Total Deaths from communicable Diseases"]}</Select.Option>
               
               
 
@@ -545,14 +567,14 @@ export const EventList = observer(() => {
                 minWidth: "100px",
               }}
             >
-              <Select.Option value="">None</Select.Option>
-              <Select.Option value="Female">Female</Select.Option>
-              <Select.Option value="Male">Male</Select.Option>
+              <Select.Option value="">{activeLanguage.lang["None"]}</Select.Option>
+              <Select.Option value="Female">{activeLanguage.lang["Female"]}</Select.Option>
+              <Select.Option value="Male">{activeLanguage.lang["Male"]}</Select.Option>
             </Select>
             <Select
               placeholder={
                 !causeOfDeath
-                  ? `All Deaths Mortality Filter`
+                  ? activeLanguage.lang["All Deaths Mortality Filter"]
                   : `${causeOfDeath} Mortalility FIlter`
               }
               onChange={(e) => {
@@ -568,20 +590,21 @@ export const EventList = observer(() => {
               }}
               value={mortalityFilter}
             >
-              <Select.Option value="">All Deaths</Select.Option>
-              <Select.Option value="Stillbirth">Stillbirth</Select.Option>
-              <Select.Option value="Neonatal">Neonatal</Select.Option>
+              <Select.Option value="">{activeLanguage.lang["All Deaths"]}</Select.Option>
+              <Select.Option value="Stillbirth">{activeLanguage.lang["Stillbirth"]}</Select.Option>
+              <Select.Option value="Neonatal">{activeLanguage.lang["Neonatal"]}</Select.Option>
               <Select.Option value="Early Neonatal">
-                Early Neonatal
+                {activeLanguage.lang["Early Neonatal"]}
               </Select.Option>
               {/* <Select.Option value="Perinatal">Perinatal</Select.Option> */}
-              <Select.Option value="Infant">Infant</Select.Option>
-              <Select.Option value="Under-five">Under-five</Select.Option>
-              <Select.Option value="Adolescent">Adolescent</Select.Option>
-              <Select.Option value="Adult">Adult</Select.Option>
+              <Select.Option value="Infant">{activeLanguage.lang["Infant"]}</Select.Option>
+              <Select.Option value="Under-five">{activeLanguage.lang["Under-five"]}</Select.Option>
+              <Select.Option value="Adolescent">{activeLanguage.lang["Adolescent"]}</Select.Option>
+              <Select.Option value="Adult">{activeLanguage.lang["Adult"]}</Select.Option>
               // 41 and 77
             </Select>
           </div>
+
           <div className="chartPicker">
             <button
               type="button"
