@@ -241,23 +241,25 @@ class Store {
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
 
-        const metaQ = {
-          meta: {
-            resource: `dataStore/Languages/${al.LanguageName}`,
-            params: {
-              fields: ["meta"],
-            },
-          },
-        };
+        const url = `/api/dataStore/Languages/${al.LanguageName}`;
 
-        const d2 = await this.engine.query(metaQ);
+        const options = {
+          headers: {
+            Accept: "application/json; charset=utf-8"
+          }
+        }
 
-        const langNats = d2.meta?.meta?.categories?.find(
+        const result = await this.engine.link.fetch(url, options).catch((err: any) => err);
+
+
+        //const d2 = await this.engine.query(metaQ);
+
+        const langNats = result?.meta?.categories?.find(
           (p: any) => p.code == "RT01"
         );
         const langOptions =
           langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
-        const langValues = d2.meta?.meta?.categoryOptions || [];
+        const langValues = result?.meta?.categoryOptions || [];
 
         let lcategories = [];
         for (let i = 0; i < langOptions.length; i++) {

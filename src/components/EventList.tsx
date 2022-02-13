@@ -553,7 +553,7 @@ export const EventList = observer(() => {
               // 41 and 77
             </Select>
             <Select
-              placeholder={"Gender"}
+              placeholder={activeLanguage.lang["Gender"]}
               onChange={(e) => {
                 if (e) {
                   setGenderFilter(e);
