@@ -22,11 +22,10 @@ const { Title } = Typography;
 
 const styles: { [name: string]: React.CSSProperties } = {
 	tableCell: {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
+		// display: "flex",
+		// alignItems: "center",
 		height: "100%",
-		paddingTop: "12px",
+		padding: "8px",
 	},
 	answerLine: {
 		borderBottom: "1px solid",
@@ -39,10 +38,11 @@ const styles: { [name: string]: React.CSSProperties } = {
 		fontWeight: 600,
 	},
 	tableAnswer: {
-		marginTop: "15px",
+		width: "65%",
 		fontSize: "20px",
 		fontWeight: 700,
 		color: "#3b3b3b",
+		padding: "8px",
 	},
 };
 
@@ -68,155 +68,27 @@ const PrintableFormData = observer((props: any) => {
 	const certified = props.certified;
 	const causeOfDeath = props.formVals["QTKk2Xt8KDu"];
 
+	const getDEValue = (dataElementId) => {
+		const value = props.formVals[dataElementId];
+		if (!value) 
+			return "";
+		if (typeof value === "string")
+			return value;
+		if (value instanceof moment)
+			return moment(value).format("DD-MMM-YYYY");
+		return value.toString();
+	}
+
 	return (
 		<>
-			<table className="my-2 w-full border-collapse">
+			<table className="my-2 w-full print-table">
 				<tbody>
-					<tr>
-						<td
-							className="border p-1 text-center"
-							style={{ height: "120px" }}
-							colSpan={12}
-						>
-							<div style={styles.tableCell}>
-								<b>FULL NAME</b>
-								<p style={styles.tableAnswer}>{name}</p>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td className="border p-1 text-center" colSpan={3}>
-							<div style={styles.tableCell}>
-								<b>
-									NIN/AIN
-									<br />
-									Of
-									<br />
-									Deceased
-								</b>
-							</div>
-						</td>
-						<td className="border p-1 text-center" colSpan={2}>
-							<div style={styles.tableCell}>
-								<b>SEX</b>
-							</div>
-						</td>
-						<td className="border p-1 text-center" colSpan={3}>
-							<div style={styles.tableCell}>
-								<b>DISTRICT</b>
-							</div>
-						</td>
-						<td className="border p-1 text-center" colSpan={2}>
-							<div style={styles.tableCell}>
-								<b>SUB COUNTY</b>
-							</div>
-						</td>
-
-						<td className="border p-1 text-center" colSpan={2}>
-							<div style={styles.tableCell}>
-								<b>VILLAGE</b>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td
-							className="border p-1 text-center"
-							colSpan={3}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{nin}</p>
-						</td>
-
-						<td
-							className="border p-1 text-center"
-							colSpan={2}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{sex}</p>
-						</td>
-						<td
-							className="border p-1 text-center"
-							colSpan={3}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{district}</p>
-						</td>
-						<td
-							className="border p-1 text-center"
-							colSpan={2}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{subcounty}</p>
-						</td>
-
-						<td
-							className="border p-1 text-center"
-							colSpan={2}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{village}</p>
-						</td>
-					</tr>
-					<tr>
-						<td className="border" colSpan={12}>
-							<div style={{ height: "20px" }}></div>
-						</td>
-					</tr>
-					<tr>
-						<td className="border p-1 text-center" colSpan={4}>
-							<div style={styles.tableCell}>
-								<b>
-									DATE OF
-									<br />
-									DEATH OF
-									<br />
-									THE DECEASED
-								</b>
-							</div>
-						</td>
-
-						<td className="border p-1 text-center" colSpan={4}>
-							<div style={styles.tableCell}>
-								<b>CAUSE OF DEATH</b>
-							</div>
-						</td>
-						<td className="border p-1 text-center" colSpan={4}>
-							<div style={styles.tableCell}>
-								<b>
-									WHETHER CAUSE OF
-									<br />
-									DEATH WAS
-									<br />
-									MEDICALLY
-									<br />
-									CERTIFIED
-								</b>
-							</div>
-						</td>
-					</tr>
-					<tr>
-						<td
-							className="border p-1 text-center"
-							colSpan={4}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{dateOfDeath}</p>
-						</td>
-						<td
-							className="border p-1 text-center"
-							colSpan={4}
-							style={{ height: "120px" }}
-						>
-							<p style={styles.tableAnswer}>{causeOfDeath}</p>
-						</td>
-						<td
-							className="border p-1 text-center"
-							colSpan={4}
-							style={{ height: "120px" }}
-						>
-							{certified ? "Yes" : "No"}
-						</td>
-					</tr>
+					{ store.printColumns.map((dataElement) => (
+						<tr key={dataElement.id}>
+							<td style={styles.tableCell}>{dataElement.name}</td>
+							<td style={styles.tableAnswer}>{getDEValue(dataElement.id)}</td>
+						</tr>
+					)) }
 				</tbody>
 			</table>
 

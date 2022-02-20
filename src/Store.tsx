@@ -4,7 +4,7 @@ import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 
-const _ = require("lodash"); 
+const _ = require("lodash");
 
 const extraHeaders = window.location.origin.includes("local")
   ? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
@@ -21,7 +21,7 @@ const query = {
     resource: `programs/vf8dN49jprI`,
     params: {
       fields:
-        "organisationUnits[id,name],programStages[programStageDataElements[displayInReports,dataElement[id,name]]]",
+        "organisationUnits[id,name],programStages[programStageDataElements[displayInReports,dataElement[id,name,code]]]",
     },
   },
   categories: {
@@ -241,7 +241,11 @@ class Store {
           return { ...de.dataElement, selected: de.displayInReports };
         }
       );
-      this.availablePrintDataElements = this.availableDataElements;
+      this.availablePrintDataElements = this.availableDataElements.map((de) => {
+        let replace = new RegExp(`^${de.code}\. ?`);
+        de.name = de.name.replace(replace, '');
+        return de;
+      });
 
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
@@ -250,12 +254,13 @@ class Store {
 
         const options = {
           headers: {
-            Accept: "application/json; charset=utf-8"
-          }
-        }
+            Accept: "application/json; charset=utf-8",
+          },
+        };
 
-        const result = await this.engine.link.fetch(url, options).catch((err: any) => err);
-
+        const result = await this.engine.link
+          .fetch(url, options)
+          .catch((err: any) => err);
 
         //const d2 = await this.engine.query(metaQ);
 
@@ -294,11 +299,13 @@ class Store {
 
       const options = {
         headers: {
-          Accept: "application/json; charset=utf-8"
-        }
-      }
+          Accept: "application/json; charset=utf-8",
+        },
+      };
 
-      const result = await this.engine.link.fetch(url, options).catch((err: any) => err);
+      const result = await this.engine.link
+        .fetch(url, options)
+        .catch((err: any) => err);
 
       if (!result?.length) {
         return [];
@@ -308,7 +315,10 @@ class Store {
 
       let r;
       for (r = 0; r < result?.length; r++) {
-        let newRes = await this.engine.link.fetch(singleLang(result[r]), options);
+        let newRes = await this.engine.link.fetch(
+          singleLang(result[r]),
+          options
+        );
         res.push(newRes);
       }
 
@@ -349,9 +359,9 @@ class Store {
       const url = `/api/dataStore/Languages/${languageName}`;
       const options = {
         headers: {
-          Accept: "application/json; charset=utf-8"
-        }
-      }
+          Accept: "application/json; charset=utf-8",
+        },
+      };
 
       const result = await this.engine.link.fetch(url, options);
 
@@ -493,9 +503,9 @@ class Store {
       const url = `/api/dataStore/ActiveLanguage/ActiveLanguage`;
       const options = {
         headers: {
-          Accept: "application/json; charset=utf-8"
-        }
-      }
+          Accept: "application/json; charset=utf-8",
+        },
+      };
 
       const result = await this.engine.link.fetch(url, options);
       return result;
@@ -870,44 +880,41 @@ class Store {
       let groupedOrgs = [];
       let keyedOrgs = {};
 
-      if (!this.currentOrganisation && !!this.selectedOrgUnit) { 
+      if (!this.currentOrganisation && !!this.selectedOrgUnit) {
         const query5 = {
           organisations: {
             resource: `organisationUnits/${this.selectedOrgUnit}.json`,
             params: {
               paging: "false",
               fields: "id,name,children,level",
-              includeDescendants: "true"
+              includeDescendants: "true",
             },
           },
         };
 
         const resOrgs = await this.engine.query(query5);
         const allOrgs = resOrgs.organisations.organisationUnits;
-        keyedOrgs = _.keyBy( allOrgs, 'id' );
+        keyedOrgs = _.keyBy(allOrgs, "id");
 
         const getAllChildren = (orgUnit: any) => {
-          return keyedOrgs[orgUnit].children.flatMap(org => {
-            return [
-              org.id,
-              ...getAllChildren(org.id)
-            ]
-          })
-        }
+          return keyedOrgs[orgUnit].children.flatMap((org) => {
+            return [org.id, ...getAllChildren(org.id)];
+          });
+        };
 
-        groupedOrgs = keyedOrgs[this.selectedOrgUnit].children.map(org => {
+        groupedOrgs = keyedOrgs[this.selectedOrgUnit].children.map((org) => {
           return {
             id: org.id,
             name: keyedOrgs[org.id]?.name,
-            children: getAllChildren(org.id)
-          }
+            children: getAllChildren(org.id),
+          };
         });
         //this.diseaseOrgUnits = groupedOrgs;
       }
 
       const getParentOrg = (orgUnit: any) => {
-        return groupedOrgs.find(org => org.children.includes(orgUnit))
-      }
+        return groupedOrgs.find((org) => org.children.includes(orgUnit));
+      };
 
       console.log("keyedOrgs", keyedOrgs);
       console.log("groupedOrgs", groupedOrgs);
@@ -929,7 +936,8 @@ class Store {
           if (!prevDiseases[name]) prevDiseases[name] = 0;
           prevDiseases[name] += 1;
 
-          if (!prevOrgDiseases[parentOrg?.id]) prevOrgDiseases[parentOrg?.id] = {};
+          if (!prevOrgDiseases[parentOrg?.id])
+            prevOrgDiseases[parentOrg?.id] = {};
           if (!prevOrgDiseases[parentOrg?.id][name]) {
             prevOrgDiseases[parentOrg?.id][name] = 0;
           }
@@ -947,7 +955,7 @@ class Store {
           birthIndex,
           deathIndex,
           sexIndex,
-          orgUnitIndex
+          orgUnitIndex,
         } = getHeaderIndexes(headers);
 
         for (var i = 0; i < rows.length; i++) {
@@ -959,7 +967,6 @@ class Store {
           const orgUnit: string = data.rows[i][orgUnitIndex];
           const parentOrg = getParentOrg(orgUnit);
 
-          
           const org = { id: parentOrg?.id, name: parentOrg?.name };
 
           if (!diseases[name]) {
@@ -997,7 +1004,7 @@ class Store {
       }
 
       this.allDiseases = diseases;
-      console.log("allDiseases", this.allDiseases)
+      console.log("allDiseases", this.allDiseases);
 
       this.topDiseases = Object.values(diseases)
         ?.sort((a: any, b: any) => a.count - b.count)
@@ -1264,7 +1271,6 @@ class Store {
     this.setAvailablePrintDataElements(elements);
   };
 
-
   @action changeDisable = (key: string, value: boolean) => {
     this.allDisabled = { ...this.allDisabled, [key]: value };
   };
@@ -1321,6 +1327,10 @@ class Store {
         });
     }
     return [];
+  }
+
+  @computed get printColumns() {
+    return this.availablePrintDataElements.filter((de: any) => de.selected);
   }
 
   @computed get currentOrganisation() {
@@ -1405,5 +1415,12 @@ function getHeaderIndexes(headers: Array<any>) {
   const birthIndex = headers.findIndex((h: any) => h.name === "RbrUuKFSqkZ");
   const deathIndex = headers.findIndex((h: any) => h.name === "i8rrl8YWxLF");
   const sexIndex = headers.findIndex((h: any) => h.name === "e96GB4CXyd3");
-  return { codIndex, causeOfDeathIndex, birthIndex, deathIndex, sexIndex, orgUnitIndex };
+  return {
+    codIndex,
+    causeOfDeathIndex,
+    birthIndex,
+    deathIndex,
+    sexIndex,
+    orgUnitIndex,
+  };
 }
