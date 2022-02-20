@@ -124,8 +124,8 @@ export const EventList = observer(() => {
   );
 
   useEffect(() => {
-    setActiveLanguage(store?.activeLanguage || allLanguages[0])
-  }, [store?.activeLanguage])
+    setActiveLanguage(store?.activeLanguage || allLanguages[0]);
+  }, [store?.activeLanguage]);
 
   let chart: any = useRef(null);
   const colOptions: any = {
@@ -293,6 +293,24 @@ export const EventList = observer(() => {
     React.useState<string>(undefined);
   const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
 
+  const groupDiseaseToOrgUnits = (diseases) => {
+    let diseaseOrgs = {};
+    Object.values(diseases).forEach((d: any) => {
+      d.affected.forEach((event) => {
+        if (!diseaseOrgs[event.org.id])
+          diseaseOrgs[event.org.id] = {
+            name: event.org.name,
+            count: 0,
+            prev: store.prevDiseaseOrgUnits[event.org?.id]?.[d.id],
+          };
+        diseaseOrgs[event.org.id].count += 1;
+      });
+    });
+    return Object.values(diseaseOrgs)
+      ?.sort((a: any, b: any) => a.count - b.count)
+      ?.slice(-20);
+  };
+
   useEffect(() => {
     if (chart.current == null) return;
 
@@ -302,8 +320,23 @@ export const EventList = observer(() => {
         let sortedDiseases = store.topDiseases;
         let totalMortalityFilteredDeathCount = 0;
         let totalGenderFilteredDeathCount = 0;
+        let allDiseases = store.allDiseases;
+
+        if (
+          !store.currentOrganisation &&
+          !!causeOfDeath &&
+          !!store.selectedOrgUnit
+        ) {
+          sortedDiseases = groupDiseaseToOrgUnits(allDiseases);
+
+        }
+
+        console.log("causeOfDeath", causeOfDeath);
+
         if (mortalityFilter || genderFilter) {
-          console.log(mortalityFilter);
+          console.log("mortalityFilter", mortalityFilter);
+          console.log("genderFilter", genderFilter);
+          
           let diseases = new MortalityFilter().apply(
             { ...JSON.parse(JSON.stringify(store.allDiseases)) },
             mortalityFilter
@@ -315,15 +348,26 @@ export const EventList = observer(() => {
           });
           diseases = new GenderFilter().apply({ ...diseases }, genderFilter);
 
-          sortedDiseases = Object.values(diseases)
-            ?.sort((a: any, b: any) => a.count - b.count)
-            ?.slice(-20);
-          totalGenderFilteredDeathCount = 0
+          console.log("diseases after gender filer", diseases)
+
+          if (
+            !store.currentOrganisation &&
+            !!causeOfDeath &&
+            !!store.selectedOrgUnit
+          ) {
+            sortedDiseases = groupDiseaseToOrgUnits(diseases);
+          } else {
+            sortedDiseases = Object.values(diseases)
+              ?.sort((a: any, b: any) => a.count - b.count)
+              ?.slice(-20);
+            console.log("sortedDiseases", sortedDiseases);
+          }
+          totalGenderFilteredDeathCount = 0;
           Object.keys(diseases).forEach((k) => {
             // console.log(diseases[k].count);
             totalGenderFilteredDeathCount += diseases[k].count;
           });
-          sortedDiseases = sortedDiseases.filter(d=>d.count > 0)
+          sortedDiseases = sortedDiseases.filter((d) => d.count > 0);
           // console.log(diseases)
         }
         // console.log(
@@ -346,20 +390,20 @@ export const EventList = observer(() => {
           ).toFixed(2)}% of total]`;
         }
         if (genderFilter) {
-          let mortalityStr = '';
-          if(mortalityFilter) {
-            mortalityStr = `that are ${mortalityFilter}`
+          let mortalityStr = "";
+          if (mortalityFilter) {
+            mortalityStr = `that are ${mortalityFilter}`;
           }
           title = `${title} [${genderFilter} ${(
             (totalGenderFilteredDeathCount / store.totalDeathCount) *
             100
           ).toFixed(2)}% ${mortalityStr}]`;
-          
         }
         if (!!store.selectedOrgUnitName)
           title = `${title} in ${store.selectedOrgUnitName}`;
         setChartTitle(title);
         chart.current.setTitle({ text: title });
+
         chart.current.xAxis[0].setCategories(
           sortedDiseases.map((d: any) => d.name)
         ); //setting category
@@ -409,7 +453,17 @@ export const EventList = observer(() => {
     ];
     store.queryTopEvents(causeOfDeath).then(() => {
       if (!!store.topDiseases) {
-        const sortedDiseases = store.topDiseases;
+        let sortedDiseases = store.topDiseases;
+
+        if (
+          !store.currentOrganisation &&
+          !!causeOfDeath &&
+          !!store.selectedOrgUnit
+        ) {
+          sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases)
+
+          console.log("dis sortedDiseases", sortedDiseases);
+        }
         chart.current.xAxis[0].setCategories(
           sortedDiseases.map((d: any) => d.name)
         ); //setting category
@@ -530,26 +584,57 @@ export const EventList = observer(() => {
                 minWidth: "160px",
               }}
             >
-              <Select.Option value="">{activeLanguage.lang["All Diseases"]}</Select.Option>
-              <Select.Option value="Malaria Deaths">{activeLanguage.lang["Malaria Deaths"]}</Select.Option>
-              <Select.Option value="TB Deaths">{activeLanguage.lang["TB Deaths"]}</Select.Option>
-              <Select.Option value="HIV Related Deaths">{activeLanguage.lang["HIV Related Deaths"]}</Select.Option>
-              <Select.Option value="Deaths from cardiovascular diseases">{activeLanguage.lang["Cardiovascular Disease"]}</Select.Option>
-              <Select.Option value="Cancer Deaths">{activeLanguage.lang["Cancer"]}</Select.Option>
-              <Select.Option value="Obstructive Pulmonary Disease">{activeLanguage.lang["Chronic Obstructive Pulmonary Disease"]}</Select.Option>
-              <Select.Option value="Diabetes Mellitus">{activeLanguage.lang["Diabetes Mellitus"]}</Select.Option>
-              <Select.Option value="Premature noncommunicable disease (NCD)">{activeLanguage.lang["Premature noncommunicable disease (NCD)"]}</Select.Option>
-              <Select.Option value="covid19">{activeLanguage.lang["covid-19"]}</Select.Option>
-              <Select.Option value="pneumonia">{activeLanguage.lang["pneumonia"]}</Select.Option>
-              <Select.Option value="Road traffic accidents">{activeLanguage.lang["Road traffic accidents"]}</Select.Option>
-              <Select.Option value="Suicide">{activeLanguage.lang["Suicide"]}</Select.Option>
-              <Select.Option value="Maternal deaths">{activeLanguage.lang["Maternal deaths"]}</Select.Option>
-              <Select.Option value="injuries">{activeLanguage.lang["Traffic Injuries"]}</Select.Option>
-              <Select.Option value="Total NCD Deaths">{activeLanguage.lang["Total Deaths from NCDs"]}</Select.Option>
-              <Select.Option value="Total Communicable Deaths">{activeLanguage.lang["Total Deaths from communicable Diseases"]}</Select.Option>
-              
-              
-
+              <Select.Option value="">
+                {activeLanguage.lang["All Diseases"]}
+              </Select.Option>
+              <Select.Option value="Malaria Deaths">
+                {activeLanguage.lang["Malaria Deaths"]}
+              </Select.Option>
+              <Select.Option value="TB Deaths">
+                {activeLanguage.lang["TB Deaths"]}
+              </Select.Option>
+              <Select.Option value="HIV Related Deaths">
+                {activeLanguage.lang["HIV Related Deaths"]}
+              </Select.Option>
+              <Select.Option value="Deaths from cardiovascular diseases">
+                {activeLanguage.lang["Cardiovascular Disease"]}
+              </Select.Option>
+              <Select.Option value="Cancer Deaths">
+                {activeLanguage.lang["Cancer"]}
+              </Select.Option>
+              <Select.Option value="Obstructive Pulmonary Disease">
+                {activeLanguage.lang["Chronic Obstructive Pulmonary Disease"]}
+              </Select.Option>
+              <Select.Option value="Diabetes Mellitus">
+                {activeLanguage.lang["Diabetes Mellitus"]}
+              </Select.Option>
+              <Select.Option value="Premature noncommunicable disease (NCD)">
+                {activeLanguage.lang["Premature noncommunicable disease (NCD)"]}
+              </Select.Option>
+              <Select.Option value="covid19">
+                {activeLanguage.lang["covid-19"]}
+              </Select.Option>
+              <Select.Option value="pneumonia">
+                {activeLanguage.lang["pneumonia"]}
+              </Select.Option>
+              <Select.Option value="Road traffic accidents">
+                {activeLanguage.lang["Road traffic accidents"]}
+              </Select.Option>
+              <Select.Option value="Suicide">
+                {activeLanguage.lang["Suicide"]}
+              </Select.Option>
+              <Select.Option value="Maternal deaths">
+                {activeLanguage.lang["Maternal deaths"]}
+              </Select.Option>
+              <Select.Option value="injuries">
+                {activeLanguage.lang["Traffic Injuries"]}
+              </Select.Option>
+              <Select.Option value="Total NCD Deaths">
+                {activeLanguage.lang["Total Deaths from NCDs"]}
+              </Select.Option>
+              <Select.Option value="Total Communicable Deaths">
+                {activeLanguage.lang["Total Deaths from communicable Diseases"]}
+              </Select.Option>
               // 41 and 77
             </Select>
             <Select
@@ -567,9 +652,15 @@ export const EventList = observer(() => {
                 minWidth: "100px",
               }}
             >
-              <Select.Option value="">{activeLanguage.lang["None"]}</Select.Option>
-              <Select.Option value="Female">{activeLanguage.lang["Female"]}</Select.Option>
-              <Select.Option value="Male">{activeLanguage.lang["Male"]}</Select.Option>
+              <Select.Option value="">
+                {activeLanguage.lang["None"]}
+              </Select.Option>
+              <Select.Option value="Female">
+                {activeLanguage.lang["Female"]}
+              </Select.Option>
+              <Select.Option value="Male">
+                {activeLanguage.lang["Male"]}
+              </Select.Option>
             </Select>
             <Select
               placeholder={
@@ -590,17 +681,31 @@ export const EventList = observer(() => {
               }}
               value={mortalityFilter}
             >
-              <Select.Option value="">{activeLanguage.lang["All Deaths"]}</Select.Option>
-              <Select.Option value="Stillbirth">{activeLanguage.lang["Stillbirth"]}</Select.Option>
-              <Select.Option value="Neonatal">{activeLanguage.lang["Neonatal"]}</Select.Option>
+              <Select.Option value="">
+                {activeLanguage.lang["All Deaths"]}
+              </Select.Option>
+              <Select.Option value="Stillbirth">
+                {activeLanguage.lang["Stillbirth"]}
+              </Select.Option>
+              <Select.Option value="Neonatal">
+                {activeLanguage.lang["Neonatal"]}
+              </Select.Option>
               <Select.Option value="Early Neonatal">
                 {activeLanguage.lang["Early Neonatal"]}
               </Select.Option>
               {/* <Select.Option value="Perinatal">Perinatal</Select.Option> */}
-              <Select.Option value="Infant">{activeLanguage.lang["Infant"]}</Select.Option>
-              <Select.Option value="Under-five">{activeLanguage.lang["Under-five"]}</Select.Option>
-              <Select.Option value="Adolescent">{activeLanguage.lang["Adolescent"]}</Select.Option>
-              <Select.Option value="Adult">{activeLanguage.lang["Adult"]}</Select.Option>
+              <Select.Option value="Infant">
+                {activeLanguage.lang["Infant"]}
+              </Select.Option>
+              <Select.Option value="Under-five">
+                {activeLanguage.lang["Under-five"]}
+              </Select.Option>
+              <Select.Option value="Adolescent">
+                {activeLanguage.lang["Adolescent"]}
+              </Select.Option>
+              <Select.Option value="Adult">
+                {activeLanguage.lang["Adult"]}
+              </Select.Option>
               // 41 and 77
             </Select>
           </div>

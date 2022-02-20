@@ -129,17 +129,15 @@ export class MortalityFilter implements EventFilter {
     if (filter) {
       Object.keys(diseases).forEach((key) => {
         let count = diseases[key].count;
-        if (count > 0 && diseases[key].affected) {
-          diseases[key].affected.forEach((d) => {
-            const f = filterbyLifeDuration(d.dob, d.dod, filter);
-            if (!f ) {
-              if(count > 0) count -= 1;
-            } 
-          });
+        let affected = diseases[key].affected;
+
+        if (count > 0 && affected) {
+          affected = affected.filter(d => filterbyLifeDuration(d.dob, d.dod, filter))
         }
-        diseases[key].count = count;
+        diseases[key].count = affected.length;
+        diseases[key].affected = affected;
       });
-      return diseases;
+
     }
     return diseases;
   }
@@ -162,15 +160,14 @@ export class GenderFilter implements EventFilter {
       //   }, {});
         Object.keys(diseases).forEach((key) => {
           let count = diseases[key].count;
+          let affected = diseases[key].affected;
+
           if (count > 0 && diseases[key].affected) {
-            diseases[key].affected.forEach((d) => {
-              const f = d.gender === filter;
-              if (!f ) {
-                if(count > 0) count -= 1;
-              } 
-            });
+            affected = diseases[key].affected.filter((d) => d.gender === filter );     
+            
           }
-          diseases[key].count = count;
+          diseases[key].count = affected.length;
+          diseases[key].affected = affected
         });
         return diseases;
     }

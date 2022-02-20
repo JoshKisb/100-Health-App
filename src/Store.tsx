@@ -4,6 +4,8 @@ import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 
+const _ = require("lodash"); 
+
 const extraHeaders = window.location.origin.includes("local")
   ? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
   : {};
@@ -82,10 +84,12 @@ class Store {
   @observable editing = false;
   @observable forceDisable = false;
   @observable availableDataElements = [];
+  @observable availablePrintDataElements = [];
   @observable ICDAltSearchtextA: any;
   @observable attributesExist: boolean | null = null;
   @observable topDiseases: any;
   @observable allDiseases: any;
+  @observable prevDiseaseOrgUnits: any = {};
   @observable totalCauseDeathCount: number = 0;
   @observable totalDeathCount: number = 0;
   @observable loadingTopDiseases: boolean = false;
@@ -237,6 +241,7 @@ class Store {
           return { ...de.dataElement, selected: de.displayInReports };
         }
       );
+      this.availablePrintDataElements = this.availableDataElements;
 
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
@@ -710,6 +715,7 @@ class Store {
     await this.queryTopEvents();
   };
 
+  // whole thing is a mess
   @action queryTopEvents = async (filterByCause?: string) => {
     this.loadingTopDiseases = true;
     this.totalCauseDeathCount = 0;
@@ -858,18 +864,79 @@ class Store {
         }
       }
 
+      // current organisation will be empty if org unit is not a facility
+      // so we fetch the current orgUnits children
+      // and use those for top deaths by child orgs
+      let groupedOrgs = [];
+      let keyedOrgs = {};
+
+      if (!this.currentOrganisation && !!this.selectedOrgUnit) { 
+        const query5 = {
+          organisations: {
+            resource: `organisationUnits/${this.selectedOrgUnit}.json`,
+            params: {
+              paging: "false",
+              fields: "id,name,children,level",
+              includeDescendants: "true"
+            },
+          },
+        };
+
+        const resOrgs = await this.engine.query(query5);
+        const allOrgs = resOrgs.organisations.organisationUnits;
+        keyedOrgs = _.keyBy( allOrgs, 'id' );
+
+        const getAllChildren = (orgUnit: any) => {
+          return keyedOrgs[orgUnit].children.flatMap(org => {
+            return [
+              org.id,
+              ...getAllChildren(org.id)
+            ]
+          })
+        }
+
+        groupedOrgs = keyedOrgs[this.selectedOrgUnit].children.map(org => {
+          return {
+            id: org.id,
+            name: keyedOrgs[org.id]?.name,
+            children: getAllChildren(org.id)
+          }
+        });
+        //this.diseaseOrgUnits = groupedOrgs;
+      }
+
+      const getParentOrg = (orgUnit: any) => {
+        return groupedOrgs.find(org => org.children.includes(orgUnit))
+      }
+
+      console.log("keyedOrgs", keyedOrgs);
+      console.log("groupedOrgs", groupedOrgs);
+
       let diseases: any = {};
       let prevDiseases: any = {};
+      let orgDiseases: any = {};
+      let prevOrgDiseases: any = {};
 
       if (!!prevData) {
-        const { codIndex } = getHeaderIndexes(prevData.headers);
+        const { codIndex, orgUnitIndex } = getHeaderIndexes(prevData.headers);
         console.log(prevData.headers);
         console.log(prevData.rows);
         for (var i = 0; i < prevData.rows.length; i++) {
           const name: string = prevData.rows[i][codIndex];
+          const orgUnit = prevData.rows[i][codIndex];
+          const parentOrg = getParentOrg(orgUnit);
+
           if (!prevDiseases[name]) prevDiseases[name] = 0;
           prevDiseases[name] += 1;
+
+          if (!prevOrgDiseases[parentOrg?.id]) prevOrgDiseases[parentOrg?.id] = {};
+          if (!prevOrgDiseases[parentOrg?.id][name]) {
+            prevOrgDiseases[parentOrg?.id][name] = 0;
+          }
+          prevOrgDiseases[parentOrg?.id][name] += 1;
         }
+
+        this.prevDiseaseOrgUnits = prevOrgDiseases;
       }
 
       if (!!data) {
@@ -880,6 +947,7 @@ class Store {
           birthIndex,
           deathIndex,
           sexIndex,
+          orgUnitIndex
         } = getHeaderIndexes(headers);
 
         for (var i = 0; i < rows.length; i++) {
@@ -888,17 +956,30 @@ class Store {
           const dob: string = data.rows[i][birthIndex];
           const dod: string = data.rows[i][deathIndex];
           const gender: string = data.rows[i][sexIndex];
-          if (!diseases[name])
+          const orgUnit: string = data.rows[i][orgUnitIndex];
+          const parentOrg = getParentOrg(orgUnit);
+
+          
+          const org = { id: parentOrg?.id, name: parentOrg?.name };
+
+          if (!diseases[name]) {
             diseases[name] = {
               name,
               code,
-              affected: [{ dob, dod, gender }],
+              affected: [],
               count: 0,
               prev: prevDiseases[name] ?? 0,
             };
+          }
 
           diseases[name].count += 1;
-          diseases[name].affected.push({ dob, dod, gender });
+          diseases[name].affected.push({ dob, dod, gender, org });
+
+          if (!orgDiseases[parentOrg?.id]) orgDiseases[parentOrg?.id] = {};
+          if (!orgDiseases[parentOrg?.id][name]) {
+            orgDiseases[parentOrg?.id][name] = 0;
+          }
+          orgDiseases[parentOrg?.id][name] += 1;
         }
         this.totalDeathCount = rows.length;
       }
@@ -916,6 +997,7 @@ class Store {
       }
 
       this.allDiseases = diseases;
+      console.log("allDiseases", this.allDiseases)
 
       this.topDiseases = Object.values(diseases)
         ?.sort((a: any, b: any) => a.count - b.count)
@@ -1168,6 +1250,21 @@ class Store {
     this.setAvailableDataElements(elements);
   };
 
+  @action setAvailablePrintDataElements = (val: any) => {
+    this.availablePrintDataElements = val;
+  };
+
+  @action includePrintColumns = (id: any) => (e: any) => {
+    const elements = this.availablePrintDataElements.map((col: any) => {
+      if (col.id === id) {
+        return { ...col, selected: e.target.checked };
+      }
+      return col;
+    });
+    this.setAvailablePrintDataElements(elements);
+  };
+
+
   @action changeDisable = (key: string, value: boolean) => {
     this.allDisabled = { ...this.allDisabled, [key]: value };
   };
@@ -1300,6 +1397,7 @@ class Store {
 export const store = new Store();
 
 function getHeaderIndexes(headers: Array<any>) {
+  const orgUnitIndex = headers.findIndex((h: any) => h.name === "orgUnit");
   const codIndex = headers.findIndex((h: any) => h.name === "QTKk2Xt8KDu");
   const causeOfDeathIndex = headers.findIndex(
     (h: any) => h.name === "sJhOdGLD5lj"
@@ -1307,5 +1405,5 @@ function getHeaderIndexes(headers: Array<any>) {
   const birthIndex = headers.findIndex((h: any) => h.name === "RbrUuKFSqkZ");
   const deathIndex = headers.findIndex((h: any) => h.name === "i8rrl8YWxLF");
   const sexIndex = headers.findIndex((h: any) => h.name === "e96GB4CXyd3");
-  return { codIndex, causeOfDeathIndex, birthIndex, deathIndex, sexIndex };
+  return { codIndex, causeOfDeathIndex, birthIndex, deathIndex, sexIndex, orgUnitIndex };
 }
