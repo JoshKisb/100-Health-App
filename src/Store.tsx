@@ -88,7 +88,9 @@ class Store {
   @observable ICDAltSearchtextA: any;
   @observable attributesExist: boolean | null = null;
   @observable topDiseases: any;
+  @observable selectedCauseOfDeath: string | null = null;
   @observable allDiseases: any;
+  @observable prevDiseases: any;
   @observable prevDiseaseOrgUnits: any = {};
   @observable totalCauseDeathCount: number = 0;
   @observable totalDeathCount: number = 0;
@@ -211,6 +213,10 @@ class Store {
       console.log(e);
     }
   };
+
+  @action setSelectedCOD = (causeOfDeath) => {
+    this.selectedCauseOfDeath = causeOfDeath;
+  }
 
   @action
   loadUserOrgUnits = async () => {
@@ -726,10 +732,12 @@ class Store {
   };
 
   // whole thing is a mess
-  @action queryTopEvents = async (filterByCause?: string) => {
+  @action queryTopEvents = async () => {
     this.loadingTopDiseases = true;
     this.totalCauseDeathCount = 0;
     this.totalDeathCount = 0;
+    const filterByCause = this.selectedCauseOfDeath;
+
     try {
       let data = null;
       let prevData = null;
@@ -880,6 +888,8 @@ class Store {
       let groupedOrgs = [];
       let keyedOrgs = {};
 
+      console.log("currentOrganisation", this.currentOrganisation);
+
       if (!this.currentOrganisation && !!this.selectedOrgUnit) {
         const query5 = {
           organisations: {
@@ -913,29 +923,54 @@ class Store {
       }
 
       const getParentOrg = (orgUnit: any) => {
-        return groupedOrgs.find((org) => org.children.includes(orgUnit));
+        if (orgUnit == this.selectedOrgUnit) {
+          return null;
+        }
+        let parentOrg = groupedOrgs.find((org) => org.id == orgUnit || org.children.includes(orgUnit));
+        if (!parentOrg && !this.currentOrganisation && !!this.selectedOrgUnit)
+          console.log(orgUnit);
+        return parentOrg;
       };
 
-      console.log("keyedOrgs", keyedOrgs);
-      console.log("groupedOrgs", groupedOrgs);
-
+     
       let diseases: any = {};
       let prevDiseases: any = {};
       let orgDiseases: any = {};
       let prevOrgDiseases: any = {};
 
       if (!!prevData) {
-        const { codIndex, orgUnitIndex } = getHeaderIndexes(prevData.headers);
-        console.log(prevData.headers);
-        console.log(prevData.rows);
+        const { headers, rows } = prevData;
+        const {
+          codIndex,
+          causeOfDeathIndex,
+          birthIndex,
+          deathIndex,
+          sexIndex,
+          orgUnitIndex,
+        } = getHeaderIndexes(headers);
+
+        
         for (var i = 0; i < prevData.rows.length; i++) {
-          const name: string = prevData.rows[i][codIndex];
-          const orgUnit = prevData.rows[i][codIndex];
+          const name: string = rows[i][codIndex];
+          const code: string = data.rows[i][causeOfDeathIndex];
+          const dob: string = data.rows[i][birthIndex];
+          const dod: string = data.rows[i][deathIndex];
+          const gender: string = data.rows[i][sexIndex];
+          const orgUnit: string = data.rows[i][orgUnitIndex];
           const parentOrg = getParentOrg(orgUnit);
 
-          if (!prevDiseases[name]) prevDiseases[name] = 0;
-          prevDiseases[name] += 1;
+          const org = { id: parentOrg?.id, name: parentOrg?.name };
 
+          if (!prevDiseases[name]) prevDiseases[name] = {
+            name,
+            code,
+            count: 0,
+            affected: []
+          };
+          prevDiseases[name].count += 1;
+          prevDiseases[name].affected.push({ dob, dod, gender, org });
+
+          if (!parentOrg) continue;
           if (!prevOrgDiseases[parentOrg?.id])
             prevOrgDiseases[parentOrg?.id] = {};
           if (!prevOrgDiseases[parentOrg?.id][name]) {
@@ -944,6 +979,11 @@ class Store {
           prevOrgDiseases[parentOrg?.id][name] += 1;
         }
 
+        if (!!filterByCause) {
+          const f = new CauseOfDeathFilter();
+          prevDiseases = f.apply(prevDiseases, filterByCause);          
+        }
+        this.prevDiseases = prevDiseases;
         this.prevDiseaseOrgUnits = prevOrgDiseases;
       }
 
@@ -982,6 +1022,7 @@ class Store {
           diseases[name].count += 1;
           diseases[name].affected.push({ dob, dod, gender, org });
 
+          if (!parentOrg) continue;
           if (!orgDiseases[parentOrg?.id]) orgDiseases[parentOrg?.id] = {};
           if (!orgDiseases[parentOrg?.id][name]) {
             orgDiseases[parentOrg?.id][name] = 0;
@@ -993,18 +1034,22 @@ class Store {
 
       console.log("prevDiseases", prevDiseases);
 
-      this.totalCauseDeathCount = 0;
-      if (filterByCause) {
+      let totalCauseDeathCount = 0;
+      if (!!filterByCause) {
         console.log("---------------------------------");
         const f = new CauseOfDeathFilter();
         diseases = f.apply(diseases, filterByCause);
         Object.keys(diseases).forEach(
-          (k) => (this.totalCauseDeathCount += diseases[k].count)
+          (k) => (totalCauseDeathCount += diseases[k].count)
         );
       }
 
+      this.totalCauseDeathCount = totalCauseDeathCount;
       this.allDiseases = diseases;
       console.log("allDiseases", this.allDiseases);
+      console.log("causeOfDeath", filterByCause);
+      console.log("this.totalCauseDeathCount", this.totalCauseDeathCount);
+      console.log("totalCauseDeathCount", totalCauseDeathCount);
 
       this.topDiseases = Object.values(diseases)
         ?.sort((a: any, b: any) => a.count - b.count)

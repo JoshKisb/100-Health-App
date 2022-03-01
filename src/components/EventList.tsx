@@ -116,6 +116,7 @@ export const EventList = observer(() => {
   const [downloadData, setDownloadData] = useState([]);
   const [downloadng, setDownloadng] = useState(false);
   const [currChartType, setCurrChartType] = useState("column");
+  const currDiseases = useRef([]);
   const csvBtn = useRef(null);
   // const myPicker = useRef<HTMLInputElement|null>(null);
 
@@ -154,7 +155,7 @@ export const EventList = observer(() => {
         let point: any = this;
         let arrow = "";
 
-        const disease = store?.topDiseases[point.x];
+        const disease = currDiseases.current[point.x];
 
         arrow =
           disease.count > disease.prev
@@ -187,10 +188,7 @@ export const EventList = observer(() => {
         let point: any = this;
         let arrow = "";
 
-        console.log(point);
-
-        const disease = store?.topDiseases[point.x];
-        console.log(disease);
+        const disease = currDiseases.current[point.x];
         arrow =
           disease.count > disease.prev
             ? arrowUp
@@ -215,7 +213,7 @@ export const EventList = observer(() => {
 
             let arrow = "";
 
-            const disease = store?.topDiseases[point.x];
+            const disease = currDiseases.current[point.x];
             if (!!disease)
               arrow =
                 disease.count > disease.prev
@@ -248,9 +246,8 @@ export const EventList = observer(() => {
     setCurrChartType(chartType);
     if (chartType == "pie") {
       opts = pieOptions;
-      if (!!store.topDiseases)
-        opts.series[0].data = store.topDiseases.map((d: any) => {
-          console.log(d);
+      if (!!currDiseases.current)
+        opts.series[0].data = currDiseases.current.map((d: any) => {
           return {
             name: d.name,
             y: d.count,
@@ -258,9 +255,11 @@ export const EventList = observer(() => {
         });
     } else if (chartType == "column") {
       opts = colOptions ?? {};
-      if (!!store.topDiseases && opts !== undefined) {
-        opts.xAxis[0].categories = store.topDiseases?.map((d: any) => d?.name);
-        opts.series[0].data = store.topDiseases?.map((d: any) => {
+      if (!!currDiseases.current && opts !== undefined) {
+        opts.xAxis[0].categories = currDiseases.current?.map(
+          (d: any) => d?.name
+        );
+        opts.series[0].data = currDiseases.current?.map((d: any) => {
           return {
             y: d.count,
             color:
@@ -293,15 +292,34 @@ export const EventList = observer(() => {
     React.useState<string>(undefined);
   const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
 
-  const groupDiseaseToOrgUnits = (diseases) => {
+  const groupDiseaseToOrgUnits = (diseases, prevDiseases = null) => {
     let diseaseOrgs = {};
+    let prevDisOrgs = {};
+
     Object.values(diseases).forEach((d: any) => {
+      if (!!prevDiseases) {
+        let prevD = prevDiseases[d.name];
+        if (!!prevD) {
+          prevD.affected.forEach((event) => {
+            if (!prevDisOrgs[event.org.id]) {
+              prevDisOrgs[event.org.id] = {
+                name: event.org.name,
+                count: 0,
+              };
+            }
+            prevDisOrgs[event.org.id].count += 1;
+          });
+        }
+      }
       d.affected.forEach((event) => {
+        if (!event.org.id) return;
         if (!diseaseOrgs[event.org.id])
           diseaseOrgs[event.org.id] = {
             name: event.org.name,
             count: 0,
-            prev: store.prevDiseaseOrgUnits[event.org?.id]?.[d.id],
+            prev: !!prevDiseases
+              ? prevDisOrgs[event.org.id]?.count
+              : store.prevDiseaseOrgUnits[event.org?.id]?.[d.id],
           };
         diseaseOrgs[event.org.id].count += 1;
       });
@@ -311,6 +329,64 @@ export const EventList = observer(() => {
       ?.slice(-20);
   };
 
+  const calculatePrevDiseaseCounts = (diseases, prevDiseases) => {
+    return [...diseases].map((d) => {
+      let prevD = prevDiseases[d.name];
+      return { ...d, prev: (prevD?.affected?.length  ?? 0)};
+    });
+  };
+
+  const filterTheDiseases = () => {
+    let totalMortalityFilteredDeathCount: number = 0;
+    let totalGenderFilteredDeathCount: number = 0;
+
+    let sortedDiseases = [];
+
+    let diseases = new MortalityFilter().apply(
+      { ...JSON.parse(JSON.stringify(store.allDiseases)) },
+      mortalityFilter
+    );
+    let prevDiseases = new MortalityFilter().apply(
+      { ...JSON.parse(JSON.stringify(store.prevDiseases)) },
+      mortalityFilter
+    );
+
+    Object.keys(diseases).forEach((k) => {
+      totalMortalityFilteredDeathCount += diseases[k].count;
+    });
+
+    diseases = new GenderFilter().apply({ ...diseases }, genderFilter);
+    prevDiseases = new GenderFilter().apply({ ...prevDiseases }, genderFilter);
+
+    console.log("diseases after gender filer", diseases);
+
+    if (
+      !store.currentOrganisation &&
+      !!causeOfDeath &&
+      !!store.selectedOrgUnit
+    ) {
+      sortedDiseases = groupDiseaseToOrgUnits(diseases, prevDiseases);
+    } else {
+      sortedDiseases = Object.values(diseases)
+        ?.sort((a: any, b: any) => a.count - b.count)
+        ?.slice(-20);
+      console.log("sortedDiseases", sortedDiseases);
+      sortedDiseases = calculatePrevDiseaseCounts(sortedDiseases, prevDiseases);
+    }
+
+    Object.keys(diseases).forEach((k) => {
+      totalGenderFilteredDeathCount += diseases[k].count;
+    });
+
+    sortedDiseases = sortedDiseases.filter((d) => d.count > 0);
+
+    return {
+      totalGenderFilteredDeathCount,
+      totalMortalityFilteredDeathCount,
+      sortedDiseases,
+    };
+  };
+
   useEffect(() => {
     if (chart.current == null) return;
 
@@ -318,6 +394,7 @@ export const EventList = observer(() => {
     else {
       if (!!store.topDiseases) {
         let sortedDiseases = store.topDiseases;
+        let prevDiseases = store.prevDiseases;
         let totalMortalityFilteredDeathCount = 0;
         let totalGenderFilteredDeathCount = 0;
         let allDiseases = store.allDiseases;
@@ -328,47 +405,25 @@ export const EventList = observer(() => {
           !!store.selectedOrgUnit
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(allDiseases);
-
         }
 
         console.log("causeOfDeath", causeOfDeath);
+        console.log("causeOfDeath", store.totalCauseDeathCount);
 
-        if (mortalityFilter || genderFilter) {
           console.log("mortalityFilter", mortalityFilter);
           console.log("genderFilter", genderFilter);
-          
-          let diseases = new MortalityFilter().apply(
-            { ...JSON.parse(JSON.stringify(store.allDiseases)) },
-            mortalityFilter
-          );
-          totalMortalityFilteredDeathCount = 0;
-          Object.keys(diseases).forEach((k) => {
-            // console.log(diseases[k].count);
-            totalMortalityFilteredDeathCount += diseases[k].count;
-          });
-          diseases = new GenderFilter().apply({ ...diseases }, genderFilter);
 
-          console.log("diseases after gender filer", diseases)
+        if (mortalityFilter || genderFilter) {
 
-          if (
-            !store.currentOrganisation &&
-            !!causeOfDeath &&
-            !!store.selectedOrgUnit
-          ) {
-            sortedDiseases = groupDiseaseToOrgUnits(diseases);
-          } else {
-            sortedDiseases = Object.values(diseases)
-              ?.sort((a: any, b: any) => a.count - b.count)
-              ?.slice(-20);
-            console.log("sortedDiseases", sortedDiseases);
-          }
-          totalGenderFilteredDeathCount = 0;
-          Object.keys(diseases).forEach((k) => {
-            // console.log(diseases[k].count);
-            totalGenderFilteredDeathCount += diseases[k].count;
-          });
-          sortedDiseases = sortedDiseases.filter((d) => d.count > 0);
-          // console.log(diseases)
+          const filtered = filterTheDiseases();
+          console.log("filtered 1", filtered);
+          console.log("total", store.totalDeathCount);
+
+          sortedDiseases = filtered.sortedDiseases;
+          totalGenderFilteredDeathCount =
+            filtered.totalGenderFilteredDeathCount;
+          totalMortalityFilteredDeathCount =
+            filtered.totalMortalityFilteredDeathCount;
         }
         // console.log(
         //   store.totalDeathCount,
@@ -377,6 +432,119 @@ export const EventList = observer(() => {
         //     store.totalDeathCount) *
         //     100
         // );
+        currDiseases.current = sortedDiseases;
+        let title = causeOfDeath
+          ? `${causeOfDeath} contributed ${(
+              (store.totalCauseDeathCount / store.totalDeathCount) *
+              100
+            ).toFixed(2)}%  of total reported deaths`
+          : "Top 20 causes of death";
+        if (mortalityFilter) {
+          title = `${title} [${mortalityFilter} ${(
+            (totalMortalityFilteredDeathCount / store.totalDeathCount) *
+            100
+          ).toFixed(2)}% of total]`;
+        }
+        if (genderFilter) {
+          let mortalityStr = "";
+          if (mortalityFilter) {
+            mortalityStr = `that are ${mortalityFilter}`;
+          }
+          title = `${title} [${genderFilter} ${(
+            (totalGenderFilteredDeathCount / store.totalDeathCount) *
+            100
+          ).toFixed(2)}% ${mortalityStr}]`;
+        }
+        if (!!store.selectedOrgUnitName)
+          title = `${title} in ${store.selectedOrgUnitName}`;
+        
+        setChartTitle(title);
+        chart.current.setTitle({ text: title });
+
+        if (currChartType == "column") {
+          chart.current.xAxis[0].setCategories(
+            sortedDiseases.map((d: any) => d.name)
+          ); //setting category
+        }
+
+        chart.current.series[0].setData(
+          sortedDiseases.map((d: any) => {
+            if (currChartType == "column")
+              return {
+                y: d.count,
+                color:
+                  d.count > d.prev
+                    ? "red"
+                    : d.count == d.prev
+                    ? "#2f7ed8"
+                    : "green",
+              };
+            else
+              return {
+                name: d.name,
+                y: d.count,
+              };
+          }),
+          true
+        ); //setting data
+      }
+      chart.current.hideLoading();
+    }
+  }, [
+    store.loadingTopDiseases,
+    causeOfDeath,
+    mortalityFilter,
+    genderFilter,
+    store.totalDeathCount,
+    store.totalCauseDeathCount,
+    store.topDiseases,
+    store.selectedOrgUnitName,
+    store.allDiseases,
+    currChartType,
+  ]);
+
+  useEffect(() => {
+    console.log("EventList:hook nationalitySelect", store.nationalitySelect);
+
+    const opts = currChartType == "column" ? colOptions : pieOptions;
+    chart.current = Highcharts.chart("topdiseases", opts);
+
+    store.selectedDateRange = [
+      defaultRange[0].format("YYYY-MM-DD"),
+      defaultRange[1].format("YYYY-MM-DD"),
+      defaultRange[2].format("YYYY-MM-DD"),
+    ];
+    store.queryTopEvents().then(() => {
+      if (!!store.topDiseases) {
+        let sortedDiseases = store.topDiseases;
+        let totalMortalityFilteredDeathCount = 0;
+        let totalGenderFilteredDeathCount = 0;
+
+        if (
+          !store.currentOrganisation &&
+          !!causeOfDeath &&
+          !!store.selectedOrgUnit
+        ) {
+          sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
+
+          console.log("dis sortedDiseases", sortedDiseases);
+        }
+
+        if (mortalityFilter || genderFilter) {
+          console.log("mortalityFilter", mortalityFilter);
+          console.log("genderFilter", genderFilter);
+
+          const filtered = filterTheDiseases();
+          console.log("filtered 2", filtered);
+          console.log("total", store.totalDeathCount);
+
+          sortedDiseases = filtered.sortedDiseases;
+          totalGenderFilteredDeathCount =
+            filtered.totalGenderFilteredDeathCount;
+          totalMortalityFilteredDeathCount =
+            filtered.totalMortalityFilteredDeathCount;
+        }
+
         let title = causeOfDeath
           ? `${causeOfDeath} contributed ${(
               (store.totalCauseDeathCount / store.totalDeathCount) *
@@ -404,69 +572,14 @@ export const EventList = observer(() => {
         setChartTitle(title);
         chart.current.setTitle({ text: title });
 
-        chart.current.xAxis[0].setCategories(
-          sortedDiseases.map((d: any) => d.name)
-        ); //setting category
 
-        chart.current.series[0].setData(
-          sortedDiseases.map((d: any) => {
-            if (currChartType == "column")
-              return {
-                y: d.count,
-                color:
-                  d.count > d.prev
-                    ? "red"
-                    : d.count == d.prev
-                    ? "#2f7ed8"
-                    : "green",
-              };
-            else return d.count;
-          }),
-          true
-        ); //setting data
-      }
-      chart.current.hideLoading();
-    }
-  }, [
-    store.loadingTopDiseases,
-    causeOfDeath,
-    mortalityFilter,
-    genderFilter,
-    store.totalDeathCount,
-    store.totalCauseDeathCount,
-    store.topDiseases,
-    store.selectedOrgUnitName,
-    store.allDiseases,
-    currChartType,
-  ]);
 
-  useEffect(() => {
-    console.log("EventList:hook nationalitySelect", store.nationalitySelect);
-    if (!store.nationalitySelect) return;
-
-    chart.current = Highcharts.chart("topdiseases", colOptions);
-
-    store.selectedDateRange = [
-      defaultRange[0].format("YYYY-MM-DD"),
-      defaultRange[1].format("YYYY-MM-DD"),
-      defaultRange[2].format("YYYY-MM-DD"),
-    ];
-    store.queryTopEvents(causeOfDeath).then(() => {
-      if (!!store.topDiseases) {
-        let sortedDiseases = store.topDiseases;
-
-        if (
-          !store.currentOrganisation &&
-          !!causeOfDeath &&
-          !!store.selectedOrgUnit
-        ) {
-          sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases)
-
-          console.log("dis sortedDiseases", sortedDiseases);
+        currDiseases.current = sortedDiseases;
+        if (currChartType == "column") {
+          chart.current.xAxis[0].setCategories(
+            sortedDiseases.map((d: any) => d.name)
+          ); //setting category
         }
-        chart.current.xAxis[0].setCategories(
-          sortedDiseases.map((d: any) => d.name)
-        ); //setting category
         chart.current.series[0].setData(
           sortedDiseases.map((d: any) => {
             if (currChartType == "column")
@@ -479,7 +592,11 @@ export const EventList = observer(() => {
                     ? "#2f7ed8"
                     : "green",
               };
-            else return d.count;
+            else
+              return {
+                name: d.name,
+                y: d.count,
+              };
           }),
           true
         ); //setting data
@@ -574,8 +691,10 @@ export const EventList = observer(() => {
               onChange={(e) => {
                 if (e) {
                   setCauseOfDeath(e);
+                  store.setSelectedCOD(e);
                 } else {
                   setCauseOfDeath(undefined);
+                  store.setSelectedCOD(undefined);
                 }
               }}
               size="middle"
@@ -658,9 +777,11 @@ export const EventList = observer(() => {
               <Select.Option value="Female">
                 {activeLanguage.lang["Female"]}
               </Select.Option>
-              <Select.Option value="Male">
-                {activeLanguage.lang["Male"]}
-              </Select.Option>
+              {causeOfDeath !== "Maternal deaths" && (
+                <Select.Option value="Male">
+                  {activeLanguage.lang["Male"]}
+                </Select.Option>
+              )}
             </Select>
             <Select
               placeholder={
