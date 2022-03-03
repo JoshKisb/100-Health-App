@@ -62,6 +62,7 @@ class Store {
   @observable userOrgUnits: any = [];
   @observable nationalitySelect: any;
   @observable selectedOrgUnit: any;
+  @observable selectedLevel: any;
   @observable activeLanguage: any;
   @observable ICDLang: any = null;
   @observable programs: any = [];
@@ -78,6 +79,7 @@ class Store {
   @observable search = "";
   @observable currentPage = "1";
   @observable programOrganisationUnits = []; /** !!!!!!!!!! */
+  @observable allOrgUnits: any = null;
   @observable currentEvent: any;
   @observable programExists = null;
   @observable viewMode = false;
@@ -216,7 +218,11 @@ class Store {
 
   @action setSelectedCOD = (causeOfDeath) => {
     this.selectedCauseOfDeath = causeOfDeath;
-  }
+  };
+
+  @action setSelectedLevel = (level) => {
+    this.selectedLevel = level;
+  };
 
   @action
   loadUserOrgUnits = async () => {
@@ -249,7 +255,7 @@ class Store {
       );
       this.availablePrintDataElements = this.availableDataElements.map((de) => {
         let replace = new RegExp(`^${de.code}\. ?`);
-        de.name = de.name.replace(replace, '');
+        de.name = de.name.replace(replace, "");
         return de;
       });
 
@@ -890,20 +896,52 @@ class Store {
 
       console.log("currentOrganisation", this.currentOrganisation);
 
-      if (!this.currentOrganisation && !!this.selectedOrgUnit) {
-        const query5 = {
-          organisations: {
-            resource: `organisationUnits/${this.selectedOrgUnit}.json`,
-            params: {
-              paging: "false",
-              fields: "id,name,children,level",
-              includeDescendants: "true",
-            },
-          },
-        };
+      if (
+        !!this.selectedLevel ||
+        (!this.currentOrganisation && !!this.selectedOrgUnit)
+      ) {
+        let allOrgs = [];
+        let filterOrgs = [];
 
-        const resOrgs = await this.engine.query(query5);
-        const allOrgs = resOrgs.organisations.organisationUnits;
+        if (!!this.selectedLevel) {
+          if (!this.allOrgUnits) {
+            const query5 = {
+              organisations: {
+                resource: `organisationUnits.json`,
+                params: {
+                  paging: "false",
+                  fields: "id,name,children,level",
+                },
+              },
+            };
+
+            const resOrgs = await this.engine.query(query5);
+            this.allOrgUnits = resOrgs.organisations.organisationUnits;
+          }
+
+          allOrgs = this.allOrgUnits.filter(
+            (org) => org.level >= this.selectedLevel
+          );
+          filterOrgs = this.allOrgUnits.filter(
+            (org) => org.level == this.selectedLevel
+          );
+        } else {
+          const query5 = {
+            organisations: {
+              resource: `organisationUnits/${this.selectedOrgUnit}.json`,
+              params: {
+                paging: "false",
+                fields: "id,name,children,level",
+                includeDescendants: "true",
+              },
+            },
+          };
+
+          const resOrgs = await this.engine.query(query5);
+          allOrgs = resOrgs.organisations.organisationUnits;
+          filterOrgs = [allOrgs.find((org) => org.id == this.selectedOrgUnit)];
+        }
+
         keyedOrgs = _.keyBy(allOrgs, "id");
 
         const getAllChildren = (orgUnit: any) => {
@@ -912,7 +950,7 @@ class Store {
           });
         };
 
-        groupedOrgs = keyedOrgs[this.selectedOrgUnit].children.map((org) => {
+        groupedOrgs = filterOrgs.map((org) => {
           return {
             id: org.id,
             name: keyedOrgs[org.id]?.name,
@@ -923,16 +961,17 @@ class Store {
       }
 
       const getParentOrg = (orgUnit: any) => {
-        if (orgUnit == this.selectedOrgUnit) {
-          return null;
-        }
-        let parentOrg = groupedOrgs.find((org) => org.id == orgUnit || org.children.includes(orgUnit));
+        // if (orgUnit == this.selectedOrgUnit) {
+        //   return null;
+        // }
+        let parentOrg = groupedOrgs.find(
+          (org) => org.id == orgUnit || org.children.includes(orgUnit)
+        );
         if (!parentOrg && !this.currentOrganisation && !!this.selectedOrgUnit)
           console.log(orgUnit);
         return parentOrg;
       };
 
-     
       let diseases: any = {};
       let prevDiseases: any = {};
       let orgDiseases: any = {};
@@ -949,7 +988,6 @@ class Store {
           orgUnitIndex,
         } = getHeaderIndexes(headers);
 
-        
         for (var i = 0; i < prevData.rows.length; i++) {
           const name: string = rows[i][codIndex];
           const code: string = data.rows[i][causeOfDeathIndex];
@@ -961,12 +999,13 @@ class Store {
 
           const org = { id: parentOrg?.id, name: parentOrg?.name };
 
-          if (!prevDiseases[name]) prevDiseases[name] = {
-            name,
-            code,
-            count: 0,
-            affected: []
-          };
+          if (!prevDiseases[name])
+            prevDiseases[name] = {
+              name,
+              code,
+              count: 0,
+              affected: [],
+            };
           prevDiseases[name].count += 1;
           prevDiseases[name].affected.push({ dob, dod, gender, org });
 
@@ -981,7 +1020,7 @@ class Store {
 
         if (!!filterByCause) {
           const f = new CauseOfDeathFilter();
-          prevDiseases = f.apply(prevDiseases, filterByCause);          
+          prevDiseases = f.apply(prevDiseases, filterByCause);
         }
         this.prevDiseases = prevDiseases;
         this.prevDiseaseOrgUnits = prevOrgDiseases;

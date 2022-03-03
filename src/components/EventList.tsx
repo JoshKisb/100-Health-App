@@ -4,7 +4,6 @@ import { useStore } from "../Context";
 import { Table, Card, Drawer, List, Checkbox, Select } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import Highcharts, { Options } from "highcharts";
-import moment, { Moment } from "moment";
 import { DatePicker, Input, Menu, Dropdown, Button, Form, Popover } from "antd";
 import {
   AudioOutlined,
@@ -41,14 +40,7 @@ require("highcharts/modules/exporting")(Highcharts);
 Highcharts.AST.allowedTags.push("svg");
 Highcharts.AST.allowedAttributes.push("viewBox");
 
-const { RangePicker } = DatePicker;
 const { Search } = Input;
-
-const defaultRange: any = [
-  moment().subtract(1, "years"),
-  moment(),
-  moment().subtract(2, "years"),
-];
 
 const FilterMenu = observer(({ field }) => {
   const store = useStore();
@@ -332,7 +324,7 @@ export const EventList = observer(() => {
   const calculatePrevDiseaseCounts = (diseases, prevDiseases) => {
     return [...diseases].map((d) => {
       let prevD = prevDiseases[d.name];
-      return { ...d, prev: (prevD?.affected?.length  ?? 0)};
+      return { ...d, prev: prevD?.affected?.length ?? 0 };
     });
   };
 
@@ -400,9 +392,10 @@ export const EventList = observer(() => {
         let allDiseases = store.allDiseases;
 
         if (
-          !store.currentOrganisation &&
-          !!causeOfDeath &&
-          !!store.selectedOrgUnit
+          (!store.currentOrganisation &&
+            !!causeOfDeath &&
+            !!store.selectedOrgUnit) ||
+          !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(allDiseases);
         }
@@ -410,11 +403,10 @@ export const EventList = observer(() => {
         console.log("causeOfDeath", causeOfDeath);
         console.log("causeOfDeath", store.totalCauseDeathCount);
 
-          console.log("mortalityFilter", mortalityFilter);
-          console.log("genderFilter", genderFilter);
+        console.log("mortalityFilter", mortalityFilter);
+        console.log("genderFilter", genderFilter);
 
         if (mortalityFilter || genderFilter) {
-
           const filtered = filterTheDiseases();
           console.log("filtered 1", filtered);
           console.log("total", store.totalDeathCount);
@@ -457,7 +449,7 @@ export const EventList = observer(() => {
         }
         if (!!store.selectedOrgUnitName)
           title = `${title} in ${store.selectedOrgUnitName}`;
-        
+
         setChartTitle(title);
         chart.current.setTitle({ text: title });
 
@@ -509,11 +501,6 @@ export const EventList = observer(() => {
     const opts = currChartType == "column" ? colOptions : pieOptions;
     chart.current = Highcharts.chart("topdiseases", opts);
 
-    store.selectedDateRange = [
-      defaultRange[0].format("YYYY-MM-DD"),
-      defaultRange[1].format("YYYY-MM-DD"),
-      defaultRange[2].format("YYYY-MM-DD"),
-    ];
     store.queryTopEvents().then(() => {
       if (!!store.topDiseases) {
         let sortedDiseases = store.topDiseases;
@@ -521,9 +508,10 @@ export const EventList = observer(() => {
         let totalGenderFilteredDeathCount = 0;
 
         if (
-          !store.currentOrganisation &&
-          !!causeOfDeath &&
-          !!store.selectedOrgUnit
+          (!store.currentOrganisation &&
+            !!causeOfDeath &&
+            !!store.selectedOrgUnit) ||
+          !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
 
@@ -572,8 +560,6 @@ export const EventList = observer(() => {
         setChartTitle(title);
         chart.current.setTitle({ text: title });
 
-
-
         currDiseases.current = sortedDiseases;
         if (currChartType == "column") {
           chart.current.xAxis[0].setCategories(
@@ -605,7 +591,7 @@ export const EventList = observer(() => {
     });
 
     store.queryEvents().then(() => {});
-  }, [store?.nationalitySelect, causeOfDeath]);
+  }, [store?.nationalitySelect, causeOfDeath, store?.selectedLevel]);
 
   useEffect(() => {
     if (filtersInitialized || !store?.data?.headers) return;
@@ -614,22 +600,6 @@ export const EventList = observer(() => {
 
     setFiltersInitialized(true);
   }, [store?.data?.headers]);
-
-  const handleSelect = (ranges) => {
-    if (!ranges) {
-      store.clearSelectedDateRange();
-    } else {
-      const startDate = ranges[0].format("YYYY-MM-DD");
-      const endDate = ranges[1].format("YYYY-MM-DD");
-      const duration = ranges[1].diff(ranges[0], "days");
-
-      const prevDate = ranges[0]
-        .subtract(duration, "days")
-        .format("YYYY-MM-DD");
-
-      store.changeSelectedDateRange(startDate, endDate, prevDate);
-    }
-  };
 
   const suffix = (
     <AudioOutlined
@@ -894,9 +864,9 @@ export const EventList = observer(() => {
             </button>
           </div>
 
-          <div className="chart-date-range">
-            <RangePicker defaultValue={defaultRange} onChange={handleSelect} />
-          </div>
+          {/*<div className="chart-date-range">
+            
+          </div>*/}
         </div>
       </div>
       {store.data ? (

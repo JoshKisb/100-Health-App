@@ -1,7 +1,9 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { TreeSelect, Select, Button, Popover, Spin } from "antd";
+import { TreeSelect, Select, Button, Popover, Spin, DatePicker } from "antd";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
+import moment, { Moment } from "moment";
+
 const { Option } = Select;
 
 // const categoryOptionCombos = [
@@ -24,6 +26,14 @@ interface OrgUnitTreeTypes {
   fetching?: boolean;
 }
 
+const { RangePicker } = DatePicker;
+
+const defaultRange: any = [
+  moment().subtract(1, "years"),
+  moment(),
+  moment().subtract(2, "years"),
+];
+
 export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
   ({ loading, fetching }) => {
     const [categoryOptionCombos, setCategoryOptionCombos] = useState([]);
@@ -40,15 +50,21 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     };
 
     useEffect(() => {
+      store.selectedDateRange = [
+        defaultRange[0].format("YYYY-MM-DD"),
+        defaultRange[1].format("YYYY-MM-DD"),
+        defaultRange[2].format("YYYY-MM-DD"),
+      ];
+
       if (store.nationalitySelect?.length) {
-        console.log("categoryOptionCombos", store.nationalitySelect)
+        console.log("categoryOptionCombos", store.nationalitySelect);
         setCategoryOptionCombos(store.nationalitySelect);
       }
     }, [store.nationalitySelect]);
 
     useEffect(() => {
       if (store.userOrgUnits?.length) {
-          setUnits(store.organisationUnits);
+        setUnits(store.organisationUnits);
       }
     }, [store, fetching]);
 
@@ -70,6 +86,22 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
       }
     };
 
+    const handleSelect = (ranges) => {
+      if (!ranges) {
+        store.clearSelectedDateRange();
+      } else {
+        const startDate = ranges[0].format("YYYY-MM-DD");
+        const endDate = ranges[1].format("YYYY-MM-DD");
+        const duration = ranges[1].diff(ranges[0], "days");
+
+        const prevDate = ranges[0]
+          .subtract(duration, "days")
+          .format("YYYY-MM-DD");
+
+        store.changeSelectedDateRange(startDate, endDate, prevDate);
+      }
+    };
+
     const handleWarnClose = () => setShowWarn(false);
 
     const showLangConfig = () => store.showLang();
@@ -85,26 +117,53 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
 
     return (
       <Spin spinning={loading}>
-        <div className="flex" style={{ alignItems: "center" }}>
+        <div className="flex" style={{ alignItems: "flex-start" }}>
           <div className="w-5/12 pr-1">
             <TreeSelect
               allowClear={true}
               treeDataSimpleMode
               size="large"
               style={{ width: "100%" }}
+              disabled={ !!store.selectedLevel }
               value={store.selectedOrgUnit}
               dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
-              placeholder={ activeLanguage?.lang["Please select health centre"] }
+              placeholder={activeLanguage?.lang["Please select health centre"]}
               onChange={store.setSelectedOrgUnit}
               loadData={onLoadData}
               treeData={units}
             />
+
+            <div className="flex mt-2">
+              <div style={{ width: "40%", paddingRight: "6px" }}>
+                <Select
+                  style={{ width: "100%" }}
+                  allowClear={true}
+                  disabled={ !!store.selectedOrgUnit }
+                  placeholder={activeLanguage?.lang["Level"] ?? "Level"}
+                  onChange={store.setSelectedLevel}
+                  size="large"
+                  value={store.selectedLevel}
+                >
+                  <Option value={1}>Level 1</Option>
+                  <Option value={2}>Level 2</Option>
+                  <Option value={3}>Level 3</Option>
+                </Select>
+              </div>
+              <div style={{ width: "60%", paddingLeft: "6px" }}>
+                <RangePicker
+                  style={{ width: "100%" }}
+                  defaultValue={defaultRange}
+                  onChange={handleSelect}
+                  size="large"
+                />
+              </div>
+            </div>
           </div>
           <div className="w-5/12 pl-1">
             <Select
               style={{ width: "100%" }}
               allowClear={true}
-              placeholder={ activeLanguage?.lang["Nationality"] }
+              placeholder={activeLanguage?.lang["Nationality"]}
               onChange={store.setSelectedNationality}
               size="large"
               value={store.selectedNationality}
@@ -132,7 +191,9 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                 onClick={store.viewMode ? store.editEvent : store.showForm}
                 disabled={!store.canInsert || store.forceDisable}
               >
-                {store.viewMode ? activeLanguage?.lang["Edit Event"] : activeLanguage?.lang["Add Event"] }
+                {store.viewMode
+                  ? activeLanguage?.lang["Edit Event"]
+                  : activeLanguage?.lang["Add Event"]}
               </Button>
             </div>
           </Popover>
@@ -153,7 +214,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                 onClick={showLangConfig}
                 disabled={!userIsAuthorized}
               >
-                { activeLanguage?.lang["Change Language"] }
+                {activeLanguage?.lang["Change Language"]}
               </Button>
             </div>
           </Popover>
