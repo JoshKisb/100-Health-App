@@ -147,6 +147,8 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                   <Option value={1}>Level 1</Option>
                   <Option value={2}>Level 2</Option>
                   <Option value={3}>Level 3</Option>
+                  <Option value={4}>Level 4</Option>
+                  <Option value={5}>Level 5</Option>
                 </Select>
               </div>
               <div style={{ width: "60%", paddingLeft: "6px" }}>
