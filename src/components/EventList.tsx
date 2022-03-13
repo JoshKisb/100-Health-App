@@ -321,6 +321,45 @@ export const EventList = observer(() => {
       ?.slice(-20);
   };
 
+  const groupDiseaseToFilters = (diseases, prevDiseases = null) => {
+    let diseaseOrgs = {};
+    let prevDisOrgs = {};
+
+    Object.values(diseases).forEach((d: any) => {
+      if (!!prevDiseases) {
+        let prevD = prevDiseases[d.name];
+        if (!!prevD) {
+          prevD.affected.forEach((event) => {
+            if (!prevDisOrgs[event.org.id]) {
+              prevDisOrgs[event.org.id] = {
+                name: event.org.name,
+                count: 0,
+              };
+            }
+            prevDisOrgs[event.org.id].count += 1;
+          });
+        }
+      }
+
+      d.affected.forEach((event) => {
+        if (!event.org.id) return;
+        if (!diseaseOrgs[event.org.id])
+          diseaseOrgs[event.org.id] = {
+            name: event.org.name,
+            count: 0,
+            prev: !!prevDiseases
+              ? prevDisOrgs[event.org.id]?.count
+              : store.prevDiseaseOrgUnits[event.org?.id]?.[d.id],
+          };
+        diseaseOrgs[event.org.id].count += 1;
+      });
+
+    });
+    return Object.values(diseaseOrgs)
+      ?.sort((a: any, b: any) => a.count - b.count)
+      ?.slice(-20);
+  };
+
   const calculatePrevDiseaseCounts = (diseases, prevDiseases) => {
     return [...diseases].map((d) => {
       let prevD = prevDiseases[d.name];
@@ -354,10 +393,12 @@ export const EventList = observer(() => {
 
     if (
       !store.currentOrganisation &&
-      !!causeOfDeath &&
-      !!store.selectedOrgUnit
+      !!store.selectedOrgUnit 
     ) {
-      sortedDiseases = groupDiseaseToOrgUnits(diseases, prevDiseases);
+      if (!!causeOfDeath)
+        sortedDiseases = groupDiseaseToOrgUnits(diseases, prevDiseases);
+      else 
+        sortedDiseases = groupDiseaseToFilters(diseases, prevDiseases);
     } else {
       sortedDiseases = Object.values(diseases)
         ?.sort((a: any, b: any) => a.count - b.count)
@@ -398,6 +439,11 @@ export const EventList = observer(() => {
           !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(allDiseases);
+        } else if (!store.currentOrganisation &&
+            !!store.selectedOrgUnit &&
+            !causeOfDeath 
+            ) {
+          sortedDiseases = groupDiseaseToFilters(allDiseases);
         }
 
         console.log("causeOfDeath", causeOfDeath);
@@ -514,8 +560,11 @@ export const EventList = observer(() => {
           !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
-
-          console.log("dis sortedDiseases", sortedDiseases);
+        } else if (!store.currentOrganisation &&
+            !!store.selectedOrgUnit &&
+            !causeOfDeath 
+            ) {
+          sortedDiseases = groupDiseaseToFilters(store.allDiseases);
         }
 
         if (mortalityFilter || genderFilter) {

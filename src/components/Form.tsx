@@ -344,6 +344,12 @@ export const DataEntryForm = observer(() => {
 	};
 
 	const valuesChange = (changedValues: any, allValues: any) => {
+
+		// if NIN given, fetch and fill other form areas
+		if (!!changedValues.MOstDqSY0gO && changedValues.MOstDqSY0gO.length == 14) {
+			fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
+		}
+
 		// Handling date of birth is unknown"
 		if (changedValues.roxn33dtLLx) {
 			console.log("Roxx changed to ", changedValues.roxn33dtLLx);
@@ -759,6 +765,74 @@ export const DataEntryForm = observer(() => {
 
 		// console.log("working");
 	};
+
+	const fetchAndFillUserInfo = (nin: string) => {
+		fetch("https://nisprod.dev.plydot.com/api/v2/getPerson", {
+			method: 'POST',
+			body: JSON.stringify({
+				"nationalId": nin,
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJE12enBMUHdSSUlKN0NhOTh0UDhUQXU3S3VFQWJpNmFteWVSeGFPTFdIcGdKVEJlRlczUVBhIiwidXNlciI6ImFkbWluIn0.5f9cBgLGpsVUsYiuXC9NvVDQ4_eeB8MKzjI4wCCOENI"
+			}),
+		})
+		.then(response => response.json())
+		.then(data => {
+			const info = data.data;
+         // full name
+			form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
+            // e96GB4CXyd3 sex 
+         let sex = "";
+         if (info?.gender == "M")
+         	sex = "Male";
+         else if (info?.gender == "F")
+         	sex = "Female";
+			form.setFieldsValue({ e96GB4CXyd3: sex });
+         // roxn33dtLLx dob known ageKnown
+         form.setFieldsValue({ roxn33dtLLx: true })
+         // RbrUuKFSqkZ dateOfBirth
+         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
+         form.setFieldsValue({ RbrUuKFSqkZ: dob })
+
+         // q7e7FOXKnOf age 
+         let years = moment().diff(dob, "years");			
+			form.setFieldsValue({ q7e7FOXKnOf: years });
+
+         // zwKo51BEayZ region  chosenRegion
+         // b70okb06FWa Occupation 
+      
+         // xNCSFrgdUgi place of birth 
+            
+         //i8rrl8YWxLF dateOfDeath
+		})
+		.catch((error) => {
+		  console.error('Error fetch user:', error);
+		});
+
+		fetch("https://nisprod.dev.plydot.com/api/v2/getPlaceOfBirth", {
+			method: 'POST',
+			body: JSON.stringify({
+				"nationalId": nin,
+				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJE12enBMUHdSSUlKN0NhOTh0UDhUQXU3S3VFQWJpNmFteWVSeGFPTFdIcGdKVEJlRlczUVBhIiwidXNlciI6ImFkbWluIn0.5f9cBgLGpsVUsYiuXC9NvVDQ4_eeB8MKzjI4wCCOENI"
+			}),
+		})
+		.then(response => response.json())
+		.then(data => {
+           
+			form.setFieldsValue({ t5nTEmlScSt: data.data.address?.district });
+         //  subCounty chosenSubCounty
+			form.setFieldsValue({ u44XP9fZweA: data.data.address?.subCounty });
+         // dsiwvNQLe5n Village 
+			form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
+		  
+         // zwKo51BEayZ region  chosenRegion
+           
+         // xNCSFrgdUgi place of birth 
+            
+         //i8rrl8YWxLF dateOfDeath
+		})
+		.catch((error) => {
+		  console.error('Error fetch user:', error);
+		});
+	}
 
 	const optionSet = (
 		os: string,
