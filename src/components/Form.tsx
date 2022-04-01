@@ -16,6 +16,7 @@ import {
 	Drawer,
 	List,
 	Alert,
+	notification
 } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -777,31 +778,44 @@ export const DataEntryForm = observer(() => {
 		.then(response => response.json())
 		.then(data => {
 			const info = data.data;
-         // full name
-			form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
-            // e96GB4CXyd3 sex 
-         let sex = "";
-         if (info?.gender == "M")
-         	sex = "Male";
-         else if (info?.gender == "F")
-         	sex = "Female";
-			form.setFieldsValue({ e96GB4CXyd3: sex });
-         // roxn33dtLLx dob known ageKnown
-         form.setFieldsValue({ roxn33dtLLx: true })
-         // RbrUuKFSqkZ dateOfBirth
-         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
-         form.setFieldsValue({ RbrUuKFSqkZ: dob })
 
-         // q7e7FOXKnOf age 
-         let years = moment().diff(dob, "years");			
-			form.setFieldsValue({ q7e7FOXKnOf: years });
+			if(!isEmpty(info)) {
+	         // full name
+				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
+	            // e96GB4CXyd3 sex 
+	         let sex = "";
+	         if (info?.gender == "M")
+	         	sex = "Male";
+	         else if (info?.gender == "F")
+	         	sex = "Female";
+				form.setFieldsValue({ e96GB4CXyd3: sex });
+	         // roxn33dtLLx dob known ageKnown
+	         form.setFieldsValue({ roxn33dtLLx: true })
+	         // RbrUuKFSqkZ dateOfBirth
+	         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
+	         form.setFieldsValue({ RbrUuKFSqkZ: dob })
 
-         // zwKo51BEayZ region  chosenRegion
-         // b70okb06FWa Occupation 
-      
-         // xNCSFrgdUgi place of birth 
-            
-         //i8rrl8YWxLF dateOfDeath
+	         // q7e7FOXKnOf age 
+	         let years = moment().diff(dob, "years");			
+				form.setFieldsValue({ q7e7FOXKnOf: years });
+
+	         // zwKo51BEayZ region  chosenRegion
+	         // b70okb06FWa Occupation 
+	      
+	         // xNCSFrgdUgi place of birth 
+	            
+	         //i8rrl8YWxLF dateOfDeath
+			} else {
+				notification.error({
+				    message: 'NIN Not Found',
+				    description:
+				      'The NIN was not found in system. Double Check for any mistakes',
+				    // onClick: () => {
+				    //   console.log('Notification Clicked!');
+				    // },
+				  });
+			}
+         
 		})
 		.catch((error) => {
 		  console.error('Error fetch user:', error);
@@ -816,18 +830,22 @@ export const DataEntryForm = observer(() => {
 		})
 		.then(response => response.json())
 		.then(data => {
+
+			if(!isEmpty(data.data)) {
+
+				form.setFieldsValue({ t5nTEmlScSt: data.data.address?.district });
+	         //  subCounty chosenSubCounty
+				form.setFieldsValue({ u44XP9fZweA: data.data.address?.subCounty });
+	         // dsiwvNQLe5n Village 
+				form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
+			  
+	         // zwKo51BEayZ region  chosenRegion
+	           
+	         // xNCSFrgdUgi place of birth 
+	            
+	         //i8rrl8YWxLF dateOfDeath
+			}
            
-			form.setFieldsValue({ t5nTEmlScSt: data.data.address?.district });
-         //  subCounty chosenSubCounty
-			form.setFieldsValue({ u44XP9fZweA: data.data.address?.subCounty });
-         // dsiwvNQLe5n Village 
-			form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
-		  
-         // zwKo51BEayZ region  chosenRegion
-           
-         // xNCSFrgdUgi place of birth 
-            
-         //i8rrl8YWxLF dateOfDeath
 		})
 		.catch((error) => {
 		  console.error('Error fetch user:', error);
@@ -1533,7 +1551,36 @@ export const DataEntryForm = observer(() => {
 					<table className="my-2 w-full border-collapse">
 						<tbody>
 							<tr>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1">
+									<b>
+										{
+											activeLanguage.lang[
+												"NIN (National Identification Number)"
+											]
+										}
+									</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item
+										/* rules={[
+                    {
+                      required: true,
+                      message: "Enter fu",
+                    },
+                  ]}*/
+										name="MOstDqSY0gO"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.ZYKmQ9GPOaF
+											}
+										/>
+									</Form.Item>
+								</td>
+								<td className="border p-1">
 									<b>
 										{
 											activeLanguage.lang[
@@ -1645,35 +1692,9 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"NIN (National Identification Number)"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										/* rules={[
-                    {
-                      required: true,
-                      message: "Enter fu",
-                    },
-                  ]}*/
-										name="MOstDqSY0gO"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.ZYKmQ9GPOaF
-											}
-										/>
-									</Form.Item>
-								</td>
+								<td className="border p-1"></td>
+
+								 {/* NIN was here */}
 							</tr>
 
 							<tr>
