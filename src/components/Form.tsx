@@ -35,6 +35,7 @@ import Declarations from "./Declarations";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
+import { getNINPlaceOfBirth, getNINPerson } from "./../utils/ninApi"
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -768,14 +769,7 @@ export const DataEntryForm = observer(() => {
 	};
 
 	const fetchAndFillUserInfo = (nin: string) => {
-		fetch("https://nisprod.dev.plydot.com/api/v2/getPerson", {
-			method: 'POST',
-			body: JSON.stringify({
-				"nationalId": nin,
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJE12enBMUHdSSUlKN0NhOTh0UDhUQXU3S3VFQWJpNmFteWVSeGFPTFdIcGdKVEJlRlczUVBhIiwidXNlciI6ImFkbWluIn0.5f9cBgLGpsVUsYiuXC9NvVDQ4_eeB8MKzjI4wCCOENI"
-			}),
-		})
-		.then(response => response.json())
+		getNINPerson(nin)
 		.then(data => {
 			const info = data.data;
 
@@ -821,14 +815,7 @@ export const DataEntryForm = observer(() => {
 		  console.error('Error fetch user:', error);
 		});
 
-		fetch("https://nisprod.dev.plydot.com/api/v2/getPlaceOfBirth", {
-			method: 'POST',
-			body: JSON.stringify({
-				"nationalId": nin,
-				"token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJE12enBMUHdSSUlKN0NhOTh0UDhUQXU3S3VFQWJpNmFteWVSeGFPTFdIcGdKVEJlRlczUVBhIiwidXNlciI6ImFkbWluIn0.5f9cBgLGpsVUsYiuXC9NvVDQ4_eeB8MKzjI4wCCOENI"
-			}),
-		})
-		.then(response => response.json())
+		getNINPlaceOfBirth(nin)
 		.then(data => {
 
 			if(!isEmpty(data.data)) {
