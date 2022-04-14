@@ -816,19 +816,76 @@ export const DataEntryForm = observer(() => {
 		});
 
 		getNINPlaceOfBirth(nin)
-		.then(data => {
+		.then(async (data) => {
+
 
 			if(!isEmpty(data.data)) {
 
-				form.setFieldsValue({ t5nTEmlScSt: data.data.address?.district });
-	         //  subCounty chosenSubCounty
-				form.setFieldsValue({ u44XP9fZweA: data.data.address?.subCounty });
+				console.log("apiAddr", data.data)
+
+				const apiSubCounty = data.data.address?.subCounty;
+				const apiDistrict = data.data.address?.district;
+				
+				const query = {
+					district: {
+						resource: `organisationUnits.json`,
+						params: {
+							filter: `name:ilike:${apiDistrict}`,
+							level: 3,
+							paging: "false",
+							fields: "id,name,displayName,parent[id,name,displayName],children[id,name,displayName]",
+						},
+					},
+				};
+
+				const sysData = await store.engine.query(query);
+
+				console.log("loaddistrict:", sysData);
+
+				const district = sysData.district.organisationUnits?.[0];
+
+				console.log("district", district)
+
+				if (!!district) {
+					const region: any = district.parent;
+					console.log("region", region)
+					let matches = {};
+					const tokens = apiSubCounty.toLowerCase().split(" ");
+					district.children.forEach(sb => {
+						tokens.forEach(t => {
+							if (sb.name.toLowerCase().indexOf(t) >= 0) {
+								if (!matches[sb.id]) 
+									matches[sb.id] = {...sb, count: 0};
+								matches[sb.id].count += 1;
+							}
+						})
+					});
+
+					const subCounty: any = Object.values(matches)?.sort((a: any, b: any) => b.count - a.count)[0];
+		         console.log("subCounty", subCounty)
+		         // zwKo51BEayZ region  chosenRegion
+		         setChosenRegionToSubmit(region.displayName);
+		         setChosenRegion(region.displayName)
+		         form.setFieldsValue({
+		         	zwKo51BEayZ: region.displayName
+		         })
+
+		         // district
+		         setChosenDistrict(district.displayName)
+		         setChosenDistrictToSubmit(district.displayName)
+					form.setFieldsValue({ t5nTEmlScSt: district.displayName});
+
+		         //  subCounty chosenSubCounty
+		         setChosenSubcounty(subCounty.displayName)
+					form.setFieldsValue({ u44XP9fZweA:  subCounty.displayName});
+					
+				}
 	         // dsiwvNQLe5n Village 
 				form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
 			  
-	         // zwKo51BEayZ region  chosenRegion
 	           
 	         // xNCSFrgdUgi place of birth 
+	         form.setFieldsValue({ xNCSFrgdUgi: data.data.address?.parish });
 	            
 	         //i8rrl8YWxLF dateOfDeath
 			}
@@ -1703,7 +1760,7 @@ export const DataEntryForm = observer(() => {
 											dictatedContent={chosenRegion}
 											// setLimitedArrayParent={setLimitedRegionParent}
 											receiveOutput={(text: any) => {
-												// console.log("Chosen region is ", text);
+												console.log("Chosen region is ", text);
 												setChosenRegionToSubmit(
 													`${text}`
 												);

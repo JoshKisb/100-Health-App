@@ -1,5 +1,5 @@
-const baseURL = "https://nisprod.dev.plydot.com/api/v2";
-const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJE12enBMUHdSSUlKN0NhOTh0UDhUQXU3S3VFQWJpNmFteWVSeGFPTFdIcGdKVEJlRlczUVBhIiwidXNlciI6ImFkbWluIn0.5f9cBgLGpsVUsYiuXC9NvVDQ4_eeB8MKzjI4wCCOENI";
+const baseURL = "https://hmis-dev.health.go.ug/db-api/api/v2";
+const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJHhscm4zQ1NtWlNFV3RJMFJsbldpaU9BV2ZPMXJpYmtHMjdBZEhmUXByZnd5akxHL01kVS5LIiwidXNlciI6ImFkbWluIn0.x6E_jYOeAWTooXCd7ebRuC3NZtgpG99Ep9Tr6j9NisE";
 
 
 export const getNINPerson = nin => {
