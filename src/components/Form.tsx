@@ -897,6 +897,11 @@ export const DataEntryForm = observer(() => {
 	         // xNCSFrgdUgi place of birth 
 	         form.setFieldsValue({ xNCSFrgdUgi: data.data.address?.parish });
 	         store.disableValue("xNCSFrgdUgi")
+
+	         //se3wRj1bYPo County
+				form.setFieldsValue({ se3wRj1bYPo: data.data.address?.county });
+	         store.disableValue("se3wRj1bYPo")
+
 	            
 	         //i8rrl8YWxLF dateOfDeath
 			}
@@ -1570,6 +1575,7 @@ export const DataEntryForm = observer(() => {
 							disabledDate={notTomorrow}
 							size="large"
 							disabled={store.viewMode}
+							defaultValue={moment()}
 							placeholder={activeLanguage.lang["Select a Date"]}
 						/>
 					</Form.Item>
@@ -1606,6 +1612,31 @@ export const DataEntryForm = observer(() => {
 					<table className="my-2 w-full border-collapse">
 						<tbody>
 							<tr>
+							<td className="border p-1">
+								<b>
+									{
+										activeLanguage.lang[
+											"Ministry of Health National Case Number"
+										]
+									}
+								</b>
+							</td>
+							<td className="border p-1" colSpan={3}>
+								<Form.Item
+									name="ZKBE8Xm9DJG"
+									className="m-0"
+								>
+									<Input
+										size="large"
+										disabled={
+											store.viewMode ||
+											store.allDisabled.ZKBE8Xm9DJG
+										}
+									/>
+								</Form.Item>
+							</td>
+							</tr>
+							<tr>
 								<td className="border p-1">
 									<b>
 										{
@@ -1617,12 +1648,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										/* rules={[
-                    {
-                      required: true,
-                      message: "Enter fu",
-                    },
-                  ]}*/
+										
 										name="MOstDqSY0gO"
 										className="m-0"
 									>
@@ -1635,62 +1661,8 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Ministry of Health National Case Number"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1" colSpan={2}>
-									<Form.Item
-										name="ZKBE8Xm9DJG"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.ZKBE8Xm9DJG
-											}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Referred"]}</b>
-								</td>
-								<td className="border p-1">
-									{/* Add the facilities dropdown here */}
-									<DistSearchPopup
-										disabled={
-											store.viewMode ||
-											store.allDisabled.zwKo51BEayZ
-										}
-										searchType={validSearchTypes.facility}
-										// setLimitedArray={limitedRegionParent}
-										dictatedContent={chosenFacility}
-										// setLimitedArrayParent={setLimitedRegionParent}
-										receiveOutput={(text: any) => {
-											console.log(
-												"Chosen facility is:",
-												text
-											);
-											setChosenFacilityToSubmit(
-												`${text}`
-											);
-											setChosenFacility(`${text}`);
-										}}
-									/>
-									{/* {optionSets ? (
-                  <Form.Item name="QDHeWslaEoH" className="m-0">
-                    {optionSet("YN01", "QDHeWslaEoH", () => {})}
-                  </Form.Item>
-                ) : null} */}
-								</td>
+							
+								
 								<td className="border p-1">
 									<b>
 										{
@@ -1722,35 +1694,44 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
+								
+								<td className="border p-1" colSpan={2}>									
+							
+									<h3
+										style={{
+											fontWeight: "bolder",
+											color: "#000085",
+										}}
+									>
+										{
+											activeLanguage.lang[
+												"Place of residence of the deceased"
+											] ?? "Place of residence of the deceased"
+										}
+									</h3>
+								</td>
 								<td className="border p-1">
-									<b>
-										{activeLanguage.lang["Referred From:"]}
-									</b>
+									{/* <b>Region2</b> */}
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										/*rules={[
-                    {
-                      required: true,
-                      message: "Enter full name",
-                    },
-                  ]}*/
-										name="WqYvFt79TQB"
+										name="twVlVWM3ffz"
 										className="m-0"
+										style={{ height: "0rem" }}
 									>
 										<Input
+											type="hidden"
+											disabled={false}
 											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.WqYvFt79TQB
-											}
+											value={approvalStatus}
+											defaultValue={approvalStatus}
+											onChange={(e) => {}}
 										/>
 									</Form.Item>
 								</td>
-								<td className="border p-1"></td>
-
-								 {/* NIN was here */}
 							</tr>
+					
+								
 
 							<tr>
 								<td className="border p-1">
@@ -1778,29 +1759,24 @@ export const DataEntryForm = observer(() => {
 											}}
 										/>
 
-										{/* <Input
-                    size="large"
-                    disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
-                  /> */}
 									</Form.Item>
 								</td>
 
+								
 								<td className="border p-1">
-									{/* <b>Region2</b> */}
+									<b>{activeLanguage.lang["Occupation"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="twVlVWM3ffz"
+										name="b70okb06FWa"
 										className="m-0"
-										style={{ height: "0rem" }}
 									>
 										<Input
-											type="hidden"
-											disabled={false}
 											size="large"
-											value={approvalStatus}
-											defaultValue={approvalStatus}
-											onChange={(e) => {}}
+											disabled={
+												store.viewMode ||
+												store.allDisabled.b70okb06FWa
+											}
 										/>
 									</Form.Item>
 								</td>
@@ -1842,55 +1818,7 @@ export const DataEntryForm = observer(() => {
                   />
                 </Form.Item> */}
 								</td>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Occupation"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="b70okb06FWa"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.b70okb06FWa
-											}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Sub-County"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="u44XP9fZweA"
-										className="m-0"
-									>
-										<DistSearchPopup
-											// limitedArray={limitedArray}
-											parentName={chosenDistrictToSubmit}
-											disabled={
-												store.viewMode ||
-												store.allDisabled.u44XP9fZweA ||
-												!chosenDistrictToSubmit
-											}
-											searchType={
-												validSearchTypes.subCounty
-											}
-											setDictatedContent={
-												setChosenDistrict
-											}
-											// limitedArrayParent={limitedArrayParent}
-											dictatedContent={chosenSubCounty}
-											receiveOutput={(text: any) =>
-												setChosenSubcounty(`${text}`)
-											}
-										/>
-									</Form.Item>
-								</td>
+								
 								<td className="border p-1">
 									<b>
 										{
@@ -1946,33 +1874,41 @@ export const DataEntryForm = observer(() => {
 										{activeLanguage.lang["No"]}
 									</Checkbox>
 
-									{/* {optionSets ? (
-                  <Form.Item name="roxn33dtLLx" className="m-0">
-                    {optionSet("YN01", "roxn33dtLLx", (k: any) => {
-                      // console.log("k occurred me", k);
-                    })}
-                  </Form.Item>
-                ) : null} */}
+									
 								</td>
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>{activeLanguage.lang["Village"]}</b>
+									<b>{activeLanguage.lang["Sub-County"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="dsiwvNQLe5n"
+										name="u44XP9fZweA"
 										className="m-0"
 									>
-										<Input
-											size="large"
+										<DistSearchPopup
+											// limitedArray={limitedArray}
+											parentName={chosenDistrictToSubmit}
 											disabled={
 												store.viewMode ||
-												store.allDisabled.dsiwvNQLe5n
+												store.allDisabled.u44XP9fZweA ||
+												!chosenDistrictToSubmit
+											}
+											searchType={
+												validSearchTypes.subCounty
+											}
+											setDictatedContent={
+												setChosenDistrict
+											}
+											// limitedArrayParent={limitedArrayParent}
+											dictatedContent={chosenSubCounty}
+											receiveOutput={(text: any) =>
+												setChosenSubcounty(`${text}`)
 											}
 										/>
 									</Form.Item>
 								</td>
+								
 								<td className="border p-1">
 									<b>
 										{activeLanguage.lang["Date of Birth"]}
@@ -2039,6 +1975,24 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
+								<td className="border p-1">
+									<b>{activeLanguage.lang["Village"]}</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item
+										name="dsiwvNQLe5n"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.dsiwvNQLe5n
+											}
+										/>
+									</Form.Item>
+								</td>
+								
 								<td className="border p-1">
 									<b>{activeLanguage.lang["Age"]}</b>
 								</td>
@@ -2111,6 +2065,26 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									<b>{activeLanguage.lang["County"] ?? "County"}</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item
+										name="se3wRj1bYPo"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.se3wRj1bYPo
+											}
+										/>
+									</Form.Item>
+								</td>
+
 								<td className="border p-1">
 									<b>{activeLanguage.lang["Sex"]}</b>
 								</td>
