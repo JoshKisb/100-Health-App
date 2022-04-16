@@ -776,6 +776,7 @@ export const DataEntryForm = observer(() => {
 			if(!isEmpty(info)) {
 	         // full name
 				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
+				store.disableValue("ZYKmQ9GPOaF")
 	            // e96GB4CXyd3 sex 
 	         let sex = "";
 	         if (info?.gender == "M")
@@ -783,15 +784,20 @@ export const DataEntryForm = observer(() => {
 	         else if (info?.gender == "F")
 	         	sex = "Female";
 				form.setFieldsValue({ e96GB4CXyd3: sex });
+				if (!!sex)
+					store.disableValue("e96GB4CXyd3")
 	         // roxn33dtLLx dob known ageKnown
 	         form.setFieldsValue({ roxn33dtLLx: true })
+	         store.disableValue("roxn33dtLLx")
 	         // RbrUuKFSqkZ dateOfBirth
 	         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
 	         form.setFieldsValue({ RbrUuKFSqkZ: dob })
+	         if (!!dob) store.disableValue("RbrUuKFSqkZ")
 
 	         // q7e7FOXKnOf age 
 	         let years = moment().diff(dob, "years");			
 				form.setFieldsValue({ q7e7FOXKnOf: years });
+				if (!!years) store.disableValue("q7e7FOXKnOf")
 
 	         // zwKo51BEayZ region  chosenRegion
 	         // b70okb06FWa Occupation 
@@ -869,23 +875,28 @@ export const DataEntryForm = observer(() => {
 		         form.setFieldsValue({
 		         	zwKo51BEayZ: region.displayName
 		         })
+		         if (!!region) store.disableValue("zwKo51BEayZ")
 
 		         // district
 		         setChosenDistrict(district.displayName)
 		         setChosenDistrictToSubmit(district.displayName)
 					form.setFieldsValue({ t5nTEmlScSt: district.displayName});
+					store.disableValue("t5nTEmlScSt")
 
 		         //  subCounty chosenSubCounty
 		         setChosenSubcounty(subCounty.displayName)
 					form.setFieldsValue({ u44XP9fZweA:  subCounty.displayName});
+					if (!!subCounty) store.disableValue("u44XP9fZweA")
 					
 				}
 	         // dsiwvNQLe5n Village 
 				form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
+				store.disableValue("dsiwvNQLe5n")
 			  
 	           
 	         // xNCSFrgdUgi place of birth 
 	         form.setFieldsValue({ xNCSFrgdUgi: data.data.address?.parish });
+	         store.disableValue("xNCSFrgdUgi")
 	            
 	         //i8rrl8YWxLF dateOfDeath
 			}
