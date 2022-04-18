@@ -1076,7 +1076,7 @@ export const DataEntryForm = observer(() => {
 			}
 			if (store.defaultValues.u44XP9fZweA) {
 				setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
-			}
+			}			
 			if (store.defaultValues.QDHeWslaEoH) {
 				setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
 			}
@@ -1119,6 +1119,11 @@ export const DataEntryForm = observer(() => {
 					lu9BiHPxNqH: "",
 				});
 			}
+		} else {
+			// creating new event
+			store.engine.link.fetch('/api/33/system/id.json').then(({ codes }) => {
+				form.setFieldsValue({ ZKBE8Xm9DJG: codes[0] })
+			})
 		}
 	}, [store.defaultValues]);
 
