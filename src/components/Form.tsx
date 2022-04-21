@@ -269,7 +269,7 @@ export const DataEntryForm = observer(() => {
 			values.sJhOdGLD5lj = underlyingCauseCode;
 		} // term = code
 		if (underlyingCauseURI) {
-			values.L97MrAMAav9 = underlyingCauseURI;
+			// values.L97MrAMAav9 = underlyingCauseURI;
 		} // uri
 		if (chosenDistrictToSubmit) {
 			values.u44XP9fZweA = chosenDistrictToSubmit;
@@ -352,7 +352,8 @@ export const DataEntryForm = observer(() => {
 	// };
 
 	const handleEstimateAge = () => {
-		if (ageKnown) return;
+		console.log("est age", ageKnown);
+		if (!!ageKnown) return;
 
 		// const dateOfDeath = form.getFieldValue("i8rrl8YWxLF");
 		const dateOfDeath = moment(actualTimeOfDeath);
@@ -365,7 +366,7 @@ export const DataEntryForm = observer(() => {
 
 		let estimatedAge = dateOfDeath.subtract(ageOfIndividual, "years");
 
-		form.setFieldsValue({ RbrUuKFSqkZ: estimatedAge });
+		// form.setFieldsValue({ RbrUuKFSqkZ: estimatedAge });
 		setForceResetDOB(true);
 	};
 
@@ -400,6 +401,29 @@ export const DataEntryForm = observer(() => {
 					validateTrigger: "onBlur",
 			  }
 			: {};
+
+	useEffect(() => {
+		if (personsGender === "Féminin") {
+			console.log("Is female");
+			if (personsAge < 50 && personsAge > 10) {
+				setShowPregnancyReminder(true);
+				setEnablePregnantQn(true);
+				setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
+				window.alert(
+					activeLanguage.lang[
+						"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+					]
+				);
+			}
+		}
+
+		if (personsGender === "Masculin") {
+			setShowPregnancyReminder(false);
+			setEnablePregnantQn(false);
+			setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
+			return;
+		}
+	}, [personsAge, personsGender]);
 
 	const valuesChange = (changedValues: any, allValues: any) => {
 		// if NIN given, fetch and fill other form areas
@@ -605,12 +629,12 @@ export const DataEntryForm = observer(() => {
 
 		if (
 			changedValues.e96GB4CXyd3 &&
-			changedValues.e96GB4CXyd3 === "SX01-02" &&
+			changedValues.e96GB4CXyd3 === "Féminin" &&
 			form.getFieldValue("q7e7FOXKnOf") > 10 &&
 			form.getFieldValue("q7e7FOXKnOf") < 50
 		) {
 			console.log("WOMAN and old enough");
-			if (personsGender === "Male") {
+			if (personsGender === "Masculin") {
 				setShowPregnancyReminder(false);
 				setEnablePregnantQn(false);
 				setEnablePregnantQnKey(`${parseInt(enablePregnantQnKey) + 1}`);
@@ -781,7 +805,7 @@ export const DataEntryForm = observer(() => {
 
 		if (
 			changedValues.e96GB4CXyd3 &&
-			changedValues.e96GB4CXyd3 !== "SX01-02"
+			changedValues.e96GB4CXyd3 !== "Féminin"
 		) {
 			// store.disableValue("zcn7acUB6x1");
 			// store.disableValue("KpfvNQSsWIw");
@@ -793,7 +817,7 @@ export const DataEntryForm = observer(() => {
 			// store.disableValue("uaxjt0inPNF");
 		} else if (
 			changedValues.e96GB4CXyd3 &&
-			changedValues.e96GB4CXyd3 === "SX01-02"
+			changedValues.e96GB4CXyd3 === "Féminin"
 		) {
 			store.enableValue("zcn7acUB6x1");
 			console.log("sex female");
@@ -850,8 +874,8 @@ export const DataEntryForm = observer(() => {
 					store.disableValue("ZYKmQ9GPOaF");
 					// e96GB4CXyd3 sex
 					let sex = "";
-					if (info?.gender == "M") sex = "Male";
-					else if (info?.gender == "F") sex = "Female";
+					if (info?.gender == "M") sex = "Masculin";
+					else if (info?.gender == "F") sex = "Féminin";
 					form.setFieldsValue({ e96GB4CXyd3: sex });
 					if (!!sex) store.disableValue("e96GB4CXyd3");
 					// roxn33dtLLx dob known ageKnown
@@ -1149,6 +1173,8 @@ export const DataEntryForm = observer(() => {
 		console.log("defaultValues: ", store.defaultValues);
 		if (Object.keys(store.defaultValues).length) {
 			setEditing(true);
+			if (!store.defaultValues.eventDate)
+				form.setFieldsValue({ eventDate: moment() });
 			// Auto-populate form if it is an existing form being edited
 			if (store.defaultValues.QTKk2Xt8KDu) {
 				setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
@@ -1741,47 +1767,8 @@ export const DataEntryForm = observer(() => {
 											}
 											key={`${Math.random()}`}
 											onChange={(e: any) => {
+												console.log("sex changed ", e);
 												setPersonsGender(e);
-												if (e === "Masculin") {
-													setShowPregnancyReminder(
-														false
-													);
-													setEnablePregnantQn(false);
-													setEnablePregnantQnKey(
-														`${
-															parseInt(
-																enablePregnantQnKey
-															) + 1
-														}`
-													);
-													return;
-												}
-												if (e === "Féminin") {
-													console.log("Is female");
-													if (
-														personsAge < 50 &&
-														personsAge > 10
-													) {
-														setShowPregnancyReminder(
-															true
-														);
-														setEnablePregnantQn(
-															true
-														);
-														setEnablePregnantQnKey(
-															`${
-																parseInt(
-																	enablePregnantQnKey
-																) + 1
-															}`
-														);
-														window.alert(
-															activeLanguage.lang[
-																"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-															]
-														);
-													}
-												}
 											}}
 										>
 											{["Masculin", "Féminin"].map(
@@ -1828,30 +1815,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-2">
-									Nationalité
-									<Form.Item
-										name="SAfeOh2zD9V"
-										className="m-0"
-									>
-										<Select
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.SAfeOh2zD9V
-											}
-										>
-											{[
-												"Congolaise",
-												"Etrangère (à préciser)",
-											].map((opt) => (
-												<Option value={opt}>
-													{opt}
-												</Option>
-											))}
-										</Select>
-									</Form.Item>
-								</td>
+								<td className="border p-2"></td>
 
 								<td className="border p-1">
 									Profession
@@ -1891,7 +1855,10 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.T9k01wy30fS
+												store.allDisabled.T9k01wy30fS ||
+												form.getFieldValue(
+													"oIFVUIOdsZf"
+												) !== "Autre (à préciser)"
 											}
 										/>
 									</Form.Item>
@@ -2098,49 +2065,15 @@ export const DataEntryForm = observer(() => {
 												ageKnown
 											}
 											onChange={(e: any) => {
-												// console.log("Age changed to", e);
-
+												console.log(
+													"Age changed to",
+													e
+												);
+												console.log(
+													"gender",
+													personsGender
+												);
 												setPersonsAge(e);
-												if (
-													personsGender === "Masculin"
-												) {
-													setShowPregnancyReminder(
-														false
-													);
-													setEnablePregnantQn(false);
-													setEnablePregnantQnKey(
-														`${
-															parseInt(
-																enablePregnantQnKey
-															) + 1
-														}`
-													);
-													return;
-												}
-
-												if (
-													personsGender ===
-														"Féminin" &&
-													e < 50 &&
-													e > 10
-												) {
-													setShowPregnancyReminder(
-														true
-													);
-													setEnablePregnantQn(true);
-													setEnablePregnantQnKey(
-														`${
-															parseInt(
-																enablePregnantQnKey
-															) + 1
-														}`
-													);
-													window.alert(
-														activeLanguage.lang[
-															"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-														]
-													);
-												}
 											}}
 										/>
 									</Form.Item>
@@ -4097,29 +4030,79 @@ export const DataEntryForm = observer(() => {
 									S’il s’agit d’une femme, cette dernière
 									était-elle enceinte?
 								</td>
-								<td className="border p-1"> Oui</td>
-								<td className="border p-1"> Non</td>
-								<td className="border p-1"> Inconnu</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									Au moment du décès
-								</td>
 								<td className="border p-1" colSpan={3}>
-									 Dans les 42 jours précédents le décès
+									<Form.Item
+										name="zcn7acUB6x1"
+										className="m-0"
+									>
+										<Select
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.zcn7acUB6x1 ||
+												!enablePregnantQn
+											}
+											onChange={(e: any) => {
+												console.log("E is ", e);
+												if (e === "Oui") {
+													// console.log("Setting pregnancy to true");
+													refreshAllPregnantKeys(
+														true
+													);
+												} else {
+													// console.log("Setting pregnancy to false");
+													refreshAllPregnantKeys(
+														false
+													);
+												}
+											}}
+										>
+											{["Oui", "Non", "Inconnu"].map(
+												(opt) => (
+													<Option value={opt}>
+														{opt}
+													</Option>
+												)
+											)}
+										</Select>
+									</Form.Item>
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1" colSpan={4}>
+									<span>
+										{activeLanguage.lang["At what point?"]}
+									</span>
+
+									<Form.Item
+										name="KpfvNQSsWIw"
+										className="m-0"
+									>
+										<Select
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.KpfvNQSsWIw ||
+												!womanWasPregnant
+											}
+										>
+											{[
+												"Au moment du décès",
+												"Dans les 42 jours précédents le décès",
+												"Entre 43jours et 1 an avant le décès",
+												"Inconnu",
+											].map((opt) => (
+												<Option value={opt}>
+													{opt}
+												</Option>
+											))}
+										</Select>
+									</Form.Item>
 								</td>
 							</tr>
 							<tr>
 								<td className="border p-1">
-									Entre 43jours et 1 an avant le décès{" "}
-								</td>
-								<td className="border p-1" colSpan={3}>
-									 Inconnu
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									La grossesse a-t-elle contribué au décès ?{" "}
+									La grossesse a-t-elle contribué au décès ?
 								</td>
 								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
@@ -4168,6 +4151,39 @@ export const DataEntryForm = observer(() => {
 							defaultValue={moment()}
 							placeholder={activeLanguage.lang["Select a Date"]}
 						/>
+					</Form.Item>
+
+					<br />
+					<Form.Item
+						label="Nom, Post nom et Prénom"
+						name="Q4RprzWZNcj"
+						className="m-0 mt-2"
+					>
+						<Input />
+					</Form.Item>
+					<br />
+					<Form.Item
+						label="Fonction"
+						name="PqApOwpaT07"
+						className="m-0 mt-2"
+					>
+						<Input />
+					</Form.Item>
+					<br />
+					<Form.Item
+						label="CNOM"
+						name="IYS39oStHfC"
+						className="m-0 mt-2"
+					>
+						<Input />
+					</Form.Item>
+					<br />
+					<Form.Item
+						label="Signature"
+						name="mW3Lr6sgvHY"
+						className="m-0 mt-2"
+					>
+						<Input />
 					</Form.Item>
 				</Card>
 			</Form>
