@@ -46,6 +46,13 @@ const styles: { [name: string]: React.CSSProperties } = {
 	},
 };
 
+const useTranslation = () => {
+	const store = useStore();
+	const lang = store.activeLanguage;
+
+	return (key: string) => lang?.lang[key] ?? key;
+};
+
 const PrintableFormData = observer((props: any) => {
 	console.log("props", props);
 	const form = props.form;
@@ -53,6 +60,7 @@ const PrintableFormData = observer((props: any) => {
 	const eventDate = !!date ? moment(date).format("DD-MMM-YYYY") : "";
 	const store = useStore();
 	const facility = store.currentOrganisation;
+	const tr = useTranslation();
 
 	const name = props.formVals["ZYKmQ9GPOaF"];
 	const nin = props.formVals["MOstDqSY0gO"];
@@ -70,25 +78,24 @@ const PrintableFormData = observer((props: any) => {
 
 	const getDEValue = (dataElementId) => {
 		const value = props.formVals[dataElementId];
-		if (!value) 
-			return "";
-		if (typeof value === "string")
-			return value;
-		if (value instanceof moment)
-			return moment(value).format("DD-MMM-YYYY");
+		if (!value) return "";
+		if (typeof value === "string") return value;
+		if (value instanceof moment) return moment(value).format("DD-MMM-YYYY");
 		return value.toString();
-	}
+	};
 
 	return (
 		<>
 			<table className="my-2 w-full print-table">
 				<tbody>
-					{ store.printColumns.map((dataElement) => (
+					{store.printColumns.map((dataElement) => (
 						<tr key={dataElement.id}>
 							<td style={styles.tableCell}>{dataElement.name}</td>
-							<td style={styles.tableAnswer}>{getDEValue(dataElement.id)}</td>
+							<td style={styles.tableAnswer}>
+								{getDEValue(dataElement.id)}
+							</td>
 						</tr>
-					)) }
+					))}
 				</tbody>
 			</table>
 
@@ -102,7 +109,7 @@ const PrintableFormData = observer((props: any) => {
 						alignItems: "flex-end",
 					}}
 				>
-					<b style={{ marginBottom: "10px" }}>Reported on:</b>
+					<b style={{ marginBottom: "10px" }}>{ tr('Reported on') }:</b>
 					<div style={{ ...styles.answerLine, marginLeft: "8px" }}>
 						{eventDate}
 					</div>
@@ -117,11 +124,13 @@ const PrintableFormData = observer((props: any) => {
 						}}
 					>
 						<div style={styles.answerLine}></div>
-						<b>Notifier Of Births and Deaths</b>
-						<div style={{ ...styles.answerLine, marginTop: "50px" }}>
+						<b>{ tr('Notifier Of Births and Deaths') }</b>
+						<div
+							style={{ ...styles.answerLine, marginTop: "50px" }}
+						>
 							{facility}
 						</div>
-						<b>Registration Area</b>
+						<b>{ tr('Registration Area') }</b>
 					</div>
 				</div>
 			</div>
@@ -129,21 +138,23 @@ const PrintableFormData = observer((props: any) => {
 	);
 });
 
+const CardTitle = observer((props: any) => {
+	const tr = useTranslation();
+	return (
+		<>
+			<Title className="text-center" level={2}>
+				{ tr('DEATH NOTIFICATION RECORD') }
+			</Title>
+			<p style={{ fontStyle: "italic", textAlign: "center" }}>
+				{ tr('Registration of Persons Act 2015') }
+			</p>
+		</>
+	);
+});
+
 export const FormPrint = React.forwardRef<any, any>((props, ref) => {
 	return (
-		<Card
-			ref={ref}
-			title={
-				<>
-					<Title className="text-center" level={2}>
-						DEATH NOTIFICATION RECORD
-					</Title>
-					<p style={{ fontStyle: "italic", textAlign: "center" }}>
-						Registration of Persons Act 2015
-					</p>
-				</>
-			}
-		>
+		<Card ref={ref} title={<CardTitle />}>
 			<PrintableFormData {...props} />
 		</Card>
 	);
