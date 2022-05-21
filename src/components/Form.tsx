@@ -919,7 +919,8 @@ export const DataEntryForm = observer(() => {
 		disabled?: boolean,
 		optionalKey?: string
 	) => {
-		const options = optionSets ? optionSets[os] : [];
+
+		let options = optionSets ? optionSets[os] : [];
 		if (options) {
 			return (
 				<Select

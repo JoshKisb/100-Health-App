@@ -13,6 +13,7 @@ export const validSearchTypes = {
   district: "district",
   subCounty: "subCounty",
   facility: "facility",
+  level6: "level6",
 };
 
 interface SearchType {
@@ -248,6 +249,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
         return;
       }
+      
       const allRegionsReceived = await store.getRegions();
       const actualRegions = allRegionsReceived.organisationUnits;
       let districtsArr = new Array();

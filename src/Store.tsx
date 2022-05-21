@@ -244,10 +244,11 @@ class Store {
         .map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
+      this.optionSets = fromPairs(options);
+
       const units = data.program.organisationUnits;
 
       this.programOrganisationUnits = units;
-      this.optionSets = fromPairs(options);
       const programStage = data.program.programStages[0];
       this.availableDataElements = programStage.programStageDataElements.map(
         (de: any) => {
@@ -276,7 +277,15 @@ class Store {
           .catch((err: any) => err);
 
         //const d2 = await this.engine.query(metaQ);
-
+        const trOptions = result.meta.optionSets
+        .filter((o: any) => {
+          return !!o.code;
+        })
+        .forEach((optionSet: any) => {
+          const options = optionSet.options.map(opt => result.meta.options.find(o => o.id == opt.id))
+          this.optionSets[optionSet.code] = options;
+        });
+      
         const langNats = result?.meta?.categories?.find(
           (p: any) => p.code == "RT01"
         );
