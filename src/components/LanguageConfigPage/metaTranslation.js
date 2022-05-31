@@ -7,12 +7,10 @@ export const generateMetadataNames = () => {
   const data1 = Object.keys(oldMeta).map((key) =>
     oldMeta[key].map((it) => it.name)
   );
-  console.log("genMeta data1", data1)
   let data = [];
   let lengthEst = 0;
   data1.forEach((it) => (lengthEst = Number(lengthEst) + Number(it.length)));
   data1.forEach((it) => data.push(...it));
-   console.log("genMeta data", data)
 
   data = data.map((key) => ({
     eng: key,
@@ -36,7 +34,6 @@ export const generateNewMetaObject = (input) => {
   const optionSetsStartIndex = newMeta.categories.length + categoriesStartIndex;
 
   const optionsStartIndex = newMeta.optionSets.length + optionSetsStartIndex;
-  const dataElementsStartIndex = newMeta.options.length + optionsStartIndex;
 
   // Populate the respective values into a new metadata object;
   // categoryOptions
@@ -101,19 +98,6 @@ export const generateNewMetaObject = (input) => {
       currentVal.name = `${input[e]}`;
       newMeta.options[ee] = currentVal;
       ee = Number(ee) + Number(1);
-    }
-  }
-
-  // dataElements
-  let f;
-  let ff = 0;
-  for (f = dataElementsStartIndex; f < input.length; f++) {
-    const currentVal = newMeta.dataElements[ff];
-
-    if (currentVal?.name) {
-      currentVal.name = `${input[f]}`;
-      newMeta.dataElements[ff] = currentVal;
-      ff = Number(ff) + Number(1);
     }
   }
 

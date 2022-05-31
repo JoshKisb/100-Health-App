@@ -186,7 +186,6 @@ class Store {
     twVlVWM3ffz: false,
     QDHeWslaEoH: false,
     WqYvFt79TQB: false,
-    se3wRj1bYPo: false,
   };
 
   @action showEvents = () => {
@@ -244,13 +243,22 @@ class Store {
         .map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
-      this.optionSets = fromPairs(options);
-
       const units = data.program.organisationUnits;
 
       this.programOrganisationUnits = units;
+      this.optionSets = fromPairs(options);
       const programStage = data.program.programStages[0];
-      
+      this.availableDataElements = programStage.programStageDataElements.map(
+        (de: any) => {
+          return { ...de.dataElement, selected: de.displayInReports };
+        }
+      );
+      this.availablePrintDataElements = this.availableDataElements.map((de) => {
+        let replace = new RegExp(`^${de.code}\. ?`);
+        de.name = de.name.replace(replace, "");
+        return de;
+      });
+
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
 
@@ -266,27 +274,6 @@ class Store {
           .fetch(url, options)
           .catch((err: any) => err);
 
-        console.log("meta", result.meta)
-
-        this.availableDataElements = programStage.programStageDataElements.map(
-          (de: any) => {
-            const trOptions = result.meta.dataElements
-            .find(dE => dE.id == de.dataElement.id)
-            // .forEach((dE: any) => {
-              // const options = dE.options.map(opt => result.meta.options.find(o => o.id == opt.id))
-              // this.dEs[dE.code] = options;
-            // });
-            let name = trOptions?.name ?? de.dataElement.name;
-            return { ...de.dataElement, name, selected: de.displayInReports };
-          }
-        );
-        this.availablePrintDataElements = this.availableDataElements.map((de) => {
-          let replace = new RegExp(`^${de.code}\. ?`);
-          de.name = de.name?.replace(replace, "");
-          return de;
-        });
-
-
         //const d2 = await this.engine.query(metaQ);
         const trOptions = result.meta.optionSets
         .filter((o: any) => {
@@ -297,6 +284,7 @@ class Store {
           this.optionSets[optionSet.code] = options;
         });
       
+        
         const langNats = result?.meta?.categories?.find(
           (p: any) => p.code == "RT01"
         );
@@ -589,6 +577,24 @@ class Store {
       const result = await this.engine.link.fetch(url);
 
       console.log("Result of district fetch is ", result);
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  // this is only for the temporrary app. which ask abrupt update
+  // this makes me sick
+  @action getLevel6Orgs = async () => {
+    try {
+      const url =
+        "/api/organisationUnits.json?level=6&paging=false&fields=id,displayName,children[id,displayName,children[id,displayName]]";
+
+      // Get the list regions, districts and sub counties
+      const result = await this.engine.link.fetch(url);
+
+      console.log("Result of level 6 fetch is ", result);
       return result;
     } catch (error) {
       console.log(error);
@@ -1423,7 +1429,7 @@ class Store {
           });
           return {
             key: found.name,
-            title: col.name,
+            title: found.column,
             dataIndex: found.name,
             render: (text: any, row: any) => {
               return row[found.i];

@@ -43,8 +43,6 @@ let UITranslationTemplateData: { eng: string; other: string }[] = Object.keys(
 let MetaTranslationTemplateData: { eng: string; other: string }[] =
   generateMetadataNames();
 
-console.log("MetaTranslationTemplateData", MetaTranslationTemplateData)
-
 const templateHeaders = [
   { label: "English Version", key: "eng" },
   { label: "Your Language", key: "other" },

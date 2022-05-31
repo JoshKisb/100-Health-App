@@ -776,7 +776,6 @@ export const DataEntryForm = observer(() => {
 			if(!isEmpty(info)) {
 	         // full name
 				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
-				store.disableValue("ZYKmQ9GPOaF")
 	            // e96GB4CXyd3 sex 
 	         let sex = "";
 	         if (info?.gender == "M")
@@ -784,20 +783,15 @@ export const DataEntryForm = observer(() => {
 	         else if (info?.gender == "F")
 	         	sex = "Female";
 				form.setFieldsValue({ e96GB4CXyd3: sex });
-				if (!!sex)
-					store.disableValue("e96GB4CXyd3")
 	         // roxn33dtLLx dob known ageKnown
 	         form.setFieldsValue({ roxn33dtLLx: true })
-	         store.disableValue("roxn33dtLLx")
 	         // RbrUuKFSqkZ dateOfBirth
 	         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
 	         form.setFieldsValue({ RbrUuKFSqkZ: dob })
-	         if (!!dob) store.disableValue("RbrUuKFSqkZ")
 
 	         // q7e7FOXKnOf age 
 	         let years = moment().diff(dob, "years");			
 				form.setFieldsValue({ q7e7FOXKnOf: years });
-				if (!!years) store.disableValue("q7e7FOXKnOf")
 
 	         // zwKo51BEayZ region  chosenRegion
 	         // b70okb06FWa Occupation 
@@ -822,86 +816,19 @@ export const DataEntryForm = observer(() => {
 		});
 
 		getNINPlaceOfBirth(nin)
-		.then(async (data) => {
-
+		.then(data => {
 
 			if(!isEmpty(data.data)) {
 
-				console.log("apiAddr", data.data)
-
-				const apiSubCounty = data.data.address?.subCounty;
-				const apiDistrict = data.data.address?.district;
-				
-				const query = {
-					district: {
-						resource: `organisationUnits.json`,
-						params: {
-							filter: `name:ilike:${apiDistrict}`,
-							level: 3,
-							paging: "false",
-							fields: "id,name,displayName,parent[id,name,displayName],children[id,name,displayName]",
-						},
-					},
-				};
-
-				const sysData = await store.engine.query(query);
-
-				console.log("loaddistrict:", sysData);
-
-				const district = sysData.district.organisationUnits?.[0];
-
-				console.log("district", district)
-
-				if (!!district) {
-					const region: any = district.parent;
-					console.log("region", region)
-					let matches = {};
-					const tokens = apiSubCounty.toLowerCase().split(" ");
-					district.children.forEach(sb => {
-						tokens.forEach(t => {
-							if (sb.name.toLowerCase().indexOf(t) >= 0) {
-								if (!matches[sb.id]) 
-									matches[sb.id] = {...sb, count: 0};
-								matches[sb.id].count += 1;
-							}
-						})
-					});
-
-					const subCounty: any = Object.values(matches)?.sort((a: any, b: any) => b.count - a.count)[0];
-		         console.log("subCounty", subCounty)
-		         // zwKo51BEayZ region  chosenRegion
-		         setChosenRegionToSubmit(region.displayName);
-		         setChosenRegion(region.displayName)
-		         form.setFieldsValue({
-		         	zwKo51BEayZ: region.displayName
-		         })
-		         if (!!region) store.disableValue("zwKo51BEayZ")
-
-		         // district
-		         setChosenDistrict(district.displayName)
-		         setChosenDistrictToSubmit(district.displayName)
-					form.setFieldsValue({ t5nTEmlScSt: district.displayName});
-					store.disableValue("t5nTEmlScSt")
-
-		         //  subCounty chosenSubCounty
-		         setChosenSubcounty(subCounty.displayName)
-					form.setFieldsValue({ u44XP9fZweA:  subCounty.displayName});
-					if (!!subCounty) store.disableValue("u44XP9fZweA")
-					
-				}
+				form.setFieldsValue({ t5nTEmlScSt: data.data.address?.district });
+	         //  subCounty chosenSubCounty
+				form.setFieldsValue({ u44XP9fZweA: data.data.address?.subCounty });
 	         // dsiwvNQLe5n Village 
 				form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
-				store.disableValue("dsiwvNQLe5n")
 			  
+	         // zwKo51BEayZ region  chosenRegion
 	           
 	         // xNCSFrgdUgi place of birth 
-	         form.setFieldsValue({ xNCSFrgdUgi: data.data.address?.parish });
-	         store.disableValue("xNCSFrgdUgi")
-
-	         //se3wRj1bYPo County
-				form.setFieldsValue({ se3wRj1bYPo: data.data.address?.county });
-	         store.disableValue("se3wRj1bYPo")
-
 	            
 	         //i8rrl8YWxLF dateOfDeath
 			}
@@ -919,8 +846,7 @@ export const DataEntryForm = observer(() => {
 		disabled?: boolean,
 		optionalKey?: string
 	) => {
-
-		let options = optionSets ? optionSets[os] : [];
+		const options = optionSets ? optionSets[os] : [];
 		if (options) {
 			return (
 				<Select
@@ -1077,7 +1003,7 @@ export const DataEntryForm = observer(() => {
 			}
 			if (store.defaultValues.u44XP9fZweA) {
 				setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
-			}			
+			}
 			if (store.defaultValues.QDHeWslaEoH) {
 				setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
 			}
@@ -1120,11 +1046,6 @@ export const DataEntryForm = observer(() => {
 					lu9BiHPxNqH: "",
 				});
 			}
-		} else {
-			// creating new event
-			store.engine.link.fetch('/api/33/system/id.json').then(({ codes }) => {
-				form.setFieldsValue({ ZKBE8Xm9DJG: codes[0] })
-			})
 		}
 	}, [store.defaultValues]);
 
@@ -1536,7 +1457,7 @@ export const DataEntryForm = observer(() => {
 							<ReactToPrint
 								trigger={() => (
 									<Button htmlType="button" size="large">
-										{activeLanguage.lang["Print"] ?? "Print"}
+										Print
 									</Button>
 								)}
 								content={() => printComponentRef.current}
@@ -1581,7 +1502,6 @@ export const DataEntryForm = observer(() => {
 							disabledDate={notTomorrow}
 							size="large"
 							disabled={store.viewMode}
-							defaultValue={moment()}
 							placeholder={activeLanguage.lang["Select a Date"]}
 						/>
 					</Form.Item>
@@ -1618,31 +1538,6 @@ export const DataEntryForm = observer(() => {
 					<table className="my-2 w-full border-collapse">
 						<tbody>
 							<tr>
-							<td className="border p-1">
-								<b>
-									{
-										activeLanguage.lang[
-											"Ministry of Health National Case Number"
-										]
-									}
-								</b>
-							</td>
-							<td className="border p-1" colSpan={3}>
-								<Form.Item
-									name="ZKBE8Xm9DJG"
-									className="m-0"
-								>
-									<Input
-										size="large"
-										disabled={
-											store.viewMode ||
-											store.allDisabled.ZKBE8Xm9DJG
-										}
-									/>
-								</Form.Item>
-							</td>
-							</tr>
-							<tr>
 								<td className="border p-1">
 									<b>
 										{
@@ -1654,7 +1549,12 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										
+										/* rules={[
+                    {
+                      required: true,
+                      message: "Enter fu",
+                    },
+                  ]}*/
 										name="MOstDqSY0gO"
 										className="m-0"
 									>
@@ -1667,8 +1567,62 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-							
-								
+								<td className="border p-1">
+									<b>
+										{
+											activeLanguage.lang[
+												"Ministry of Health National Case Number"
+											]
+										}
+									</b>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									<Form.Item
+										name="ZKBE8Xm9DJG"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.ZKBE8Xm9DJG
+											}
+										/>
+									</Form.Item>
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									<b>{activeLanguage.lang["Referred"]}</b>
+								</td>
+								<td className="border p-1">
+									{/* Add the facilities dropdown here */}
+									<DistSearchPopup
+										disabled={
+											store.viewMode ||
+											store.allDisabled.zwKo51BEayZ
+										}
+										searchType={[validSearchTypes.subCounty, validSearchTypes.level6]}
+										// setLimitedArray={limitedRegionParent}
+										dictatedContent={chosenFacility}
+										// setLimitedArrayParent={setLimitedRegionParent}
+										receiveOutput={(text: any) => {
+											console.log(
+												"Chosen facility is:",
+												text
+											);
+											setChosenFacilityToSubmit(
+												`${text}`
+											);
+											setChosenFacility(`${text}`);
+										}}
+									/>
+									{/* {optionSets ? (
+                  <Form.Item name="QDHeWslaEoH" className="m-0">
+                    {optionSet("YN01", "QDHeWslaEoH", () => {})}
+                  </Form.Item>
+                ) : null} */}
+								</td>
 								<td className="border p-1">
 									<b>
 										{
@@ -1700,44 +1654,35 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								
-								<td className="border p-1" colSpan={2}>									
-							
-									<h3
-										style={{
-											fontWeight: "bolder",
-											color: "#000085",
-										}}
-									>
-										{
-											activeLanguage.lang[
-												"Place of residence of the deceased"
-											] ?? "Place of residence of the deceased"
-										}
-									</h3>
-								</td>
 								<td className="border p-1">
-									{/* <b>Region2</b> */}
+									<b>
+										{activeLanguage.lang["Referred From:"]}
+									</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="twVlVWM3ffz"
+										/*rules={[
+                    {
+                      required: true,
+                      message: "Enter full name",
+                    },
+                  ]}*/
+										name="WqYvFt79TQB"
 										className="m-0"
-										style={{ height: "0rem" }}
 									>
 										<Input
-											type="hidden"
-											disabled={false}
 											size="large"
-											value={approvalStatus}
-											defaultValue={approvalStatus}
-											onChange={(e) => {}}
+											disabled={
+												store.viewMode ||
+												store.allDisabled.WqYvFt79TQB
+											}
 										/>
 									</Form.Item>
 								</td>
+								<td className="border p-1"></td>
+
+								 {/* NIN was here */}
 							</tr>
-					
-								
 
 							<tr>
 								<td className="border p-1">
@@ -1758,31 +1703,36 @@ export const DataEntryForm = observer(() => {
 											dictatedContent={chosenRegion}
 											// setLimitedArrayParent={setLimitedRegionParent}
 											receiveOutput={(text: any) => {
-												console.log("Chosen region is ", text);
+												// console.log("Chosen region is ", text);
 												setChosenRegionToSubmit(
 													`${text}`
 												);
 											}}
 										/>
 
+										{/* <Input
+                    size="large"
+                    disabled={store.viewMode || store.allDisabled.zwKo51BEayZ}
+                  /> */}
 									</Form.Item>
 								</td>
 
-								
 								<td className="border p-1">
-									<b>{activeLanguage.lang["Occupation"]}</b>
+									{/* <b>Region2</b> */}
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="b70okb06FWa"
+										name="twVlVWM3ffz"
 										className="m-0"
+										style={{ height: "0rem" }}
 									>
 										<Input
+											type="hidden"
+											disabled={false}
 											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.b70okb06FWa
-											}
+											value={approvalStatus}
+											defaultValue={approvalStatus}
+											onChange={(e) => {}}
 										/>
 									</Form.Item>
 								</td>
@@ -1824,7 +1774,55 @@ export const DataEntryForm = observer(() => {
                   />
                 </Form.Item> */}
 								</td>
-								
+								<td className="border p-1">
+									<b>{activeLanguage.lang["Occupation"]}</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item
+										name="b70okb06FWa"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.b70okb06FWa
+											}
+										/>
+									</Form.Item>
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									<b>{activeLanguage.lang["Sub-County"]}</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item
+										name="u44XP9fZweA"
+										className="m-0"
+									>
+										<DistSearchPopup
+											// limitedArray={limitedArray}
+											parentName={chosenDistrictToSubmit}
+											disabled={
+												store.viewMode ||
+												store.allDisabled.u44XP9fZweA ||
+												!chosenDistrictToSubmit
+											}
+											searchType={
+												validSearchTypes.subCounty
+											}
+											setDictatedContent={
+												setChosenDistrict
+											}
+											// limitedArrayParent={limitedArrayParent}
+											dictatedContent={chosenSubCounty}
+											receiveOutput={(text: any) =>
+												setChosenSubcounty(`${text}`)
+											}
+										/>
+									</Form.Item>
+								</td>
 								<td className="border p-1">
 									<b>
 										{
@@ -1880,29 +1878,33 @@ export const DataEntryForm = observer(() => {
 										{activeLanguage.lang["No"]}
 									</Checkbox>
 
-									
+									{/* {optionSets ? (
+                  <Form.Item name="roxn33dtLLx" className="m-0">
+                    {optionSet("YN01", "roxn33dtLLx", (k: any) => {
+                      // console.log("k occurred me", k);
+                    })}
+                  </Form.Item>
+                ) : null} */}
 								</td>
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>{activeLanguage.lang["County"] ?? "County"}</b>
+									<b>{activeLanguage.lang["Village"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="se3wRj1bYPo"
+										name="dsiwvNQLe5n"
 										className="m-0"
 									>
 										<Input
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.se3wRj1bYPo
+												store.allDisabled.dsiwvNQLe5n
 											}
 										/>
 									</Form.Item>
 								</td>
-
-								
 								<td className="border p-1">
 									<b>
 										{activeLanguage.lang["Date of Birth"]}
@@ -1969,38 +1971,6 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Sub-County"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="u44XP9fZweA"
-										className="m-0"
-									>
-										<DistSearchPopup
-											// limitedArray={limitedArray}
-											parentName={chosenDistrictToSubmit}
-											disabled={
-												store.viewMode ||
-												store.allDisabled.u44XP9fZweA ||
-												!chosenDistrictToSubmit
-											}
-											searchType={
-												validSearchTypes.subCounty
-											}
-											setDictatedContent={
-												setChosenDistrict
-											}
-											// limitedArrayParent={limitedArrayParent}
-											dictatedContent={chosenSubCounty}
-											receiveOutput={(text: any) =>
-												setChosenSubcounty(`${text}`)
-											}
-										/>
-									</Form.Item>
-								</td>
-								
-								
 								<td className="border p-1">
 									<b>{activeLanguage.lang["Age"]}</b>
 								</td>
@@ -2073,28 +2043,6 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Village"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="dsiwvNQLe5n"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.dsiwvNQLe5n
-											}
-										/>
-									</Form.Item>
-								</td>
-								
-
-
 								<td className="border p-1">
 									<b>{activeLanguage.lang["Sex"]}</b>
 								</td>
