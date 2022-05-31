@@ -1457,7 +1457,7 @@ export const DataEntryForm = observer(() => {
 							<ReactToPrint
 								trigger={() => (
 									<Button htmlType="button" size="large">
-										Print
+										{activeLanguage.lang["Print"] ?? "Print"}
 									</Button>
 								)}
 								content={() => printComponentRef.current}
