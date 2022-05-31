@@ -250,17 +250,7 @@ class Store {
 
       this.programOrganisationUnits = units;
       const programStage = data.program.programStages[0];
-      this.availableDataElements = programStage.programStageDataElements.map(
-        (de: any) => {
-          return { ...de.dataElement, selected: de.displayInReports };
-        }
-      );
-      this.availablePrintDataElements = this.availableDataElements.map((de) => {
-        let replace = new RegExp(`^${de.code}\. ?`);
-        de.name = de.name.replace(replace, "");
-        return de;
-      });
-
+      
       if (!!this.activeLanguage?.lang) {
         let al = this.activeLanguage?.lang;
 
@@ -275,6 +265,27 @@ class Store {
         const result = await this.engine.link
           .fetch(url, options)
           .catch((err: any) => err);
+
+        console.log("meta", result.meta)
+
+        this.availableDataElements = programStage.programStageDataElements.map(
+          (de: any) => {
+            const trOptions = result.meta.dataElements
+            .find(dE => dE.id == de.dataElement.id)
+            // .forEach((dE: any) => {
+              // const options = dE.options.map(opt => result.meta.options.find(o => o.id == opt.id))
+              // this.dEs[dE.code] = options;
+            // });
+            let name = trOptions?.name ?? de.dataElement.name;
+            return { ...de.dataElement, name, selected: de.displayInReports };
+          }
+        );
+        this.availablePrintDataElements = this.availableDataElements.map((de) => {
+          let replace = new RegExp(`^${de.code}\. ?`);
+          de.name = de.name?.replace(replace, "");
+          return de;
+        });
+
 
         //const d2 = await this.engine.query(metaQ);
         const trOptions = result.meta.optionSets
@@ -1412,7 +1423,7 @@ class Store {
           });
           return {
             key: found.name,
-            title: found.column,
+            title: col.name,
             dataIndex: found.name,
             render: (text: any, row: any) => {
               return row[found.i];
