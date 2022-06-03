@@ -44,6 +44,8 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     const [showLangWarn, setShowLangWarn] = useState(false);
     const activeLanguage = store.activeLanguage;
 
+    console.log("OrgUT activeLang", activeLanguage);
+
     const onLoadData = async (treeNode: any) => {
       await store.loadOrganisationUnitsChildren(treeNode.id);
       setUnits(store.organisationUnits);

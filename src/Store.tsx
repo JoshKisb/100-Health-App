@@ -511,7 +511,16 @@ class Store {
       const metaExists = !!data.program.programStages[0];
       let url = metaExists ? updateUrl : postUrl;
 
-      const postObject = JSON.stringify(meta);
+      const slimMeta = _.pick(meta, [
+        "dataElements", 
+        "categoryOptions", 
+        "categoryOptionCombos",
+        "categories",
+        "optionSets",
+        "options",
+      ]);
+      
+      const postObject = JSON.stringify(slimMeta);
       console.log("Meta object is ", postObject);
 
       const result = await this.engine.link.fetch(url, {

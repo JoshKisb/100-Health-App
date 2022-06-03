@@ -93,9 +93,9 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
     });
     const [loading, setLoading] = useState(false);
 
-    const setLanguage = async (lang: any) => {
+    const setLanguage = (lang: any) => {
       console.log("Lang is ", lang);
-      await store.setActiveLanguage(lang);
+      store.setActiveLanguage({ lang });
     };
     const setLanguageMeta = async (meta: any) => {
       await store.postLanguageMeta(meta);
@@ -150,44 +150,56 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
         duration: 2,
       });
 
-      const icdLang = ICDLanguages[`${chosenICDLang}`];
-      // Update the active language
-      await store.saveActiveLanguage(
-        chosenLang.language.LanguageName,
-        chosenLang.language,
-        icdLang,
-        true // Update is true
-      );
-      await setLanguage(chosenLang.language);
-
-      // Notify setting ICD Lang
-      // Set ICD Lang
-      notification.info({
-        message: "Update",
-        description: "Setting Chosen language for ICD Clasification",
-        duration: 2,
-      });
-      
-      store.setICDLang(icdLang);
-
-      if (chosenLang?.language.LanguageName) {
-        setCurrentLanguageID(chosenLang.language?.LanguageID);
-        setCurrentLanguageName(chosenLang.language?.LanguageName);
-
-        // Notify posting meta
+      const saveLang = async () => {
+        const icdLang = ICDLanguages[`${chosenICDLang}`];
+        // Update the active language
+        await store.saveActiveLanguage(
+          chosenLang.language.LanguageName,
+          chosenLang.language,
+          icdLang,
+          true // Update is true
+        );
+        setLanguage(chosenLang.language);
+  
+        // Notify setting ICD Lang
+        // Set ICD Lang
         notification.info({
           message: "Update",
-          description: "Setting Metadata",
+          description: "Setting Chosen language for ICD Clasification",
           duration: 2,
         });
-        // setLoading(false);
-        await setLanguageMeta(chosenLang?.meta)
-          .then((res) => setLoading(false))
-          .catch((err) => setLoading(false));
-      } else {
-        setLoading(false);
+        
+        store.setICDLang(icdLang);
       }
-      next();
+
+      const saveMeta =async () => {
+        
+        if (chosenLang?.language.LanguageName) {
+          setCurrentLanguageID(chosenLang.language?.LanguageID);
+          setCurrentLanguageName(chosenLang.language?.LanguageName);
+  
+          // Notify posting meta
+          notification.info({
+            message: "Update",
+            description: "Setting Metadata",
+            duration: 2,
+          });
+          // setLoading(false);
+          await setLanguageMeta(chosenLang?.meta)
+            .then((res) => setLoading(false))
+            .catch((err) => setLoading(false));
+        } 
+      }
+
+      Promise.all([
+        saveLang(),
+        saveMeta()
+      ]).then(() => {
+        next();
+      }).catch(() => {
+        setLoading(false)
+      })
+
     };
 
     const saveAllNewData = () => {
