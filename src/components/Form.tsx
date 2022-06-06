@@ -1646,9 +1646,9 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									<b>
 										{
-											activeLanguage.lang[
-												"NIN (National Identification Number)"
-											]
+											store.selectedNationality == "VJU0bY182ND" 
+											? (activeLanguage.lang["Identification Number"] ?? "Identification Number")
+											: activeLanguage.lang["NIN (National Identification Number)"]
 										}
 									</b>
 								</td>
@@ -2399,7 +2399,7 @@ export const DataEntryForm = observer(() => {
 						)}
 					</div>
 
-					{customRowLength < 10 && (
+					{store.isAdmin && customRowLength < 10 && (
 						<button
 							disabled={fetching}
 							onClick={(e) => {

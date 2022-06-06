@@ -81,6 +81,7 @@ class Store {
   @observable programOrganisationUnits = []; /** !!!!!!!!!! */
   @observable allOrgUnits: any = null;
   @observable currentEvent: any;
+  @observable roles: any = [];
   @observable programExists = null;
   @observable viewMode = false;
   @observable editing = false;
@@ -512,7 +513,16 @@ class Store {
       const metaExists = !!data.program.programStages[0];
       let url = metaExists ? updateUrl : postUrl;
 
-      const postObject = JSON.stringify(meta);
+      const slimMeta = _.pick(meta, [
+        "dataElements", 
+        "categoryOptions", 
+        "categoryOptionCombos",
+        "categories",
+        "optionSets",
+        "options",
+      ]);
+
+      const postObject = JSON.stringify(slimMeta);
       console.log("Meta object is ", postObject);
 
       const result = await this.engine.link.fetch(url, {
@@ -571,7 +581,9 @@ class Store {
         },
       });
       console.log("check if admin Result is ", userDetails?.me.code);
-      return userDetails?.me?.userCredentials?.userRoles?.some(
+      const roles = userDetails?.me?.userCredentials?.userRoles
+      this.roles = roles;
+      return roles?.some(
         (r) => r.id === "yrB6vc5Ip3r"
       );
     } catch (e) {
@@ -1387,6 +1399,12 @@ class Store {
   @action enableValue = (key: string) => {
     this.allDisabled = { ...this.allDisabled, [key]: false };
   };
+
+  @computed get isAdmin() {
+    return this.roles?.some(
+      (r) => r.id === "yrB6vc5Ip3r"
+    );
+  }
 
   @computed
   get organisationUnits() {

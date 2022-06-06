@@ -118,21 +118,21 @@ export const generateNewMetaObject = (input) => {
   }
 
   // Place the new metadata into the old metadata object.
-  let metaFullClone = _.cloneDeep(fullMetaData);
-  Object.keys(newMeta).forEach((key) => {
-    let currentVal = fullMetaData[key];
-    let newVal = newMeta[key];
-    const newValIDS = newVal.map((it) => it.id);
-    let unEditedVals = currentVal.filter((item) => {
-      if (!newValIDS.includes(item.id)) {
-        return item;
-      }
-    });
+  let metaFullClone = newMeta; //_.cloneDeep(fullMetaData);
+  // Object.keys(newMeta).forEach((key) => {
+  //   let currentVal = fullMetaData[key];
+  //   let newVal = newMeta[key];
+  //   const newValIDS = newVal.map((it) => it.id);
+  //   let unEditedVals = currentVal.filter((item) => {
+  //     if (!newValIDS.includes(item.id)) {
+  //       return item;
+  //     }
+  //   });
 
-    const valToReplaceWith = [...unEditedVals, ...newVal];
+  //   const valToReplaceWith = [...unEditedVals, ...newVal];
 
-    metaFullClone[key] = valToReplaceWith;
-  });
+  //   metaFullClone[key] = valToReplaceWith;
+  // });
 
   console.log("Meta full clone is ", metaFullClone);
   return metaFullClone;

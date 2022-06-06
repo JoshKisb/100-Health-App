@@ -95,10 +95,19 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
 
     const setLanguage = async (lang: any) => {
       console.log("Lang is ", lang);
-      await store.setActiveLanguage(lang);
+      await store.setActiveLanguage({ lang });
     };
     const setLanguageMeta = async (meta: any) => {
-      await store.postLanguageMeta(meta);
+      const res = await store.postLanguageMeta(meta);
+      if (res.status === "ERROR") {
+        notification.error({
+          message: "Error!",
+          description: `Failed to update system metadata`,
+          onClick: () => {},
+          duration: 3,
+        });
+        return Promise.reject('Meta update failed')
+      }
     };
     const getLanguages = async () => {
       let allLanguages = await store
@@ -150,45 +159,56 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
         duration: 2,
       });
 
-      const icdLang = ICDLanguages[`${chosenICDLang}`];
-      // Update the active language
-      await store.saveActiveLanguage(
-        chosenLang.language.LanguageName,
-        chosenLang.language,
-        icdLang,
-        true // Update is true
-      );
-      await setLanguage(chosenLang.language);
-
-      // Notify setting ICD Lang
-      // Set ICD Lang
-      notification.info({
-        message: "Update",
-        description: "Setting Chosen language for ICD Clasification",
-        duration: 2,
-      });
-      
-      store.setICDLang(icdLang);
-
-      if (chosenLang?.language.LanguageName) {
-        setCurrentLanguageID(chosenLang.language?.LanguageID);
-        setCurrentLanguageName(chosenLang.language?.LanguageName);
-
-        // Notify posting meta
+      const saveLang = async () => {
+        const icdLang = ICDLanguages[`${chosenICDLang}`];
+        // Update the active language
+        await store.saveActiveLanguage(
+          chosenLang.language.LanguageName,
+          chosenLang.language,
+          icdLang,
+          true // Update is true
+        );
+        setLanguage(chosenLang.language);
+  
+        // Notify setting ICD Lang
+        // Set ICD Lang
         notification.info({
           message: "Update",
-          description: "Setting Metadata",
+          description: "Setting Chosen language for ICD Clasification",
           duration: 2,
         });
-        // setLoading(false);
-        await setLanguageMeta(chosenLang?.meta)
-          .then((res) => setLoading(false))
-          .catch((err) => setLoading(false));
-      } else {
-        setLoading(false);
+        
+        store.setICDLang(icdLang);
       }
-      next();
-    };
+
+      const saveMeta =async () => {
+        
+        if (chosenLang?.language.LanguageName) {
+          setCurrentLanguageID(chosenLang.language?.LanguageID);
+          setCurrentLanguageName(chosenLang.language?.LanguageName);
+  
+          // Notify posting meta
+          notification.info({
+            message: "Update",
+            description: "Setting Metadata",
+            duration: 2,
+          });
+          // setLoading(false);
+          await setLanguageMeta(chosenLang?.meta)
+            .then((res) => setLoading(false))
+            .catch((err) => setLoading(false));
+        } 
+      }
+
+      Promise.all([
+        saveLang(),
+        saveMeta()
+      ]).then(() => {
+        next();
+      }).catch(() => {
+        setLoading(false)
+      })
+    }
 
     const saveAllNewData = () => {
       store.saveNewLang(
@@ -319,6 +339,10 @@ const RealLanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = obser
       const allFieldsPresent = allFields.every((x) =>
         newLangFields.includes(x)
       );
+      
+      console.log("newLangObj", newLanguageObj);
+      console.log("newLangF", newLangFields);
+      // const noRepeatValues = 
 
       // Validation error messages
       if (!noNewFields || !allFieldsPresent || someFieldsEmpty) {
