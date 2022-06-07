@@ -16,7 +16,9 @@ import {
 	Drawer,
 	List,
 	Alert,
-	notification
+	notification,
+	Col,
+	Row
 } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -36,6 +38,7 @@ import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
 import { getNINPlaceOfBirth, getNINPerson } from "./../utils/ninApi"
+import { useTranslation } from "../utils/useTranslation";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -75,6 +78,7 @@ export const DataEntryForm = observer(() => {
 	const [form] = Form.useForm();
 	const [optionSets, setOptionSets] = useState<any>();
 	const [drawerVisible, setDrawerVisible] = useState(false);
+	const tr = useTranslation();
 
 	const store = useStore();
 	const [activeLanguage, setActiveLanguage] = useState(
@@ -169,6 +173,9 @@ export const DataEntryForm = observer(() => {
 	const [pregnantKey5, setPregnantKey5] = useState("11");
 	const [pregnantKey6, setPregnantKey6] = useState("12");
 	const [pregnantKey7, setPregnantKey7] = useState("13");
+
+	const [idTypeLabel, setIDTypeLabel] = useState("Identification Number");
+	const [idTypeOptions, setIDTypeOptions] = useState([]);
 
 	const refreshAllPregnantKeys = (bool: boolean) => {
 		setWomanWasPregnant(bool);
@@ -345,6 +352,30 @@ export const DataEntryForm = observer(() => {
 		setForceResetDOB(true);
 	};
 
+	useEffect(() => {
+		const nationality = store.selectedNationality;
+		if (nationality === "l4UMmqvSBe5") {
+			setIDTypeLabel(tr("NIN (National Identification Number)"));
+			form.setFieldsValue({ xxx6yjtuN2f: "National ID" });
+		} else if (nationality === "VJU0bY182ND") { // foreigner
+			setIDTypeLabel(tr("Identification Number"));
+			form.setFieldsValue({ xxx6yjtuN2f: "" });
+			setIDTypeOptions([
+				"Passport", 
+				"Social Security Card", 
+				"National ID"
+			]);
+		} else if (nationality === "wUteK0Om3qP") { // refugee
+			setIDTypeLabel(tr("Identification Number"));
+			form.setFieldsValue({ xxx6yjtuN2f: "" });
+			setIDTypeOptions([
+				"Passport", 
+				"Refugee Card", 
+				"National ID"
+			]);
+		}
+	}, [store?.selectedNationality])
+
 	const valuesChange = (changedValues: any, allValues: any) => {
 
 		// if NIN given, fetch and fill other form areas
@@ -360,6 +391,17 @@ export const DataEntryForm = observer(() => {
 			} else {
 				setAgeKnown(false);
 			}
+		}
+
+		if (changedValues.xxx6yjtuN2f) {
+			if (changedValues.xxx6yjtuN2f === "Passport")
+				setIDTypeLabel("Passport Number");
+			else if (changedValues.xxx6yjtuN2f === "Social Security Card")
+				setIDTypeLabel("Social Security Number");
+			else if (changedValues.xxx6yjtuN2f === "Refugee Card")
+				setIDTypeLabel("Refugee Card Number");
+			else 
+				setIDTypeLabel("National Identification Number");
 		}
 
 		// If the changed value is date of death or
@@ -1642,14 +1684,34 @@ export const DataEntryForm = observer(() => {
 								</Form.Item>
 							</td>
 							</tr>
+							{store.selectedNationality !== "l4UMmqvSBe5" &&
 							<tr>
 								<td className="border p-1">
 									<b>
-										{
-											store.selectedNationality == "VJU0bY182ND" 
-											? (activeLanguage.lang["Identification Number"] ?? "Identification Number")
-											: activeLanguage.lang["NIN (National Identification Number)"]
-										}
+										{tr("Type Of ID")}
+									</b>
+								</td>
+								<td className="border p-1">
+									<Form.Item name="xxx6yjtuN2f" className="m-0">
+										<Select 
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.xxx6yjtuN2f
+											}
+										>
+											{idTypeOptions.map(opt => (
+												<Option key={opt} value={opt}>{opt}</Option>
+											))}
+										</Select>
+									</Form.Item>
+								</td>
+								<td className="border p-1" colSpan={2}></td>
+							</tr>}
+							<tr>
+								<td className="border p-1">
+									<b>
+										{idTypeLabel}
 									</b>
 								</td>
 								<td className="border p-1">
@@ -4650,6 +4712,29 @@ export const DataEntryForm = observer(() => {
 									receiveOutput={handleDeclarationOutput}
 									receiveOldData={declarationsDefault}
 								/>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									<Row>
+										<Col xs={24} md={9} className="border p-1">
+											<b>{tr("Examined By")}</b>
+										</Col>
+										<Col xs={24} md={15} className="border p-1">
+											<Form.Item
+												name="PaoRZbokFWJ"
+												className="m-0"
+											>
+												<Input
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.PaoRZbokFWJ 
+													} 
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+								</td>
 							</tr>
 						</tbody>
 					</table>
