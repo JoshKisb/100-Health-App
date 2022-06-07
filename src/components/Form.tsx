@@ -355,7 +355,7 @@ export const DataEntryForm = observer(() => {
 	useEffect(() => {
 		const nationality = store.selectedNationality;
 		if (nationality === "l4UMmqvSBe5") {
-			setIDTypeLabel(tr("NIN (National Identification Number)"));
+			setIDTypeLabel(tr("NIN"));
 			form.setFieldsValue({ xxx6yjtuN2f: "National ID" });
 		} else if (nationality === "VJU0bY182ND") { // foreigner
 			setIDTypeLabel(tr("Identification Number"));
@@ -401,7 +401,7 @@ export const DataEntryForm = observer(() => {
 			else if (changedValues.xxx6yjtuN2f === "Refugee Card")
 				setIDTypeLabel("Refugee Card Number");
 			else 
-				setIDTypeLabel("National Identification Number");
+				setIDTypeLabel("NIN");
 		}
 
 		// If the changed value is date of death or
