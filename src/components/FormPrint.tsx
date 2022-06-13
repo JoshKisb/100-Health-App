@@ -55,7 +55,7 @@ const PrintableFormData = observer((props: any) => {
 	const date = form.getFieldValue("eventDate");
 	const eventDate = !!date ? moment(date).format("DD-MMM-YYYY") : "";
 	const store = useStore();
-	const facility = store.currentOrganisation;
+	const facility = store.currentOrganisationTree;
 	const tr = useTranslation();
 
 	const name = props.formVals["ZYKmQ9GPOaF"];

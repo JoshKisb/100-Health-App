@@ -21,7 +21,7 @@ const query = {
     resource: `programs/vf8dN49jprI`,
     params: {
       fields:
-        "organisationUnits[id,name],programStages[programStageDataElements[displayInReports,dataElement[id,name,code]]]",
+        "organisationUnits[id,name,ancestors[id,name,level]],programStages[programStageDataElements[displayInReports,dataElement[id,name,code]]]",
     },
   },
   categories: {
@@ -1468,6 +1468,19 @@ class Store {
     // console.log("and selectedOrgUnit is ", this.selectedOrgUnit);
     if (current) {
       return current.name;
+    }
+    return "";
+  }
+
+  @computed get currentOrganisationTree() {
+    const current: any = this.programOrganisationUnits.find(
+      (u: any) => u.id === this.selectedOrgUnit
+    ); /** !!!!!!!!!! */
+    if (current) {
+      return current.ancestors
+        ?.map((a) => a.name?.trim())
+        .concat(current.name?.trim())
+        .join(" / ");
     }
     return "";
   }
