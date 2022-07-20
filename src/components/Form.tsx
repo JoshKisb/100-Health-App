@@ -814,7 +814,7 @@ export const DataEntryForm = observer(() => {
 		getNINPerson(nin)
 		.then(data => {
 			const info = data.data;
-
+			console.log("NIN info", data);
 			if(!isEmpty(info)) {
 	         // full name
 				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
