@@ -299,6 +299,20 @@ export const DataEntryForm = observer(() => {
 		store.loadUserOrgUnits().then(() => {
 			setOptionSets(store.optionSets);
 		});
+
+		store.enableValue("t5nTEmlScSt");
+		store.enableValue("u44XP9fZweA");
+		store.enableValue("zwKo51BEayZ");
+		store.enableValue("dsiwvNQLe5n");
+		store.enableValue("xNCSFrgdUgi");
+		store.enableValue("se3wRj1bYPo");
+
+		store.enableValue("ZYKmQ9GPOaF");
+		store.enableValue("e96GB4CXyd3");
+		store.enableValue("roxn33dtLLx");
+		store.enableValue("RbrUuKFSqkZ");
+		store.enableValue("q7e7FOXKnOf");
+
 	}, [store]);
 
 	const [testVal, setTestVal] = useState("");
@@ -815,7 +829,7 @@ export const DataEntryForm = observer(() => {
 		.then(data => {
 			const info = data.data;
 			console.log("NIN info", data);
-			if(!isEmpty(info)) {
+			if(!isEmpty(info) && !info.error) {
 	         // full name
 				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
 				store.disableValue("ZYKmQ9GPOaF")
@@ -848,14 +862,25 @@ export const DataEntryForm = observer(() => {
 	            
 	         //i8rrl8YWxLF dateOfDeath
 			} else {
-				notification.error({
-				    message: 'NIN Not Found',
-				    description:
+
+				if (info.error) {
+					notification.error({
+						message: 'Error fetching NIN information',
+						description: info.error
+						// onClick: () => {
+						//   console.log('Notification Clicked!');
+						// },
+					 });
+				} else {
+					notification.error({
+				   	message: 'NIN Not Found',
+				   	description:
 				      'The NIN was not found in system. Double Check for any mistakes',
 				    // onClick: () => {
 				    //   console.log('Notification Clicked!');
 				    // },
-				  });
+				  	});
+				}
 			}
          
 		})
@@ -867,9 +892,9 @@ export const DataEntryForm = observer(() => {
 		.then(async (data) => {
 
 
-			if(!isEmpty(data.data)) {
+			console.log("apiAddr", data.data)
+			if(!isEmpty(data.data) && !data.data.error) {
 
-				console.log("apiAddr", data.data)
 
 				const apiSubCounty = data.data.address?.subCounty;
 				const apiDistrict = data.data.address?.district;
