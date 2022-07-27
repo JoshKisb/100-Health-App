@@ -37,7 +37,7 @@ import Declarations from "./Declarations";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
-import { getNINPlaceOfBirth, getNINPerson } from "./../utils/ninApi"
+import { getNINPlaceOfBirth, getNINPerson, fetchNINToken } from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
 
 // interface languageString {
@@ -1191,6 +1191,7 @@ export const DataEntryForm = observer(() => {
 			// creating new event
 			store.engine.link.fetch('/api/33/system/id.json').then(({ codes }) => {
 				form.setFieldsValue({ ZKBE8Xm9DJG: codes[0] })
+				store.disableValue("ZKBE8Xm9DJG");
 			})
 		}
 	}, [store.defaultValues]);
@@ -1199,6 +1200,7 @@ export const DataEntryForm = observer(() => {
 		// setActiveLanguage(allLanguages[0]);
 		// setActiveLanguageString(allLanguages[0].langName);
 		// store.setActiveLanguage(allLanguages[0]);
+		fetchNINToken(store.engine);
 	}, []);
 
 	useEffect(() => {
