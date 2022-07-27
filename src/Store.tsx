@@ -1023,11 +1023,11 @@ class Store {
 
         for (var i = 0; i < prevData.rows.length; i++) {
           const name: string = rows[i][codIndex];
-          const code: string = data.rows[i][causeOfDeathIndex];
-          const dob: string = data.rows[i][birthIndex];
-          const dod: string = data.rows[i][deathIndex];
-          const gender: string = data.rows[i][sexIndex];
-          const orgUnit: string = data.rows[i][orgUnitIndex];
+          const code: string = rows[i][causeOfDeathIndex];
+          const dob: string = rows[i][birthIndex];
+          const dod: string = rows[i][deathIndex];
+          const gender: string = rows[i][sexIndex];
+          const orgUnit: string = rows[i][orgUnitIndex];
           const parentOrg = getParentOrg(orgUnit);
 
           const org = { id: parentOrg?.id, name: parentOrg?.name };
@@ -1072,11 +1072,11 @@ class Store {
 
         for (var i = 0; i < rows.length; i++) {
           const name: string = rows[i][codIndex];
-          const code: string = data.rows[i][causeOfDeathIndex];
-          const dob: string = data.rows[i][birthIndex];
-          const dod: string = data.rows[i][deathIndex];
-          const gender: string = data.rows[i][sexIndex];
-          const orgUnit: string = data.rows[i][orgUnitIndex];
+          const code: string = rows[i][causeOfDeathIndex];
+          const dob: string = rows[i][birthIndex];
+          const dod: string = rows[i][deathIndex];
+          const gender: string = rows[i][sexIndex];
+          const orgUnit: string = rows[i][orgUnitIndex];
           const parentOrg = getParentOrg(orgUnit);
 
           const org = { id: parentOrg?.id, name: parentOrg?.name };

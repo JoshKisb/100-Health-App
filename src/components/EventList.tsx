@@ -279,7 +279,7 @@ export const EventList = observer(() => {
     setVisible(false);
   };
 
-  const [causeOfDeath, setCauseOfDeath] = React.useState<string>(undefined);
+  
   const [mortalityFilter, setMortalityFilter] =
     React.useState<string>(undefined);
   const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
@@ -395,7 +395,7 @@ export const EventList = observer(() => {
       !store.currentOrganisation &&
       !!store.selectedOrgUnit 
     ) {
-      if (!!causeOfDeath)
+      if (!!store.selectedCauseOfDeath)
         sortedDiseases = groupDiseaseToOrgUnits(diseases, prevDiseases);
       else 
         sortedDiseases = groupDiseaseToFilters(diseases, prevDiseases);
@@ -434,20 +434,20 @@ export const EventList = observer(() => {
 
         if (
           (!store.currentOrganisation &&
-            !!causeOfDeath &&
+            !!store.selectedCauseOfDeath &&
             !!store.selectedOrgUnit) ||
           !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(allDiseases);
         } else if (!store.currentOrganisation &&
             !!store.selectedOrgUnit &&
-            !causeOfDeath 
+            !store.selectedCauseOfDeath 
             ) {
           sortedDiseases = groupDiseaseToFilters(allDiseases);
         }
 
-        console.log("causeOfDeath", causeOfDeath);
-        console.log("causeOfDeath", store.totalCauseDeathCount);
+        console.log("causeOfDeath", store.selectedCauseOfDeath);
+        console.log("causeOfDeath count", store.totalCauseDeathCount);
 
         console.log("mortalityFilter", mortalityFilter);
         console.log("genderFilter", genderFilter);
@@ -471,8 +471,8 @@ export const EventList = observer(() => {
         //     100
         // );
         currDiseases.current = sortedDiseases;
-        let title = causeOfDeath
-          ? `${causeOfDeath} contributed ${(
+        let title = store.selectedCauseOfDeath
+          ? `${store.selectedCauseOfDeath} contributed ${(
               (store.totalCauseDeathCount / store.totalDeathCount) *
               100
             ).toFixed(2)}%  of total reported deaths`
@@ -530,7 +530,7 @@ export const EventList = observer(() => {
     }
   }, [
     store.loadingTopDiseases,
-    causeOfDeath,
+    store.selectedCauseOfDeath,
     mortalityFilter,
     genderFilter,
     store.totalDeathCount,
@@ -555,14 +555,14 @@ export const EventList = observer(() => {
 
         if (
           (!store.currentOrganisation &&
-            !!causeOfDeath &&
+            !!store.selectedCauseOfDeath &&
             !!store.selectedOrgUnit) ||
           !!store.selectedLevel
         ) {
           sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
         } else if (!store.currentOrganisation &&
             !!store.selectedOrgUnit &&
-            !causeOfDeath 
+            !store.selectedCauseOfDeath 
             ) {
           sortedDiseases = groupDiseaseToFilters(store.allDiseases);
         }
@@ -582,21 +582,21 @@ export const EventList = observer(() => {
             filtered.totalMortalityFilteredDeathCount;
         }
 
-        let title = causeOfDeath
-          ? `${causeOfDeath} contributed ${(
+        let title = !!store.selectedCauseOfDeath
+          ? `${store.selectedCauseOfDeath} contributed ${(
               (store.totalCauseDeathCount / store.totalDeathCount) *
               100
             ).toFixed(2)}%  of total reported deaths`
           : "Top 20 causes of death";
-        if (mortalityFilter) {
+        if (!!mortalityFilter) {
           title = `${title} [${mortalityFilter} ${(
             (totalMortalityFilteredDeathCount / store.totalDeathCount) *
             100
           ).toFixed(2)}% of total]`;
         }
-        if (genderFilter) {
+        if (!!genderFilter) {
           let mortalityStr = "";
-          if (mortalityFilter) {
+          if (!!mortalityFilter) {
             mortalityStr = `that are ${mortalityFilter}`;
           }
           title = `${title} [${genderFilter} ${(
@@ -640,7 +640,7 @@ export const EventList = observer(() => {
     });
 
     store.queryEvents().then(() => {});
-  }, [store?.nationalitySelect, causeOfDeath, store?.selectedLevel]);
+  }, [store?.nationalitySelect, store.selectedCauseOfDeath, store?.selectedLevel]);
 
   useEffect(() => {
     if (filtersInitialized || !store?.data?.headers) return;
@@ -706,20 +706,13 @@ export const EventList = observer(() => {
             }}
           >
             <Select
-              placeholder={activeLanguage.lang["Filter Deaths"]}
-              onChange={(e) => {
-                if (e) {
-                  setCauseOfDeath(e);
-                  store.setSelectedCOD(e);
-                } else {
-                  setCauseOfDeath(undefined);
-                  store.setSelectedCOD(undefined);
-                }
-              }}
+              placeholder={activeLanguage.lang["Filter Deaths"] ?? "Filter Deaths"}
+              onChange={store.setSelectedCOD}
               size="middle"
-              value={causeOfDeath}
+              value={store.selectedCauseOfDeath}
+              filterOption={false}
               style={{
-                minWidth: "160px",
+                minWidth: "200px",
               }}
             >
               <Select.Option value="">
@@ -773,12 +766,12 @@ export const EventList = observer(() => {
               <Select.Option value="Total Communicable Deaths">
                 {activeLanguage.lang["Total Deaths from communicable Diseases"]}
               </Select.Option>
-              // 41 and 77
+              
             </Select>
             <Select
-              placeholder={activeLanguage.lang["Gender"]}
+              placeholder={activeLanguage.lang["Gender"] ?? "Gender"}
               onChange={(e) => {
-                if (e) {
+                if (!!e) {
                   setGenderFilter(e);
                 } else {
                   setGenderFilter(undefined);
@@ -789,14 +782,11 @@ export const EventList = observer(() => {
               style={{
                 minWidth: "100px",
               }}
-            >
-              <Select.Option value="">
-                {activeLanguage.lang["None"]}
-              </Select.Option>
+            >             
               <Select.Option value="Female">
                 {activeLanguage.lang["Female"]}
               </Select.Option>
-              {causeOfDeath !== "Maternal deaths" && (
+              {store.selectedCauseOfDeath !== "Maternal deaths" && (
                 <Select.Option value="Male">
                   {activeLanguage.lang["Male"]}
                 </Select.Option>
@@ -804,10 +794,11 @@ export const EventList = observer(() => {
             </Select>
             <Select
               placeholder={
-                !causeOfDeath
+                !store.selectedCauseOfDeath
                   ? activeLanguage.lang["All Deaths Mortality Filter"]
-                  : `${causeOfDeath} Mortalility FIlter`
+                  : `${store.selectedCauseOfDeath} Mortalility FIlter`
               }
+              allowClear
               onChange={(e) => {
                 if (e) {
                   setMortalityFilter(e);
@@ -820,10 +811,7 @@ export const EventList = observer(() => {
                 minWidth: "200px",
               }}
               value={mortalityFilter}
-            >
-              <Select.Option value="">
-                {activeLanguage.lang["All Deaths"]}
-              </Select.Option>
+            >              
               <Select.Option value="Stillbirth">
                 {activeLanguage.lang["Stillbirth"]}
               </Select.Option>
