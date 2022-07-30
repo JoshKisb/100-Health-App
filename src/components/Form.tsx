@@ -390,10 +390,17 @@ export const DataEntryForm = observer(() => {
 		}
 	}, [store?.selectedNationality])
 
+	const ninValidation = store?.selectedNationality === "l4UMmqvSBe5" ? {
+		rules: [
+			{ len: 14, message: "NIN should have 14 characters"}
+		],
+		validateTrigger: "onBlur"
+	}: {}
+
 	const valuesChange = (changedValues: any, allValues: any) => {
 
 		// if NIN given, fetch and fill other form areas
-		if (!!changedValues.MOstDqSY0gO && changedValues.MOstDqSY0gO.length == 14) {
+		if (!!changedValues.MOstDqSY0gO && store.selectedNationality === "l4UMmqvSBe5" && changedValues.MOstDqSY0gO.length == 14) {
 			fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
 		}
 
@@ -1743,7 +1750,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										
+										{...ninValidation}										
 										name="MOstDqSY0gO"
 										className="m-0"
 									>
