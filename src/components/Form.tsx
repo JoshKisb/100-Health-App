@@ -870,10 +870,10 @@ export const DataEntryForm = observer(() => {
 	         //i8rrl8YWxLF dateOfDeath
 			} else {
 
-				if (info.error) {
+				if (info.error && !(info.error.code == 320)) {
 					notification.error({
 						message: 'Error fetching NIN information',
-						description: info.error
+						description: info.error.message ?? info.error
 						// onClick: () => {
 						//   console.log('Notification Clicked!');
 						// },
