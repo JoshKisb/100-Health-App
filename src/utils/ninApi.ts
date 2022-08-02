@@ -51,6 +51,9 @@ export const getNINPerson = (nin) => {
 export const getNINPlaceOfBirth = (nin) => {
 	return fetch(`${baseURL}/getPlaceOfBirth`, {
 		method: "POST",
+		retries: 3,
+		retryDelay: 3000,
+		retryOn: [419, 503, 504],
 		body: JSON.stringify({
 			nationalId: nin,
 			token: token,
