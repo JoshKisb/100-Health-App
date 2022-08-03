@@ -3,9 +3,9 @@ import fetchBuilder from "fetch-retry-ts";
 
 const baseURL = "https://hmis-dev.health.go.ug/db-api/api/v2";
 const defaultToken =
-	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJGMuMFFCZ1RRbVI5ZE1GcFcyWXhiZS5NVG5JdmZ4M2s0Qi40bjJiYzdaY2hpWFcxY1BuQk8yIiwidXNlciI6ImFkbWluMiJ9.nRYsIQpcXK4yQlvKlpZkvW1XnNr21MXf9puzgCtpmfA";
+	"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhIjoiJDJiJDEyJEZzVFJ3dmlwWmIxdzc4VjdLUXFXTHVpMVhUUy4xRDVtVUd1Y0VsS1RvM01ldlU5NkhDM2ZXIiwidXNlciI6ImFkbWluIn0.MAr0WS4LOINOPgb5l2zdw_rWLfn8-dRlf56otvuWVMs";
 
-let token;
+let token = defaultToken;
 
 const options = {
 	retries: 3,
@@ -14,28 +14,33 @@ const options = {
 };
 
 const fetch = fetchBuilder(originalFetch);
+let ninTokenRequest: Promise<void> = new Promise(() => {});
 
 export const fetchNINToken = async (engine) => {
-	// check exists
-	const res = await engine.link.fetch("/api/dataStore");
-	console.log(res);
-	if (!res.includes("NINtoken")) {
-		// Create the name space
-		engine.link.fetch(`/api/dataStore/NINtoken/NINtoken`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ token: defaultToken }),
-		});
-		token = defaultToken;
-	} else {
-		const res = await engine.link.fetch(`/api/dataStore/NINtoken/NINtoken`);
-		token = res.token;
+	const getTok = async () => {
+		// check exists
+		const res = await engine.link.fetch("/api/dataStore");
+		console.log(res);
+		if (!res.includes("NINtoken")) {
+			// Create the name space
+			engine.link.fetch(`/api/dataStore/NINtoken/NINtoken`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ token: defaultToken }),
+			});
+			token = defaultToken;
+		} else {
+			const res = await engine.link.fetch(`/api/dataStore/NINtoken/NINtoken`);
+			token = res.token;
+		}
 	}
+	ninTokenRequest = getTok();
 };
 
-export const getNINPerson = (nin) => {
+export const getNINPerson = async (nin) => {
+	await ninTokenRequest;
 	return fetch(`${baseURL}/getPerson`, {
 		method: "POST",
 		retries: 3,
@@ -48,7 +53,8 @@ export const getNINPerson = (nin) => {
 	}).then((response) => response.json());
 };
 
-export const getNINPlaceOfBirth = (nin) => {
+export const getNINPlaceOfBirth = async (nin) => {
+	await ninTokenRequest;
 	return fetch(`${baseURL}/getPlaceOfResidence`, {
 		method: "POST",
 		retries: 3,
