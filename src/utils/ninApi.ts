@@ -49,7 +49,7 @@ export const getNINPerson = (nin) => {
 };
 
 export const getNINPlaceOfBirth = (nin) => {
-	return fetch(`${baseURL}/getPlaceOfBirth`, {
+	return fetch(`${baseURL}/getPlaceOfResidence`, {
 		method: "POST",
 		retries: 3,
 		retryDelay: 3000,
