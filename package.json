@@ -51,7 +51,6 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
     "react-to-print": "^2.14.4",
-    "retry-axios": "^3.0.0",
     "string-similarity": "^4.0.2",
     "styled-jsx": "^3.2.4"
   },
