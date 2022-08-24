@@ -666,7 +666,23 @@ const LanguageConfigPage: FunctionComponent<LanguageConfigPageTypes> = observer(
       await store
         .createProgram()
         .then((res) => {
-          checkForProgram();
+          if (res.status === "ERROR") {
+            setLoading(false);
+            res.typeReports.forEach(r => {
+                r.objectReports.forEach(o => {
+                  o.errorReports.forEach(err => {
+                    notification.error({
+                      message: "Import Error!",
+                      description: err.message,
+                      onClick: () => {},
+                      duration: 12,
+                    })  
+                  })
+                })
+            })
+          } else {
+            checkForProgram();
+          }
         })
         .catch((err) => {
           console.log("Error creating program", err)

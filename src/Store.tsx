@@ -655,7 +655,7 @@ class Store {
 
   @action createProgram = async () => {
     const metaUrl = `/api/metadata`;
-    await this.engine.link.fetch(metaUrl, {
+    return await this.engine.link.fetch(metaUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
