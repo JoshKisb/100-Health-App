@@ -1664,6 +1664,7 @@
 			"created": "2019-08-14T19:42:50.143",
 			"lastUpdated": "2022-04-13T13:37:38.290",
 			"name": "Nationality",
+			"shortName": "Nationality",
 			"id": "ICjKVP3jwYl",
 			"dataDimensionType": "ATTRIBUTE",
 			"dataDimension": true,
@@ -23766,7 +23767,7 @@
 		{
 			"created": "2020-03-28T12:36:45.967",
 			"lastUpdated": "2022-04-13T13:37:32.801",
-			"name": "Yes/No/Unknown",
+			"name": "Yes / No / Unknown",
 			"id": "Tn0IZ14u2cd",
 			"version": 5,
 			"valueType": "TEXT",
