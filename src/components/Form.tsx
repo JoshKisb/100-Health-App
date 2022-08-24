@@ -401,7 +401,7 @@ export const DataEntryForm = observer(() => {
 
 		// if NIN given, fetch and fill other form areas
 		if (!!changedValues.MOstDqSY0gO && store.selectedNationality === "l4UMmqvSBe5" && changedValues.MOstDqSY0gO.length == 14) {
-			fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
+			//fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
 		}
 
 		// Handling date of birth is unknown"
