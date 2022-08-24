@@ -287,7 +287,7 @@ export const DataEntryForm = observer(() => {
 		//   }
 
 		// })
-
+		console.log("values", values);
 		await store.addEvent(values);
 	};
 
@@ -657,7 +657,7 @@ export const DataEntryForm = observer(() => {
 		// console.log("clear working");
 		if (changedValues.sfpqAeqKeyQ) {
 			form.setFieldsValue({ zD0E77W4rFs: null });
-			// console.log("clear working");
+			console.log("clear working");
 		}
 
 		if (changedValues.i8rrl8YWxLF) {
