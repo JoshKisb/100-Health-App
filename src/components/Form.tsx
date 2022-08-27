@@ -995,6 +995,7 @@ export const DataEntryForm = observer(() => {
 	) => {
 
 		let options = optionSets ? optionSets[os] : [];
+		console.log("fm options", options);
 		if (options) {
 			return (
 				<Select
@@ -1014,7 +1015,7 @@ export const DataEntryForm = observer(() => {
 							  }
 					}
 				>
-					{options.map((option: any) => (
+					{options.filter(o => !!o && !!o.code).map((option: any) => (
 						<Option key={option.code} value={option.code}>
 							{option.name}
 						</Option>

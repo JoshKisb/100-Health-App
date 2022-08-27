@@ -238,11 +238,13 @@ class Store {
       this.userOrgUnits = data.me.organisationUnits;
       this.fetchingOrgUnits = false;
 
-      const options = data.options.optionSets
+      let options = data.options.optionSets
         .filter((o: any) => {
           return !!o.code;
-        })
-        .map((optionSet: any) => {
+        });
+      
+          console.log("options", options);
+        options = options.map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
       this.optionSets = fromPairs(options);
