@@ -10,7 +10,7 @@ import { OrgUnitTree } from "./components/OrgUnitTree";
 import { StoreContext } from "./Context";
 import { EventList } from "./components/EventList";
 import LanguageConfigPage from "./components/LanguageConfigPage";
-
+import "./App.css";
 
 const extraHeaders =
   process.env.NODE_ENV === "development"

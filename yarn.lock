@@ -2090,7 +2090,7 @@ aws4@^1.8.0:
 
 axios@^0.27.2:
   version "0.27.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.27.2.tgz#207658cc8621606e586c85db4b41a750e756d972"
+  resolved "https://registry.npmjs.org/axios/-/axios-0.27.2.tgz"
   integrity sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==
   dependencies:
     follow-redirects "^1.14.9"
@@ -3185,7 +3185,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
 
 cross-fetch@^3.1.5:
   version "3.1.5"
-  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.1.5.tgz#e1389f44d9e7ba767907f7af8454787952ab534f"
+  resolved "https://registry.npmjs.org/cross-fetch/-/cross-fetch-3.1.5.tgz"
   integrity sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==
   dependencies:
     node-fetch "2.6.7"
@@ -4348,7 +4348,7 @@ fbjs@^0.8.1:
 
 fetch-retry-ts@^1.1.25:
   version "1.1.25"
-  resolved "https://registry.yarnpkg.com/fetch-retry-ts/-/fetch-retry-ts-1.1.25.tgz#25849a87a5a016cc772f90986d95dd5049eeb5ac"
+  resolved "https://registry.npmjs.org/fetch-retry-ts/-/fetch-retry-ts-1.1.25.tgz"
   integrity sha512-kjJcfBYDbajnxMBfBa85hrS0Z+A0bDKuZWuzh5uHpaLSm2qZ3eAND5sDVfFUuIJg51sTd91cdB+Ayqo3magB/g==
 
 figgy-pudding@^3.5.1:
@@ -5593,7 +5593,7 @@ isomorphic-fetch@^2.1.1:
 
 isomorphic-unfetch@^3.1.0:
   version "3.1.0"
-  resolved "https://registry.yarnpkg.com/isomorphic-unfetch/-/isomorphic-unfetch-3.1.0.tgz#87341d5f4f7b63843d468438128cb087b7c3e98f"
+  resolved "https://registry.npmjs.org/isomorphic-unfetch/-/isomorphic-unfetch-3.1.0.tgz"
   integrity sha512-geDJjpoZ8N0kWexiwkX8F9NkTsXhetLPVbZFQ+JTW239QNOwvB0gniuR1Wc6f0AMTn7/mFGyXvHTifrCp/GH8Q==
   dependencies:
     node-fetch "^2.6.1"
@@ -6971,7 +6971,7 @@ node-emoji@^1.8.1:
 
 node-fetch@2.6.7, node-fetch@^2.6.1:
   version "2.6.7"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.7.tgz"
   integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
   dependencies:
     whatwg-url "^5.0.0"
@@ -9412,11 +9412,6 @@ ret@~0.1.10:
   version "0.1.15"
   resolved "https://registry.npmjs.org/ret/-/ret-0.1.15.tgz"
 
-retry-axios@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/retry-axios/-/retry-axios-3.0.0.tgz#5fd54f65330d155c36d01e3685238889375b9aa0"
-  integrity sha512-/jRv4nCDytusFZIY+zD6aKP29+wpgnbjfap5B76rqvgROWfONG5Bf7vCXx7grhxJwYGLlumraKZQUMzNgfXNCg==
-
 retry@^0.12.0:
   version "0.12.0"
   resolved "https://registry.npmjs.org/retry/-/retry-0.12.0.tgz"
@@ -10448,7 +10443,7 @@ tr46@^1.0.1:
 
 tr46@~0.0.3:
   version "0.0.3"
-  resolved "https://registry.yarnpkg.com/tr46/-/tr46-0.0.3.tgz#8184fd347dac9cdc185992f3a6622e14b9d9ab6a"
+  resolved "https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz"
   integrity sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==
 
 trim-right@^1.0.1:
@@ -10551,7 +10546,7 @@ underscore@~1.9.1:
 
 unfetch@^4.2.0:
   version "4.2.0"
-  resolved "https://registry.yarnpkg.com/unfetch/-/unfetch-4.2.0.tgz#7e21b0ef7d363d8d9af0fb929a5555f6ef97a3be"
+  resolved "https://registry.npmjs.org/unfetch/-/unfetch-4.2.0.tgz"
   integrity sha512-F9p7yYCn6cIW9El1zi0HI6vqpeIvBsr3dSuRO6Xuppb1u5rXpCPmMvLSyECLhybr9isec8Ohl0hPekMVrEinDA==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
@@ -10797,7 +10792,7 @@ wbuf@^1.1.0, wbuf@^1.7.3:
 
 webidl-conversions@^3.0.0:
   version "3.0.1"
-  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
+  resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
 
 webidl-conversions@^4.0.2:
@@ -10936,7 +10931,7 @@ whatwg-mimetype@^2.1.0, whatwg-mimetype@^2.2.0, whatwg-mimetype@^2.3.0:
 
 whatwg-url@^5.0.0:
   version "5.0.0"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-5.0.0.tgz#966454e8765462e37644d3626f6742ce8b70965d"
+  resolved "https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz"
   integrity sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==
   dependencies:
     tr46 "~0.0.3"

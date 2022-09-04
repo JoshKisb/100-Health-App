@@ -18,7 +18,7 @@ import {
 	Alert,
 	notification,
 	Col,
-	Row
+	Row,
 } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -37,7 +37,11 @@ import Declarations from "./Declarations";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
-import { getNINPlaceOfBirth, getNINPerson, fetchNINToken } from "./../utils/ninApi"
+import {
+	getNINPlaceOfBirth,
+	getNINPerson,
+	fetchNINToken,
+} from "./../utils/ninApi";
 import { useTranslation } from "../utils/useTranslation";
 
 // interface languageString {
@@ -312,7 +316,6 @@ export const DataEntryForm = observer(() => {
 		store.enableValue("roxn33dtLLx");
 		store.enableValue("RbrUuKFSqkZ");
 		store.enableValue("q7e7FOXKnOf");
-
 	}, [store]);
 
 	const [testVal, setTestVal] = useState("");
@@ -371,36 +374,40 @@ export const DataEntryForm = observer(() => {
 		if (nationality === "l4UMmqvSBe5") {
 			setIDTypeLabel(tr("NIN"));
 			form.setFieldsValue({ xxx6yjtuN2f: "National ID" });
-		} else if (nationality === "VJU0bY182ND") { // foreigner
+		} else if (nationality === "VJU0bY182ND") {
+			// foreigner
 			setIDTypeLabel(tr("Identification Number"));
 			form.setFieldsValue({ xxx6yjtuN2f: "" });
 			setIDTypeOptions([
-				"Passport", 
-				"Social Security Card", 
-				"National ID"
+				"Passport",
+				"Social Security Card",
+				"National ID",
 			]);
-		} else if (nationality === "wUteK0Om3qP") { // refugee
+		} else if (nationality === "wUteK0Om3qP") {
+			// refugee
 			setIDTypeLabel(tr("Identification Number"));
 			form.setFieldsValue({ xxx6yjtuN2f: "" });
-			setIDTypeOptions([
-				"Passport", 
-				"Refugee Card", 
-				"National ID"
-			]);
+			setIDTypeOptions(["Passport", "Refugee Card", "National ID"]);
 		}
-	}, [store?.selectedNationality])
+	}, [store?.selectedNationality]);
 
-	const ninValidation = store?.selectedNationality === "l4UMmqvSBe5" ? {
-		rules: [
-			{ len: 14, message: "NIN should have 14 characters"}
-		],
-		validateTrigger: "onBlur"
-	}: {}
+	const ninValidation =
+		store?.selectedNationality === "l4UMmqvSBe5"
+			? {
+					rules: [
+						{ len: 14, message: "NIN should have 14 characters" },
+					],
+					validateTrigger: "onBlur",
+			  }
+			: {};
 
 	const valuesChange = (changedValues: any, allValues: any) => {
-
 		// if NIN given, fetch and fill other form areas
-		if (!!changedValues.MOstDqSY0gO && store.selectedNationality === "l4UMmqvSBe5" && changedValues.MOstDqSY0gO.length == 14) {
+		if (
+			!!changedValues.MOstDqSY0gO &&
+			store.selectedNationality === "l4UMmqvSBe5" &&
+			changedValues.MOstDqSY0gO.length == 14
+		) {
 			//fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
 		}
 
@@ -421,8 +428,7 @@ export const DataEntryForm = observer(() => {
 				setIDTypeLabel("Social Security Number");
 			else if (changedValues.xxx6yjtuN2f === "Refugee Card")
 				setIDTypeLabel("Refugee Card Number");
-			else 
-				setIDTypeLabel("NIN");
+			else setIDTypeLabel("NIN");
 		}
 
 		// If the changed value is date of death or
@@ -833,158 +839,160 @@ export const DataEntryForm = observer(() => {
 
 	const fetchAndFillUserInfo = (nin: string) => {
 		getNINPerson(nin)
-		.then(data => {
-			const info = data.data;
-			console.log("NIN info", data);
-			if(!isEmpty(info) && !info.error) {
-	         // full name
-				form.setFieldsValue({ ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}` });
-				store.disableValue("ZYKmQ9GPOaF")
-	            // e96GB4CXyd3 sex 
-	         let sex = "";
-	         if (info?.gender == "M")
-	         	sex = "Male";
-	         else if (info?.gender == "F")
-	         	sex = "Female";
-				form.setFieldsValue({ e96GB4CXyd3: sex });
-				if (!!sex)
-					store.disableValue("e96GB4CXyd3")
-	         // roxn33dtLLx dob known ageKnown
-	         form.setFieldsValue({ roxn33dtLLx: true })
-	         store.disableValue("roxn33dtLLx")
-	         // RbrUuKFSqkZ dateOfBirth
-	         let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
-	         form.setFieldsValue({ RbrUuKFSqkZ: dob })
-	         if (!!dob) store.disableValue("RbrUuKFSqkZ")
+			.then((data) => {
+				const info = data.data;
+				console.log("NIN info", data);
+				if (!isEmpty(info) && !info.error) {
+					// full name
+					form.setFieldsValue({
+						ZYKmQ9GPOaF: `${info?.givenNames} ${info?.surname}`,
+					});
+					store.disableValue("ZYKmQ9GPOaF");
+					// e96GB4CXyd3 sex
+					let sex = "";
+					if (info?.gender == "M") sex = "Male";
+					else if (info?.gender == "F") sex = "Female";
+					form.setFieldsValue({ e96GB4CXyd3: sex });
+					if (!!sex) store.disableValue("e96GB4CXyd3");
+					// roxn33dtLLx dob known ageKnown
+					form.setFieldsValue({ roxn33dtLLx: true });
+					store.disableValue("roxn33dtLLx");
+					// RbrUuKFSqkZ dateOfBirth
+					let dob = moment(info?.dateOfBirth, "DD/MM/YYYY");
+					form.setFieldsValue({ RbrUuKFSqkZ: dob });
+					if (!!dob) store.disableValue("RbrUuKFSqkZ");
 
-	         // q7e7FOXKnOf age 
-	         let years = moment().diff(dob, "years");			
-				form.setFieldsValue({ q7e7FOXKnOf: years });
-				if (!!years) store.disableValue("q7e7FOXKnOf")
+					// q7e7FOXKnOf age
+					let years = moment().diff(dob, "years");
+					form.setFieldsValue({ q7e7FOXKnOf: years });
+					if (!!years) store.disableValue("q7e7FOXKnOf");
 
-	         // zwKo51BEayZ region  chosenRegion
-	         // b70okb06FWa Occupation 
-	      
-	         // xNCSFrgdUgi place of birth 
-	            
-	         //i8rrl8YWxLF dateOfDeath
-			} else {
+					// zwKo51BEayZ region  chosenRegion
+					// b70okb06FWa Occupation
 
-				if (info.error && !(info.error.code == 320)) {
-					notification.error({
-						message: 'Error fetching NIN information',
-						description: info.error.message ?? info.error
-						// onClick: () => {
-						//   console.log('Notification Clicked!');
-						// },
-					 });
+					// xNCSFrgdUgi place of birth
+
+					//i8rrl8YWxLF dateOfDeath
 				} else {
-					notification.error({
-				   	message: 'NIN Not Found',
-				   	description:
-				      'The NIN was not found in system. Double Check for any mistakes',
-				    // onClick: () => {
-				    //   console.log('Notification Clicked!');
-				    // },
-				  	});
+					if (info.error && !(info.error.code == 320)) {
+						notification.error({
+							message: "Error fetching NIN information",
+							description: info.error.message ?? info.error,
+							// onClick: () => {
+							//   console.log('Notification Clicked!');
+							// },
+						});
+					} else {
+						notification.error({
+							message: "NIN Not Found",
+							description:
+								"The NIN was not found in system. Double Check for any mistakes",
+							// onClick: () => {
+							//   console.log('Notification Clicked!');
+							// },
+						});
+					}
 				}
-			}
-         
-		})
-		.catch((error) => {
-		  console.error('Error fetch user:', error);
-		});
+			})
+			.catch((error) => {
+				console.error("Error fetch user:", error);
+			});
 
 		getNINPlaceOfBirth(nin)
-		.then(async (data) => {
+			.then(async (data) => {
+				console.log("apiAddr", data.data);
+				if (!isEmpty(data.data) && !data.data.error) {
+					const apiSubCounty = data.data.address?.subCounty;
+					const apiDistrict = data.data.address?.district;
 
-
-			console.log("apiAddr", data.data)
-			if(!isEmpty(data.data) && !data.data.error) {
-
-
-				const apiSubCounty = data.data.address?.subCounty;
-				const apiDistrict = data.data.address?.district;
-				
-				const query = {
-					district: {
-						resource: `organisationUnits.json`,
-						params: {
-							filter: `name:ilike:${apiDistrict}`,
-							level: 3,
-							paging: "false",
-							fields: "id,name,displayName,parent[id,name,displayName],children[id,name,displayName]",
+					const query = {
+						district: {
+							resource: `organisationUnits.json`,
+							params: {
+								filter: `name:ilike:${apiDistrict}`,
+								level: 3,
+								paging: "false",
+								fields:
+									"id,name,displayName,parent[id,name,displayName],children[id,name,displayName]",
+							},
 						},
-					},
-				};
+					};
 
-				const sysData = await store.engine.query(query);
+					const sysData = await store.engine.query(query);
 
-				console.log("loaddistrict:", sysData);
+					console.log("loaddistrict:", sysData);
 
-				const district = sysData.district.organisationUnits?.[0];
+					const district = sysData.district.organisationUnits?.[0];
 
-				console.log("district", district)
+					console.log("district", district);
 
-				if (!!district) {
-					const region: any = district.parent;
-					console.log("region", region)
-					let matches = {};
-					const tokens = apiSubCounty.toLowerCase().split(" ");
-					district.children.forEach(sb => {
-						tokens.forEach(t => {
-							if (sb.name.toLowerCase().indexOf(t) >= 0) {
-								if (!matches[sb.id]) 
-									matches[sb.id] = {...sb, count: 0};
-								matches[sb.id].count += 1;
-							}
-						})
+					if (!!district) {
+						const region: any = district.parent;
+						console.log("region", region);
+						let matches = {};
+						const tokens = apiSubCounty.toLowerCase().split(" ");
+						district.children.forEach((sb) => {
+							tokens.forEach((t) => {
+								if (sb.name.toLowerCase().indexOf(t) >= 0) {
+									if (!matches[sb.id])
+										matches[sb.id] = { ...sb, count: 0 };
+									matches[sb.id].count += 1;
+								}
+							});
+						});
+
+						const subCounty: any = Object.values(matches)?.sort(
+							(a: any, b: any) => b.count - a.count
+						)[0];
+						console.log("subCounty", subCounty);
+						// zwKo51BEayZ region  chosenRegion
+						setChosenRegionToSubmit(region.displayName);
+						setChosenRegion(region.displayName);
+						form.setFieldsValue({
+							zwKo51BEayZ: region.displayName,
+						});
+						if (!!region) store.disableValue("zwKo51BEayZ");
+
+						// district
+						setChosenDistrict(district.displayName);
+						setChosenDistrictToSubmit(district.displayName);
+						form.setFieldsValue({
+							t5nTEmlScSt: district.displayName,
+						});
+						store.disableValue("t5nTEmlScSt");
+
+						//  subCounty chosenSubCounty
+						setChosenSubcounty(subCounty.displayName);
+						form.setFieldsValue({
+							u44XP9fZweA: subCounty.displayName,
+						});
+						if (!!subCounty) store.disableValue("u44XP9fZweA");
+					}
+					// dsiwvNQLe5n Village
+					form.setFieldsValue({
+						dsiwvNQLe5n: data.data.address?.village,
 					});
+					store.disableValue("dsiwvNQLe5n");
 
-					const subCounty: any = Object.values(matches)?.sort((a: any, b: any) => b.count - a.count)[0];
-		         console.log("subCounty", subCounty)
-		         // zwKo51BEayZ region  chosenRegion
-		         setChosenRegionToSubmit(region.displayName);
-		         setChosenRegion(region.displayName)
-		         form.setFieldsValue({
-		         	zwKo51BEayZ: region.displayName
-		         })
-		         if (!!region) store.disableValue("zwKo51BEayZ")
+					// xNCSFrgdUgi place of birth
+					form.setFieldsValue({
+						xNCSFrgdUgi: data.data.address?.parish,
+					});
+					store.disableValue("xNCSFrgdUgi");
 
-		         // district
-		         setChosenDistrict(district.displayName)
-		         setChosenDistrictToSubmit(district.displayName)
-					form.setFieldsValue({ t5nTEmlScSt: district.displayName});
-					store.disableValue("t5nTEmlScSt")
+					//se3wRj1bYPo County
+					form.setFieldsValue({
+						se3wRj1bYPo: data.data.address?.county,
+					});
+					store.disableValue("se3wRj1bYPo");
 
-		         //  subCounty chosenSubCounty
-		         setChosenSubcounty(subCounty.displayName)
-					form.setFieldsValue({ u44XP9fZweA:  subCounty.displayName});
-					if (!!subCounty) store.disableValue("u44XP9fZweA")
-					
+					//i8rrl8YWxLF dateOfDeath
 				}
-	         // dsiwvNQLe5n Village 
-				form.setFieldsValue({ dsiwvNQLe5n: data.data.address?.village });
-				store.disableValue("dsiwvNQLe5n")
-			  
-	           
-	         // xNCSFrgdUgi place of birth 
-	         form.setFieldsValue({ xNCSFrgdUgi: data.data.address?.parish });
-	         store.disableValue("xNCSFrgdUgi")
-
-	         //se3wRj1bYPo County
-				form.setFieldsValue({ se3wRj1bYPo: data.data.address?.county });
-	         store.disableValue("se3wRj1bYPo")
-
-	            
-	         //i8rrl8YWxLF dateOfDeath
-			}
-           
-		})
-		.catch((error) => {
-		  console.error('Error fetch user:', error);
-		});
-	}
+			})
+			.catch((error) => {
+				console.error("Error fetch user:", error);
+			});
+	};
 
 	const optionSet = (
 		os: string,
@@ -993,7 +1001,6 @@ export const DataEntryForm = observer(() => {
 		disabled?: boolean,
 		optionalKey?: string
 	) => {
-
 		let options = optionSets ? optionSets[os] : [];
 		console.log("fm options", options);
 		if (options) {
@@ -1015,11 +1022,13 @@ export const DataEntryForm = observer(() => {
 							  }
 					}
 				>
-					{options.filter(o => !!o && !!o.code).map((option: any) => (
-						<Option key={option.code} value={option.code}>
-							{option.name}
-						</Option>
-					))}
+					{options
+						.filter((o) => !!o && !!o.code)
+						.map((option: any) => (
+							<Option key={option.code} value={option.code}>
+								{option.name}
+							</Option>
+						))}
 				</Select>
 			);
 		}
@@ -1152,7 +1161,7 @@ export const DataEntryForm = observer(() => {
 			}
 			if (store.defaultValues.u44XP9fZweA) {
 				setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
-			}			
+			}
 			if (store.defaultValues.QDHeWslaEoH) {
 				setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
 			}
@@ -1197,10 +1206,12 @@ export const DataEntryForm = observer(() => {
 			}
 		} else {
 			// creating new event
-			store.engine.link.fetch('/api/33/system/id.json').then(({ codes }) => {
-				form.setFieldsValue({ ZKBE8Xm9DJG: codes[0] })
-				store.disableValue("ZKBE8Xm9DJG");
-			})
+			store.engine.link
+				.fetch("/api/33/system/id.json")
+				.then(({ codes }) => {
+					form.setFieldsValue({ ZKBE8Xm9DJG: codes[0] });
+					store.disableValue("ZKBE8Xm9DJG");
+				});
 		}
 	}, [store.defaultValues]);
 
@@ -1524,6 +1535,77 @@ export const DataEntryForm = observer(() => {
 	}, [customFieldName, customRowLength, customRows, deleting]);
 
 	const printComponentRef = useRef(null);
+	const cardactions = [
+		<React.Fragment>
+			<div style={styles.flexRow}>
+				<>
+					<p style={{ margin: "0rem" }}>
+						{activeLanguage.lang["Inserting for"]}{" "}
+						{store.currentOrganisation}{" "}
+					</p>
+					{!isEmpty(store.defaultValues) ? (
+						<Popconfirm
+							title={activeLanguage.lang["Sure to delete?"]}
+							onConfirm={() => store.deleteEvent()}
+						>
+							<>
+								<Button size="large">
+									{activeLanguage.lang["Delete"]}
+								</Button>{" "}
+							</>
+						</Popconfirm>
+					) : null}
+					<div>
+						<Button
+							size="large"
+							onClick={() => {
+								store.showEvents();
+								store.enableForm();
+							}}
+						>
+							{activeLanguage.lang["Cancel"]}
+						</Button>
+
+						<Button
+							htmlType="submit"
+							size="large"
+							disabled={
+								!underlyingCauseChosen ||
+								!personsGender ||
+								store.viewMode ||
+								(!declarations.ZXZZfzBpu8a &&
+									!declarations.cp5xzqVU2Vw &&
+									!declarations.lu9BiHPxNqH &&
+									!declarations.u9tYUv6AM51)
+							}
+						>
+							{activeLanguage.lang["Save"]}
+						</Button>
+					</div>
+				</>
+			</div>
+		</React.Fragment>,
+		<div style={{ display: "flex", alignItems: "center" }}>
+			<ApprovalRights
+				style={styles.flexRow}
+				updateApprovalStatus={handleUpdateApproval}
+				statusReceived={approvalStatusFromEditedForm}
+			/>
+			<ReactToPrint
+				trigger={() => (
+					<Button htmlType="button" size="large">
+						{activeLanguage.lang["Print"] ?? "Print"}
+					</Button>
+				)}
+				content={() => printComponentRef.current}
+			/>
+			<SettingOutlined
+				style={{ fontSize: "24px", marginLeft: "10px" }}
+				onClick={() => setDrawerVisible(!drawerVisible)}
+			/>
+		</div>,
+	];
+
 	return (
 		<div>
 			<Form
@@ -1544,88 +1626,9 @@ export const DataEntryForm = observer(() => {
 							}
 						</Title>
 					}
-					actions={[
-						<React.Fragment>
-							<div style={styles.flexRow}>
-								<>
-									<p style={{ margin: "0rem" }}>
-										{activeLanguage.lang["Inserting for"]}{" "}
-										{store.currentOrganisation}{" "}
-									</p>
-									{!isEmpty(store.defaultValues) ? (
-										<Popconfirm
-											title={
-												activeLanguage.lang[
-													"Sure to delete?"
-												]
-											}
-											onConfirm={() =>
-												store.deleteEvent()
-											}
-										>
-											<>
-												<Button size="large">
-													{
-														activeLanguage.lang[
-															"Delete"
-														]
-													}
-												</Button>{" "}
-											</>
-										</Popconfirm>
-									) : null}
-									<div>
-										<Button
-											size="large"
-											onClick={() => {
-												store.showEvents();
-												store.enableForm();
-											}}
-										>
-											{activeLanguage.lang["Cancel"]}
-										</Button>
-
-										<Button
-											htmlType="submit"
-											size="large"
-											disabled={
-												!underlyingCauseChosen ||
-												!personsGender ||
-												store.viewMode ||
-												(!declarations.ZXZZfzBpu8a &&
-													!declarations.cp5xzqVU2Vw &&
-													!declarations.lu9BiHPxNqH &&
-													!declarations.u9tYUv6AM51)
-											}
-										>
-											{activeLanguage.lang["Save"]}
-										</Button>
-									</div>
-								</>
-							</div>
-						</React.Fragment>,
-						<div style={{ display: "flex", alignItems: "center" }}>
-							<ApprovalRights
-								style={styles.flexRow}
-								updateApprovalStatus={handleUpdateApproval}
-								statusReceived={approvalStatusFromEditedForm}
-							/>
-							<ReactToPrint
-								trigger={() => (
-									<Button htmlType="button" size="large">
-										{activeLanguage.lang["Print"] ?? "Print"}
-									</Button>
-								)}
-								content={() => printComponentRef.current}
-							/>
-              <SettingOutlined
-                style={{ fontSize: "24px", marginLeft: "10px" }}
-                onClick={() => setDrawerVisible(!drawerVisible)}
-              />
-						</div>,
-					]}
+					actions={cardactions}
 					type="inner"
-					bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
+					// bodyStyle={{ maxHeight: "70vh", overflow: "auto" }}
 				>
 					<div style={{ display: "none" }}>
 						<FormPrint
@@ -1641,6 +1644,7 @@ export const DataEntryForm = observer(() => {
 							eventDate={form.getFieldValue("eventDate")}
 						/>
 					</div>
+
 					<Form.Item
 						label={activeLanguage.lang["Date of Entry"]}
 						rules={[
@@ -1692,90 +1696,70 @@ export const DataEntryForm = observer(() => {
           </Select>
         </Form.Item>*/}
 
-					<table className="my-2 w-full border-collapse">
+					<h4 style={{ marginTop: "16px" }}>
+						I. ADMINISTRATIVE DONEES
+					</h4>
+					<table className="mt-2 w-full border-collapse">
 						<tbody>
 							<tr>
-							<td className="border p-1">
-								<b>
-									{
-										activeLanguage.lang[
-											"Ministry of Health National Case Number"
-										]
-									}
-								</b>
-							</td>
-							<td className="border p-1" colSpan={3}>
-								<Form.Item
-									name="ZKBE8Xm9DJG"
-									className="m-0"
+								<td
+									className="border p-1 text-lg"
+									colSpan={2}
+									style={{ background: titleBackgroundColor }}
 								>
-									<Input
-										size="large"
-										disabled={
-											store.viewMode ||
-											store.allDisabled.ZKBE8Xm9DJG
-										}
-									/>
-								</Form.Item>
-							</td>
-							</tr>
-							{store.selectedNationality !== "l4UMmqvSBe5" &&
-							<tr>
-								<td className="border p-1">
-									<b>
-										{tr("Type Of ID")}
-									</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item name="xxx6yjtuN2f" className="m-0">
-										<Select 
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.xxx6yjtuN2f
-											}
-										>
-											{idTypeOptions.map(opt => (
-												<Option key={opt} value={opt}>{opt}</Option>
-											))}
-										</Select>
-									</Form.Item>
-								</td>
-								<td className="border p-1" colSpan={2}></td>
-							</tr>}
-							<tr>
-								<td className="border p-1">
-									<b>
-										{idTypeLabel}
-									</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										{...ninValidation}										
-										name="MOstDqSY0gO"
-										className="m-0"
+									<h3
+										style={{
+											fontWeight: "bolder",
+											color: "#000085",
+										}}
 									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.ZYKmQ9GPOaF
-											}
-										/>
-									</Form.Item>
+										A. Informations sur l'établissement des
+										soins
+									</h3>
 								</td>
-							
-								
+							</tr>
+							<tr>
+								<td className="border p-1">Province:</td>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Name (Full name):"
-											]
-										}
-									</b>
+									Territoire/Commune :
 								</td>
-								<td className="border p-1">
+							</tr>
+							<tr>
+								<td className="border p-1">Zone de santé :</td>
+								<td className="border p-1">Aire de santé :</td>
+							</tr>
+							<tr>
+								<td className="border p-1" colSpan={2}>
+									Formation sanitaire/Etablissement des soins
+									:
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<table className="mb-2 w-full border-collapse">
+						<thead>
+							<tr>
+								<th
+									className="border p-1 text-lg"
+									colSpan={3}
+									style={{ background: titleBackgroundColor }}
+								>
+									<h3
+										style={{
+											fontWeight: "bolder",
+											color: "#000085",
+										}}
+									>
+										B. Informations sur la personne décédée
+									</h3>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td className="border p-1" colSpan={2}>
+									Name, Post nom and Prénom of the deceased
+									person :
 									<Form.Item
 										rules={[
 											{
@@ -1795,407 +1779,8 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-							</tr>
-							<tr>
-								
-								<td className="border p-1" colSpan={2}>									
-							
-									<h3
-										style={{
-											fontWeight: "bolder",
-											color: "#000085",
-										}}
-									>
-										{
-											activeLanguage.lang[
-												"Place of residence of the deceased"
-											] ?? "Place of residence of the deceased"
-										}
-									</h3>
-								</td>
 								<td className="border p-1">
-									{/* <b>Region2</b> */}
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="twVlVWM3ffz"
-										className="m-0"
-										style={{ height: "0rem" }}
-									>
-										<Input
-											type="hidden"
-											disabled={false}
-											size="large"
-											value={approvalStatus}
-											defaultValue={approvalStatus}
-											onChange={(e) => {}}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-					
-								
-
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Region"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="zwKo51BEayZ"
-										className="m-0"
-									>
-										<DistSearchPopup
-											disabled={
-												store.viewMode ||
-												store.allDisabled.zwKo51BEayZ
-											}
-											searchType={validSearchTypes.region}
-											// setLimitedArray={limitedRegionParent}
-											dictatedContent={chosenRegion}
-											// setLimitedArrayParent={setLimitedRegionParent}
-											receiveOutput={(text: any) => {
-												console.log("Chosen region is ", text);
-												setChosenRegionToSubmit(
-													`${text}`
-												);
-											}}
-										/>
-
-									</Form.Item>
-								</td>
-
-								
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Occupation"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="b70okb06FWa"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.b70okb06FWa
-											}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["District"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="t5nTEmlScSt"
-										className="m-0"
-									>
-										<DistSearchPopup
-											disabled={
-												store.viewMode ||
-												store.allDisabled.t5nTEmlScSt ||
-												!chosenRegionToSubmit
-											}
-											searchType={
-												validSearchTypes.district
-											}
-											parentName={chosenRegionToSubmit}
-											// setLimitedArray={setLimitedDistrictParent}
-											dictatedContent={chosenDistrict}
-											// setLimitedArrayParent={setLimitedRegionParent}
-											receiveOutput={(text: any) =>
-												setChosenDistrictToSubmit(
-													`${text}`
-												)
-											}
-										/>
-									</Form.Item>
-									{/* <Form.Item name="bNpMzyShDCX" className="m-0">
-                  <Input
-                    size="large"
-                    disabled={store.viewMode || store.allDisabled.bNpMzyShDCX}
-                  />
-                </Form.Item> */}
-								</td>
-								
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Date of Birth Known ?"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									<Checkbox
-										disabled={
-											store.viewMode ||
-											store.allDisabled.roxn33dtLLx
-										}
-										checked={ageKnown}
-										// onClick={() => form.setFieldsValue({ roxn33dtLLx: "Yes" })}
-										onChange={(val: any) => {
-											console.log(
-												"VAL IS ",
-												val?.target?.checked
-											);
-											setAgeKnown(val?.target?.checked);
-											form.setFieldsValue({
-												roxn33dtLLx: "Yes",
-											});
-											store.disableValue("q7e7FOXKnOf");
-										}}
-									>
-										{activeLanguage.lang["Yes"]}
-									</Checkbox>
-
-									<Checkbox
-										// onChange={(val: any) => console.log("VAL IS ", val?.target)}
-										disabled={
-											store.viewMode ||
-											store.allDisabled.roxn33dtLLx
-										}
-										checked={!ageKnown}
-										onChange={(val: any) => {
-											console.log(
-												"VAL IS ",
-												val?.target?.checked
-											);
-											setAgeKnown(!val?.target?.checked);
-											form.setFieldsValue({
-												roxn33dtLLx: "No",
-											});
-
-											store.enableValue("q7e7FOXKnOf");
-										}}
-									>
-										{activeLanguage.lang["No"]}
-									</Checkbox>
-
-									
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["County"] ?? "County"}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="se3wRj1bYPo"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.se3wRj1bYPo
-											}
-										/>
-									</Form.Item>
-								</td>
-
-								
-								<td className="border p-1">
-									<b>
-										{activeLanguage.lang["Date of Birth"]}
-									</b>
-								</td>
-								<td className="border p-1">
-									{!forceResetDOB ? (
-										<Form.Item
-											rules={[
-												{
-													type: "object",
-													required: true,
-													message:
-														"Please select date!",
-												},
-											]}
-											name="RbrUuKFSqkZ"
-											className="m-0"
-										>
-											<DatePicker
-												disabledDate={notTomorrow}
-												size="large"
-												placeholder={
-													activeLanguage.lang[
-														"Select a Date"
-													]
-												}
-												disabled={
-													store.viewMode ||
-													store.allDisabled
-														.RbrUuKFSqkZ ||
-													!ageKnown
-												}
-												onChange={(e: any) => {
-													if (e?._d) {
-														console.log(
-															"Date of birth has changed",
-															e
-														);
-														// const birthDate = new Date(e?._d);
-														// const ageInYears = moment().diff(birthDate, "years");
-														const ageInYears = moment().diff(
-															e,
-															"years"
-														);
-														if (
-															ageInYears < 50 &&
-															ageInYears > 10
-														) {
-															setPersonsAge(
-																ageInYears
-															);
-															// q7e7FOXKnOf
-															// form.setFieldsValue({
-															//   RbrUuKFSqkZ: ageInYears,
-															// });
-															// store.setFie
-														}
-													}
-												}}
-											/>
-										</Form.Item>
-									) : null}
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Sub-County"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="u44XP9fZweA"
-										className="m-0"
-									>
-										<DistSearchPopup
-											// limitedArray={limitedArray}
-											parentName={chosenDistrictToSubmit}
-											disabled={
-												store.viewMode ||
-												store.allDisabled.u44XP9fZweA ||
-												!chosenDistrictToSubmit
-											}
-											searchType={
-												validSearchTypes.subCounty
-											}
-											setDictatedContent={
-												setChosenDistrict
-											}
-											// limitedArrayParent={limitedArrayParent}
-											dictatedContent={chosenSubCounty}
-											receiveOutput={(text: any) =>
-												setChosenSubcounty(`${text}`)
-											}
-										/>
-									</Form.Item>
-								</td>
-								
-								
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Age"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										rules={[
-											{
-												type: "integer",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Enter a valid age below 120"
-													],
-												max: 120,
-											},
-										]}
-										name="q7e7FOXKnOf"
-										className="m-0"
-									>
-										<InputNumber
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.q7e7FOXKnOf ||
-												ageKnown
-											}
-											onChange={(e: any) => {
-												// console.log("Age changed to", e);
-
-												setPersonsAge(e);
-												if (personsGender === "Male") {
-													setShowPregnancyReminder(
-														false
-													);
-													setEnablePregnantQn(false);
-													setEnablePregnantQnKey(
-														`${
-															parseInt(
-																enablePregnantQnKey
-															) + 1
-														}`
-													);
-													return;
-												}
-
-												if (
-													personsGender ===
-														"Female" &&
-													e < 50 &&
-													e > 10
-												) {
-													setShowPregnancyReminder(
-														true
-													);
-													setEnablePregnantQn(true);
-													setEnablePregnantQnKey(
-														`${
-															parseInt(
-																enablePregnantQnKey
-															) + 1
-														}`
-													);
-													window.alert(
-														activeLanguage.lang[
-															"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-														]
-													);
-												}
-											}}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Village"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="dsiwvNQLe5n"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.dsiwvNQLe5n
-											}
-										/>
-									</Form.Item>
-								</td>
-								
-
-
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Sex"]}</b>
-								</td>
-								<td className="border p-1">
+									Sexe:
 									{optionSets ? (
 										<Form.Item
 											rules={[
@@ -2267,249 +1852,181 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
+								<td className="border p-1">Nationalité:</td>
+								<td className="border p-1">Etat civil:</td>
 								<td className="border p-1">
-									<b>
-										{activeLanguage.lang["Place of Birth"]}
-									</b>
-								</td>
-								<td className="border p-1">
+									Profession:
 									<Form.Item
-										name="xNCSFrgdUgi"
+										name="b70okb06FWa"
 										className="m-0"
 									>
 										<Input
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.xNCSFrgdUgi
+												store.allDisabled.b70okb06FWa
 											}
-										/>
-									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Date and time of death"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										rules={[
-											{
-												type: "object",
-												required: true,
-												message:
-													activeLanguage.lang[
-														"Please select date and time of death!"
-													],
-											},
-										]}
-										name="i8rrl8YWxLF"
-										className="m-0"
-									>
-										<DatePicker
-											disabledDate={notTomorrow}
-											size="large"
-											showTime
-											format="YYYY-MM-DD HH:mm:ss"
-											placeholder={
-												activeLanguage.lang[
-													"Select date and time of death"
-												]
-											}
-											disabled={
-												store.viewMode ||
-												store.allDisabled.i8rrl8YWxLF
-											}
-											onChange={(e: any) => {
-												var minutes = 1000 * 60;
-												var hours = minutes * 60;
-												var days = hours * 24;
-
-												console.log(
-													"Time of death has changed to",
-													e
-												);
-												setActualTimeOfDeath(e);
-												var foo_date1 = form.getFieldValue(
-													"RbrUuKFSqkZ"
-												);
-												var foo_date2 = form.getFieldValue(
-													"i8rrl8YWxLF"
-												);
-												var diff_date = Math.round(
-													(foo_date2 - foo_date1) /
-														days
-												);
-
-												console.log(
-													"diff_date is ",
-													diff_date
-												);
-												// console.log("function diffdate has been run ");
-
-												if (diff_date < 25) {
-													window.alert(
-														activeLanguage.lang[
-															"Please remember that you should also complete the section 'Fetal or infant Death'"
-														]
-													);
-												}
-											}}
 										/>
 									</Form.Item>
 								</td>
 							</tr>
-							{customRows.map(
-								(
-									{
-										name,
-										id,
-									}: { name: string; id: string | null },
-									index: number
-								) => {
-									// console.log(index, " custom rows");
-									return (
-										<tr key={index}>
-											<td
-												className="border p-1"
-												colSpan={2}
+							<tr>
+								<td className="border p-1">Niveau d’étude</td>
+								<td className="border p-1" colSpan={2}>
+									Adresse physique complète:
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									<div className="b-flex">
+										<span className="mr-3">
+											Date de naissance ou âge
+										</span>
+										{!forceResetDOB ? (
+											<Form.Item
+												rules={[
+													{
+														type: "object",
+														required: true,
+														message:
+															"Please select date!",
+													},
+												]}
+												name="RbrUuKFSqkZ"
+												className="m-0"
 											>
-												<b>{name}</b>
-											</td>
-											<td
-												className="border p-1"
-												colSpan={2}
-											>
-												<span
-													style={{ display: "flex" }}
-												>
-													<Form.Item
-														name={id as string}
-														className="m-0"
-														style={{ flexGrow: 1 }}
-														initialValue={
-															store.defaultValues[
-																id
-															]
+												<DatePicker
+													disabledDate={notTomorrow}
+													size="large"
+													placeholder={
+														activeLanguage.lang[
+															"Select a Date"
+														]
+													}
+													disabled={
+														store.viewMode ||
+														store.allDisabled
+															.RbrUuKFSqkZ ||
+														!ageKnown
+													}
+													onChange={(e: any) => {
+														if (e?._d) {
+															console.log(
+																"Date of birth has changed",
+																e
+															);
+															// const birthDate = new Date(e?._d);
+															// const ageInYears = moment().diff(birthDate, "years");
+															const ageInYears = moment().diff(
+																e,
+																"years"
+															);
+															if (
+																ageInYears <
+																	50 &&
+																ageInYears > 10
+															) {
+																setPersonsAge(
+																	ageInYears
+																);
+																// q7e7FOXKnOf
+																// form.setFieldsValue({
+																//   RbrUuKFSqkZ: ageInYears,
+																// });
+																// store.setFie
+															}
 														}
-													>
-														<Input
-															size="large"
-															disabled={
-																store.viewMode
-															}
-															// disabled={
-															//     store.viewMode ||
-															//     store.allDisabled.ZKBE8Xm9DJG
-															// }
-														/>
-													</Form.Item>
-													<span
-														style={{
-															display:
-																"inline-block",
-															cursor: "pointer",
-														}}
-													>
-														<button
-															disabled={
-																fetching ||
-																deleting
-															}
-															type="button"
-															className="ant-btn ant-btn-lg ant-btn-icon-only"
-															onClick={() => {
-																const rows = [
-																	...customRows,
-																];
-																rows.splice(
-																	index,
-																	1
-																);
-																setCustomRows([
-																	...rows,
-																]);
-																setDeleting(
-																	true
-																);
-															}}
-														>
-															<span
-																role="img"
-																aria-label="close"
-																className="anticon anticon-close"
-																style={{
-																	fontSize:
-																		"16px",
-																	color:
-																		"red",
-																}}
-															>
-																<svg
-																	viewBox="64 64 896 896"
-																	focusable="false"
-																	data-icon="close"
-																	width="1em"
-																	height="1em"
-																	fill="currentColor"
-																	aria-hidden="true"
-																>
-																	<path d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 00203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path>
-																</svg>
-															</span>
-														</button>
-													</span>
-												</span>
-											</td>
-										</tr>
-									);
-								}
-							)}
+													}}
+												/>
+											</Form.Item>
+										) : null}
+									</div>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									<div className="b-flex">
+										<span className="mr-3">
+											Date de décès
+										</span>
+										<Form.Item
+											rules={[
+												{
+													type: "object",
+													required: true,
+													message:
+														activeLanguage.lang[
+															"Please select date and time of death!"
+														],
+												},
+											]}
+											name="i8rrl8YWxLF"
+											className="m-0"
+										>
+											<DatePicker
+												disabledDate={notTomorrow}
+												size="large"
+												showTime
+												format="YYYY-MM-DD HH:mm:ss"
+												placeholder={
+													activeLanguage.lang[
+														"Select date and time of death"
+													]
+												}
+												disabled={
+													store.viewMode ||
+													store.allDisabled
+														.i8rrl8YWxLF
+												}
+												onChange={(e: any) => {
+													var minutes = 1000 * 60;
+													var hours = minutes * 60;
+													var days = hours * 24;
+
+													console.log(
+														"Time of death has changed to",
+														e
+													);
+													setActualTimeOfDeath(e);
+													var foo_date1 = form.getFieldValue(
+														"RbrUuKFSqkZ"
+													);
+													var foo_date2 = form.getFieldValue(
+														"i8rrl8YWxLF"
+													);
+													var diff_date = Math.round(
+														(foo_date2 -
+															foo_date1) /
+															days
+													);
+
+													console.log(
+														"diff_date is ",
+														diff_date
+													);
+													// console.log("function diffdate has been run ");
+
+													if (diff_date < 25) {
+														window.alert(
+															activeLanguage.lang[
+																"Please remember that you should also complete the section 'Fetal or infant Death'"
+															]
+														);
+													}
+												}}
+											/>
+										</Form.Item>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1" colSpan={3}>
+									Lieu de la survenue du décès
+								</td>
+							</tr>
 						</tbody>
 					</table>
 
-					<div
-						style={{
-							padding: "4px",
-						}}
-					>
-						{creatingCustomField && (
-							<>
-								<p>Press Enter To Submit</p>{" "}
-								<Input
-									value={customFieldName}
-									onChange={(e) => {
-										setCustomFieldName(e.target.value);
-									}}
-									onKeyDown={(e) => {
-										if (e.keyCode === 13) {
-											setCreatingFiled(false);
-											setFetching(true);
-										}
-									}}
-								/>
-							</>
-						)}
-					</div>
-
-					{store.isAdmin && customRowLength < 10 && (
-						<button
-							disabled={fetching}
-							onClick={(e) => {
-								e.preventDefault();
-								setCreatingFiled(true);
-								// setCustomRowLength(customRowLength + 1);
-							}}
-						>
-							+Add field
-						</button>
-					)}
-
-					<table className="my-2 w-full border-collapse px-2">
+					<h4 style={{ marginTop: "16px" }}>II. DONNÉES MÉDICALES</h4>
+					<table className="w-full border-collapse">
 						<tbody>
 							<tr>
 								<td
@@ -3705,13 +3222,12 @@ export const DataEntryForm = observer(() => {
 							</tr>
 						</tbody>
 					</table>
-
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="w-full border-collapse">
 						<tbody>
 							<tr>
 								<td
-									colSpan={2}
 									className="border p-1 text-lg"
+									colSpan={4}
 									style={{ background: titleBackgroundColor }}
 								>
 									<h3
@@ -3720,26 +3236,16 @@ export const DataEntryForm = observer(() => {
 											color: "#000085",
 										}}
 									>
-										{" "}
-										{
-											activeLanguage.lang[
-												"Frame B: Other medical data"
-											]
-										}
+										Cadre B: Autres données médicales
 									</h3>
 								</td>
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Was surgery performed within the last 4 weeks?"
-											]
-										}
-									</b>
+									Une chirurgie a-t-elle eu lieu dans les 4
+									semaines précédentes?
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="Kk0hmrJPR90"
@@ -3791,15 +3297,10 @@ export const DataEntryForm = observer(() => {
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"If yes please specify date of surgery"
-											]
-										}
-									</b>
+									Dans l’affirmative, Veuillez préciser la
+									date de la chirurgie
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									<Form.Item
 										name="j5TIQx3gHyF"
 										className="m-0"
@@ -3824,18 +3325,12 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
-
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"If yes please specify reason for surgery (disease or condition)"
-											]
-										}
-									</b>
+									Dans l’affirmative, Veuillez préciser le
+									motif de la chirurgie (maladie ou état)
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									<Form.Item
 										name="JhHwdQ337nn"
 										className="m-0"
@@ -3850,15 +3345,9 @@ export const DataEntryForm = observer(() => {
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Was an autopsy requested?"
-											]
-										}
-									</b>
+									A-t-on demandé une autopsie?
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="jY3K6Bv4o9Q"
@@ -3895,15 +3384,10 @@ export const DataEntryForm = observer(() => {
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"If yes were the findings used in the certification?"
-											]
-										}
-									</b>
+									Dans l’affirmative, les conclusions
+									ont-elles servi à la certification?
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="UfG52s4YcUt"
@@ -3923,35 +3407,14 @@ export const DataEntryForm = observer(() => {
 							</tr>
 						</tbody>
 					</table>
-
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="w-full border-collapse">
 						<tbody>
 							<tr>
-								<td
-									colSpan={6}
-									className="border p-1 text-lg"
-									style={{ background: titleBackgroundColor }}
-								>
-									<h3
-										style={{
-											fontWeight: "bolder",
-											color: "#000085",
-										}}
-									>
-										<b>
-											{
-												activeLanguage.lang[
-													"Manner of death"
-												]
-											}
-										</b>
-									</h3>
+								<td className="border p-1" colSpan={3}>
+									Circonstances du décès
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Disease"]}</b>
-								</td>
 								<td className="border p-1">
 									<Form.Item
 										name="FhHPxY16vet"
@@ -3964,12 +3427,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.FhHPxY16vet
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Maladie
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Assault"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3983,18 +3443,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.KsGOxFyzIs1
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Agression
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Could not be determined"
-											]
-										}
-									</b>{" "}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -4008,15 +3459,12 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.b4yPk98om7e
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Non déterminée
 										</Checkbox>
 									</Form.Item>
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1">
-									<b>Accident</b>
-								</td>
 								<td className="border p-1">
 									<Form.Item
 										name="gNM2Yhypydx"
@@ -4029,18 +3477,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.gNM2Yhypydx
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Accident
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Legal intervention"
-											]
-										}
-									</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -4054,18 +3493,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.tYH7drlbNya
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Intervention de la force publique
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Pending investigation"
-											]
-										}
-									</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -4079,21 +3509,12 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.fQWuywOaoN2
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Enquête en cours
 										</Checkbox>
 									</Form.Item>
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Intentional self-harm"
-											]
-										}
-									</b>
-								</td>
 								<td className="border p-1">
 									<Form.Item
 										name="wX3i3gkTG4m"
@@ -4106,12 +3527,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.wX3i3gkTG4m
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Lésion auto-infligé
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["War"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -4125,12 +3543,9 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.xDMX2CJ4Xw3
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Guerre
 										</Checkbox>
 									</Form.Item>
-								</td>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Unknown"]}</b>
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -4144,22 +3559,15 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.o1hG9vr0peF
 											}
 										>
-											{activeLanguage.lang["Yes"]}
+											Inconnu
 										</Checkbox>
 									</Form.Item>
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>
-										{
-											activeLanguage.lang[
-												"If external cause or poisoning"
-											]
-										}
-									</b>
-								</td>
 								<td className="border p-1">
+									Dans le cas d’une cause externe ou d’un
+									empoisonnement :
 									<Form.Item
 										name="AZSlwlRAFig"
 										className="m-0"
@@ -4176,11 +3584,9 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									<b>
-										{activeLanguage.lang["Date of injury"]}
-									</b>
+									Date du traumatisme
 								</td>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1">
 									<Form.Item
 										name="U18Tnfz9EKd"
 										className="m-0"
@@ -4207,16 +3613,12 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1" colSpan={3}>
-									<b>
-										{
-											activeLanguage.lang[
-												"Please describe how external cause occurred (If poisoning please specify poisoning agent)"
-											]
-										}
-									</b>
+								<td className="border p-1">
+									Veuillez décrire comment est survenu la
+									cause externe (dans le cas d’un
+									empoisonnement, indiquez l’agent toxique)
 								</td>
-								<td className="border p-1" colSpan={3}>
+								<td className="border p-1" colSpan={2}>
 									<Form.Item
 										name="DKlOhZJOCrX"
 										className="m-0"
@@ -4231,17 +3633,16 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
+						</tbody>
+					</table>
+					<table className="w-full border-collapse">
+						<tbody>
 							<tr>
-								<td className="border p-1" colSpan={3}>
-									<b>
-										{
-											activeLanguage.lang[
-												"Place of occurrence of the external cause"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1" colSpan={3}>
+								<td className="border p-1 text-lg" colSpan={4}>
+									<strong>
+										Lieu de manifestation de la cause
+										externe:
+									</strong>
 									<Form.Item
 										name="kGIDD5xIeLC"
 										className="m-0"
@@ -4256,15 +3657,43 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
+							<tr>
+								<td className="border p-1"> Domicile</td>
+								<td className="border p-1">
+									 Etablissement collectif
+								</td>
+								<td className="border p-1">
+									 École, autre institution, lieu
+									d’administration publique
+								</td>
+								<td className="border p-1">
+									 Lieu de sport et d’athlétisme
+								</td>
+							</tr>
+							<tr>
+								<td className="border p-1"> Rue et route </td>
+								<td className="border p-1">
+									 Zone de commerce et de services{" "}
+								</td>
+								<td className="border p-1">
+									 Zone industrielle et chantier{" "}
+								</td>
+								<td className="border p-1"> Ferme</td>
+							</tr>
+							<tr>
+								<td className="border p-1" colSpan={3}>
+									 Autre endroit (veuillez préciser) :{" "}
+								</td>
+								<td className="border p-1"> Inconnu</td>
+							</tr>
 						</tbody>
 					</table>
-
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="w-full border-collapse">
 						<tbody>
 							<tr>
 								<td
-									colSpan={4}
 									className="border p-1 text-lg"
+									colSpan={4}
 									style={{ background: titleBackgroundColor }}
 								>
 									<h3
@@ -4273,25 +3702,15 @@ export const DataEntryForm = observer(() => {
 											color: "#000085",
 										}}
 									>
-										{
-											activeLanguage.lang[
-												"Fetal or infant death"
-											]
-										}
+										Mort fœtal, néonatal ou nourrisson
 									</h3>
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>
-										{
-											activeLanguage.lang[
-												"Multiple pregnancy"
-											]
-										}
-									</b>
+								<td className="border p-1">
+									Grossesse multiple
 								</td>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="V4rE1tsj5Rb"
@@ -4303,10 +3722,8 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>{activeLanguage.lang["Stillborn?"]}</b>
-								</td>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1">Mort-né ?</td>
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="ivnHp4M4hFF"
@@ -4344,15 +3761,9 @@ export const DataEntryForm = observer(() => {
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"If death within 24 hrs specify the number of hours survived"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
+									Si la mort s’est produite dans les premières
+									24 heures de vie, précisez le nombre
+									d’heures de vie
 									<Form.Item
 										name="jf9TogeSZpk"
 										className="m-0"
@@ -4377,16 +3788,8 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Birth weight (in grams)"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
+									Poids à la naissance (en grammes)
 									<Form.Item
 										name="xAWYJtQsg8M"
 										className="m-0"
@@ -4414,15 +3817,7 @@ export const DataEntryForm = observer(() => {
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Number of completed weeks of pregnancy"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
+									Nombre de semaines entières de grossesse
 									<Form.Item
 										name="lQ1Byr04JTx"
 										className="m-0"
@@ -4446,16 +3841,8 @@ export const DataEntryForm = observer(() => {
 										</span>
 									) : null}
 								</td>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Age of mother (years)"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
+									Age de la mères (années)
 									<Form.Item
 										name="DdfDMFW4EJ9"
 										className="m-0"
@@ -4481,18 +3868,13 @@ export const DataEntryForm = observer(() => {
 									) : null}
 								</td>
 							</tr>
-
 							<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>
-										{
-											activeLanguage.lang[
-												"If the death was perinatal, please state conditions of mother that affected the fetus and newborn"
-											]
-										}
-									</b>{" "}
+								<td className="border p-1">
+									Dans le cas d’une mort périnatale, veuillez
+									indiquer l’état de la mère ayant nui au
+									fœtus et au nouveau-né.
 								</td>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1" colSpan={3}>
 									<Form.Item
 										name="GFVhltTCG8b"
 										className="m-0"
@@ -4507,119 +3889,36 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
-						</tbody>
-					</table>
-
-					<table className="my-2 w-full border-collapse px-2">
-						<tbody>
 							<tr>
-								<td
-									className="border p-1 text-lg"
-									style={{ background: titleBackgroundColor }}
-								>
-									<h3
-										style={{
-											fontWeight: "bolder",
-											color: "#000085",
-										}}
-									>
-										<b>
-											{
-												activeLanguage.lang[
-													"For women, was the deceased pregnant or within 6 weeks of delivery?"
-												]
-											}
-										</b>
-										{showPregnancyReminder &&
-											personsGender === "Female" && (
-												<Alert
-													message={
-														activeLanguage.lang[
-															"Reminder"
-														]
-													}
-													description={
-														activeLanguage.lang[
-															"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-														]
-													}
-													type="error"
-													closable
-													showIcon
-													onClose={() => {
-														setShowPregnancyReminder(
-															false
-														);
-													}}
-												/>
-											)}
-									</h3>
-								</td>
 								<td className="border p-1">
-									{optionSets ? (
-										<Form.Item
-											name="zcn7acUB6x1"
-											className="m-0"
-										>
-											{optionSet(
-												"YN01",
-												"zcn7acUB6x1",
-												(e: any) => {
-													console.log("E is ", e);
-													if (e === "Yes") {
-														// console.log("Setting pregnancy to true");
-														refreshAllPregnantKeys(
-															true
-														);
-													} else {
-														// console.log("Setting pregnancy to false");
-														refreshAllPregnantKeys(
-															false
-														);
-													}
-												},
-												!enablePregnantQn,
-												enablePregnantQnKey
-											)}
-										</Form.Item>
-									) : null}
+									S’il s’agit d’une femme, cette dernière
+									était-elle enceinte?
+								</td>
+								<td className="border p-1"> Oui</td>
+								<td className="border p-1"> Non</td>
+								<td className="border p-1"> Inconnu</td>
+							</tr>
+							<tr>
+								<td className="border p-1">
+									Au moment du décès
+								</td>
+								<td className="border p-1" colSpan={3}>
+									 Dans les 42 jours précédents le décès
 								</td>
 							</tr>
 							<tr>
 								<td className="border p-1">
-									<b>
-										{activeLanguage.lang["At what point?"]}
-									</b>
+									Entre 43jours et 1 an avant le décès{" "}
 								</td>
-								<td className="border p-1">
-									{optionSets ? (
-										<Form.Item
-											name="KpfvNQSsWIw"
-											className="m-0"
-										>
-											{optionSet(
-												"100ATPOINT",
-												"KpfvNQSsWIw",
-												() => {},
-												!womanWasPregnant,
-												pregnantKey1
-											)}
-										</Form.Item>
-									) : null}
+								<td className="border p-1" colSpan={3}>
+									 Inconnu
 								</td>
 							</tr>
-
 							<tr>
 								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Did the pregnancy contribute to death?"
-											]
-										}
-									</b>
+									La grossesse a-t-elle contribué au décès ?{" "}
 								</td>
-								<td className="border p-1">
+								<td className="border p-1" colSpan={3}>
 									{optionSets ? (
 										<Form.Item
 											name="AJAraEcfH63"
@@ -4634,141 +3933,6 @@ export const DataEntryForm = observer(() => {
 											)}
 										</Form.Item>
 									) : null}
-								</td>
-							</tr>
-
-							<tr>
-								<td className="border p-1">
-									<b>{activeLanguage.lang["Parity"]}</b>
-								</td>
-								<td className="border p-1">
-									<Form.Item
-										name="ymyLrfEcYkD"
-										className="m-0"
-									>
-										<Input
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.ymyLrfEcYkD ||
-												!womanWasPregnant
-											}
-											key={pregnantKey4}
-										/>
-									</Form.Item>
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Mode of delivery"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									{optionSets ? (
-										<Form.Item
-											name="K5BDPJQk1BP"
-											className="m-0"
-										>
-											{optionSet(
-												"MD01",
-												"K5BDPJQk1BP",
-												() => {},
-												!womanWasPregnant,
-												pregnantKey5
-											)}
-										</Form.Item>
-									) : null}
-								</td>
-							</tr>
-
-							<tr>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Place of delivery"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									{optionSets ? (
-										<Form.Item
-											name="Z41di0TRjIu"
-											className="m-0"
-										>
-											{optionSet(
-												"PD01",
-												"Z41di0TRjIu",
-												() => {},
-												!womanWasPregnant,
-												pregnantKey6
-											)}
-										</Form.Item>
-									) : null}
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<b>
-										{
-											activeLanguage.lang[
-												"Delivered by skilled attendant"
-											]
-										}
-									</b>
-								</td>
-								<td className="border p-1">
-									{optionSets ? (
-										<Form.Item
-											name="uaxjt0inPNF"
-											className="m-0"
-										>
-											{optionSet(
-												"YN01",
-												"uaxjt0inPNF",
-												() => {},
-												!womanWasPregnant,
-												pregnantKey7
-											)}
-										</Form.Item>
-									) : null}
-								</td>
-							</tr>
-
-							<tr>
-								<Declarations
-									titleBackgroundColor={titleBackgroundColor}
-									receiveOutput={handleDeclarationOutput}
-									receiveOldData={declarationsDefault}
-								/>
-							</tr>
-							<tr>
-								<td className="border p-1">
-									<Row>
-										<Col xs={24} md={9} className="border p-1">
-											<b>{tr("Examined By")}</b>
-										</Col>
-										<Col xs={24} md={15} className="border p-1">
-											<Form.Item
-												name="PaoRZbokFWJ"
-												className="m-0"
-											>
-												<Input
-													size="large"
-													disabled={
-														store.viewMode ||
-														store.allDisabled.PaoRZbokFWJ 
-													} 
-												/>
-											</Form.Item>
-										</Col>
-									</Row>
 								</td>
 							</tr>
 						</tbody>

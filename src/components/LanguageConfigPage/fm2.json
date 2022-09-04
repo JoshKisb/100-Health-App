@@ -184,6 +184,7 @@
 		  "created":"2019-08-14T19:42:50.143",
 		  "lastUpdated":"2020-03-12T07:40:05.801",
 		  "name":"Nationality",
+		  "shortName": "Nationality",
 		  "id":"ICjKVP3jwYl",
 		  "dataDimensionType":"ATTRIBUTE",
 		  "dataDimension":true,

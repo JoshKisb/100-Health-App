@@ -4,7 +4,6 @@ import { Button, Form, Input, Popconfirm } from "antd";
 import { CloseOutlined, ConsoleSqlOutlined } from "@ant-design/icons";
 
 import "@whoicd/icd11ect/style.css";
-import "../App.css";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import { any } from "prop-types";

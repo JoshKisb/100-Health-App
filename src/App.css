@@ -127,6 +127,15 @@
   animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+.b-flex {
+  display: flex;
+  align-items: center;
+}
+
+.mr-3 {
+  margin-right: 15px;
+}
+
 #topdiseaseswrapper {
   position: relative;
   /*max-width: 1240px;*/
