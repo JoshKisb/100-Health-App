@@ -1696,46 +1696,7 @@ export const DataEntryForm = observer(() => {
           </Select>
         </Form.Item>*/}
 
-					<h4 style={{ marginTop: "16px" }}>
-						I. ADMINISTRATIVE DONEES
-					</h4>
-					<table className="mt-2 w-full border-collapse">
-						<tbody>
-							<tr>
-								<td
-									className="border p-1 text-lg"
-									colSpan={2}
-									style={{ background: titleBackgroundColor }}
-								>
-									<h3
-										style={{
-											fontWeight: "bolder",
-											color: "#000085",
-										}}
-									>
-										A. Informations sur l'établissement des
-										soins
-									</h3>
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">Province:</td>
-								<td className="border p-1">
-									Territoire/Commune :
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1">Zone de santé :</td>
-								<td className="border p-1">Aire de santé :</td>
-							</tr>
-							<tr>
-								<td className="border p-1" colSpan={2}>
-									Formation sanitaire/Etablissement des soins
-									:
-								</td>
-							</tr>
-						</tbody>
-					</table>
+					
 					<table className="mb-2 w-full border-collapse">
 						<thead>
 							<tr>
@@ -1780,7 +1741,7 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									Sexe:
+									Sexe
 									{optionSets ? (
 										<Form.Item
 											rules={[
@@ -1851,29 +1812,102 @@ export const DataEntryForm = observer(() => {
 									) : null}
 								</td>
 							</tr>
-							<tr>
-								<td className="border p-1">Nationalité:</td>
-								<td className="border p-1">Etat civil:</td>
-								<td className="border p-1">
-									Profession:
-									<Form.Item
-										name="b70okb06FWa"
+							<tr> 
+							<td className="border p-1" colSpan={3}>Etat civil
+
+							<Form.Item
+										name="RvmQTDpuD7A"
 										className="m-0"
 									>
 										<Input
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.b70okb06FWa
+												store.allDisabled.RvmQTDpuD7A }
+										/>
+									</Form.Item>
+							</td>
+							</tr>
+							<tr>
+								<td className="border p-2">Nationalité
+								<Form.Item
+										name="SAfeOh2zD9V"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.SAfeOh2zD9V
+
+											
+											}
+										/>
+									</Form.Item>
+								</td>
+								
+								<td className="border p-1">
+									Profession
+									<Form.Item
+										name="oIFVUIOdsZf"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.oIFVUIOdsZf
+											}
+										/>
+									</Form.Item>
+								</td>
+								<td className="border p-1">
+									Profession-other
+									<Form.Item
+										name="T9k01wy30fS"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.T9k01wy30fS
 											}
 										/>
 									</Form.Item>
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-1">Niveau d’étude</td>
+								<td className="border p-2">Niveau d’étude
+								<Form.Item
+										name="OiYnmsLaGwd"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.OiYnmsLaGwd
+
+											}
+										/>
+									</Form.Item>
+								
+								</td>
 								<td className="border p-1" colSpan={2}>
-									Adresse physique complète:
+									Adresse physique complète
+									<Form.Item
+										name="yDuGIdgpbqt"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.yDuGIdgpbqt
+											}
+										/>
+									</Form.Item>
 								</td>
 							</tr>
 							<tr>
@@ -2020,6 +2054,18 @@ export const DataEntryForm = observer(() => {
 							<tr>
 								<td className="border p-1" colSpan={3}>
 									Lieu de la survenue du décès
+									<Form.Item
+										name="eICtulVGOCp"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.eICtulVGOCp
+											}
+										/>
+									</Form.Item>
 								</td>
 							</tr>
 						</tbody>
