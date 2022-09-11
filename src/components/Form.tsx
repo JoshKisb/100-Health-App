@@ -1645,28 +1645,6 @@ export const DataEntryForm = observer(() => {
 						/>
 					</div>
 
-					<Form.Item
-						label={activeLanguage.lang["Date of Entry"]}
-						rules={[
-							{
-								type: "object",
-								required: true,
-								message:
-									activeLanguage.lang["Please select date!"],
-							},
-						]}
-						name="eventDate"
-						className="m-0"
-					>
-						<DatePicker
-							disabledDate={notTomorrow}
-							size="large"
-							disabled={store.viewMode}
-							defaultValue={moment()}
-							placeholder={activeLanguage.lang["Select a Date"]}
-						/>
-					</Form.Item>
-
 					{/*<Form.Item
           label={activeLanguage.lang.Languages}
           style={{ marginTop: "1rem" }}
@@ -1696,7 +1674,6 @@ export const DataEntryForm = observer(() => {
           </Select>
         </Form.Item>*/}
 
-					
 					<table className="mb-2 w-full border-collapse">
 						<thead>
 							<tr>
@@ -1742,31 +1719,54 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									Sexe
-									{optionSets ? (
-										<Form.Item
-											rules={[
-												{
-													required: true,
-													message:
-														activeLanguage.lang[
-															"Sex is required"
-														],
-												},
-											]}
-											name="e96GB4CXyd3"
-											className="m-0"
-										>
-											{optionSet(
-												"SX01",
-												"e96GB4CXyd3",
-												(e: any) => {
-													setPersonsGender(e);
-													if (e === "Male") {
+									<Form.Item
+										rules={[
+											{
+												required: true,
+												message:
+													activeLanguage.lang[
+														"Sex is required"
+													],
+											},
+										]}
+										name="e96GB4CXyd3"
+										className="m-0"
+									>
+										<Select
+											style={{ width: "100%" }}
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled["e96GB4CXyd3"]
+											}
+											key={`${Math.random()}`}
+											onChange={(e: any) => {
+												setPersonsGender(e);
+												if (e === "Masculin") {
+													setShowPregnancyReminder(
+														false
+													);
+													setEnablePregnantQn(false);
+													setEnablePregnantQnKey(
+														`${
+															parseInt(
+																enablePregnantQnKey
+															) + 1
+														}`
+													);
+													return;
+												}
+												if (e === "Féminin") {
+													console.log("Is female");
+													if (
+														personsAge < 50 &&
+														personsAge > 10
+													) {
 														setShowPregnancyReminder(
-															false
+															true
 														);
 														setEnablePregnantQn(
-															false
+															true
 														);
 														setEnablePregnantQnKey(
 															`${
@@ -1775,90 +1775,110 @@ export const DataEntryForm = observer(() => {
 																) + 1
 															}`
 														);
-														return;
-													}
-													if (e === "Female") {
-														console.log(
-															"Is female"
+														window.alert(
+															activeLanguage.lang[
+																"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+															]
 														);
-														if (
-															personsAge < 50 &&
-															personsAge > 10
-														) {
-															setShowPregnancyReminder(
-																true
-															);
-															setEnablePregnantQn(
-																true
-															);
-															setEnablePregnantQnKey(
-																`${
-																	parseInt(
-																		enablePregnantQnKey
-																	) + 1
-																}`
-															);
-															window.alert(
-																activeLanguage
-																	.lang[
-																	"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
-																]
-															);
-														}
 													}
 												}
+											}}
+										>
+											{["Masculin", "Féminin"].map(
+												(opt) => (
+													<Option
+														key={opt}
+														value={opt}
+													>
+														{opt}
+													</Option>
+												)
 											)}
-										</Form.Item>
-									) : null}
+										</Select>
+									</Form.Item>
 								</td>
 							</tr>
-							<tr> 
-							<td className="border p-1" colSpan={3}>Etat civil
-
-							<Form.Item
+							<tr>
+								<td className="border p-1" colSpan={3}>
+									Etat civil
+									<Form.Item
 										name="RvmQTDpuD7A"
 										className="m-0"
 									>
-										<Input
+										<Select
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.RvmQTDpuD7A }
-										/>
+												store.allDisabled.RvmQTDpuD7A
+											}
+										>
+											{[
+												"Marié(e)",
+												"Célibataire",
+												"Veuf/Veuve",
+												"Divorcé(e)",
+												"Union de fait",
+											].map((opt) => (
+												<Option value={opt}>
+													{opt}
+												</Option>
+											))}
+										</Select>
 									</Form.Item>
-							</td>
+								</td>
 							</tr>
 							<tr>
-								<td className="border p-2">Nationalité
-								<Form.Item
+								<td className="border p-2">
+									Nationalité
+									<Form.Item
 										name="SAfeOh2zD9V"
 										className="m-0"
 									>
-										<Input
+										<Select
 											size="large"
 											disabled={
 												store.viewMode ||
 												store.allDisabled.SAfeOh2zD9V
-
-											
 											}
-										/>
+										>
+											{[
+												"Congolaise",
+												"Etrangère (à préciser)",
+											].map((opt) => (
+												<Option value={opt}>
+													{opt}
+												</Option>
+											))}
+										</Select>
 									</Form.Item>
 								</td>
-								
+
 								<td className="border p-1">
 									Profession
 									<Form.Item
 										name="oIFVUIOdsZf"
 										className="m-0"
+										style={{ minWidth: "300px" }}
 									>
-										<Input
+										<Select
 											size="large"
 											disabled={
 												store.viewMode ||
 												store.allDisabled.oIFVUIOdsZf
 											}
-										/>
+										>
+											{[
+												"Fonctionnaire de l’état",
+												"Commerçant",
+												"Cultivateur",
+												"Ménagère",
+												"Autre (à préciser)",
+											].map((opt) => (
+												<Select.Option value={opt}>
+													{opt}
+												</Select.Option>
+											))}
+										</Select>
 									</Form.Item>
 								</td>
 								<td className="border p-1">
@@ -1878,21 +1898,32 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<td className="border p-2">Niveau d’étude
-								<Form.Item
+								<td className="border p-2">
+									Niveau d’étude
+									<Form.Item
 										name="OiYnmsLaGwd"
 										className="m-0"
 									>
-										<Input
+										<Select
 											size="large"
 											disabled={
 												store.viewMode ||
 												store.allDisabled.OiYnmsLaGwd
-
 											}
-										/>
+										>
+											{[
+												"Aucun niveau",
+												"Primaire",
+												"Secondaire",
+												"Supérieur/Universitaire",
+												"Post Universitaire",
+											].map((opt) => (
+												<Option value={opt}>
+													{opt}
+												</Option>
+											))}
+										</Select>
 									</Form.Item>
-								
 								</td>
 								<td className="border p-1" colSpan={2}>
 									Adresse physique complète
@@ -1910,8 +1941,73 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
+
 							<tr>
 								<td className="border p-1">
+									<div
+										className="b-flex"
+										style={{ marginBottom: "4px" }}
+									>
+										<b style={{ marginRight: "8px" }}>
+											{
+												activeLanguage.lang[
+													"Date of Birth Known ?"
+												]
+											}
+										</b>
+										<Checkbox
+											disabled={
+												store.viewMode ||
+												store.allDisabled.roxn33dtLLx
+											}
+											checked={ageKnown}
+											// onClick={() => form.setFieldsValue({ roxn33dtLLx: "Yes" })}
+											onChange={(val: any) => {
+												console.log(
+													"VAL IS ",
+													val?.target?.checked
+												);
+												setAgeKnown(
+													val?.target?.checked
+												);
+												form.setFieldsValue({
+													roxn33dtLLx: "Yes",
+												});
+												store.disableValue(
+													"q7e7FOXKnOf"
+												);
+											}}
+										>
+											{activeLanguage.lang["Yes"]}
+										</Checkbox>
+
+										<Checkbox
+											// onChange={(val: any) => console.log("VAL IS ", val?.target)}
+											disabled={
+												store.viewMode ||
+												store.allDisabled.roxn33dtLLx
+											}
+											checked={!ageKnown}
+											onChange={(val: any) => {
+												console.log(
+													"VAL IS ",
+													val?.target?.checked
+												);
+												setAgeKnown(
+													!val?.target?.checked
+												);
+												form.setFieldsValue({
+													roxn33dtLLx: "No",
+												});
+
+												store.enableValue(
+													"q7e7FOXKnOf"
+												);
+											}}
+										>
+											{activeLanguage.lang["No"]}
+										</Checkbox>
+									</div>
 									<div className="b-flex">
 										<span className="mr-3">
 											Date de naissance ou âge
@@ -1976,7 +2072,80 @@ export const DataEntryForm = observer(() => {
 										) : null}
 									</div>
 								</td>
-								<td className="border p-1" colSpan={2}>
+								<td className="border p-1">
+									<Form.Item
+										rules={[
+											{
+												type: "integer",
+												required: false,
+												message:
+													activeLanguage.lang[
+														"Enter a valid age below 120"
+													],
+												max: 120,
+											},
+										]}
+										name="q7e7FOXKnOf"
+										className="m-0"
+									>
+										<InputNumber
+											size="large"
+											style={{ width: "100%" }}
+											placeholder="Age"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.q7e7FOXKnOf ||
+												ageKnown
+											}
+											onChange={(e: any) => {
+												// console.log("Age changed to", e);
+
+												setPersonsAge(e);
+												if (
+													personsGender === "Masculin"
+												) {
+													setShowPregnancyReminder(
+														false
+													);
+													setEnablePregnantQn(false);
+													setEnablePregnantQnKey(
+														`${
+															parseInt(
+																enablePregnantQnKey
+															) + 1
+														}`
+													);
+													return;
+												}
+
+												if (
+													personsGender ===
+														"Féminin" &&
+													e < 50 &&
+													e > 10
+												) {
+													setShowPregnancyReminder(
+														true
+													);
+													setEnablePregnantQn(true);
+													setEnablePregnantQnKey(
+														`${
+															parseInt(
+																enablePregnantQnKey
+															) + 1
+														}`
+													);
+													window.alert(
+														activeLanguage.lang[
+															"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+														]
+													);
+												}
+											}}
+										/>
+									</Form.Item>
+								</td>
+								<td className="border p-1">
 									<div className="b-flex">
 										<span className="mr-3">
 											Date de décès
@@ -2095,7 +2264,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							<tr>
-								<th style={{ width: "15%" }}></th>
+								<th style={{ width: "18%" }}></th>
 								<th style={{ width: "5%" }}></th>
 								<th style={{ width: "25%" }}></th>
 								<th style={{ width: "15%" }}></th>
@@ -3693,44 +3862,32 @@ export const DataEntryForm = observer(() => {
 										name="kGIDD5xIeLC"
 										className="m-0"
 									>
-										<Input
+										<Select
 											size="large"
 											disabled={
 												store.viewMode ||
 												store.allDisabled.kGIDD5xIeLC
 											}
-										/>
+										>
+											{[
+												"Domicile",
+												"Etablissement collectif",
+												"École, autre institution, lieu d’administration publique",
+												"Lieu de sport et d’athlétisme",
+												"Rue et route ",
+												"Zone de commerce et de services",
+												"Zone industrielle et chantier",
+												"Ferme",
+												"Autre endroit (veuillez préciser)",
+												"Inconnu",
+											].map((opt) => (
+												<Select.Option value={opt}>
+													{opt}
+												</Select.Option>
+											))}
+										</Select>
 									</Form.Item>
 								</td>
-							</tr>
-							<tr>
-								<td className="border p-1"> Domicile</td>
-								<td className="border p-1">
-									 Etablissement collectif
-								</td>
-								<td className="border p-1">
-									 École, autre institution, lieu
-									d’administration publique
-								</td>
-								<td className="border p-1">
-									 Lieu de sport et d’athlétisme
-								</td>
-							</tr>
-							<tr>
-								<td className="border p-1"> Rue et route </td>
-								<td className="border p-1">
-									 Zone de commerce et de services{" "}
-								</td>
-								<td className="border p-1">
-									 Zone industrielle et chantier{" "}
-								</td>
-								<td className="border p-1"> Ferme</td>
-							</tr>
-							<tr>
-								<td className="border p-1" colSpan={3}>
-									 Autre endroit (veuillez préciser) :{" "}
-								</td>
-								<td className="border p-1"> Inconnu</td>
 							</tr>
 						</tbody>
 					</table>
@@ -3981,8 +4138,37 @@ export const DataEntryForm = observer(() => {
 									) : null}
 								</td>
 							</tr>
+							<tr>
+								<Declarations
+									titleBackgroundColor={titleBackgroundColor}
+									receiveOutput={handleDeclarationOutput}
+									receiveOldData={declarationsDefault}
+								/>
+							</tr>
 						</tbody>
 					</table>
+					<br />
+					<Form.Item
+						label={activeLanguage.lang["Date of Entry"]}
+						rules={[
+							{
+								type: "object",
+								required: true,
+								message:
+									activeLanguage.lang["Please select date!"],
+							},
+						]}
+						name="eventDate"
+						className="m-0 mt-2"
+					>
+						<DatePicker
+							disabledDate={notTomorrow}
+							size="large"
+							disabled={store.viewMode}
+							defaultValue={moment()}
+							placeholder={activeLanguage.lang["Select a Date"]}
+						/>
+					</Form.Item>
 				</Card>
 			</Form>
 
