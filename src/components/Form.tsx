@@ -4128,6 +4128,38 @@ export const DataEntryForm = observer(() => {
 									receiveOldData={declarationsDefault}
 								/>
 							</tr>
+							<tr>
+								<td className="border p-1">
+									<Row>
+										<Col
+											xs={24}
+											md={9}
+											className="border p-1"
+										>
+											<b>{tr("Examined By")}</b>
+										</Col>
+										<Col
+											xs={24}
+											md={15}
+											className="border p-1"
+										>
+											<Form.Item
+												name="PaoRZbokFWJ"
+												className="m-0"
+											>
+												<Input
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled
+															.PaoRZbokFWJ
+													}
+												/>
+											</Form.Item>
+										</Col>
+									</Row>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 					<br />
