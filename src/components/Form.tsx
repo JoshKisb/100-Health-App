@@ -1595,9 +1595,7 @@ export const DataEntryForm = observer(() => {
 						<Button
 							htmlType="submit"
 							size="large"
-							disabled={
-								!underlyingCauseChosen ||
-								!personsGender ||
+							disabled={															
 								store.viewMode ||
 								(!declarations.ZXZZfzBpu8a &&
 									!declarations.cp5xzqVU2Vw &&
