@@ -1588,8 +1588,7 @@ export const DataEntryForm = observer(() => {
 											htmlType="submit"
 											size="large"
 											disabled={
-												!underlyingCauseChosen ||
-												!personsGender ||
+												
 												store.viewMode ||
 												(!declarations.ZXZZfzBpu8a &&
 													!declarations.cp5xzqVU2Vw &&
