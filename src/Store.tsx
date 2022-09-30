@@ -10,6 +10,82 @@ const extraHeaders = window.location.origin.includes("local")
   ? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
   : {};
 
+  const dlcolumns = [
+    "ZKBE8Xm9DJG",
+    "ZYKmQ9GPOaF",
+    "MOstDqSY0gO",
+  
+    "zwKo51BEayZ",
+    "bNpMzyShDCX",
+    "u44XP9fZweA",
+    "b70okb06FWa",
+    "t5nTEmlScSt",
+    "dsiwvNQLe5n",
+    "RbrUuKFSqkZ",
+    "q7e7FOXKnOf",
+    "e96GB4CXyd3",
+    "xNCSFrgdUgi",
+    "i8rrl8YWxLF",
+  
+    "sfpqAeqKeyQ",
+    "zD0E77W4rFs",
+    "cSDJ9kSJkFP",
+    "Ylht9kCLSRW",
+    "zb7uTuBCPrN",
+    "tuMMQsGtE69",
+    "uckvenVFnwf",
+    "myydnkmLfhp",
+    "C8n6hBilwsX",
+    "ZFdJRT3PaUd",
+    "aC64sB86ThG",
+    "QTKk2Xt8KDu",
+    "IeS8V8Yf40N",
+    "Op5pSvgHo1M",
+    "cmZrrHfTxW3",
+    "dTd7txVzhgY",
+    "xeE5TQLvucB",
+    "Kk0hmrJPR90",
+    "j5TIQx3gHyF",
+    "JhHwdQ337nn",
+    "jY3K6Bv4o9Q",
+    "UfG52s4YcUt",
+    "FhHPxY16vet",
+    "gNM2Yhypydx",
+    "wX3i3gkTG4m",
+    "KsGOxFyzIs1",
+    "tYH7drlbNya",
+    "xDMX2CJ4Xw3",
+    "b4yPk98om7e",
+    "fQWuywOaoN2",
+    "o1hG9vr0peF",
+    "AZSlwlRAFig",
+    "U18Tnfz9EKd",
+    "DKlOhZJOCrX",
+    "kGIDD5xIeLC",
+    "mDez8j7furx",
+    
+    "V4rE1tsj5Rb",
+    "ivnHp4M4hFF",
+    "jf9TogeSZpk",
+    "lQ1Byr04JTx",
+    "xAWYJtQsg8M",
+    "DdfDMFW4EJ9",
+    "GFVhltTCG8b",
+    "zcn7acUB6x1",
+    "AJAraEcfH63",
+    "RJhbkjYrODG",
+    "ymyLrfEcYkD",
+    "K5BDPJQk1BP",
+    "Z41di0TRjIu",
+    "uaxjt0inPNF",
+    "u9tYUv6AM51",
+  
+    "ZXZZfzBpu8a",
+    "cp5xzqVU2Vw",
+    "lu9BiHPxNqH",
+    "PaoRZbokFWJ",
+  ]
+  
 const query = {
   me: {
     resource: "me.json",
@@ -1187,7 +1263,8 @@ class Store {
     }
   };
 
-  @action downloadData = async () => {
+  
+  @action downloadData = async (allorgs = false) => {
     if (this.canInsert) {
       let query1: any = {
         events: {
@@ -1195,7 +1272,7 @@ class Store {
           params: {
             pager: false,
             programStage: this.programStage,
-            orgUnit: this.selectedOrgUnit,
+            ...(allorgs ? {}: { orgUnit: this.selectedOrgUnit}),
             totalPages: "true",
             attributeCc: this.attributeCC,
             attributeCos: this.selectedNationality,
@@ -1224,9 +1301,10 @@ class Store {
         let dd = [];
         let headerIndexes = [];
 
-        dd.push(this.columns.map((c) => c.title));
+        const columns = this.dlcolumns;
+        dd.push(columns.map((c) => c.title));
 
-        this.columns.forEach((h, idx) => {
+        columns.forEach((h, idx) => {
           headerIndexes.push(
             data.events.headers.findIndex((eh) => eh.name == h.key)
           );
@@ -1435,6 +1513,31 @@ class Store {
     ) {
       return this.availableDataElements
         .filter((de: any) => de.selected)
+        .map((col: any) => {
+          const found = this.data.headers.find((c: any) => {
+            return col.id === c.name;
+          });
+          return {
+            key: found.name,
+            title: col.name,
+            dataIndex: found.name,
+            render: (text: any, row: any) => {
+              return row[found.i];
+            },
+          };
+        });
+    }
+    return [];
+  }
+
+  @computed get dlcolumns() {
+    if (
+      this.data &&
+      this.data.headers.length > 0 &&
+      this.data.rows.length > 0
+    ) {
+      return this.availableDataElements
+        .filter((de: any) => dlcolumns.includes(de.id))
         .map((col: any) => {
           const found = this.data.headers.find((c: any) => {
             return col.id === c.name;
