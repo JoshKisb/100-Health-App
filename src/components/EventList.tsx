@@ -983,6 +983,7 @@ export const EventList = observer(() => {
 
 							<Dropdown.Button
 								icon={<DownOutlined />}
+								
 								overlay={
 									<Menu>
 										<Menu.Item
@@ -997,7 +998,7 @@ export const EventList = observer(() => {
 							>
 								{downloadng && (
 									<LoadingOutlined
-										style={{ fontSize: "24px" }}
+										style={{ fontSize: "14px" }}
 									/>
 								)}
 								Download

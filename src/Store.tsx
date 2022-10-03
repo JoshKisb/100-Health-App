@@ -1302,6 +1302,7 @@ class Store {
         let headerIndexes = [];
 
         const columns = this.dlcolumns;
+        console.log("dlcolumns", columns)
         dd.push(columns.map((c) => c.title));
 
         columns.forEach((h, idx) => {
@@ -1536,8 +1537,7 @@ class Store {
       this.data.headers.length > 0 &&
       this.data.rows.length > 0
     ) {
-      return this.availableDataElements
-        .filter((de: any) => dlcolumns.includes(de.id))
+      const columns = this.availableDataElements
         .map((col: any) => {
           const found = this.data.headers.find((c: any) => {
             return col.id === c.name;
@@ -1551,6 +1551,8 @@ class Store {
             },
           };
         });
+
+        return dlcolumns.map(c => columns.find(de => de.key == c))
     }
     return [];
   }
