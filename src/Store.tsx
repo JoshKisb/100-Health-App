@@ -1301,7 +1301,7 @@ class Store {
         let dd = [];
         let headerIndexes = [];
 
-        const columns = this.dlcolumns;
+        const columns = this.getdlcolumns(data.events)
         console.log("dlcolumns", columns)
         dd.push(columns.map((c) => c.title));
 
@@ -1531,15 +1531,14 @@ class Store {
     return [];
   }
 
-  @computed get dlcolumns() {
+  @action getdlcolumns(data) {
     if (
-      this.data &&
-      this.data.headers.length > 0 &&
-      this.data.rows.length > 0
+      !!data &&
+      this.availableDataElements.length > 0
     ) {
       const columns = this.availableDataElements
         .map((col: any) => {
-          const found = this.data.headers.find((c: any) => {
+          const found = data.headers.find((c: any) => {
             return col.id === c.name;
           });
           return {
