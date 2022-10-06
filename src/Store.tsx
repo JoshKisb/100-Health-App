@@ -1270,7 +1270,7 @@ class Store {
         events: {
           resource: "events/query.json",
           params: {
-            pager: false,
+            paging: "false",
             programStage: this.programStage,
             ...(allorgs ? {}: { orgUnit: this.selectedOrgUnit}),
             totalPages: "true",
