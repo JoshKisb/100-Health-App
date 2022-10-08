@@ -1212,7 +1212,7 @@ class Store {
   };
 
   @action queryEvents = async () => {
-    if (this.canInsert) {
+    if (this.canFetchData) {
       let query1: any = {
         events: {
           resource: "events/query.json",
@@ -1221,6 +1221,7 @@ class Store {
             pageSize: this.pageSize,
             programStage: this.programStage,
             orgUnit: this.selectedOrgUnit,
+            ouMode: "DESCENDANTS",
             totalPages: "true",
             attributeCc: this.attributeCC,
             attributeCos: this.selectedNationality,
@@ -1265,7 +1266,7 @@ class Store {
 
   
   @action downloadData = async (allorgs = false) => {
-    if (this.canInsert) {
+    if (this.canFetchData) {
       let query1: any = {
         events: {
           resource: "events/query.json",
@@ -1274,6 +1275,7 @@ class Store {
             programStage: this.programStage,
             ...(allorgs ? {}: { orgUnit: this.selectedOrgUnit}),
             totalPages: "true",
+            ouMode: "DESCENDANTS",
             attributeCc: this.attributeCC,
             attributeCos: this.selectedNationality,
             includeAllDataElements: "true",
@@ -1608,6 +1610,17 @@ class Store {
       this.selectedOrgUnit &&
       this.selectedNationality &&
       this.currentOrganisation
+    );
+  }
+
+  @computed get canFetchData() {
+    console.log("this.selectedOrgUnit is ", this.selectedOrgUnit);
+    console.log("this.selectedNationality is ", this.selectedNationality);
+    console.log("this.currentOrganisation is ", this.currentOrganisation);
+    return (
+      this.selectedOrgUnit &&
+      this.selectedNationality 
+      // this.currentOrganisation
     );
   }
 

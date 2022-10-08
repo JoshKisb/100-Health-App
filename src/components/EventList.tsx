@@ -662,6 +662,7 @@ export const EventList = observer(() => {
 		store?.nationalitySelect,
 		store.selectedCauseOfDeath,
 		store?.selectedLevel,
+		store.selectedOrgUnit,
 	]);
 
 	useEffect(() => {
