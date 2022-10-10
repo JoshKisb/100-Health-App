@@ -1293,9 +1293,11 @@ class Store {
           params: {
             paging: "false",
             programStage: this.programStage,
-            ...(allorgs ? {}: { orgUnit: this.selectedOrgUnit}),
+            ...(allorgs ? {}: { 
+              orgUnit: this.selectedOrgUnit,
+              ouMode: "DESCENDANTS",
+            }),
             totalPages: "true",
-            ouMode: "DESCENDANTS",
             attributeCc: this.attributeCC,
             attributeCos: this.selectedNationality,
             includeAllDataElements: "true",
