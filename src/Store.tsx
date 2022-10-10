@@ -374,7 +374,7 @@ class Store {
               // this.dEs[dE.code] = options;
             // });
             let name = trOptions?.name ?? de.dataElement.name;
-            return { ...de.dataElement, name, selected: de.displayInReports };
+            return { ...de.dataElement, realname: de.dataElement.name, name, selected: de.displayInReports };
           }
         );
         this.availablePrintDataElements = this.availableDataElements.map((de) => {
@@ -1567,7 +1567,7 @@ class Store {
           });
           return {
             key: found.name,
-            title: col.name,
+            title: col.realname,
             dataIndex: found.name,
             render: (text: any, row: any) => {
               return row[found.i];
