@@ -1338,7 +1338,7 @@ class Store {
             headers.push(c.title);
           }
         });
-        headers.push("Nationality");
+        // headers.push("Nationality");
         dd.push(headers);
 
         columns.forEach((h, idx) => {
