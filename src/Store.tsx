@@ -85,25 +85,24 @@ const extraHeaders = window.location.origin.includes("local")
     "lu9BiHPxNqH",
     "PaoRZbokFWJ",
       
-      
-    "WkXxkKEJLsg",
-    "fleGy9CvHYh",
-    "hO8No9fHVd2",
-    "eCVDO6lt4go",
-    "QGFYJK00ES7",
-    "CnPGhOcERFF",
-    "QHY3iYRLvMp",
-    "k9xdBQzYMXo",
-    "yftBZ5bSEOb",
-    "fJUy96o8akn",
-    "S53kx50gjQn",
-    "ctbKSNV2cg7",
-    "KpfvNQSsWIw",
-    "sJhOdGLD5lj",
-    "L97MrANAav9",
-    "twVlVWM3ffz",
-    "L97MrAMAav9",
-    "se3wRj1bYPo",
+    // "WkXxkKEJLsg",
+    // "fleGy9CvHYh",
+    // "hO8No9fHVd2",
+    // "eCVDO6lt4go",
+    // "QGFYJK00ES7",
+    // "CnPGhOcERFF",
+    // "QHY3iYRLvMp",
+    // "k9xdBQzYMXo",
+    // "yftBZ5bSEOb",
+    // "fJUy96o8akn",
+    // "S53kx50gjQn",
+    // "ctbKSNV2cg7",
+    // "KpfvNQSsWIw",
+    // "sJhOdGLD5lj",
+    // "L97MrANAav9",
+    // "twVlVWM3ffz",
+    // "L97MrAMAav9",
+    // "se3wRj1bYPo",
   ]
   
 const query = {
@@ -1325,18 +1324,41 @@ class Store {
         let dd = [];
         let headerIndexes = [];
 
+        let dodIndex = null;
+
         const columns = this.getdlcolumns(data.events)
         console.log("dlcolumns", columns)
-        dd.push(columns.map((c) => c.title));
+        let headers = [];
+        columns.forEach((c, idx) => {
+          if (c.key === "i8rrl8YWxLF") {
+            dodIndex = data.events.headers.findIndex((eh) => eh.name === "i8rrl8YWxLF");
+            headers.push("100-DDO10. Date of Death")
+            headers.push("100-DDO10. Time of Death")
+          } else {
+            headers.push(c.title);
+          }
+        });
+        headers.push("Nationality");
+        dd.push(headers);
 
         columns.forEach((h, idx) => {
-          headerIndexes.push(
-            data.events.headers.findIndex((eh) => eh.name == h.key)
-          );
+          const hidx = data.events.headers.findIndex((eh) => eh.name === h.key)
+          headerIndexes.push(hidx);
         });
 
         data.events.rows.forEach((e) => {
-          dd.push(headerIndexes.map((idx) => e[idx]));
+        
+          const rowdata = [];
+          headerIndexes.forEach((idx) => {
+            if (!!dodIndex && dodIndex === idx) {
+              rowdata.push(moment(e[idx]).format('YYYY-MM-DD'))
+              rowdata.push(moment(e[idx]).format('HH:mm:ss'))
+            } else {
+              rowdata.push(e[idx])
+            }
+          });
+
+          dd.push(rowdata);
         });
 
         console.log("Download data", dd);
