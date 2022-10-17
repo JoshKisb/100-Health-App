@@ -47,6 +47,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     const onLoadData = async (treeNode: any) => {
       await store.loadOrganisationUnitsChildren(treeNode.id);
       setUnits(store.organisationUnits);
+      console.log("otddddd", store.organisationUnits)
     };
 
     useEffect(() => {

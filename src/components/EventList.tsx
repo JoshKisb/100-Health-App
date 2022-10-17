@@ -555,11 +555,12 @@ export const EventList = observer(() => {
 	useEffect(() => {
 		console.log(
 			"EventList:hook nationalitySelect",
-			store.nationalitySelect
+			store.selectedNationality
 		);
 
 		const opts = currChartType == "column" ? colOptions : pieOptions;
 		chart.current = Highcharts.chart("topdiseases", opts);
+		
 
 		store.queryTopEvents().then(() => {
 			if (!!store.topDiseases) {
@@ -659,6 +660,7 @@ export const EventList = observer(() => {
 
 		store.queryEvents().then(() => {});
 	}, [
+		store?.selectedNationality,
 		store?.nationalitySelect,
 		store.selectedCauseOfDeath,
 		store?.selectedLevel,

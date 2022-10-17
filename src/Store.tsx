@@ -155,7 +155,9 @@ class Store {
   @observable engine: any;
   @observable fetchingOrgUnits: boolean = false;
   @observable userOrgUnits: any = [];
+  @observable userOrgUnitsLoaded: boolean = false;
   @observable nationalitySelect: any;
+  @observable actualSelOrgUnit: any;
   @observable selectedOrgUnit: any;
   @observable selectedLevel: any;
   @observable activeLanguage: any;
@@ -290,6 +292,7 @@ class Store {
     this.edit();
     this.currentEvent = null;
     this.editing = false;
+    this.selectedOrgUnit = this.actualSelOrgUnit;
     this.currentPage = "1";
   };
   @action showForm = () => (this.currentPage = "3");
@@ -297,7 +300,12 @@ class Store {
   @action setEngine = (engine: any) => (this.engine = engine);
   @action edit = () => (this.viewMode = false);
   @action view = () => (this.viewMode = true);
-  @action setCurrentEvent = (event: any) => (this.currentEvent = event);
+  @action setCurrentEvent = (event: any) => {
+    this.currentEvent = event;
+    this.actualSelOrgUnit = this.selectedOrgUnit;
+    console.log("setting org unit", this.currentEventOrgUnit)
+    this.selectedOrgUnit = this.currentEventOrgUnit;
+  };
   @action setSelectedNationality = async (nationality: any) => {
     try {
       console.log("Nationality is ", nationality);
@@ -324,96 +332,101 @@ class Store {
   @action
   loadUserOrgUnits = async () => {
     console.log("we are in the function now", query);
-    this.fetchingOrgUnits = true;
-    try {
-      const data = await this.engine.query(query);
+    if (!this.userOrgUnitsLoaded) {
+      this.fetchingOrgUnits = true;
 
-      console.log("loadUserOrgUnits:", data);
-
-      this.userOrgUnits = data.me.organisationUnits;
-      this.fetchingOrgUnits = false;
-
-      const options = data.options.optionSets
-        .filter((o: any) => {
-          return !!o.code;
-        })
-        .map((optionSet: any) => {
-          return [optionSet.code, optionSet.options];
-        });
-      this.optionSets = fromPairs(options);
-
-      const units = data.program.organisationUnits;
-
-      this.programOrganisationUnits = units;
-      const programStage = data.program.programStages[0];
-      
-      if (!!this.activeLanguage?.lang) {
-        let al = this.activeLanguage?.lang;
-
-        const url = `/api/dataStore/Languages/${al.LanguageName}`;
-
-        const options = {
-          headers: {
-            Accept: "application/json; charset=utf-8",
-          },
-        };
-
-        const result = await this.engine.link
-          .fetch(url, options)
-          .catch((err: any) => err);
-
-        console.log("meta", result.meta)
-
-        this.availableDataElements = programStage.programStageDataElements.map(
-          (de: any) => {
-            const trOptions = result.meta.dataElements
-            .find(dE => dE.id == de.dataElement.id)
-            // .forEach((dE: any) => {
-              // const options = dE.options.map(opt => result.meta.options.find(o => o.id == opt.id))
-              // this.dEs[dE.code] = options;
-            // });
-            let name = trOptions?.name ?? de.dataElement.name;
-            return { ...de.dataElement, realname: de.dataElement.name, name, selected: de.displayInReports };
+      try {
+        const data = await this.engine.query(query);
+  
+        console.log("loadUserOrgUnits:", data);
+  
+        this.userOrgUnits = data.me.organisationUnits;
+        this.fetchingOrgUnits = false;
+  
+        const options = data.options.optionSets
+          .filter((o: any) => {
+            return !!o.code;
+          })
+          .map((optionSet: any) => {
+            return [optionSet.code, optionSet.options];
+          });
+        this.optionSets = fromPairs(options);
+  
+        const units = data.program.organisationUnits;
+  
+        this.programOrganisationUnits = units;
+        const programStage = data.program.programStages[0];
+        
+        if (!!this.activeLanguage?.lang) {
+          let al = this.activeLanguage?.lang;
+  
+          const url = `/api/dataStore/Languages/${al.LanguageName}`;
+  
+          const options = {
+            headers: {
+              Accept: "application/json; charset=utf-8",
+            },
+          };
+  
+          const result = await this.engine.link
+            .fetch(url, options)
+            .catch((err: any) => err);
+  
+          console.log("meta", result.meta)
+  
+          this.availableDataElements = programStage.programStageDataElements.map(
+            (de: any) => {
+              const trOptions = result.meta.dataElements
+              .find(dE => dE.id == de.dataElement.id)
+              // .forEach((dE: any) => {
+                // const options = dE.options.map(opt => result.meta.options.find(o => o.id == opt.id))
+                // this.dEs[dE.code] = options;
+              // });
+              let name = trOptions?.name ?? de.dataElement.name;
+              return { ...de.dataElement, realname: de.dataElement.name, name, selected: de.displayInReports };
+            }
+          );
+          this.availablePrintDataElements = this.availableDataElements.map((de) => {
+            let replace = new RegExp(`^${de.code}\. ?`);
+            de.name = de.name?.replace(replace, "");
+            return de;
+          });
+  
+  
+          //const d2 = await this.engine.query(metaQ);
+          const trOptions = result.meta.optionSets
+          .filter((o: any) => {
+            return !!o.code;
+          })
+          .forEach((optionSet: any) => {
+            const options = optionSet.options.map(opt => result.meta.options.find(o => o.id == opt.id))
+            this.optionSets[optionSet.code] = options;
+          });
+        
+          const langNats = result?.meta?.categories?.find(
+            (p: any) => p.code == "RT01"
+          );
+          const langOptions =
+            langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
+          const langValues = result?.meta?.categoryOptions || [];
+  
+          let lcategories = [];
+          for (let i = 0; i < langOptions.length; i++) {
+            const id = langOptions[i];
+            lcategories.push(langValues.find((l: any) => l.id == id));
           }
-        );
-        this.availablePrintDataElements = this.availableDataElements.map((de) => {
-          let replace = new RegExp(`^${de.code}\. ?`);
-          de.name = de.name?.replace(replace, "");
-          return de;
-        });
+  
+          console.log("cates", lcategories);
+  
+          this.nationalitySelect = lcategories || [];
 
-
-        //const d2 = await this.engine.query(metaQ);
-        const trOptions = result.meta.optionSets
-        .filter((o: any) => {
-          return !!o.code;
-        })
-        .forEach((optionSet: any) => {
-          const options = optionSet.options.map(opt => result.meta.options.find(o => o.id == opt.id))
-          this.optionSets[optionSet.code] = options;
-        });
-      
-        const langNats = result?.meta?.categories?.find(
-          (p: any) => p.code == "RT01"
-        );
-        const langOptions =
-          langNats?.categoryOptions?.map((x: any) => x.id) ?? [];
-        const langValues = result?.meta?.categoryOptions || [];
-
-        let lcategories = [];
-        for (let i = 0; i < langOptions.length; i++) {
-          const id = langOptions[i];
-          lcategories.push(langValues.find((l: any) => l.id == id));
+          this.userOrgUnitsLoaded =  true;
         }
-
-        console.log("cates", lcategories);
-
-        this.nationalitySelect = lcategories || [];
+        // console.log("test13", test13);
+      } catch (e) {
+        console.log("errrruuuooorrrr", e);
+        this.fetchingOrgUnits = false;
       }
-      // console.log("test13", test13);
-    } catch (e) {
-      console.log("errrruuuooorrrr", e);
-      this.fetchingOrgUnits = false;
     }
   };
 
@@ -825,12 +838,15 @@ class Store {
     };
     try {
       const data = await this.engine.query(query);
+      console.log("otdddx res", data.organisations);
       const found = data.organisations.organisationUnits.map((unit: any) => {
         return unit.children.map((child: any) => {
           return { ...child, pId: parent };
         });
       });
       const all = flatten(found);
+      console.log("otdddx userorgs", this.userOrgUnits);
+      console.log("otdddx flatt", all);
       this.userOrgUnits = [...this.userOrgUnits, ...all];
     } catch (e) {
       console.log(e);
@@ -838,17 +854,7 @@ class Store {
   };
 
   @action setSelectedOrgUnit = async (val: any) => {
-    try {
       this.selectedOrgUnit = val;
-      this.queryTopEvents();
-      if (this.canInsert) {
-        await this.queryEvents();
-      } else {
-        this.data = null;
-      }
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   @action changeSelectedDateRange = async (
@@ -1231,6 +1237,7 @@ class Store {
   };
 
   @action queryEvents = async () => {
+    console.log("canFetch", this.canFetchData)
     if (this.canFetchData) {
       let query1: any = {
         events: {
@@ -1434,6 +1441,8 @@ class Store {
     }
     try {
       await this.engine.mutate(createMutation);
+      this.selectedOrgUnit = this.actualSelOrgUnit;
+      this.queryEvents().then(() => {});
     } catch (error) {
       console.error("Failed to fetch projects", error);
     }
@@ -1666,6 +1675,17 @@ class Store {
       this.selectedNationality 
       // this.currentOrganisation
     );
+  }
+  @computed get currentEventOrgUnit() {
+    //console.log("cuureEvOr", this.data.headers)
+    if (this.data && this.data.headers.length > 0 && this.currentEvent) {
+
+      const orgidx = this.data.headers.findIndex(h => h.name === "orgUnit");
+      //console.log("orgidx", orgidx)
+      return this.currentEvent[orgidx]
+    }
+
+    return null;
   }
 
   @computed get defaultValues() {
