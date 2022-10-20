@@ -157,6 +157,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                   style={{ width: "100%" }}
                   defaultValue={defaultRange}
                   onChange={handleSelect}
+                  format="YYYY-MM-DD"
                   size="large"
                 />
               </div>

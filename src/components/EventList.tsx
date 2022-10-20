@@ -17,6 +17,8 @@ import { GenderFilter, MortalityFilter } from "../filters";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 
+const { RangePicker } = DatePicker;
+
 const allLanguages = [
 	{
 		langName: "English",
@@ -560,7 +562,6 @@ export const EventList = observer(() => {
 
 		const opts = currChartType == "column" ? colOptions : pieOptions;
 		chart.current = Highcharts.chart("topdiseases", opts);
-		
 
 		store.queryTopEvents().then(() => {
 			if (!!store.topDiseases) {
@@ -707,6 +708,17 @@ export const EventList = observer(() => {
 				setDownloadng(false);
 			});
 	};
+
+	const handleChangeDate = (ranges) => {
+      if (!ranges) {
+        store.clearSelectedDlDateRange();
+      } else {
+        const startDate = ranges[0].format("YYYY-MM-DD");
+        const endDate = ranges[1].format("YYYY-MM-DD");
+
+        store.changeSelectedDlDateRange(startDate, endDate);
+      }
+    };
 
 	// console.log(store.data ? JSON.parse(JSON.stringify(store.data)) : "");
 
@@ -986,7 +998,6 @@ export const EventList = observer(() => {
 
 							<Dropdown.Button
 								icon={<DownOutlined />}
-								
 								overlay={
 									<Menu>
 										<Menu.Item
@@ -1009,16 +1020,31 @@ export const EventList = observer(() => {
 						</div>
 					}
 				>
-					<div
-						style={{
-							padding: "15px",
-							display: "flex",
-							gap: "10px",
-						}}
-					>
-						{Object.keys(store.filters).map((field: any) => (
-							<FilterMenu key={field} field={field} />
-						))}
+					<div style={{
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center"
+					}}>
+						<div
+							style={{
+								padding: "15px",
+								display: "flex",
+								gap: "10px",
+							}}
+						>
+							{Object.keys(store.filters).map((field: any) => (
+								<FilterMenu key={field} field={field} />
+							))}
+						</div>
+
+						<div>
+							<RangePicker
+								style={{ width: "100%" }}
+								onChange={handleChangeDate}
+								allowClear
+								size="large"
+							/>
+						</div>
 					</div>
 
 					<Table
