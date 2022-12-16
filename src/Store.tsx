@@ -404,12 +404,12 @@ class Store {
 					);
 					this.availablePrintDataElements = this.availableDataElements.map(
 						(de) => {
-							let replace = new RegExp(`^${escapeRegExp(de.code)}\. ?`);
+							let replace = new RegExp(`^${escapeRegExp(de.code)}\\. ?`);
 							de.name = de.name?.replace(replace, "");
 							return de;
 						}
 					);
-
+git 
 					//const d2 = await this.engine.query(metaQ);
 					const trOptions = result.meta.optionSets
 						.filter((o: any) => {
