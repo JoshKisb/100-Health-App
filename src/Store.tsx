@@ -1,5 +1,5 @@
 import { action, computed, observable, runInAction } from "mobx";
-import { flatten, fromPairs, isArray } from "lodash";
+import { escapeRegExp, flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
@@ -9,6 +9,14 @@ const _ = require("lodash");
 const extraHeaders = window.location.origin.includes("local")
 	? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
 	: {};
+
+export const dateFields = [
+		"eventDate",
+		"RbrUuKFSqkZ",
+		"i8rrl8YWxLF",
+		"j5TIQx3gHyF",
+		"U18Tnfz9EKd",
+	];
 
 const dlcolumns = [
 	"ZKBE8Xm9DJG",
@@ -396,7 +404,7 @@ class Store {
 					);
 					this.availablePrintDataElements = this.availableDataElements.map(
 						(de) => {
-							let replace = new RegExp(`^${de.code}\. ?`);
+							let replace = new RegExp(`^${escapeRegExp(de.code)}\. ?`);
 							de.name = de.name?.replace(replace, "");
 							return de;
 						}
@@ -1741,20 +1749,14 @@ class Store {
 	}
 
 	@computed get defaultValues() {
-		const dates = [
-			"eventDate",
-			"RbrUuKFSqkZ",
-			"i8rrl8YWxLF",
-			"j5TIQx3gHyF",
-			"U18Tnfz9EKd",
-		];
+		
 		if (this.data && this.data.headers.length > 0 && this.currentEvent) {
 			// console.log("we have default values");
 			const d = this.data.headers
 				.map((c: any) => {
 					let value = this.currentEvent[c.i];
 
-					if (dates.indexOf(c.name) !== -1 && value !== "") {
+					if (dateFields.indexOf(c.name) !== -1 && value !== "") {
 						value = moment(value);
 					} else if (value === "true") {
 						value = true;

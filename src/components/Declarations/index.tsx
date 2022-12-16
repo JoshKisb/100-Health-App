@@ -3,6 +3,8 @@ import { Input, Button, Form } from "antd";
 import { observer } from "mobx-react";
 import { useStore } from "./../../Context";
 import { Checkbox } from "antd";
+import englishString from "./../../assets/english.json";
+import frenchString from "./../../assets/french.json";
 
 import {
   CloseSquareOutlined,
@@ -28,6 +30,19 @@ interface SearchType {
   titleBackgroundColor?: any;
 }
 let anyArrayType: any[] = [];
+
+const allLanguages = [
+	{
+		langName: "English",
+		lang: englishString,
+	},
+	{
+		langName: "French",
+		lang: frenchString,
+	},
+];
+
+
 export const DistrictSearchPopup: SFC<SearchType> = observer(
   ({
     disabled = false,
@@ -44,7 +59,10 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     const [attendedBeforeDeath, setAttendedBeforeDeath] = useState(false);
     const [examinedBeforeDeath, setExaminedBeforeDeath] = useState(false);
     const [conductedPostMortem, setConductedPostMortem] = useState(false);
-    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage);
+    
+    const [activeLanguage, setActiveLanguage] = useState(
+      store.activeLanguage || allLanguages[0]
+    );
     const [other, setOther] = useState("");
 
     const saveContent = () => {
@@ -76,7 +94,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     // const [attendedBeforeDeath, setAttendedBeforeDeath] = useState("")
 
     useEffect(() => {
-      setActiveLanguage(store.activeLanguage);
+      if (!!store.activeLanguage)
+        setActiveLanguage(store.activeLanguage);
     }, [store.activeLanguage]);
 
     return (

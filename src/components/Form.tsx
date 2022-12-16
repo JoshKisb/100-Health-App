@@ -39,6 +39,7 @@ import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
 import { getNINPlaceOfBirth, getNINPerson, fetchNINToken } from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
+import { dateFields } from "../Store";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -73,6 +74,38 @@ const customFieldsReservedIds = [
 
 const { Option } = Select;
 const { Title } = Typography;
+
+const mcodmap = {
+	ByIsCiqkq4v: "ymyLrfEcYkD",
+	jdxl2rdeDEk: "lQ1Byr04JTx",
+	WzauwhVOwM0: "i8rrl8YWxLF",
+	eJwpqR9t7YM: "RJhbkjYrODG",
+	IT4y0iWZqRu: "ZYKmQ9GPOaF",
+	uFoaTRJ16Ch: "gNM2Yhypydx",
+	K4FUK590rIU: "KsGOxFyzIs1",
+	hcu4LCAMSkz: "zwKo51BEayZ",
+	ioXkKfrgCJa: "u44XP9fZweA",
+	FHmHV9mElbD: "t5nTEmlScSt",
+	iJqBq0kQtWO: "q7e7FOXKnOf",
+	AqXDMjrPUEE: "Z41di0TRjIu",
+	XW2CKaAiMKc: "xAWYJtQsg8M",
+	js6jQi1rx1j: "jY3K6Bv4o9Q",
+	ZKBE8Xm9DJG: "ZKBE8Xm9DJG",
+	sfpqAeqKeyQ: "sfpqAeqKeyQ",
+	zb7uTuBCPrN: "zb7uTuBCPrN",
+	QGFYJK00ES7: "QGFYJK00ES7",
+	CnPGhOcERFF: "CnPGhOcERFF",
+	xeE5TQLvucB: "xeE5TQLvucB",
+	Ylht9kCLSRW: "Ylht9kCLSRW",
+	myydnkmLfhp: "myydnkmLfhp",
+	aC64sB86ThG: "aC64sB86ThG",
+	cmZrrHfTxW3: "cmZrrHfTxW3",
+	eCVDO6lt4go: "eCVDO6lt4go",
+	hO8No9fHVd2: "hO8No9fHVd2",
+	fleGy9CvHYh: "fleGy9CvHYh",
+	WkXxkKEJLsg: "WkXxkKEJLsg",
+	CupbOInqvJI: "MOstDqSY0gO",
+}
 
 export const DataEntryForm = observer(() => {
 	const [form] = Form.useForm();
@@ -248,6 +281,7 @@ export const DataEntryForm = observer(() => {
 	const [actualTimeOfDeath, setActualTimeOfDeath] = useState(moment());
 
 	// End of Testing
+	const [fromReview, setFromReview] = useState(false);
 
 	const onFinish = async (values: any) => {
 		// Force form to acknowledge controlled values
@@ -288,7 +322,17 @@ export const DataEntryForm = observer(() => {
 
 		// })
 		console.log("values", values);
-		await store.addEvent(values);
+		if (!fromReview) {
+			await store.addEvent(values);
+		} else {
+			let rvalues = {};
+			Object.keys(mcodmap).forEach(rkey => {
+				rvalues[rkey] = values[mcodmap[rkey]]	
+			})
+			console.log("rvalues", rvalues);
+			window.opener.returntoreview(rvalues);
+			window.close();
+		}
 	};
 
 	const notTomorrow = (date: moment.Moment) => {
@@ -403,6 +447,8 @@ export const DataEntryForm = observer(() => {
 		if (!!changedValues.MOstDqSY0gO && store.selectedNationality === "l4UMmqvSBe5" && changedValues.MOstDqSY0gO.length == 14) {
 			fetchAndFillUserInfo(changedValues.MOstDqSY0gO);
 		}
+
+		
 
 		// Handling date of birth is unknown"
 		if (changedValues.roxn33dtLLx) {
@@ -1134,63 +1180,99 @@ export const DataEntryForm = observer(() => {
 		// Force ant design to acknowledge the changed value
 	};
 
+	
+
 	useEffect(() => {
 		console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
 		console.log("defaultValues: ", store.defaultValues);
-		if (Object.keys(store.defaultValues).length) {
+
+		let defaults = store.defaultValues;
+
+		const mcodtemp = localStorage.getItem("mcodtemp");
+      if (!!mcodtemp) {
+			setFromReview(true);
+        const lsdefaults = JSON.parse(mcodtemp);
+		  Object.keys(lsdefaults).forEach(key => {
+				defaults[mcodmap[key]] = lsdefaults[key];
+
+				if (key === "iJqBq0kQtWO" && !!lsdefaults[key]) {
+					setAgeKnown(true);
+					form.setFieldsValue({
+						roxn33dtLLx: "Yes",
+					});	
+				}
+
+				if (dateFields.indexOf(mcodmap[key]) !== -1 && !!lsdefaults[key]) {
+					defaults[mcodmap[key]] = moment(lsdefaults[key]);
+				} 
+				// else if (value === "true") {
+				// 	value = true;
+				// } else if (value === "false") {
+				// 	value = false;
+				// }
+		  })
+
+		  console.log("clean defaults", defaults)
+		  localStorage.removeItem("mcodtemp")
+		  
+		  form.setFieldsValue(defaults)
+		} 
+		
+		console.log({defaults});
+		if (Object.keys(defaults).length) {
 			setEditing(true);
 			// Auto-populate form if it is an existing form being edited
-			if (store.defaultValues.QTKk2Xt8KDu) {
-				setUnderlyingCauseText(`${store.defaultValues.QTKk2Xt8KDu}`);
+			if (defaults.QTKk2Xt8KDu) {
+				setUnderlyingCauseText(`${defaults.QTKk2Xt8KDu}`);
 			}
-			if (store.defaultValues.sJhOdGLD5lj) {
-				setUnderlyingCauseCode(`${store.defaultValues.sJhOdGLD5lj}`);
+			if (defaults.sJhOdGLD5lj) {
+				setUnderlyingCauseCode(`${defaults.sJhOdGLD5lj}`);
 			}
-			if (store.defaultValues.t5nTEmlScSt) {
-				setChosenSubcounty(`${store.defaultValues.t5nTEmlScSt}`);
+			if (defaults.t5nTEmlScSt) {
+				setChosenSubcounty(`${defaults.t5nTEmlScSt}`);
 			}
-			if (store.defaultValues.u44XP9fZweA) {
-				setChosenDistrict(`${store.defaultValues.u44XP9fZweA}`);
+			if (defaults.u44XP9fZweA) {
+				setChosenDistrict(`${defaults.u44XP9fZweA}`);
 			}			
-			if (store.defaultValues.QDHeWslaEoH) {
-				setChosenFacility(`${store.defaultValues.QDHeWslaEoH}`);
+			if (defaults.QDHeWslaEoH) {
+				setChosenFacility(`${defaults.QDHeWslaEoH}`);
 			}
 			setUnderlyingCauseChosen(true);
-			if (store.defaultValues.e96GB4CXyd3) {
-				setPersonsGender(`${store.defaultValues.e96GB4CXyd3}`);
+			if (defaults.e96GB4CXyd3) {
+				setPersonsGender(`${defaults.e96GB4CXyd3}`);
 			}
-			if (store.defaultValues.q7e7FOXKnOf) {
-				setPersonsAge(Number(`${store.defaultValues.q7e7FOXKnOf}`));
+			if (defaults.q7e7FOXKnOf) {
+				setPersonsAge(Number(`${defaults.q7e7FOXKnOf}`));
 			}
-			if (store.defaultValues.zwKo51BEayZ) {
-				setChosenRegion(`${store.defaultValues.zwKo51BEayZ}`);
+			if (defaults.zwKo51BEayZ) {
+				setChosenRegion(`${defaults.zwKo51BEayZ}`);
 			}
-			// setChosenFacility(`${store.defaultValues.referredValueSavedHere}`);
-			if (store.defaultValues.q7e7FOXKnOf) {
+			// setChosenFacility(`${defaults.referredValueSavedHere}`);
+			if (defaults.q7e7FOXKnOf) {
 				form.setFieldsValue({
-					q7e7FOXKnOf: Number(`${store.defaultValues.q7e7FOXKnOf}`),
+					q7e7FOXKnOf: Number(`${defaults.q7e7FOXKnOf}`),
 				});
-				// console.log("Chosen district is =>", store.defaultValues);
+				// console.log("Chosen district is =>", defaults);
 			}
 
-			if (store.defaultValues.twVlVWM3ffz) {
+			if (defaults.twVlVWM3ffz) {
 				setApprovalStatusFromEditedForm(
-					`${store.defaultValues.twVlVWM3ffz}`
+					`${defaults.twVlVWM3ffz}`
 				);
 			}
 
-			if (store.defaultValues.lu9BiHPxNqH) {
+			if (defaults.lu9BiHPxNqH) {
 				setDeclarationsDefault({
-					u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
-					ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
-					cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
-					lu9BiHPxNqH: `${store.defaultValues.lu9BiHPxNqH}`,
+					u9tYUv6AM51: defaults.u9tYUv6AM51 ? true : false,
+					ZXZZfzBpu8a: defaults.ZXZZfzBpu8a ? true : false,
+					cp5xzqVU2Vw: defaults.cp5xzqVU2Vw ? true : false,
+					lu9BiHPxNqH: `${defaults.lu9BiHPxNqH}`,
 				});
 			} else {
 				setDeclarationsDefault({
-					u9tYUv6AM51: store.defaultValues.u9tYUv6AM51 ? true : false,
-					ZXZZfzBpu8a: store.defaultValues.ZXZZfzBpu8a ? true : false,
-					cp5xzqVU2Vw: store.defaultValues.cp5xzqVU2Vw ? true : false,
+					u9tYUv6AM51: defaults.u9tYUv6AM51 ? true : false,
+					ZXZZfzBpu8a: defaults.ZXZZfzBpu8a ? true : false,
+					cp5xzqVU2Vw: defaults.cp5xzqVU2Vw ? true : false,
 					lu9BiHPxNqH: "",
 				});
 			}

@@ -113,6 +113,11 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     };
 
     useEffect(() => {
+      const mcodtemp = localStorage.getItem("mcodtemp");
+      console.log("checking ls", mcodtemp)
+      if (!!mcodtemp) {
+        store.showForm();
+      }
       checkApproval();
     }, []);
 
