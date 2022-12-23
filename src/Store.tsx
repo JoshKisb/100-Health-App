@@ -409,7 +409,7 @@ class Store {
 							return de;
 						}
 					);
-git 
+
 					//const d2 = await this.engine.query(metaQ);
 					const trOptions = result.meta.optionSets
 						.filter((o: any) => {
@@ -1342,6 +1342,8 @@ git
 
 	@action downloadData = async (allorgs = false) => {
 		if (this.canFetchData) {
+			
+
 			let query1: any = {
 				events: {
 					resource: "events/query.json",
