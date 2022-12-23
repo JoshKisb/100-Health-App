@@ -19,5 +19,9 @@
     "name": "HISP",
     "url": "http://dhis2.org"
   },
+<<<<<<< HEAD
   "manifest_generated_at": "Fri Dec 23 2022 15:29:38 GMT+0300 (East Africa Time)"
+=======
+  "manifest_generated_at": "Fri Dec 23 2022 15:23:23 GMT+0300 (East Africa Time)"
+>>>>>>> 907ebc09edcba2e8dd7a0b634b3baf1c4e6973dc
 }
