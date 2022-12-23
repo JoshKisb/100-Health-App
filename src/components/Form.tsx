@@ -3479,7 +3479,7 @@ export const DataEntryForm = observer(() => {
 													style={{ width: "100%" }}
 													size="large"
 													value={underlyingCauseText}
-													disabled={store.viewMode}
+													disabled={store.viewMode || !!underlyingCauseText}
 													onDropdownVisibleChange={(
 														change
 													) => {
