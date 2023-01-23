@@ -1192,7 +1192,7 @@ export const DataEntryForm = observer(() => {
       if (!!mcodtemp) {
 			setFromReview(true);
         const lsdefaults = JSON.parse(mcodtemp);
-		  Object.keys(lsdefaults).forEach(key => {
+		  Object.keys(lsdefaults).filter(k => !["nationality", "orgUnit"].includes(k)).forEach(key => {
 				defaults[mcodmap[key]] = lsdefaults[key];
 
 				if (key === "iJqBq0kQtWO" && !!lsdefaults[key]) {

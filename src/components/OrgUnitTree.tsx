@@ -116,7 +116,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
       const mcodtemp = localStorage.getItem("mcodtemp");
       console.log("checking ls", mcodtemp)
       if (!!mcodtemp) {
-        store.showForm();
+        store.setNewFromLocalStorage(JSON.parse(mcodtemp));
       }
       checkApproval();
     }, []);

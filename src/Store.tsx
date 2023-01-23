@@ -208,6 +208,7 @@ class Store {
 	@observable selectedDlDateRange: [string, string] | null = null;
 	@observable searchIds: any;
 	@observable filters: any = {};
+	@observable lsdata: any = null;
 	@observable allDisabled: any = {
 		ZKBE8Xm9DJG: false,
 		ZYKmQ9GPOaF: false,
@@ -316,6 +317,10 @@ class Store {
 		console.log("setting org unit", this.currentEventOrgUnit);
 		this.selectedOrgUnit = this.currentEventOrgUnit;
 	};
+	@action setNewFromLocalStorage = (ls: any) => {
+		this.showForm();
+		this.lsdata = ls;
+	} 
 	@action setSelectedNationality = async (nationality: any) => {
 		try {
 			console.log("Nationality is ", nationality);
@@ -442,6 +447,25 @@ class Store {
 					this.nationalitySelect = lcategories || [];
 
 					this.userOrgUnitsLoaded = true;
+
+					if (!!this.lsdata) {
+						if (!!this.lsdata["orgUnit"]) {
+							this.actualSelOrgUnit = this.selectedOrgUnit;
+							const org = this.programOrganisationUnits.find(o => o.id === this.lsdata["orgUnit"])
+							org.leaf = true;
+							this.userOrgUnits = [...this.userOrgUnits, org];
+							console.log("setting org unite", org);
+							this.selectedOrgUnit = this.lsdata["orgUnit"]
+						}
+				
+						if(!!this.lsdata["nationality"]) {
+							const nId = this.nationalitySelect?.find(n => n.name === this.lsdata["nationality"])?.id
+							console.log("setting nat", nId);
+							if (!!nId)
+								this.selectedNationality = nId;
+						}
+						this.lsdata = null;
+					}
 				}
 				// console.log("test13", test13);
 			} catch (e) {
