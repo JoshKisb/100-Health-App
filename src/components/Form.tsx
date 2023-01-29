@@ -76,6 +76,7 @@ const { Option } = Select;
 const { Title } = Typography;
 
 const mcodmap = {
+	hcu4LCAMSkz: "dsiwvNQLe5n", // village 
 	ByIsCiqkq4v: "ymyLrfEcYkD",
 	jdxl2rdeDEk: "lQ1Byr04JTx",
 	WzauwhVOwM0: "i8rrl8YWxLF",
@@ -83,9 +84,8 @@ const mcodmap = {
 	FIfoObQJvNp: "ZYKmQ9GPOaF",
 	uFoaTRJ16Ch: "gNM2Yhypydx",
 	K4FUK590rIU: "KsGOxFyzIs1",
-	hcu4LCAMSkz: "zwKo51BEayZ",
-	ioXkKfrgCJa: "u44XP9fZweA",
-	FHmHV9mElbD: "t5nTEmlScSt",
+	FHmHV9mElbD: "u44XP9fZweA", // district
+	ioXkKfrgCJa: "t5nTEmlScSt", // subcounty
 	iJqBq0kQtWO: "q7e7FOXKnOf",
 	AqXDMjrPUEE: "Z41di0TRjIu",
 	XW2CKaAiMKc: "xAWYJtQsg8M",
@@ -322,9 +322,9 @@ export const DataEntryForm = observer(() => {
 
 		// })
 		console.log("values", values);
+		
+		await store.addEvent(values);
 		if (!fromReview) {
-			await store.addEvent(values);
-		} else {
 			let rvalues = {};
 			Object.keys(mcodmap).forEach(rkey => {
 				rvalues[rkey] = values[mcodmap[rkey]]	
@@ -1213,6 +1213,8 @@ export const DataEntryForm = observer(() => {
 		  })
 
 		  console.log("clean defaults", defaults)
+		  form.setFieldsValue({ e96GB4CXyd3: "Female" })
+		  setPersonsGender("Female");
 		  localStorage.removeItem("mcodtemp")
 		  
 		  form.setFieldsValue(defaults)

@@ -187,6 +187,7 @@ class Store {
 	@observable programOrganisationUnits = []; /** !!!!!!!!!! */
 	@observable allOrgUnits: any = null;
 	@observable currentEvent: any;
+	@observable currentEventObj: any;
 	@observable roles: any = [];
 	@observable programExists = null;
 	@observable viewMode = false;
@@ -460,6 +461,7 @@ class Store {
 							console.log("ss", this.lsdata["event"])
 							const e: any = await this.getEvent(this.lsdata["event"])
 							   console.log("ev", e.orgUnit);
+								this.currentEventObj = e;
 								this.actualSelOrgUnit = this.selectedOrgUnit;
 								const org = this.programOrganisationUnits.find(o => o.id === e.orgUnit)
 								org.leaf = true;
@@ -1570,6 +1572,9 @@ class Store {
 		if (this.editing && this.currentEvent) {
 			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
+		} else if(!!this.currentEventObj) {
+			event = { ...event, event: this.currentEventObj.event };
+			createMutation = { ...createMutation, data: event };
 		}
 		try {
 			await this.engine.mutate(createMutation);
@@ -1836,6 +1841,12 @@ class Store {
 			const dFromPairs = fromPairs(d);
 
 			return dFromPairs;
+		} else if(!!this.currentEventObj) {
+			const d = this.currentEventObj;
+			dateFields.forEach(f => {
+				if (!!d[f]) d[f] = moment(d[f]);
+			})
+			return d;
 		}
 		return {};
 	}
