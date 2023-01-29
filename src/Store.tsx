@@ -456,6 +456,18 @@ class Store {
 							this.userOrgUnits = [...this.userOrgUnits, org];
 							console.log("setting org unite", org);
 							this.selectedOrgUnit = this.lsdata["orgUnit"]
+						} else if(!!this.lsdata["event"]) {
+							console.log("ss", this.lsdata["event"])
+							const e: any = await this.getEvent(this.lsdata["event"])
+							   console.log("ev", e.orgUnit);
+								this.actualSelOrgUnit = this.selectedOrgUnit;
+								const org = this.programOrganisationUnits.find(o => o.id === e.orgUnit)
+								org.leaf = true;
+								this.userOrgUnits = [...this.userOrgUnits, org];
+								console.log("setting org unite", org);
+								this.selectedOrgUnit = e.orgUnit;
+							
+							
 						}
 				
 						if(!!this.lsdata["nationality"]) {
@@ -1304,6 +1316,34 @@ class Store {
 		}
 	};
 
+	@action getEvent = async (eventId) => {
+		let query1: any = {
+			events: {
+				resource: `events/${eventId}.json`,
+			}
+		}
+
+		try {
+			const data = await this.engine.query(query1);
+			console.log({data})
+			return data.events;
+			// runInAction(() => {
+			// 	this.data = data.events;
+
+			// 	this.data.headers = this.data.headers.map(
+			// 		(a: any, i: number) => {
+			// 			return {
+			// 				...a,
+			// 				i,
+			// 			};
+			// 		}
+			// 	);
+			// 	this.total = this.data.metaData.pager.total;
+			// });
+		} catch (e) {
+			console.log("exxx", e);
+		}
+	}
 	@action queryEvents = async () => {
 		console.log("canFetch", this.canFetchData);
 		if (this.canFetchData) {
