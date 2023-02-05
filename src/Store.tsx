@@ -456,12 +456,10 @@ class Store {
 							org.leaf = true;
 							this.userOrgUnits = [...this.userOrgUnits, org];
 							console.log("setting org unite", org);
-							this.selectedOrgUnit = this.lsdata["orgUnit"]
+							this.selectedOrgUnit = this.lsdata["orgUnit"]							
 						} else if(!!this.lsdata["event"]) {
 							console.log("ss", this.lsdata["event"])
-							const e: any = await this.getEvent(this.lsdata["event"])
-							   console.log("ev", e.orgUnit);
-								this.currentEventObj = e;
+							const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
 								this.actualSelOrgUnit = this.selectedOrgUnit;
 								const org = this.programOrganisationUnits.find(o => o.id === e.orgUnit)
 								org.leaf = true;
@@ -1569,8 +1567,8 @@ class Store {
 			resource: "events",
 			data: event,
 		};
-		if (this.editing && this.currentEvent) {
-			event = { ...event, event: this.currentEvent[0] };
+		if ((this.editing && this.currentEvent) || this.lsdata) {
+			event = { ...event, event: this.currentEventObj?.id ?? this.lsdata?.ZKBE8Xm9DJG ?? this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
 		} else if(!!this.currentEventObj) {
 			event = { ...event, event: this.currentEventObj.event };

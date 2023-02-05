@@ -324,7 +324,7 @@ export const DataEntryForm = observer(() => {
 		console.log("values", values);
 		
 		await store.addEvent(values);
-		if (!fromReview) {
+		if (!!fromReview) {
 			let rvalues = {};
 			Object.keys(mcodmap).forEach(rkey => {
 				rvalues[rkey] = values[mcodmap[rkey]]	
@@ -1185,7 +1185,7 @@ export const DataEntryForm = observer(() => {
 	useEffect(() => {
 		console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
 		console.log("defaultValues: ", store.defaultValues);
-
+		form.setFieldsValue({"eventDate": moment()})
 		let defaults = store.defaultValues;
 
 		const mcodtemp = localStorage.getItem("mcodtemp");
@@ -1739,8 +1739,7 @@ export const DataEntryForm = observer(() => {
 						<DatePicker
 							disabledDate={notTomorrow}
 							size="large"
-							disabled={store.viewMode}
-							defaultValue={moment()}
+							disabled={store.viewMode}							
 							placeholder={activeLanguage.lang["Select a Date"]}
 						/>
 					</Form.Item>
