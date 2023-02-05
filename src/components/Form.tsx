@@ -1196,9 +1196,9 @@ export const DataEntryForm = observer(() => {
 				defaults[mcodmap[key]] = lsdefaults[key];
 
 				if (key === "iJqBq0kQtWO" && !!lsdefaults[key]) {
-					setAgeKnown(true);
+					setAgeKnown(false);
 					form.setFieldsValue({
-						roxn33dtLLx: "Yes",
+						roxn33dtLLx: "No",
 					});	
 				}
 
@@ -1217,8 +1217,8 @@ export const DataEntryForm = observer(() => {
 		  setPersonsGender("Female");
 		  localStorage.removeItem("mcodtemp")
 		  
-		  form.setFieldsValue(defaults)
 		} 
+		form.setFieldsValue(defaults)
 		
 		console.log({defaults});
 		if (Object.keys(defaults).length) {

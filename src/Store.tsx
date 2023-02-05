@@ -459,14 +459,20 @@ class Store {
 							this.selectedOrgUnit = this.lsdata["orgUnit"]							
 						} else if(!!this.lsdata["event"]) {
 							console.log("ss", this.lsdata["event"])
-							const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
-								this.actualSelOrgUnit = this.selectedOrgUnit;
-								const org = this.programOrganisationUnits.find(o => o.id === e.orgUnit)
-								org.leaf = true;
-								this.userOrgUnits = [...this.userOrgUnits, org];
-								console.log("setting org unite", org);
-								this.selectedOrgUnit = e.orgUnit;
+							const fillInfo = async () => {
+								const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
+								if (!!e)
+									this.currentEventObj = e;
+							}
+							fillInfo();
+							const parent: any = await this.getEvent(this.lsdata["event"])							   								
 							
+							this.actualSelOrgUnit = this.selectedOrgUnit;
+							const org = this.programOrganisationUnits.find(o => o.id === parent.orgUnit)
+							org.leaf = true;
+							this.userOrgUnits = [...this.userOrgUnits, org];
+							console.log("setting org unite", org);
+							this.selectedOrgUnit = parent.orgUnit;
 							
 						}
 				
@@ -476,7 +482,7 @@ class Store {
 							if (!!nId)
 								this.selectedNationality = nId;
 						}
-						this.lsdata = null;
+						
 					}
 				}
 				// console.log("test13", test13);
@@ -1318,15 +1324,16 @@ class Store {
 
 	@action getEvent = async (eventId) => {
 		let query1: any = {
-			events: {
+			event: {
 				resource: `events/${eventId}.json`,
-			}
+			},
 		}
 
 		try {
+			console.log("q11", query1)
 			const data = await this.engine.query(query1);
 			console.log({data})
-			return data.events;
+			return data.event;
 			// runInAction(() => {
 			// 	this.data = data.events;
 
@@ -1531,7 +1538,6 @@ class Store {
 
 		console.log("FORM RECEIVED IS ", form);
 		const dataValues = Object.entries(rest)
-
 			.map(([dataElement, value]) => {
 				if (value instanceof moment) {
 					if (dataElement === "i8rrl8YWxLF") {
@@ -1548,6 +1554,7 @@ class Store {
 				};
 			})
 			.filter((dv) => !!dv.value);
+
 		console.log("OBJECT ENTRIES ARE:", dataValues);
 		let event: any = {
 			attributeCategoryOptions: this.selectedNationality,
@@ -1567,15 +1574,17 @@ class Store {
 			resource: "events",
 			data: event,
 		};
-		if ((this.editing && this.currentEvent) || this.lsdata) {
-			event = { ...event, event: this.currentEventObj?.id ?? this.lsdata?.ZKBE8Xm9DJG ?? this.currentEvent[0] };
+		console.log("vvv", this)
+		if ((this.editing && this.currentEvent)) {
+			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
-		} else if(!!this.currentEventObj) {
-			event = { ...event, event: this.currentEventObj.event };
+		} else if(!!this.currentEventObj || this.lsdata) {
+			event = { ...event, event: this.currentEventObj?.event ?? this.lsdata?.ZKBE8Xm9DJG };
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
 			await this.engine.mutate(createMutation);
+			
 			this.selectedOrgUnit = this.actualSelOrgUnit;
 			this.queryEvents().then(() => {});
 		} catch (error) {
@@ -1840,11 +1849,22 @@ class Store {
 
 			return dFromPairs;
 		} else if(!!this.currentEventObj) {
-			const d = this.currentEventObj;
-			dateFields.forEach(f => {
-				if (!!d[f]) d[f] = moment(d[f]);
-			})
-			return d;
+			const d = this.currentEventObj.dataValues.map(de => {
+				let value = de.value;
+
+					if (dateFields.indexOf(de.dataElement) !== -1 && value !== "") {
+						value = moment(value);
+					} else if (value === "true") {
+						value = true;
+					} else if (value === "false") {
+						value = false;
+					}
+					return [de.dataElement, value];
+			}).filter((v: any) => !!v[1]);
+
+			const dFromPairs = fromPairs(d);
+
+			return {...dFromPairs, ...this.lsdata};
 		}
 		return {};
 	}
