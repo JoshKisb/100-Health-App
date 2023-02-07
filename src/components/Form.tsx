@@ -2126,13 +2126,13 @@ export const DataEntryForm = observer(() => {
 															e,
 															"years"
 														);
+														setPersonsAge(
+															ageInYears
+														);
 														if (
 															ageInYears < 50 &&
 															ageInYears > 10
 														) {
-															setPersonsAge(
-																ageInYears
-															);
 															// q7e7FOXKnOf
 															// form.setFieldsValue({
 															//   RbrUuKFSqkZ: ageInYears,
@@ -2206,7 +2206,7 @@ export const DataEntryForm = observer(() => {
 												ageKnown
 											}
 											onChange={(e: any) => {
-												// console.log("Age changed to", e);
+												console.log("Age changed to", e);
 
 												setPersonsAge(e);
 												if (personsGender === "Male") {
@@ -4535,7 +4535,7 @@ export const DataEntryForm = observer(() => {
 											name="V4rE1tsj5Rb"
 											className="m-0"
 										>
-											{optionSet("YN01", "V4rE1tsj5Rb")}
+											{optionSet("YN01", "V4rE1tsj5Rb", null, personsAge > 1)}
 										</Form.Item>
 									) : null}
 								</td>
@@ -4574,7 +4574,8 @@ export const DataEntryForm = observer(() => {
 															}`
 														);
 													}
-												}
+												},
+												personsAge > 1
 											)}
 										</Form.Item>
 									) : null}
@@ -4606,6 +4607,7 @@ export const DataEntryForm = observer(() => {
 											},
 										]}
 									>
+										
 										<InputNumber
 											size="large"
 											disabled={
@@ -4633,10 +4635,10 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.xAWYJtQsg8M
+												store.allDisabled.xAWYJtQsg8M || personsAge > 1
 											}
 										/>
-									</Form.Item>
+									</Form.Item>									
 									{form.getFieldValue("xAWYJtQsg8M") < 100 ||
 									form.getFieldValue("xAWYJtQsg8M") >
 										10000 ? (
@@ -4669,7 +4671,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.lQ1Byr04JTx
+												store.allDisabled.lQ1Byr04JTx || personsAge > 1
 											}
 										/>
 									</Form.Item>
@@ -4703,7 +4705,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.DdfDMFW4EJ9
+												store.allDisabled.DdfDMFW4EJ9 || personsAge > 1
 											}
 										/>
 									</Form.Item>
@@ -4739,7 +4741,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.GFVhltTCG8b
+												store.allDisabled.GFVhltTCG8b || personsAge > 1
 											}
 										/>
 									</Form.Item>
