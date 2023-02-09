@@ -10,7 +10,6 @@ import { useStore } from "../Context";
 import { any } from "prop-types";
 
 
-
 const state = {
   field1: "",
 };
@@ -58,6 +57,11 @@ export const ICDField: SFC<ICD> = observer(
     const [value, setValue] = useState("");
     const [visible, setVisible] = useState(!form.getFieldValue(field));
     const store = useStore();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // const aval = (fieldName,form) => {
+    //   return Form.useWatch(fieldName,form);
+    // }
 
     const mySettings = {
       apiServerUrl: "https://hmis-dev.health.go.ug",
@@ -278,10 +282,17 @@ export const ICDField: SFC<ICD> = observer(
       // }
     };
 
+    // useEffect(() => {
+      
+    //   console.log("form val", aval)
+    //   setValue(aval)
+    // }, [aval])
+
     return (
       <div style={styles.icdContainerStyles} id={id}>
         {visible ? (
           <div className="flex" ref={fieldRef}>
+            <Form.Item name={field} className="m-0">
             <Input
               size="large"
               disabled={
@@ -313,6 +324,7 @@ export const ICDField: SFC<ICD> = observer(
                 // }
               }}
             />
+            </Form.Item>
             <Popconfirm
               disabled={buttonIsDisabled}
               visible={popConfirmVisible}
