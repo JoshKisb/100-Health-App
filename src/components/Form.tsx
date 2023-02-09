@@ -1214,6 +1214,9 @@ export const DataEntryForm = observer(() => {
 				if (dateFields.indexOf(mcodmap[key]) !== -1 && !!lsdefaults[key]) {
 					defaults[mcodmap[key]] = moment(lsdefaults[key]);
 				} 
+
+				if (mcodmap[key] === "jY3K6Bv4o9Q")
+					defaults[mcodmap[key]] = lsdefaults[key] === "true" ? "Yes" : "No";
 				// else if (value === "true") {
 				// 	value = true;
 				// } else if (value === "false") {

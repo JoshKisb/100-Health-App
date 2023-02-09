@@ -320,6 +320,9 @@ class Store {
 	};
 	@action setNewFromLocalStorage = (ls: any) => {
 		this.showForm();
+		console.log("lsss", ls)
+		if (!!ls["jY3K6Bv4o9Q"])
+		ls["jY3K6Bv4o9Q"] = ls["jY3K6Bv4o9Q"] === "true" ? "Yes" : "No";
 		this.lsdata = ls;
 	} 
 	@action setSelectedNationality = async (nationality: any) => {
@@ -1836,6 +1839,8 @@ class Store {
 
 					if (dateFields.indexOf(c.name) !== -1 && value !== "") {
 						value = moment(value);
+					} else if (c.name === "jY3K6Bv4o9Q") {
+						value = value === "true" ? "Yes" : "No";
 					} else if (value === "true") {
 						value = true;
 					} else if (value === "false") {
@@ -1854,6 +1859,8 @@ class Store {
 
 					if (dateFields.indexOf(de.dataElement) !== -1 && value !== "") {
 						value = moment(value);
+					} else if (de.dataElement === "jY3K6Bv4o9Q") {
+						value = value === "true" ? "Yes" : "No";
 					} else if (value === "true") {
 						value = true;
 					} else if (value === "false") {
@@ -1863,7 +1870,7 @@ class Store {
 			}).filter((v: any) => !!v[1]);
 
 			const dFromPairs = fromPairs(d);
-
+			console.log("dfp", dFromPairs)
 			return {...dFromPairs, ...this.lsdata};
 		}
 		return {};
