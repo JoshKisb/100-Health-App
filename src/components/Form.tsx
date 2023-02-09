@@ -335,6 +335,15 @@ export const DataEntryForm = observer(() => {
 		}
 	};
 
+	const onCancel = () => {
+		if (!!fromReview) {
+			window.close();
+		} else {
+			store.showEvents();
+			store.enableForm();
+		}
+	}
+
 	const notTomorrow = (date: moment.Moment) => {
 		return date.isAfter(moment());
 	};
@@ -1660,10 +1669,7 @@ export const DataEntryForm = observer(() => {
 									<div>
 										<Button
 											size="large"
-											onClick={() => {
-												store.showEvents();
-												store.enableForm();
-											}}
+											onClick={onCancel}
 										>
 											{activeLanguage.lang["Cancel"]}
 										</Button>
