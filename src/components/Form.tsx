@@ -3195,7 +3195,7 @@ export const DataEntryForm = observer(() => {
 											toggleEnableAltSearch("d", value);
 										}}
 										next="cmZrrHfTxW3"
-										dvalue={form.getFieldValue("cmZrrHfTxW3")}
+										dvalue={form.getFieldValue("CnPGhOcERFF")}
 										disabled={store.allDisabled.CnPGhOcERFF}
 										form={form}
 										field="CnPGhOcERFF"
