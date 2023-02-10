@@ -2700,6 +2700,7 @@ export const DataEntryForm = observer(() => {
 										}}
 										disabled={store.allDisabled.sfpqAeqKeyQ}
 										next="Ylht9kCLSRW"
+										dvalue={form.getFieldValue("sfpqAeqKeyQ")}
 										form={form}
 										field="sfpqAeqKeyQ"
 										codeField="zD0E77W4rFs"
@@ -2873,6 +2874,7 @@ export const DataEntryForm = observer(() => {
 											toggleEnableAltSearch("b", value);
 										}}
 										disabled={store.allDisabled.zb7uTuBCPrN}
+										dvalue={form.getFieldValue("zb7uTuBCPrN")}
 										form={form}
 										field="zb7uTuBCPrN"
 										searchQueryField="uckvenVFnwf"
@@ -3034,6 +3036,7 @@ export const DataEntryForm = observer(() => {
 										next="aC64sB86ThG"
 										disabled={store.allDisabled.QGFYJK00ES7}
 										form={form}
+										dvalue={form.getFieldValue("QGFYJK00ES7")}
 										field="QGFYJK00ES7"
 										searchQueryField="ZFdJRT3PaUd"
 										codeField="C8n6hBilwsX"
@@ -3192,6 +3195,7 @@ export const DataEntryForm = observer(() => {
 											toggleEnableAltSearch("d", value);
 										}}
 										next="cmZrrHfTxW3"
+										dvalue={form.getFieldValue("cmZrrHfTxW3")}
 										disabled={store.allDisabled.CnPGhOcERFF}
 										form={form}
 										field="CnPGhOcERFF"

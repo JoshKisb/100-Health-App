@@ -27,6 +27,7 @@ interface ICD {
   addUnderlyingCause?: any;
   id?: string;
   resetUnderlyingCauseDropdown?: any;
+  dvalue?: any
 }
 
 export const ICDField: SFC<ICD> = observer(
@@ -43,6 +44,7 @@ export const ICDField: SFC<ICD> = observer(
     addUnderlyingCause,
     id,
     resetUnderlyingCauseDropdown,
+    dvalue
   }) => {
     // Testing
     const [buttonIsDisabled, setButtonIsDisabled] = useState(true);
@@ -52,6 +54,7 @@ export const ICDField: SFC<ICD> = observer(
     const [reposition, setReposition] = useState(false);
     const [listenerAdded, setListenerAdded] = useState(false);
     const fieldRef = React.createRef<HTMLDivElement>();
+    const inputRef = React.createRef<any>()
 
     //
     const [value, setValue] = useState("");
@@ -282,17 +285,23 @@ export const ICDField: SFC<ICD> = observer(
       // }
     };
 
-    // useEffect(() => {
+    useEffect(() => {
       
-    //   console.log("form val", aval)
-    //   setValue(aval)
-    // }, [aval])
+      console.log("form val", dvalue)
+      setVisible((v) => 
+        !!dvalue && !!v ? false: v
+      )
+
+      if (!!dvalue && !!next)
+        store.enableValue(next);
+
+    }, [dvalue, next, store])
 
     return (
       <div style={styles.icdContainerStyles} id={id}>
         {visible ? (
           <div className="flex" ref={fieldRef}>
-            <Form.Item name={field} className="m-0">
+           
             <Input
               size="large"
               disabled={
@@ -300,6 +309,7 @@ export const ICDField: SFC<ICD> = observer(
               }
               className="ctw-input"
               data-ctw-ino={field}
+              ref={inputRef}
               value={value}
               onChange={(e: any) => {
                 setValue(e.target.value);
@@ -324,7 +334,7 @@ export const ICDField: SFC<ICD> = observer(
                 // }
               }}
             />
-            </Form.Item>
+            
             <Popconfirm
               disabled={buttonIsDisabled}
               visible={popConfirmVisible}
