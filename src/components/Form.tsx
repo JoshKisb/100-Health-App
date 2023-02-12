@@ -3905,6 +3905,19 @@ export const DataEntryForm = observer(() => {
 
 								<td>
 									<Form.Item
+										name="CPq2mkKL98T"
+										className="m-0"
+									>
+										<Input
+											size="large"
+											disabled={store.viewMode}
+											type="hidden"
+										/>
+									</Form.Item>
+								</td>
+
+								<td>
+									<Form.Item
 										name="cSDJ9kSJkFP"
 										className="m-0"
 									>
