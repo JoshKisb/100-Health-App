@@ -1200,6 +1200,8 @@ export const DataEntryForm = observer(() => {
 		const mcodtemp = localStorage.getItem("mcodtemp");
       if (!!mcodtemp) {
 			setFromReview(true);
+			form.setFieldsValue({ "CPq2mkKL98T": "hmis 020" });
+			
         const lsdefaults = JSON.parse(mcodtemp);
 		  Object.keys(lsdefaults).filter(k => !["nationality", "orgUnit"].includes(k)).forEach(key => {
 				defaults[mcodmap[key]] = lsdefaults[key];
