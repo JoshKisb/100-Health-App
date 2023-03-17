@@ -49,7 +49,6 @@ export const getNINPerson = async (nin) => {
 		body: JSON.stringify({
 			nationalId: nin,
 			token: token,
-			method: 'getPerson'
 		}),
 	}).then((response) => response.json());
 };
@@ -64,7 +63,6 @@ export const getNINPlaceOfBirth = async (nin) => {
 		body: JSON.stringify({
 			nationalId: nin,
 			token: token,
-			method: 'getPlaceOfResidence'
 		}),
 	}).then((response) => response.json());
 };
