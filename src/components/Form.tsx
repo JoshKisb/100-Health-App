@@ -1200,7 +1200,7 @@ export const DataEntryForm = observer(() => {
 		const mcodtemp = localStorage.getItem("mcodtemp");
       if (!!mcodtemp) {
 			setFromReview(true);
-			form.setFieldsValue({ "CPq2mkKL98T": "hmis 020" });
+			form.setFieldsValue({ CPq2mkKL98T: "hmis 020" });
 			
         const lsdefaults = JSON.parse(mcodtemp);
 		  Object.keys(lsdefaults).filter(k => !["nationality", "orgUnit"].includes(k)).forEach(key => {
@@ -1211,6 +1211,8 @@ export const DataEntryForm = observer(() => {
 					form.setFieldsValue({
 						roxn33dtLLx: "No",
 					});	
+				} else if (key === "iJqBq0kQtWO" && !lsdefaults[key]) {
+					delete defaults[mcodmap[key]];
 				}
 
 				if (dateFields.indexOf(mcodmap[key]) !== -1 && !!lsdefaults[key]) {
