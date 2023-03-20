@@ -89,6 +89,10 @@ abbr[title] {
           text-decoration: underline dotted; /* 2 */
 }
 
+.w-100 {
+  width: 100%;
+}
+
 /**
  * Add the correct font weight in Chrome, Edge, and Safari.
  */

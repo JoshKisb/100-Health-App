@@ -4,6 +4,9 @@
     justify-content: center;
     padding:2rem 4rem;
 }
+.w-100 {
+  width: 100%;
+}
 
 .lang-config-form{
     max-width: 50rem;

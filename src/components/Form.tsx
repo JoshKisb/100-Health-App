@@ -37,7 +37,7 @@ import Declarations from "./Declarations";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { AnyARecord } from "dns";
-import { getNINPlaceOfBirth, getNINPerson, fetchNINToken } from "./../utils/ninApi"
+import { useNinApi }  from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
 import { dateFields } from "../Store";
 
@@ -886,8 +886,10 @@ export const DataEntryForm = observer(() => {
 		// console.log("working");
 	};
 
+	const ninapi = useNinApi();
+
 	const fetchAndFillUserInfo = (nin: string) => {
-		getNINPerson(nin)
+		ninapi.getNINPerson(nin)
 		.then(data => {
 			const info = data.data;
 			console.log("NIN info", data);
@@ -950,7 +952,7 @@ export const DataEntryForm = observer(() => {
 		  console.error('Error fetch user:', error);
 		});
 
-		getNINPlaceOfBirth(nin)
+		ninapi.getNINPlaceOfBirth(nin)
 		.then(async (data) => {
 
 
@@ -1307,7 +1309,8 @@ export const DataEntryForm = observer(() => {
 		// setActiveLanguage(allLanguages[0]);
 		// setActiveLanguageString(allLanguages[0].langName);
 		// store.setActiveLanguage(allLanguages[0]);
-		fetchNINToken(store.engine);
+		// fetchNINToken(store.engine);
+		store.apiStore.fetchNINToken();
 	}, []);
 
 	useEffect(() => {

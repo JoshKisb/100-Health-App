@@ -3,6 +3,7 @@ import { escapeRegExp, flatten, fromPairs, isArray } from "lodash";
 import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
+import { ApiStore } from "./stores/api";
 
 const _ = require("lodash");
 
@@ -162,6 +163,7 @@ const categoryOptionCombos = [
 
 class Store {
 	@observable engine: any;
+	@observable apiStore: ApiStore = new ApiStore();
 	@observable fetchingOrgUnits: boolean = false;
 	@observable userOrgUnits: any = [];
 	@observable userOrgUnitsLoaded: boolean = false;
@@ -309,7 +311,12 @@ class Store {
 	};
 	@action showForm = () => (this.currentPage = "3");
 	@action showLang = () => (this.currentPage = "2");
-	@action setEngine = (engine: any) => (this.engine = engine);
+	@action showApi = () => (this.currentPage = "4");
+	@action setEngine = (engine: any) => {
+		this.engine = engine;
+		this.apiStore.setEngine(engine);
+	}
+	
 	@action edit = () => (this.viewMode = false);
 	@action view = () => (this.viewMode = true);
 	@action setCurrentEvent = (event: any) => {

@@ -42,6 +42,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     const store = useStore();
     const [showWarn, setShowWarn] = useState(false);
     const [showLangWarn, setShowLangWarn] = useState(false);
+    const [showApiWarn, setShowApiWarn] = useState(false);
     const activeLanguage = store.activeLanguage;
 
     const onLoadData = async (treeNode: any) => {
@@ -76,6 +77,15 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
     };
 
     const handleLangWarnClose = () => setShowLangWarn(false);
+
+    const checkIfApiWarnApplies = async () => {
+      if (!userIsAuthorized) {
+        setShowApiWarn(true);
+      }
+    };
+
+    const handleApiWarnClose = () => setShowApiWarn(false);
+
 
     const checkIfWarnApplies = () => {
       if (
@@ -203,6 +213,27 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
                 {store.viewMode
                   ? activeLanguage?.lang["Edit Event"]
                   : activeLanguage?.lang["Add Event"]}
+              </Button>
+            </div>
+          </Popover>
+
+          <Popover
+            placement="bottomRight"
+            title="Insufficient Permissions"
+            content="Please contact your administrator to change the api settings for you."
+            visible={showApiWarn}
+          >
+            <div
+              className="w-2/12 p-2 text-right"
+              onMouseEnter={checkIfApiWarnApplies}
+              onMouseLeave={handleApiWarnClose}
+            >
+              <Button
+                size="large"
+                onClick={store.showApi}
+                disabled={!userIsAuthorized}
+              >
+                {activeLanguage?.lang["API"] ?? "API"}
               </Button>
             </div>
           </Popover>
