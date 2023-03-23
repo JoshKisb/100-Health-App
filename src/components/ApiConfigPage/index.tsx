@@ -19,6 +19,11 @@ const ApiConfigPage: FunctionComponent = observer(() => {
 	const apiStore = store.apiStore;
 	const [loading, setLoading] = useState(false);
 	const [submitting, setSubmitting] = useState(false);
+	const [posting, setPosting] = useState({
+		nin: false,
+		nita: false,
+		sepa: false,
+	});
 	const [form] = Form.useForm();
 
 	useEffect(() => {
@@ -50,6 +55,71 @@ const ApiConfigPage: FunctionComponent = observer(() => {
 
 	const valuesChange = () => {};
 
+	const handlePost = async (endp: string) => {
+		setPosting((s) => ({ ...s, [endp]: true }));
+		const values = form.getFieldsValue();
+		const baseurl = values["base_url"];
+		let tokenupdated = false;
+		try {
+			if (endp === "nin") {
+				const res = await apiStore.postNinToken(baseurl, {
+					username: values["nin_username"],
+					password: values["nin_password"],
+					method: values["nin_method"],
+				});
+				const token = res.token ?? res.data?.token;
+				apiStore.setToken(token);
+				tokenupdated = true;
+			}
+
+			if (endp === "nita") {
+				await apiStore.postNitaClient(baseurl, {
+					username: values["nita_username"],
+					password: values["nita_password"],
+					base_url: values["nita_baseurl"],
+					token: values["nita_token"],
+					method: values["nita_method"],
+				});
+			}
+
+			if (endp === "sepa") {
+				await apiStore.postSetPass(baseurl, {
+					username: values["sepa_username"],
+					password: values["sepa_password"],
+					token: values["sepa_token"],
+					method: values["sepa_method"],
+				});
+			}
+
+			notification.success({
+				message: "API Post was successful",
+				onClick: () => {},
+				duration: 4,
+			});
+
+			if (tokenupdated) {
+				form.setFieldsValue({ ...apiStore.values });
+				apiStore.saveDSValues(apiStore.values).then(() => {
+					notification.success({
+						message: "Token updated",
+						onClick: () => {},
+						duration: 4,
+					});
+				});
+			}
+		} catch (error) {
+			setPosting((s) => ({ ...s, [endp]: false }));
+			notification.error({
+				message: "API Post failed!",
+				description: error.toString(),
+				onClick: () => {},
+				duration: 4,
+			});
+		}
+
+		setPosting((s) => ({ ...s, [endp]: false }));
+	};
+
 	return (
 		<div className="lang-config-form-container">
 			<Form
@@ -79,7 +149,33 @@ const ApiConfigPage: FunctionComponent = observer(() => {
 				>
 					<Spin spinning={loading}>
 						<Space direction="vertical" style={{ width: "100%" }} size={24}>
-							<Card type="inner" title="Get NIN Token">
+							<Card type="inner" title="Base URL">
+								<Form.Item label="Base URL" name="base_url" className="">
+									<Input size="large" />
+								</Form.Item>
+							</Card>
+							<Card
+								type="inner"
+								title="Get NIN Token"
+								actions={[
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "flex-end",
+											paddingRight: "24px",
+										}}
+									>
+										<Button
+											type="primary"
+											disabled={posting.nin}
+											loading={posting.nin}
+											onClick={() => handlePost("nin")}
+										>
+											{posting.nin ? "Posting..." : "Post"}
+										</Button>
+									</div>,
+								]}
+							>
 								<Form.Item
 									label="Username"
 									name="nin_username"
@@ -94,8 +190,32 @@ const ApiConfigPage: FunctionComponent = observer(() => {
 								>
 									<Input size="large" />
 								</Form.Item>
+								<Form.Item label="Method" name="nin_method" className="">
+									<Input size="large" />
+								</Form.Item>
 							</Card>
-							<Card type="inner" title="Set NITA Client">
+							<Card
+								type="inner"
+								title="Set NITA Client"
+								actions={[
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "flex-end",
+											paddingRight: "24px",
+										}}
+									>
+										<Button
+											type="primary"
+											disabled={posting.nita}
+											loading={posting.nita}
+											onClick={() => handlePost("nita")}
+										>
+											{posting.nita ? "Posting..." : "Post"}
+										</Button>
+									</div>,
+								]}
+							>
 								<Form.Item
 									label="Username"
 									name="nita_username"
@@ -124,7 +244,28 @@ const ApiConfigPage: FunctionComponent = observer(() => {
 									<Input size="large" />
 								</Form.Item>
 							</Card>
-							<Card type="inner" title="Set Password">
+							<Card
+								type="inner"
+								title="Set Password"
+								actions={[
+									<div
+										style={{
+											display: "flex",
+											justifyContent: "flex-end",
+											paddingRight: "24px",
+										}}
+									>
+										<Button
+											type="primary"
+											disabled={posting.sepa}
+											loading={posting.sepa}
+											onClick={() => handlePost("sepa")}
+										>
+											{posting.sepa ? "Posting..." : "Post"}
+										</Button>
+									</div>,
+								]}
+							>
 								<Form.Item
 									label="Username"
 									name="sepa_username"

@@ -1,11 +1,12 @@
 import { action, observable } from "mobx";
 import { string } from "prop-types";
-import { defaultToken } from "../utils/ninApi";
+import { baseURL, defaultToken } from "../utils/ninApi";
 
 const namespace = "NIN_API";
 
 
 const defaults = {
+	base_url: baseURL,
 	nin_token: defaultToken,
 	nin_username: "",
 	nin_password: "",
@@ -49,6 +50,13 @@ export class ApiStore {
 		return true;
 	};
 
+	@action setToken = (token) => {
+		this.values.nin_token = token;
+		this.values.nita_token = token;
+		this.values.sepa_token = token;
+		this.ninToken = token;
+	}
+
 	@action fetchNINToken = async () => {
 		const getTok = async () => {
 			const namespaceExists = await this.checkDatastoreNamespace();
@@ -86,6 +94,47 @@ export class ApiStore {
 			},
 			body: JSON.stringify({...this.values, ...values}),
 		});
-		
+	}
+
+	@action postNinToken = async (baseurl, values) => {
+		const res = await fetch(`${baseurl}/getToken`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({...values}),
+		}).then((response) => response.json());
+		if (!!res.error || !!res.data?.error) {
+			throw new Error(res.error ?? res.data.error);
+			return;
+		}
+		return res;
+	}
+
+	@action postNitaClient = async (baseurl, values) => {
+		const res = await fetch(`${baseurl}/setNitaClient`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({...values}),
+		}).then((response) => response.json());
+		if (!!res.error || !!res.data?.error)
+			throw new Error(res.error ?? res.data.error);
+		return res;
+			
+	}
+
+	@action postSetPass = async (baseurl, values) => {
+		const res = await fetch(`${baseurl}/setPassword`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({...values}),
+		}).then((response) => response.json());
+		if (!!res.error || !!res.data?.error)
+			throw new Error(res.error ?? res.data.error);
+		return res;
 	}
 }
