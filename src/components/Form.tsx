@@ -402,7 +402,7 @@ export const DataEntryForm = observer(() => {
 	// };
 
 	const handleEstimateAge = () => {
-		if (ageKnown) return;
+		if (ageKnown || personsAge) return;
 
 		// const dateOfDeath = form.getFieldValue("i8rrl8YWxLF");
 		const dateOfDeath = moment(actualTimeOfDeath);
@@ -2142,9 +2142,8 @@ export const DataEntryForm = observer(() => {
 															e,
 															"years"
 														);
-														setPersonsAge(
-															ageInYears
-														);
+														setAgeKnown(true);
+														setPersonsAge(ageInYears);
 														if (
 															ageInYears < 50 &&
 															ageInYears > 10
@@ -3651,6 +3650,50 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
+
+							<tr>
+								<td className="border p-1" colSpan={2}>
+									<b>
+										{tr("Doris Underlying Cause")}
+									</b>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									<Form.Item
+										name="tKezaEs8Ez5"
+										className="m-0"
+									>
+										<Input
+											type="text"
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.tKezaEs8Ez5
+											}
+										/>
+									</Form.Item>
+									
+								</td>
+								<td className="border p-1" colSpan={1}>
+									<Form.Item
+										name="LAvyxs29laJ"
+										className="m-0"
+									>
+										<Input
+											type="text"
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.LAvyxs29laJ
+											}
+										/>
+									</Form.Item>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									
+								</td>
+							</tr>
+
+
 							<tr>
 								<td className="border p-1" colSpan={2} rowSpan={5}>
 									<b>
