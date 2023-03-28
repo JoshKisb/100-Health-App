@@ -904,6 +904,7 @@ export const DataEntryForm = observer(() => {
 	         else if (info?.gender == "F")
 	         	sex = "Female";
 				form.setFieldsValue({ e96GB4CXyd3: sex });
+				setPersonsGender(sex);
 				if (!!sex)
 					store.disableValue("e96GB4CXyd3")
 	         // roxn33dtLLx dob known ageKnown
@@ -917,14 +918,42 @@ export const DataEntryForm = observer(() => {
 	         // q7e7FOXKnOf age 
 	         let years = moment().diff(dob, "years");			
 				form.setFieldsValue({ q7e7FOXKnOf: years });
-				if (!!years) store.disableValue("q7e7FOXKnOf")
+				setPersonsAge(years);
 
-	         // zwKo51BEayZ region  chosenRegion
-	         // b70okb06FWa Occupation 
-	      
-	         // xNCSFrgdUgi place of birth 
-	            
-	         //i8rrl8YWxLF dateOfDeath
+				if (!!years) store.disableValue("q7e7FOXKnOf");
+
+				if (sex === "Male") {
+					setShowPregnancyReminder(
+						false
+					);
+					setEnablePregnantQn(false);
+					setEnablePregnantQnKey(
+						`${
+							parseInt(
+								enablePregnantQnKey
+							) + 1
+						}`
+					);
+					return;
+				}
+
+				if (sex === "Female" && years < 50 && years > 10) {
+					setShowPregnancyReminder(true);
+					setEnablePregnantQn(true);
+					setEnablePregnantQnKey(
+						`${
+							parseInt(
+								enablePregnantQnKey
+							) + 1
+						}`
+					);
+					window.alert(
+						activeLanguage.lang[
+							"Please Remember to fill in the section: For women, was the deceased pregnant or within 6 weeks of delivery?"
+						]
+					);
+				}
+
 			} else {
 
 				if (info.error && !(info.error.code == 320)) {
