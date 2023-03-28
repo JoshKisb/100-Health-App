@@ -165,6 +165,7 @@ class Store {
 	@observable engine: any;
 	@observable apiStore: ApiStore = new ApiStore();
 	@observable fetchingOrgUnits: boolean = false;
+	@observable user: any = null;
 	@observable userOrgUnits: any = [];
 	@observable userOrgUnitsLoaded: boolean = false;
 	@observable nationalitySelect: any;
@@ -366,6 +367,10 @@ class Store {
 
 				console.log("loadUserOrgUnits:", data);
 
+				const { id, username, surname, firstName } = data.me;
+
+				const user = { id, username, surname, firstName };
+				this.user = user;
 				this.userOrgUnits = data.me.organisationUnits;
 				this.fetchingOrgUnits = false;
 

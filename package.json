@@ -1,5 +1,5 @@
 {
-  "name": "voyage-ui",
+  "name": "mccod",
   "version": "0.1.0",
   "private": true,
   "homepage": ".",
@@ -78,8 +78,8 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": " Medical Certificate of Cause of Death",
-    "description": " Medical Certificate of Cause of Death",
+    "name": "Doris Medical Certificate of Cause of Death",
+    "description": "Doris version of Medical Certificate of Cause of Death",
     "launch_path": "index.html",
     "icons": {
       "16": "assets/icons/image001.png",

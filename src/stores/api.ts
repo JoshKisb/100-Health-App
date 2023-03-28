@@ -60,7 +60,7 @@ export class ApiStore {
 	@action fetchNINToken = async () => {
 		const getTok = async () => {
 			const namespaceExists = await this.checkDatastoreNamespace();
-			if (namespaceExists) {
+			if (!namespaceExists) {
 				this.ninToken = defaultToken;
 			} else {
 				const res: APIDataStore = await this.engine.link.fetch(

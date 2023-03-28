@@ -1130,11 +1130,80 @@ export const DataEntryForm = observer(() => {
 		console.log("underlyingCauseText...", underlyingCauseText);
 	};
 
+	const setDorisFields = async () => {
+		console.log("underlying causes", underlyingCauses)
+		const payload = {
+			DeathCertificate: {
+				CertificateKey: "",
+				Issuer: "",
+				Comments: "",
+				FreeText: "",
+				ICDVersion: "",
+				ICDMinorVersion: "",
+				UCStated: {
+					Code: "",
+					Text: "",
+					LinearizationURI: "",
+					FoundationURI: "",
+					Interval: ""
+				},
+				AdministrativeData: null,
+				Part1: [
+					{
+						Code: "RA01.0",
+						LinearizationURI: "http://id.who.int/icd/release/11/mms/1790791774",
+						Text: "COVID-19, virus identified",
+						Interval: "",
+						FoundationURI: ""
+					},
+					{
+						Code: "1E32",
+						LinearizationURI: "http://id.who.int/icd/release/11/mms/1235618695",
+						Text: "Influenza, virus not identified",
+						Interval: "",
+						FoundationURI: ""
+					},
+					{
+						Code: "1C12.Z",
+						LinearizationURI: "http://id.who.int/icd/release/11/mms/2064398473/unspecified",
+						Text: "Whooping cough, unspecified",
+						Interval: "",
+						FoundationURI: ""
+					}
+				],
+				Part2: null,
+				UCComputed: null,
+				Surgery: null,
+				Autopsy: null,
+				MannerOfDeath: null,
+				FetalOrInfantDeath: null,
+				MaternalDeath: null
+			},
+			DorisSettings: {
+				fullyAutomatic: true
+ 	 		}
+		};
+		const res = await fetch("https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11", {
+			body: JSON.stringify(payload),
+			method: 'POST',
+			headers: {
+				"Content-Type": "application/json",			
+			}
+		}).then((response) => response.json());
+
+		console.log("resd", res);
+		form.setFieldsValue({
+			tKezaEs8Ez5: "disease",
+			LAvyxs29laJ: "code"
+		})
+	}
+
 	const addDiseaseTitle = (val: string) => {
 		let keys = Object.keys(underlyingCauses);
 		let titleToAdd = "";
 		let uriToAdd = "";
 
+		setDorisFields();
 		console.log("Inside addDiseaseTitle, val =>", val);
 		keys.forEach((item) => {
 			if (
