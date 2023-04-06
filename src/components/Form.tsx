@@ -3746,7 +3746,7 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 							</tr>
-
+							{ store.isAdmin && (
 							<tr>
 								<td className="border p-1" colSpan={2}>
 									<b>
@@ -3788,7 +3788,7 @@ export const DataEntryForm = observer(() => {
 									
 								</td>
 							</tr>
-
+							)}
 
 							<tr>
 								<td className="border p-1" colSpan={2} rowSpan={5}>
