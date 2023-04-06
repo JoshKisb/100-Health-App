@@ -402,7 +402,7 @@ export const DataEntryForm = observer(() => {
 	// };
 
 	const handleEstimateAge = () => {
-		if (ageKnown || personsAge) return;
+		if (ageKnown) return;
 
 		// const dateOfDeath = form.getFieldValue("i8rrl8YWxLF");
 		const dateOfDeath = moment(actualTimeOfDeath);
@@ -2206,7 +2206,7 @@ export const DataEntryForm = observer(() => {
 											rules={[
 												{
 													type: "object",
-													required: true,
+													required: ageKnown,
 													message:
 														"Please select date!",
 												},
@@ -2531,9 +2531,7 @@ export const DataEntryForm = observer(() => {
 												var foo_date1 = form.getFieldValue(
 													"RbrUuKFSqkZ"
 												);
-												var foo_date2 = form.getFieldValue(
-													"i8rrl8YWxLF"
-												);
+												var foo_date2 = e
 												var diff_date = Math.round(
 													(foo_date2 - foo_date1) /
 														days
