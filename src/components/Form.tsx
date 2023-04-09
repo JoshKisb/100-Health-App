@@ -1212,7 +1212,9 @@ export const DataEntryForm = observer(() => {
 				fullyAutomatic: true
  	 		}
 		};
-		const res = await fetch("https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11", {
+		// "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
+		const url = "https://217.76.51.191/icd/release/11/2023-01/doris";
+		const res = await fetch(url, {
 			body: JSON.stringify(payload),
 			method: 'POST',
 			headers: {

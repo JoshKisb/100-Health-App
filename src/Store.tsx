@@ -121,6 +121,13 @@ const query = {
 			fields: "*,organisationUnits[*]",
 		},
 	},
+	orgs: {
+		resource: "organisationUnits.json",
+		params: {
+			paging: "false",
+			fields: "id,name,path,leaf,level,parent[id]",
+		},
+	},	
 	program: {
 		resource: `programs/vf8dN49jprI`,
 		params: {
@@ -371,7 +378,7 @@ class Store {
 
 				const user = { id, username, surname, firstName };
 				this.user = user;
-				this.userOrgUnits = data.me.organisationUnits;
+				this.userOrgUnits = data.orgs.organisationUnits.map(o => ({...o, pId: o.parent?.id })); //data.me.organisationUnits;
 				this.fetchingOrgUnits = false;
 
 				const options = data.options.optionSets

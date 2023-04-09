@@ -136,16 +136,18 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(
         <div className="flex" style={{ alignItems: "flex-start" }}>
           <div className="w-5/12 pr-1">
             <TreeSelect
+              showSearch
               allowClear={true}
               treeDataSimpleMode
               size="large"
               style={{ width: "100%" }}
+              treeNodeFilterProp="title"
               disabled={ !!store.selectedLevel }
               value={store.selectedOrgUnit}
               dropdownStyle={{ maxHeight: 400, overflow: "auto" }}
               placeholder={activeLanguage?.lang["Please select health centre"]}
               onChange={store.setSelectedOrgUnit}
-              loadData={onLoadData}
+              //loadData={onLoadData}
               treeData={units}
             />
 
