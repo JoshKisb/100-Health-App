@@ -18,7 +18,8 @@ import {
 	Alert,
 	notification,
 	Col,
-	Row
+	Row,
+	Switch
 } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -890,7 +891,7 @@ export const DataEntryForm = observer(() => {
 
 	const fetchAndFillUserInfo = (nin: string) => {
 		ninapi.getNINPerson(nin)
-		.then(data => {
+		.then((data: any) => {
 			const info = data.data;
 			console.log("NIN info", data);
 			if(!isEmpty(info) && !info.error) {
@@ -982,7 +983,7 @@ export const DataEntryForm = observer(() => {
 		});
 
 		ninapi.getNINPlaceOfBirth(nin)
-		.then(async (data) => {
+		.then(async (data: any) => {
 
 
 			console.log("apiAddr", data.data)
@@ -1161,71 +1162,55 @@ export const DataEntryForm = observer(() => {
 
 	const setDorisFields = async () => {
 		console.log("underlying causes", underlyingCauses)
+		
 		const payload = {
-			DeathCertificate: {
-				CertificateKey: "",
-				Issuer: "",
-				Comments: "",
-				FreeText: "",
-				ICDVersion: "",
-				ICDMinorVersion: "",
-				UCStated: {
-					Code: "",
-					Text: "",
-					LinearizationURI: "",
-					FoundationURI: "",
-					Interval: ""
-				},
-				AdministrativeData: null,
-				Part1: [
-					{
-						Code: "RA01.0",
-						LinearizationURI: "http://id.who.int/icd/release/11/mms/1790791774",
-						Text: "COVID-19, virus identified",
-						Interval: "",
-						FoundationURI: ""
-					},
-					{
-						Code: "1E32",
-						LinearizationURI: "http://id.who.int/icd/release/11/mms/1235618695",
-						Text: "Influenza, virus not identified",
-						Interval: "",
-						FoundationURI: ""
-					},
-					{
-						Code: "1C12.Z",
-						LinearizationURI: "http://id.who.int/icd/release/11/mms/2064398473/unspecified",
-						Text: "Whooping cough, unspecified",
-						Interval: "",
-						FoundationURI: ""
-					}
-				],
-				Part2: null,
-				UCComputed: null,
-				Surgery: null,
-				Autopsy: null,
-				MannerOfDeath: null,
-				FetalOrInfantDeath: null,
-				MaternalDeath: null
-			},
-			DorisSettings: {
-				fullyAutomatic: true
- 	 		}
+			sex: personsGender == "Male" ? "1" 
+				: personsGender == "Female" ? "2"
+				: "9",
+			// estimatedAge // Provided in ISO_8601 format https://en.wikipedia.org/wiki/ISO_8601#Durations. E.g. P10YD 10 years, P9M 9 months, P5D 5 days, PT10H 10 hours, PT10M 10 minutes
+			causeOfDeathCodeA: underlyingCauses["diseaseTitleA"],
+			causeOfDeathCodeB: underlyingCauses["diseaseTitleB"],
+			causeOfDeathCodeC: underlyingCauses["diseaseTitleC"],
+			causeOfDeathCodeD: underlyingCauses["diseaseTitleD"],
+			// intervalA
+			// intervalB
+			// intervalC
+			// intervalD
+			// dateBirth
+			// dateDeath
+			// maternalDeathWasPregnant // For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
+			// maternalDeathPregnancyContribute // Did pregnancy contribute to death 0: No, - 1: Yes, - 9: Unknown
+			// timeFromPregnancy
+
 		};
 		// "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
-		const url = "https://217.76.51.191/icd/release/11/2023-01/doris";
+		const url = "https://217.76.51.191/icd/release/11/2023-01/doris?" + new URLSearchParams(payload);
 		const res = await fetch(url, {
-			body: JSON.stringify(payload),
-			method: 'POST',
+			// body: JSON.stringify(payload),
+			method: 'GET',
 			headers: {
-				"Content-Type": "application/json",			
+				"Content-Type": "application/json",
+				"API-Version": "v2",
+				"Accept-Language": "en",	
 			}
 		}).then((response) => response.json());
 
+		const nameres = await fetch(
+			res.uri.replace("http://id.who.int", "https://217.76.51.191"),
+			{
+				method: 'GET',
+				headers: {
+					"Content-Type": "application/json",
+					"API-Version": "v2",
+					"Accept-Language": "en",	
+				}
+			}).then((response) => response.json());
+		
+
 		console.log("resd", res);
 		form.setFieldsValue({
-			tKezaEs8Ez5: "disease",
-			LAvyxs29laJ: "code"
+			tKezaEs8Ez5: nameres?.title["@value"],
+			LAvyxs29laJ: res.code
 		})
 	}
 
@@ -1725,6 +1710,11 @@ export const DataEntryForm = observer(() => {
 		}
 	}, [customFieldName, customRowLength, customRows, deleting]);
 
+	const [notifyx, setNotifyx] = useState(true);
+	const onChangeNotify = (checked: boolean) => {
+		setNotifyx(checked);
+	}
+
 	const printComponentRef = useRef(null);
 	return (
 		<div>
@@ -1839,6 +1829,7 @@ export const DataEntryForm = observer(() => {
 							eventDate={form.getFieldValue("eventDate")}
 						/>
 					</div>
+					<div style={{ display: "flex", alignItems: "center" }}>
 					<Form.Item
 						label={activeLanguage.lang["Date of Entry"]}
 						rules={[
@@ -1851,6 +1842,7 @@ export const DataEntryForm = observer(() => {
 						]}
 						name="eventDate"
 						className="m-0"
+						style={{ marginRight: "15px" }}
 					>
 						<DatePicker
 							disabledDate={notTomorrow}
@@ -1859,6 +1851,12 @@ export const DataEntryForm = observer(() => {
 							placeholder={activeLanguage.lang["Select a Date"]}
 						/>
 					</Form.Item>
+
+					<div className="ml-1" style={{ width: "100%", maxWidth: "50%" }}>
+						Notify &nbsp;
+						<Switch defaultChecked onChange={onChangeNotify} />
+					</div>
+					</div>
 
 					{/*<Form.Item
           label={activeLanguage.lang.Languages}
@@ -2703,7 +2701,7 @@ export const DataEntryForm = observer(() => {
 						</button>
 					)}
 
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="my-2 w-full border-collapse px-2" style={{ ...(notifyx ? ({display: "none"}): ({})) }}>
 						<tbody>
 							<tr>
 								<td
@@ -4118,7 +4116,7 @@ export const DataEntryForm = observer(() => {
 						</tbody>
 					</table>
 
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="my-2 w-full border-collapse px-2" style={{ ...(notifyx ? ({display: "none"}): ({})) }}>
 						<tbody>
 							<tr>
 								<td
@@ -4671,7 +4669,7 @@ export const DataEntryForm = observer(() => {
 						</tbody>
 					</table>
 
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="my-2 w-full border-collapse px-2" style={{ ...(notifyx ? ({display: "none"}): ({})) }}>
 						<tbody>
 							<tr>
 								<td
@@ -4924,7 +4922,7 @@ export const DataEntryForm = observer(() => {
 						</tbody>
 					</table>
 
-					<table className="my-2 w-full border-collapse px-2">
+					<table className="my-2 w-full border-collapse px-2" style={{ ...(notifyx ? ({display: "none"}): ({})) }}>
 						<tbody>
 							<tr>
 								<td
@@ -5154,7 +5152,10 @@ export const DataEntryForm = observer(() => {
 									) : null}
 								</td>
 							</tr>
-
+						</tbody>
+						</table>
+						<table className="my-2 w-full border-collapse px-2">
+						<tbody>
 							<tr>
 								<Declarations
 									titleBackgroundColor={titleBackgroundColor}

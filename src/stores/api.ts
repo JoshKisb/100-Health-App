@@ -1,6 +1,7 @@
 import { action, observable } from "mobx";
 import { string } from "prop-types";
 import { baseURL, defaultToken } from "../utils/ninApi";
+import { parseJsonRes } from "../utils/parseJsonRes";
 
 const namespace = "NIN_API";
 
@@ -97,13 +98,13 @@ export class ApiStore {
 	}
 
 	@action postNinToken = async (baseurl, values) => {
-		const res = await fetch(`${baseurl}/getToken`, {
+		const res: any = await fetch(`${baseurl}/getToken`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({...values}),
-		}).then((response) => response.json());
+		}).then((response) => parseJsonRes(response));
 		if (!!res.error || !!res.data?.error) {
 			throw new Error(res.error ?? res.data.error);
 			return;
@@ -112,13 +113,13 @@ export class ApiStore {
 	}
 
 	@action postNitaClient = async (baseurl, values) => {
-		const res = await fetch(`${baseurl}/setNitaClient`, {
+		const res: any = await fetch(`${baseurl}/setNitaClient`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({...values}),
-		}).then((response) => response.json());
+		}).then((response) => parseJsonRes(response));
 		if (!!res.error || !!res.data?.error)
 			throw new Error(res.error ?? res.data.error);
 		return res;
@@ -126,13 +127,13 @@ export class ApiStore {
 	}
 
 	@action postSetPass = async (baseurl, values) => {
-		const res = await fetch(`${baseurl}/setPassword`, {
+		const res: any = await fetch(`${baseurl}/setPassword`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({...values}),
-		}).then((response) => response.json());
+		}).then((response) => parseJsonRes(response));
 		if (!!res.error || !!res.data?.error)
 			throw new Error(res.error ?? res.data.error);
 		return res;
