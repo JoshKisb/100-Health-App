@@ -19,7 +19,8 @@ import {
 	notification,
 	Col,
 	Row,
-	Switch
+	Switch,
+	Radio
 } from "antd";
 import { SettingOutlined } from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -1711,8 +1712,9 @@ export const DataEntryForm = observer(() => {
 	}, [customFieldName, customRowLength, customRows, deleting]);
 
 	const [notifyx, setNotifyx] = useState(true);
-	const onChangeNotify = (checked: boolean) => {
-		setNotifyx(checked);
+	const onChangeNotify = (e: any) => {
+		// console.log("ev", e)
+		setNotifyx(e.target.value);
 	}
 
 	const printComponentRef = useRef(null);
@@ -1852,10 +1854,10 @@ export const DataEntryForm = observer(() => {
 						/>
 					</Form.Item>
 
-					<div className="ml-1" style={{ width: "100%", maxWidth: "50%" }}>
-						Notify &nbsp;
-						<Switch defaultChecked onChange={onChangeNotify} />
-					</div>
+					<Radio.Group onChange={onChangeNotify} value={notifyx} className="ml-1" style={{ width: "100%", maxWidth: "50%" }}>
+						<Radio value={true}>Notify</Radio>
+						<Radio value={false}>Medically Certify</Radio>
+					</Radio.Group>
 					</div>
 
 					{/*<Form.Item
