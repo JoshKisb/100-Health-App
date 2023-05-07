@@ -67,7 +67,7 @@ export const ICDField: SFC<ICD> = observer(
     // }
 
     const mySettings = {
-      apiServerUrl: "https://174.138.191.155:8083",
+      apiServerUrl: "https://ug.sk-engine.cloud/icd-api",
       // apiServerUrl: "https://hmis-dev.health.go.ug",
       // apiServerUrl: " https://icdapi.azurewebsites.net",
       language: store.ICDLang ?? "en",
