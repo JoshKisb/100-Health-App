@@ -1197,7 +1197,7 @@ export const DataEntryForm = observer(() => {
 		}).then((response) => response.json());
 
 		const nameres = await fetch(
-			res.uri.replace("http://id.who.int", "https://217.76.51.191"),
+			res.uri.replace("http://id.who.int", "https://ug.sk-engine.cloud/icd-api"),
 			{
 				method: 'GET',
 				headers: {
