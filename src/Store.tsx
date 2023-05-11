@@ -1650,7 +1650,7 @@ class Store {
 					value,
 				};
 			})
-			.filter((dv) => !!dv.value);
+			.filter((dv) => !!dv.value || dv.value === 0);
 
 		console.log("OBJECT ENTRIES ARE:", dataValues);
 		let event: any = {
