@@ -168,6 +168,8 @@ const categoryOptionCombos = [
 	},
 ];
 
+export const age_ranges = ["age_00","age_01","age_05","age_10","age_15","age_20","age_25","age_30","age_35","age_40","age_45","age_50","age_55","age_60","age_65","age_70","age_75","age_80","age_85","age_90","age_95","age_unknown"];
+
 class Store {
 	@observable engine: any;
 	@observable apiStore: ApiStore = new ApiStore();
@@ -362,6 +364,79 @@ class Store {
 	@action setSelectedLevel = (level) => {
 		this.selectedLevel = level;
 	};
+
+	@action fetchAnacodData = async () => {
+		const url = `/api/29/analytics/events/query/vf8dN49jprI.json?dimension=pe:2022;2023;2021&dimension=ou:akV6429SUqu&dimension=aKclf7Yl1PE.ZKBE8Xm9DJG&dimension=aKclf7Yl1PE.MOstDqSY0gO&dimension=aKclf7Yl1PE.ZYKmQ9GPOaF&dimension=aKclf7Yl1PE.zwKo51BEayZ&dimension=aKclf7Yl1PE.Z41di0TRjIu&dimension=aKclf7Yl1PE.dsiwvNQLe5n&dimension=aKclf7Yl1PE.RbrUuKFSqkZ&dimension=aKclf7Yl1PE.q7e7FOXKnOf&dimension=aKclf7Yl1PE.e96GB4CXyd3&dimension=aKclf7Yl1PE.i8rrl8YWxLF&dimension=aKclf7Yl1PE.sfpqAeqKeyQ&dimension=aKclf7Yl1PE.zD0E77W4rFs&dimension=aKclf7Yl1PE.cSDJ9kSJkFP&dimension=aKclf7Yl1PE.WkXxkKEJLsg&dimension=aKclf7Yl1PE.Ylht9kCLSRW&dimension=aKclf7Yl1PE.zb7uTuBCPrN&dimension=aKclf7Yl1PE.tuMMQsGtE69&dimension=aKclf7Yl1PE.uckvenVFnwf&dimension=aKclf7Yl1PE.fleGy9CvHYh&dimension=aKclf7Yl1PE.myydnkmLfhp&dimension=aKclf7Yl1PE.QGFYJK00ES7&dimension=aKclf7Yl1PE.C8n6hBilwsX&dimension=aKclf7Yl1PE.ZFdJRT3PaUd&dimension=aKclf7Yl1PE.hO8No9fHVd2&dimension=aKclf7Yl1PE.aC64sB86ThG&dimension=aKclf7Yl1PE.CnPGhOcERFF&dimension=aKclf7Yl1PE.IeS8V8Yf40N&dimension=aKclf7Yl1PE.Op5pSvgHo1M&dimension=aKclf7Yl1PE.eCVDO6lt4go&dimension=aKclf7Yl1PE.cmZrrHfTxW3&dimension=aKclf7Yl1PE.QTKk2Xt8KDu&dimension=aKclf7Yl1PE.dTd7txVzhgY&dimension=aKclf7Yl1PE.xeE5TQLvucB&dimension=aKclf7Yl1PE.ctbKSNV2cg7&dimension=aKclf7Yl1PE.mI0UjQioE7E&dimension=aKclf7Yl1PE.krhrEBwJeNC&dimension=aKclf7Yl1PE.u5ebhwtAmpU&dimension=aKclf7Yl1PE.ZKtS7L49Poo&dimension=aKclf7Yl1PE.OxJgcwH15L7&dimension=aKclf7Yl1PE.fJDDc9mlubU&dimension=aKclf7Yl1PE.Zrn8LD3LoKY&dimension=aKclf7Yl1PE.z89Wr84V2G6&dimension=aKclf7Yl1PE.Kk0hmrJPR90&dimension=aKclf7Yl1PE.j5TIQx3gHyF&dimension=aKclf7Yl1PE.JhHwdQ337nn&dimension=aKclf7Yl1PE.jY3K6Bv4o9Q&dimension=aKclf7Yl1PE.UfG52s4YcUt&dimension=aKclf7Yl1PE.FhHPxY16vet&dimension=aKclf7Yl1PE.KsGOxFyzIs1&dimension=aKclf7Yl1PE.b4yPk98om7e&dimension=aKclf7Yl1PE.gNM2Yhypydx&dimension=aKclf7Yl1PE.tYH7drlbNya&dimension=aKclf7Yl1PE.fQWuywOaoN2&dimension=aKclf7Yl1PE.wX3i3gkTG4m&dimension=aKclf7Yl1PE.xDMX2CJ4Xw3&dimension=aKclf7Yl1PE.o1hG9vr0peF&dimension=aKclf7Yl1PE.AZSlwlRAFig&dimension=aKclf7Yl1PE.U18Tnfz9EKd&dimension=aKclf7Yl1PE.DKlOhZJOCrX&dimension=aKclf7Yl1PE.kGIDD5xIeLC&dimension=aKclf7Yl1PE.V4rE1tsj5Rb&dimension=aKclf7Yl1PE.ivnHp4M4hFF&dimension=aKclf7Yl1PE.jf9TogeSZpk&dimension=aKclf7Yl1PE.xAWYJtQsg8M&dimension=aKclf7Yl1PE.lQ1Byr04JTx&dimension=aKclf7Yl1PE.DdfDMFW4EJ9&dimension=aKclf7Yl1PE.GFVhltTCG8b&dimension=aKclf7Yl1PE.KpfvNQSsWIw&dimension=aKclf7Yl1PE.AJAraEcfH63&dimension=aKclf7Yl1PE.ymyLrfEcYkD&dimension=aKclf7Yl1PE.K5BDPJQk1BP&dimension=aKclf7Yl1PE.uaxjt0inPNF&dimension=aKclf7Yl1PE.Kz29xNOBjsJ&dimension=aKclf7Yl1PE.ZXZZfzBpu8a&dimension=aKclf7Yl1PE.cp5xzqVU2Vw&dimension=aKclf7Yl1PE.lu9BiHPxNqH&dimension=aKclf7Yl1PE.PaoRZbokFWJ&dimension=aKclf7Yl1PE.twVlVWM3ffz&stage=aKclf7Yl1PE&displayProperty=NAME&outputType=EVENT&desc=eventdate&paging=false`
+		// const query1 = {
+		// 	events: {
+		// 		resource: "events/query.json",
+		// 		params: {
+		// 			paging: "false",
+		// 			programStage: this.programStage,
+		// 			totalPages: "true",
+		// 			includeAllDataElements: "true",
+		// 			// startDate: "2022-01-01",
+		// 			// endDate: "2022-12-31",
+					
+		// 		},
+		// 	},
+		// };
+
+		const res = await this.engine.link.fetch(url);
+		// turn [id: {name, column}]
+		// into {name: id}
+		let headers: any = {};
+		res.headers.forEach((header, key) => {
+			headers[header.name.replace(/^aKclf7Yl1PE./, '')] = key;
+		}); 
+		console.log("res", res);
+		console.log("headers", headers);
+
+		
+		const result = {};
+
+		for (const row of res.rows) {
+  			// const country_area = row[headers.country_area];
+			// const iso3_code = row[headers.iso3_code];
+			const date = row[headers.eventdate];
+			const year = !!date ? date.split("-")[0] : "Unknown";
+			const icd_code = row[headers.dTd7txVzhgY];
+			const sex = row[headers.e96GB4CXyd3].toLowerCase();
+			const sex_code = sex == "male" ? 1 : (sex == "female" ? 2 : 9);
+			const age = row[headers.q7e7FOXKnOf];
+
+			// create the key for this row based on year, sex, and icd_code
+			const key = `${year}-${sex_code}-${icd_code}`;
+
+			// if this is the first time we've seen this key, initialize the object
+			if (!result[key]) {
+				result[key] = {
+					country_area: "Trainingland",
+					iso3_code: "USA",
+					data_type: "mortality",
+					year,
+					icd_code,
+					sex_code,
+					total_num: 0,
+					age_ranges: Object.fromEntries(age_ranges.map((age_range) => [age_range, 0])),
+				};
+			}
+
+			// update the total_num and age range fields for this row
+			if (!!age || age === 0) {
+				let ageRange = Math.floor(Math.min(age, 99) / 5) * 5;
+				if (ageRange == 0 && age > 0) ageRange = 1; 
+				result[key].age_ranges[`age_${ageRange}`] += 1;
+			} else {
+				result[key].age_ranges.age_unknown += 1;
+			}
+			result[key].total_num += 1;
+		}
+
+		console.log(result);
+		return result;
+
+	}
 
 	@action
 	loadUserOrgUnits = async () => {

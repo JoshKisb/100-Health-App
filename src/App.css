@@ -17,6 +17,12 @@
   float: right;
   display: none;
 }
+.d-flex {
+  display: flex;
+}
+.justify-content-end {
+  justify-content: flex-end;
+}
 #demo-paste-selected {
   background-color: #ff9;
   padding: 5px;
