@@ -1751,7 +1751,7 @@ export const DataEntryForm = observer(() => {
 											title={
 												activeLanguage.lang[
 													"Sure to delete?"
-												]
+												] ?? "Sure to delete?"
 											}
 											onConfirm={() =>
 												store.deleteEvent()
@@ -1976,7 +1976,7 @@ export const DataEntryForm = observer(() => {
 									<Form.Item
 										rules={[
 											{
-												required: true,
+												required: false,
 												message: "Enter full name",
 											},
 										]}
@@ -2210,7 +2210,7 @@ export const DataEntryForm = observer(() => {
 													type: "object",
 													required: ageKnown,
 													message:
-														"Please select date!",
+														"Please select date or mark age as unknown!",
 												},
 											]}
 											name="RbrUuKFSqkZ"
@@ -2396,7 +2396,7 @@ export const DataEntryForm = observer(() => {
 										<Form.Item
 											rules={[
 												{
-													required: true,
+													required: false,
 													message:
 														activeLanguage.lang[
 															"Sex is required"
@@ -2496,7 +2496,7 @@ export const DataEntryForm = observer(() => {
 										rules={[
 											{
 												type: "object",
-												required: true,
+												required: false,
 												message:
 													activeLanguage.lang[
 														"Please select date and time of death!"

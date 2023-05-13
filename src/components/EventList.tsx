@@ -902,6 +902,7 @@ export const EventList = observer(() => {
                               <Menu.Item>
                                  <AnacodDownload />
                               </Menu.Item>
+                              <Menu.Item onClick={() => {}}>Data Dictionary</Menu.Item>
                            </Menu>
                         }
                         onClick={() => handleDownload()}
