@@ -13,6 +13,10 @@ import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { set } from "lodash";
 import AnacodDownload from "./AnacodDownload";
+import { useConfig } from '@dhis2/app-runtime'
+
+// Within a functional component body
+
 
 const { RangePicker } = DatePicker;
 
@@ -252,6 +256,7 @@ export const EventList = observer(() => {
 
    const [mortalityFilter, setMortalityFilter] = React.useState<string>(undefined);
    const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
+   const { baseUrl, apiVersion } = useConfig();
 
    const groupDiseaseToOrgUnits = (diseases, prevDiseases = null) => {
       let diseaseOrgs = {};
@@ -711,6 +716,13 @@ export const EventList = observer(() => {
       }
    };
 
+   const handleDataDicDl = () => {
+      const link = document.createElement('a');
+      link.href = "assets/DATA DICTIONARY.csv";
+      link.download = 'DATA DICTIONARY.csv';
+      link.click();
+   }
+
    
    
    // console.log(store.data ? JSON.parse(JSON.stringify(store.data)) : "");
@@ -902,7 +914,7 @@ export const EventList = observer(() => {
                               <Menu.Item>
                                  <AnacodDownload />
                               </Menu.Item>
-                              <Menu.Item onClick={() => {}}>Data Dictionary</Menu.Item>
+                              <Menu.Item onClick={() => handleDataDicDl()}>Data Dictionary</Menu.Item>
                            </Menu>
                         }
                         onClick={() => handleDownload()}

@@ -1711,7 +1711,7 @@ export const DataEntryForm = observer(() => {
 		}
 	}, [customFieldName, customRowLength, customRows, deleting]);
 
-	const [notifyx, setNotifyx] = useState(true);
+	const [notifyx, setNotifyx] = useState(false);
 	const onChangeNotify = (e: any) => {
 		// console.log("ev", e)
 		setNotifyx(e.target.value);
@@ -1854,10 +1854,10 @@ export const DataEntryForm = observer(() => {
 						/>
 					</Form.Item>
 
-					<Radio.Group onChange={onChangeNotify} value={notifyx} className="ml-1" style={{ width: "100%", maxWidth: "50%" }}>
+					{/* <Radio.Group onChange={onChangeNotify} value={notifyx} className="ml-1" style={{ width: "100%", maxWidth: "50%" }}>
 						<Radio value={true}>Notify</Radio>
 						<Radio value={false}>Medically Certify</Radio>
-					</Radio.Group>
+					</Radio.Group> */}
 					</div>
 
 					{/*<Form.Item
