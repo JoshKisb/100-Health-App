@@ -42,6 +42,7 @@ import { AnyARecord } from "dns";
 import { useNinApi }  from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
 import { dateFields } from "../Store";
+import { DorisReportModal } from "./DorisReportModal";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -114,6 +115,7 @@ export const DataEntryForm = observer(() => {
 	const [optionSets, setOptionSets] = useState<any>();
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const tr = useTranslation();
+	const [dorisReport, setDorisReport] = useState("");
 
 	const store = useStore();
 	const [activeLanguage, setActiveLanguage] = useState(
@@ -1213,6 +1215,7 @@ export const DataEntryForm = observer(() => {
 			tKezaEs8Ez5: nameres?.title["@value"],
 			LAvyxs29laJ: res.code
 		})
+		setDorisReport(res.report);
 	}
 
 	const addDiseaseTitle = (val: string) => {
@@ -3787,7 +3790,9 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1" colSpan={2}>
-									
+									{!!dorisReport && (
+										<DorisReportModal report={dorisReport} />	
+									)}
 								</td>
 							</tr>
 							)}
