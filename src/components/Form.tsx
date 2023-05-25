@@ -1,5 +1,5 @@
 // referredValueSavedHere
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import {
 	Button,
 	Card,
@@ -253,6 +253,13 @@ export const DataEntryForm = observer(() => {
 	const [underlyingCauseCode, setUnderlyingCauseCode] = useState("");
 	const [underlyingCauseText, setUnderlyingCauseText] = useState("");
 	const [underlyingCauseURI, setUnderlyingCauseURI] = useState("");
+	const [dorisValue, setDorisValue] = useState<any>({});
+	const finalCauseOptions = useMemo(() => {
+		return {
+			...({[underlyingCauseCode]: underlyingCauseText}),
+			...({[dorisValue.code]: dorisValue.text})
+		}
+	}, [underlyingCauseCode, underlyingCauseText, dorisValue])
 
 	type underlyingCauseObjectOptions = {
 		[key: string]: string;
@@ -1215,6 +1222,10 @@ export const DataEntryForm = observer(() => {
 			tKezaEs8Ez5: nameres?.title["@value"],
 			LAvyxs29laJ: res.code
 		})
+		setDorisValue({
+			code: res.code,
+			text: nameres?.title["@value"]
+		});
 		setDorisReport(res.report);
 	}
 
@@ -3796,49 +3807,54 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							)}
-                         <tr>
-<td className="border p-1" colSpan={2}>
-	<b>
-		{tr("Final Underlying Cause")}
-	</b>
-</td>
-<td className="border p-1" colSpan={2}>
-	<Form.Item
-		name="mQVAyOLbga1"
-		className="m-0"
-	>
-		<Input
-			type="text"
-			size="large"
-			disabled={
-				store.viewMode ||
-				store.allDisabled.tKezaEs8Ez5
-			}
-		/>
-	</Form.Item>
-	
-</td>
-<td className="border p-1" colSpan={1}>
-	<Form.Item
-		name="n2mScmFMovq"
-		className="m-0"
-	>
-		<Input
-			type="text"
-			size="large"
-			disabled={
-				store.viewMode ||
-				store.allDisabled.LAvyxs29laJ
-			}
-		/>
-	</Form.Item>
-</td>
-<td className="border p-1" colSpan={2}>
-	{!!dorisReport && (
-		<DorisReportModal report={dorisReport} />	
-	)}
-</td>
-</tr>
+                         	<tr>
+								<td className="border p-1" colSpan={2}>
+									<b>
+										{tr("Final Underlying Cause")}
+									</b>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									<Form.Item
+										name="mQVAyOLbga1"
+										className="m-0"
+									>
+										<Select 
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.mQVAyOLbga1
+											}
+											onChange={(s) => {
+												const finalc = Object.keys(finalCauseOptions).find(key => finalCauseOptions[key] === s)
+												form.setFieldsValue({n2mScmFMovq: finalc});
+											}}
+										>
+											{Object.values(finalCauseOptions).filter(o => !!o).map((opt: any) => (
+												<Option key={opt} value={opt}>{opt}</Option>
+											))}
+										</Select>										
+									</Form.Item>
+									
+								</td>
+								<td className="border p-1" colSpan={1}>
+									<Form.Item
+										name="n2mScmFMovq"
+										className="m-0"
+									>
+										<Input
+											type="text"
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n2mScmFMovq
+											}
+										/>
+									</Form.Item>
+								</td>
+								<td className="border p-1" colSpan={2}>
+									
+								</td>
+							</tr>
 
 							<tr>
 								<td className="border p-1" colSpan={2} rowSpan={5}>
