@@ -1508,7 +1508,7 @@ export const DataEntryForm = observer(() => {
 				.then((res: any) => {
 					console.log("CustomRows", res);
 
-					if (!res || res == {}) {
+					if (!res || JSON.stringify(res) == "{}") {
 						setCustomRows([]);
 						setCustomRowLength(0);
 					} else {
