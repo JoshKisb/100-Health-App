@@ -3796,6 +3796,49 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							)}
+                         <tr>
+<td className="border p-1" colSpan={2}>
+	<b>
+		{tr("Final Underlying Cause")}
+	</b>
+</td>
+<td className="border p-1" colSpan={2}>
+	<Form.Item
+		name="mQVAyOLbga1"
+		className="m-0"
+	>
+		<Input
+			type="text"
+			size="large"
+			disabled={
+				store.viewMode ||
+				store.allDisabled.tKezaEs8Ez5
+			}
+		/>
+	</Form.Item>
+	
+</td>
+<td className="border p-1" colSpan={1}>
+	<Form.Item
+		name="n2mScmFMovq"
+		className="m-0"
+	>
+		<Input
+			type="text"
+			size="large"
+			disabled={
+				store.viewMode ||
+				store.allDisabled.LAvyxs29laJ
+			}
+		/>
+	</Form.Item>
+</td>
+<td className="border p-1" colSpan={2}>
+	{!!dorisReport && (
+		<DorisReportModal report={dorisReport} />	
+	)}
+</td>
+</tr>
 
 							<tr>
 								<td className="border p-1" colSpan={2} rowSpan={5}>
