@@ -747,21 +747,34 @@ export const DataEntryForm = observer(() => {
 		//   store.enableValue("UfG52s4YcUt");
 		// }
 
-		if (changedValues.Ylht9kCLSRW) {
-			store.enableValue("WkXxkKEJLsg");
+		if (changedValues.Ylht9kCLSRW) { // cause A
+			store.enableValue("WkXxkKEJLsg"); //time interval
+			console.log("A changed. enable B");
+			store.enableValue("zb7uTuBCPrN");
 		}
 
-		if (changedValues.WkXxkKEJLsg) {
+		if (changedValues.sfpqAeqKeyQ) {
+			console.log("A changed. enable B");
 			store.enableValue("zb7uTuBCPrN");
+		}
+
+		if (changedValues.zb7uTuBCPrN)
+			store.enableValue("QGFYJK00ES7");
+
+		if (changedValues.QGFYJK00ES7)
+			store.enableValue("CnPGhOcERFF")
+
+		if (changedValues.WkXxkKEJLsg) {
+			store.enableValue("zb7uTuBCPrN"); // cause b
 			store.enableValue("QTKk2Xt8KDu");
 		}
 
-		if (changedValues.myydnkmLfhp) {
-			store.enableValue("fleGy9CvHYh");
+		if (changedValues.myydnkmLfhp) { // time inteval b
+			store.enableValue("fleGy9CvHYh"); // ti b
 		}
 
-		if (changedValues.fleGy9CvHYh) {
-			store.enableValue("QGFYJK00ES7");
+		if (changedValues.fleGy9CvHYh) {  // ti b
+			store.enableValue("QGFYJK00ES7"); // cause c
 		}
 
 		if (changedValues.aC64sB86ThG) {
