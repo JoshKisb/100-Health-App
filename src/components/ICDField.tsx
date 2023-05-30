@@ -103,6 +103,7 @@ export const ICDField: SFC<ICD> = observer(
           [field]: selectedEntity.title,
         });
         if (next) {
+          console.log("Enabling next field", next);
           store.enableValue(next);
         }
         if (codeField) {
@@ -293,8 +294,10 @@ export const ICDField: SFC<ICD> = observer(
         !!dvalue && !!v ? false: v
       )
 
-      if (!!dvalue && !!next)
+      if (!!dvalue && !!next) {
+        console.log("Enabling next field again", next)
         store.enableValue(next);
+      }
 
     }, [dvalue, next, store])
 

@@ -253,17 +253,17 @@ class Store {
 		xAWYJtQsg8M: false,
 		DdfDMFW4EJ9: false,
 		sfpqAeqKeyQ: false,
-		Ylht9kCLSRW: true,
+		Ylht9kCLSRW: false,
 		zb7uTuBCPrN: false,
 		QGFYJK00ES7: false,
 		CnPGhOcERFF: false,
-		myydnkmLfhp: true,
-		aC64sB86ThG: true,
-		cmZrrHfTxW3: true,
+		myydnkmLfhp: false,
+		aC64sB86ThG: false,
+		cmZrrHfTxW3: false,
 		U18Tnfz9EKd: false,
-		QTKk2Xt8KDu: true,
-		DKlOhZJOCrX: true,
-		xeE5TQLvucB: true,
+		QTKk2Xt8KDu: false,
+		DKlOhZJOCrX: false,
+		xeE5TQLvucB: false,
 		FhHPxY16vet: false,
 		KsGOxFyzIs1: false,
 		gNM2Yhypydx: false,
@@ -279,13 +279,13 @@ class Store {
 		jY3K6Bv4o9Q: false,
 		AZSlwlRAFig: false,
 		UfG52s4YcUt: false,
-		kGIDD5xIeLC: true,
+		kGIDD5xIeLC: false,
 		mDez8j7furx: false,
-		WkXxkKEJLsg: true,
-		fleGy9CvHYh: true,
-		hO8No9fHVd2: true,
+		WkXxkKEJLsg: false,
+		fleGy9CvHYh: false,
+		hO8No9fHVd2: false,
 		zD0E77W4rFs: false,
-		eCVDO6lt4go: true,
+		eCVDO6lt4go: false,
 		tuMMQsGtE69: false,
 		C8n6hBilwsX: false,
 		IeS8V8Yf40N: false,
@@ -1768,7 +1768,7 @@ class Store {
 	};
 
 	@action disableValue = (key: string) => {
-		this.allDisabled = { ...this.allDisabled, [key]: true };
+		this.allDisabled = { ...this.allDisabled, [key]: false };
 	};
 
 	@action enableValue = (key: string) => {

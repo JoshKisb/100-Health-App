@@ -747,13 +747,13 @@ export const DataEntryForm = observer(() => {
 		//   store.enableValue("UfG52s4YcUt");
 		// }
 
-		if (changedValues.Ylht9kCLSRW) { // cause A
+		if (changedValues.Ylht9kCLSRW) { // 
 			store.enableValue("WkXxkKEJLsg"); //time interval
 			console.log("A changed. enable B");
 			store.enableValue("zb7uTuBCPrN");
 		}
 
-		if (changedValues.sfpqAeqKeyQ) {
+		if (changedValues.sfpqAeqKeyQ) { // cause A
 			console.log("A changed. enable B");
 			store.enableValue("zb7uTuBCPrN");
 		}
@@ -1111,7 +1111,7 @@ export const DataEntryForm = observer(() => {
 					style={{ width: "100%" }}
 					size="large"
 					disabled={
-						disabled || store.viewMode || store.allDisabled[field]
+						store.viewMode || store.allDisabled[field]
 					}
 					key={optionalKey || `${Math.random()}`}
 					onChange={
@@ -2121,8 +2121,7 @@ export const DataEntryForm = observer(() => {
 										<DistSearchPopup
 											disabled={
 												store.viewMode ||
-												store.allDisabled.t5nTEmlScSt ||
-												!chosenRegionToSubmit
+												store.allDisabled.t5nTEmlScSt 
 											}
 											searchType={
 												validSearchTypes.district
@@ -2302,8 +2301,7 @@ export const DataEntryForm = observer(() => {
 											parentName={chosenDistrictToSubmit}
 											disabled={
 												store.viewMode ||
-												store.allDisabled.u44XP9fZweA ||
-												!chosenDistrictToSubmit
+												store.allDisabled.u44XP9fZweA 
 											}
 											searchType={
 												validSearchTypes.subCounty
@@ -2888,8 +2886,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.QHY3iYRLvMp ||
-															altSearchIsDisabled.a
+																.QHY3iYRLvMp 
 														}
 														value={testVal}
 														onChange={(e: any) => {
@@ -3057,8 +3054,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.NkiH8GTX6HC ||
-															altSearchIsDisabled.b
+																.NkiH8GTX6HC 
 														}
 														value={testVal2}
 														onChange={(e: any) => {
@@ -3219,8 +3215,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.SDPq8UURlWc ||
-															altSearchIsDisabled.c
+																.SDPq8UURlWc 
 														}
 														value={testVal3}
 														onChange={(e: any) => {
@@ -3379,8 +3374,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.zqW9xWyqOur ||
-															altSearchIsDisabled.d
+																.zqW9xWyqOur 
 														}
 														value={testVal4}
 														onChange={(e: any) => {
@@ -3624,7 +3618,7 @@ export const DataEntryForm = observer(() => {
 													style={{ width: "100%" }}
 													size="large"
 													value={underlyingCauseText}
-													disabled={store.viewMode || !!underlyingCauseText}
+													disabled={store.viewMode}
 													onDropdownVisibleChange={(
 														change
 													) => {
@@ -3776,98 +3770,101 @@ export const DataEntryForm = observer(() => {
 								</td>
 							</tr>
 							{ store.isAdmin && (
-							<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>
-										{tr("Doris Underlying Cause")}
-									</b>
-								</td>
-								<td className="border p-1" colSpan={2}>
-									<Form.Item
-										name="tKezaEs8Ez5"
-										className="m-0"
-									>
-										<Input
-											type="text"
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.tKezaEs8Ez5
-											}
-										/>
-									</Form.Item>
-									
-								</td>
-								<td className="border p-1" colSpan={1}>
-									<Form.Item
-										name="LAvyxs29laJ"
-										className="m-0"
-									>
-										<Input
-											type="text"
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.LAvyxs29laJ
-											}
-										/>
-									</Form.Item>
-								</td>
-								<td className="border p-1" colSpan={2}>
-									{!!dorisReport && (
-										<DorisReportModal report={dorisReport} />	
-									)}
-								</td>
-							</tr>
+								<>
+									<tr>
+										<td className="border p-1" colSpan={2}>
+											<b>
+												{tr("Doris Underlying Cause")}
+											</b>
+										</td>
+										<td className="border p-1" colSpan={2}>
+											<Form.Item
+												name="tKezaEs8Ez5"
+												className="m-0"
+											>
+												<Input
+													type="text"
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.tKezaEs8Ez5
+													}
+												/>
+											</Form.Item>
+											
+										</td>
+										<td className="border p-1" colSpan={1}>
+											<Form.Item
+												name="LAvyxs29laJ"
+												className="m-0"
+											>
+												<Input
+													type="text"
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.LAvyxs29laJ
+													}
+												/>
+											</Form.Item>
+										</td>
+										<td className="border p-1" colSpan={2}>
+											{!!dorisReport && (
+												<DorisReportModal report={dorisReport} />	
+											)}
+										</td>
+									</tr>
+									<tr>
+										<td className="border p-1" colSpan={2}>
+											<b>
+												{tr("Final Underlying Cause")}
+											</b>
+										</td>
+										<td className="border p-1" colSpan={2}>
+											<Form.Item
+												name="mQVAyOLbga1"
+												className="m-0"
+											>
+												<Select 
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.mQVAyOLbga1
+													}
+													onChange={(s) => {
+														const finalc = Object.keys(finalCauseOptions).find(key => finalCauseOptions[key] === s)
+														form.setFieldsValue({n2mScmFMovq: finalc});
+													}}
+												>
+													{Object.values(finalCauseOptions).filter(o => !!o).map((opt: any) => (
+														<Option key={opt} value={opt}>{opt}</Option>
+													))}
+												</Select>										
+											</Form.Item>
+											
+										</td>
+										<td className="border p-1" colSpan={1}>
+											<Form.Item
+												name="n2mScmFMovq"
+												className="m-0"
+											>
+												<Input
+													type="text"
+													size="large"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.n2mScmFMovq
+													}
+												/>
+											</Form.Item>
+										</td>
+										<td className="border p-1" colSpan={2}>
+											
+										</td>
+									</tr>
+								</>
 							)}
-                         	<tr>
-								<td className="border p-1" colSpan={2}>
-									<b>
-										{tr("Final Underlying Cause")}
-									</b>
-								</td>
-								<td className="border p-1" colSpan={2}>
-									<Form.Item
-										name="mQVAyOLbga1"
-										className="m-0"
-									>
-										<Select 
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.mQVAyOLbga1
-											}
-											onChange={(s) => {
-												const finalc = Object.keys(finalCauseOptions).find(key => finalCauseOptions[key] === s)
-												form.setFieldsValue({n2mScmFMovq: finalc});
-											}}
-										>
-											{Object.values(finalCauseOptions).filter(o => !!o).map((opt: any) => (
-												<Option key={opt} value={opt}>{opt}</Option>
-											))}
-										</Select>										
-									</Form.Item>
-									
-								</td>
-								<td className="border p-1" colSpan={1}>
-									<Form.Item
-										name="n2mScmFMovq"
-										className="m-0"
-									>
-										<Input
-											type="text"
-											size="large"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.n2mScmFMovq
-											}
-										/>
-									</Form.Item>
-								</td>
-								<td className="border p-1" colSpan={2}>
-									
-								</td>
-							</tr>
+                         	
 
 							<tr>
 								<td className="border p-1" colSpan={2} rowSpan={5}>
@@ -3921,8 +3918,7 @@ export const DataEntryForm = observer(() => {
 											size="small"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.T4uxg60Lalw ||
-												altSearchIsDisabled.e
+												store.allDisabled.T4uxg60Lalw 
 											}
 										/>
 									</Form.Item>
@@ -4306,7 +4302,7 @@ export const DataEntryForm = observer(() => {
 										<DatePicker
 											disabledDate={notTomorrow}
 											size="large"
-											disabled={disableFrameB}
+											disabled={false}
 											key={frameBKey1}
 											// value={store.defaultValues.j5TIQx3gHyF?._d==="invalid"}
 										/>
@@ -4331,7 +4327,7 @@ export const DataEntryForm = observer(() => {
 									>
 										<Input
 											size="large"
-											disabled={disableFrameB}
+											disabled={false}
 											key={frameBKey2}
 										/>
 									</Form.Item>
@@ -4861,9 +4857,7 @@ export const DataEntryForm = observer(() => {
 										
 										<InputNumber
 											size="large"
-											disabled={
-												disableFetal || personsAge > 1
-											}
+											disabled={false}
 											key={fetalDisableKey}
 										/>
 									</Form.Item>
@@ -4886,7 +4880,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.xAWYJtQsg8M || personsAge > 1
+												store.allDisabled.xAWYJtQsg8M 
 											}
 										/>
 									</Form.Item>									
@@ -4922,7 +4916,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.lQ1Byr04JTx || personsAge > 1
+												store.allDisabled.lQ1Byr04JTx 
 											}
 										/>
 									</Form.Item>
@@ -4956,7 +4950,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.DdfDMFW4EJ9 || personsAge > 1
+												store.allDisabled.DdfDMFW4EJ9 
 											}
 										/>
 									</Form.Item>
@@ -4992,7 +4986,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.GFVhltTCG8b || personsAge > 1
+												store.allDisabled.GFVhltTCG8b 
 											}
 										/>
 									</Form.Item>
@@ -5092,7 +5086,7 @@ export const DataEntryForm = observer(() => {
 												"100ATPOINT",
 												"KpfvNQSsWIw",
 												() => {},
-												!womanWasPregnant,
+												store.viewMode,
 												pregnantKey1
 											)}
 										</Form.Item>
@@ -5120,7 +5114,7 @@ export const DataEntryForm = observer(() => {
 												"YN01",
 												"AJAraEcfH63",
 												() => {},
-												!womanWasPregnant,
+												store.viewMode,
 												pregnantKey2
 											)}
 										</Form.Item>
@@ -5141,8 +5135,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.ymyLrfEcYkD ||
-												!womanWasPregnant
+												store.allDisabled.ymyLrfEcYkD 
 											}
 											key={pregnantKey4}
 										/>
@@ -5169,7 +5162,7 @@ export const DataEntryForm = observer(() => {
 												"MD01",
 												"K5BDPJQk1BP",
 												() => {},
-												!womanWasPregnant,
+												store.viewMode,
 												pregnantKey5
 											)}
 										</Form.Item>
@@ -5197,7 +5190,7 @@ export const DataEntryForm = observer(() => {
 												"PD01",
 												"Z41di0TRjIu",
 												() => {},
-												!womanWasPregnant,
+												store.viewMode,
 												pregnantKey6
 											)}
 										</Form.Item>
@@ -5224,7 +5217,7 @@ export const DataEntryForm = observer(() => {
 												"YN01",
 												"uaxjt0inPNF",
 												() => {},
-												!womanWasPregnant,
+												store.viewMode,
 												pregnantKey7
 											)}
 										</Form.Item>

@@ -295,7 +295,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
       <React.Fragment>
         <Input
           size="large"
-          disabled={disabled || false}
+          disabled={false}
           value={searchString}
           onChange={(e) => {
             setSearchString(e.target.value);
