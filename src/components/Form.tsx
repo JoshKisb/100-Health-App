@@ -1808,11 +1808,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												
-												store.viewMode ||
-												(!declarations.ZXZZfzBpu8a &&
-													!declarations.cp5xzqVU2Vw &&
-													!declarations.lu9BiHPxNqH &&
-													!declarations.u9tYUv6AM51)
+												store.viewMode 
 											}
 										>
 											{activeLanguage.lang["Save"]}
