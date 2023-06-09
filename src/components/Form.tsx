@@ -2230,7 +2230,7 @@ export const DataEntryForm = observer(() => {
 											rules={[
 												{
 													type: "object",
-													required: ageKnown,
+													required: false,
 													message:
 														"Please select date or mark age as unknown!",
 												},
@@ -2249,8 +2249,7 @@ export const DataEntryForm = observer(() => {
 												disabled={
 													store.viewMode ||
 													store.allDisabled
-														.RbrUuKFSqkZ ||
-													!ageKnown
+														.RbrUuKFSqkZ 
 												}
 												onChange={(e: any) => {
 													if (e?._d) {
