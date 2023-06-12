@@ -43,6 +43,7 @@ import { useNinApi }  from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
 import { dateFields } from "../Store";
 import { DorisReportModal } from "./DorisReportModal";
+import { da } from "date-fns/locale";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -1184,26 +1185,57 @@ export const DataEntryForm = observer(() => {
 	};
 
 	const setDorisFields = async () => {
-		console.log("underlying causes", underlyingCauses)
+		console.log("underlying causes", underlyingCauses);
+
+		const intervalAType = form.getFieldValue("Ylht9kCLSRW");
+		const intervalAVal = form.getFieldValue("WkXxkKEJLsg");
+		const intervalA = (!!intervalAType && !!intervalAVal) ? moment.duration({ [intervalAType]: intervalAVal }).toISOString() : null;
+
+		const intervalBType = form.getFieldValue("myydnkmLfhp");
+		const intervalBVal = form.getFieldValue("fleGy9CvHYh");
+		const intervalB = (!!intervalBType && !!intervalBVal) ? moment.duration({ [intervalBType]: intervalBVal }).toISOString() : null;
+
+		const intervalCType = form.getFieldValue("aC64sB86ThG");
+		const intervalCVal = form.getFieldValue("hO8No9fHVd2");
+		const intervalC = (!!intervalCType && !!intervalCVal) ? moment.duration({ [intervalCType]: intervalCVal }).toISOString() : null;
+
+		const intervalDType = form.getFieldValue("cmZrrHfTxW3");
+		const intervalDVal = form.getFieldValue("eCVDO6lt4go");
+		const intervalD = (!!intervalDType && !!intervalDVal) ? moment.duration({ [intervalDType]: intervalDVal }).toISOString() : null;
+
+		const dateOfDeath = moment(actualTimeOfDeath);
+		const ageOfIndividual = form.getFieldValue("q7e7FOXKnOf");
+		const dateOfBirth = form.getFieldValue("RbrUuKFSqkZ");
+		const wasPregnant = form.getFieldValue("zcn7acUB6x1");
+		const pregnacyContribute = form.getFieldValue("AJAraEcfH63")
+		const pregTime = form.getFieldValue("KpfvNQSsWIw");
 		
 		const payload = {
 			sex: personsGender == "Male" ? "1" 
 				: personsGender == "Female" ? "2"
 				: "9",
-			// estimatedAge // Provided in ISO_8601 format https://en.wikipedia.org/wiki/ISO_8601#Durations. E.g. P10YD 10 years, P9M 9 months, P5D 5 days, PT10H 10 hours, PT10M 10 minutes
+			// estimatedAge // Provided in ISO_8601 format https://en.wikipedia.org/wiki/ISO_8601#Durations. 
+			// E.g. P10YD 10 years, P9M 9 months, P5D 5 days, PT10H 10 hours, PT10M 10 minutes
+			estimatedAge: moment.duration({ years: personsAge }).toISOString(),
 			causeOfDeathCodeA: underlyingCauses["diseaseTitleA"],
 			causeOfDeathCodeB: underlyingCauses["diseaseTitleB"],
 			causeOfDeathCodeC: underlyingCauses["diseaseTitleC"],
 			causeOfDeathCodeD: underlyingCauses["diseaseTitleD"],
-			// intervalA
-			// intervalB
-			// intervalC
-			// intervalD
-			// dateBirth
-			// dateDeath
-			// maternalDeathWasPregnant // For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
-			// maternalDeathPregnancyContribute // Did pregnancy contribute to death 0: No, - 1: Yes, - 9: Unknown
+			intervalA,
+			intervalB,
+			intervalC,
+			intervalD,
+			dateBirth: dateOfBirth?.toISOString(),
+			dateDeath: dateOfDeath?.toISOString(),
+			// maternalDeathWasPregnant 
+			// For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
+			maternalDeathWasPregnant: wasPregnant == "Yes" ? "1" : wasPregnant == "No" ? "0" : "9",
+			// maternalDeathPregnancyContribute 
+			// Did pregnancy contribute to death 0: No, - 1: Yes, - 9: Unknown
+			maternalDeathPregnancyContribute: pregnacyContribute == "Yes" ? "1" : pregnacyContribute == "No" ? "0" : "9",
 			// timeFromPregnancy
+			// 1: Within 42 days before death - 2: Between 43 days up to 1 year before death - 9:Unknown
+			timeFromPregnancy: pregTime == "Within 42 days before the death" ? "1" : pregTime == "Between 43 days up to 1 year before death" ? "2": "9",
 
 		};
 		// "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
