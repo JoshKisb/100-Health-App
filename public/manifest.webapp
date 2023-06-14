@@ -7,9 +7,9 @@
     }
   },
   "appType": "APP",
-  "name": "Doris Medical Certificate of Cause of Death",
+  "name": " Medical Certificate of Cause of Death",
   "version": "2.0.0",
-  "description": "Doris version of Medical Certificate of Cause of Death",
+  "description": " Medical Certificate of Cause of Death",
   "icons": {
     "16": "assets/icons/image001.png",
     "48": "assets/icons/image001.png",
@@ -19,5 +19,5 @@
     "name": "HISP",
     "url": "http://dhis2.org"
   },
-  "manifest_generated_at": "Tue May 30 2023 10:24:16 GMT+0300 (East Africa Time)"
+  "manifest_generated_at": "Wed Jun 14 2023 13:11:56 GMT+0300 (East Africa Time)"
 }

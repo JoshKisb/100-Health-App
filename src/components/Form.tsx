@@ -2349,7 +2349,7 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									<b>{activeLanguage.lang["Age"]}</b>
 								</td>
-								<td className="border p-1">
+								<td className="border p-1 d-flex">
 									<Form.Item
 										rules={[
 											{
@@ -2369,8 +2369,7 @@ export const DataEntryForm = observer(() => {
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.q7e7FOXKnOf ||
-												ageKnown
+												store.allDisabled.q7e7FOXKnOf 
 											}
 											onChange={(e: any) => {
 												console.log("Age changed to", e);
@@ -2415,6 +2414,27 @@ export const DataEntryForm = observer(() => {
 													);
 												}
 											}}
+										/>
+									</Form.Item>
+									<Form.Item
+										rules={[
+											{
+												type: "integer",
+												required: false,												
+											},
+										]}
+										name="n9s5bKgCCVq"
+										className="m-0"
+										style={{ width: "100%" }}
+									>
+										<InputNumber
+											size="large"
+											placeholder="months"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n9s5bKgCCVq 
+											}
+											
 										/>
 									</Form.Item>
 								</td>
