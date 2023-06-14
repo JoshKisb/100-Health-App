@@ -78,8 +78,8 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": "Doris Medical Certificate of Cause of Death",
-    "description": "Doris version of Medical Certificate of Cause of Death",
+    "name": " Medical Certificate of Cause of Death",
+    "description": " Medical Certificate of Cause of Death",
     "launch_path": "index.html",
     "icons": {
       "16": "assets/icons/image001.png",
