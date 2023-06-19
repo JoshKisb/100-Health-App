@@ -342,14 +342,16 @@ export const DataEntryForm = observer(() => {
 				rvalues[rkey] = values[mcodmap[rkey]]	
 			})
 			console.log("rvalues", rvalues);
-			window.opener.returntoreview(rvalues);
+			(window.parent as any).returntoreview(rvalues);
 			window.close();
 		}
 	};
 
 	const onCancel = () => {
 		if (!!fromReview) {
-			window.close();
+			// console.log("window", window);
+			// window.close();
+			(window.parent as any).closeIframe();
 		} else {
 			store.showEvents();
 			store.enableForm();
@@ -2566,14 +2568,7 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									<Form.Item
 										rules={[
-											{
-												type: "object",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Please select date and time of death!"
-													],
-											},
+											
 										]}
 										name="i8rrl8YWxLF"
 										className="m-0"
