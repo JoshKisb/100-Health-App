@@ -339,11 +339,12 @@ export const DataEntryForm = observer(() => {
 		if (!!fromReview) {
 			let rvalues = {};
 			Object.keys(mcodmap).forEach(rkey => {
-				rvalues[rkey] = values[mcodmap[rkey]]	
+				const val = values[mcodmap[rkey]];
+				rvalues[rkey] = !!val ? val : "";
 			})
 			console.log("rvalues", rvalues);
 			(window.parent as any).returntoreview(rvalues);
-			window.close();
+			(window.parent as any).closeIframe();
 		}
 	};
 
@@ -1349,7 +1350,7 @@ export const DataEntryForm = observer(() => {
 		const mcodtemp = localStorage.getItem("mcodtemp");
       if (!!mcodtemp) {
 			setFromReview(true);
-			form.setFieldsValue({ CPq2mkKL98T: "hmis 020" });
+			// form.setFieldsValue({ CPq2mkKL98T: "hmis 020" });
 			
         const lsdefaults = JSON.parse(mcodtemp);
 		  Object.keys(lsdefaults).filter(k => !["nationality", "orgUnit"].includes(k)).forEach(key => {
