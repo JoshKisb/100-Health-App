@@ -93,8 +93,8 @@ export const WeeklyReport = observer(() => {
       series: [
          { name: "Deaths", color: "red" } as any,
          { name: "Approved Deaths", color: "blue" } as any,
-         { name: "108-CI03. No. of deaths", color: "green" } as any,
-         { name: "105-MA04c1. Deliveries in unit - Fresh still birth", color: "orange" } as any,
+         { name: "Aggregate Deaths", color: "green" } as any,
+         // { name: "105-MA04c1. Deliveries in unit - Fresh still birth", color: "orange" } as any,
       ],
       tooltip: {
          useHTML: true,
@@ -203,16 +203,11 @@ export const WeeklyReport = observer(() => {
             });
             opts.series[2].data = currDiseases.current?.map((d: any) => {
                return {
-                  y: d.indi1,
+                  y: d.indi1 + d.indi2,
                   color: "green",
                };
             });
-            opts.series[3].data = currDiseases.current?.map((d: any) => {
-               return {
-                  y: d.indi2,
-                  color: "orange",
-               };
-            });
+            
          }
       }
 
@@ -291,27 +286,13 @@ export const WeeklyReport = observer(() => {
                   else
                      return {
                         name: d.name,
-                        y: d.indi1,
+                        y: d.indi1 + d.indi2,
                      };
                }),
                true
             ); //setting data
 
-            chart.current.series[3].setData(
-               sortedDiseases.map((d: any) => {
-                  if (currChartType == "column")
-                     return {
-                        y: d.indi2,
-                        color: "orange",
-                     };
-                  else
-                     return {
-                        name: d.name,
-                        y: d.indi2,
-                     };
-               }),
-               true
-            ); //setting data
+            
          }
          chart.current.hideLoading();
       });
