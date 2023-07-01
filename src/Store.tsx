@@ -1058,7 +1058,7 @@ class Store {
 
 		const fetchIndis = async () => {
 			const url = `/analytics?dimension=pe:202305,ou:LEVEL-iITwmH31lPe,dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
-			const res = await this.engine.query(url);
+			const res = await this.engine.link.fetch(url);
 			console.log("res fetch indis", res);
 			const headers = getHeaders(res.headers);
 			const dxkey = headers.find((h: any) => h.name === "dx")?.index;
