@@ -14,6 +14,9 @@ import AnacodDownload from "./AnacodDownload";
 import { useConfig } from "@dhis2/app-runtime";
 import { TopDiseasesChart } from "./TopDiseasesChart";
 import { Tabs } from "antd";
+import { WeeklyReport } from "./WeeklyReport";
+
+require("highcharts/modules/exporting")(Highcharts);
 
 const { TabPane } = Tabs;
 
@@ -251,8 +254,8 @@ export const EventList = observer(() => {
             <TabPane tab="Top 20 Causes of Death" key="1">
                <TopDiseasesChart />
             </TabPane>
-            <TabPane tab="Weekly Report" key="2">
-               <p>Weekly Report</p>
+            <TabPane tab="Mortality Report" key="2">
+               <WeeklyReport />
             </TabPane>
          </Tabs>         
          

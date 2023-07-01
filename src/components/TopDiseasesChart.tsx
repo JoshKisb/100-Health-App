@@ -7,8 +7,6 @@ import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
 import { Input, Select } from "antd";
 
-require("highcharts/modules/exporting")(Highcharts);
-
 const { Search } = Input;
 
 

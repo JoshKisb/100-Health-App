@@ -212,6 +212,7 @@ class Store {
 	@observable topDiseases: any;
 	@observable selectedCauseOfDeath: string | null = null;
 	@observable allDiseases: any;
+	@observable allIndis: any = {};
 	@observable prevDiseases: any;
 	@observable prevDiseaseOrgUnits: any = {};
 	@observable totalCauseDeathCount: number = 0;
@@ -220,6 +221,7 @@ class Store {
 	@observable selectedDateRange: [string, string, string] | null = null;
 	@observable selectedDlDateRange: [string, string] | null = null;
 	@observable searchIds: any;
+	@observable allDeaths: any[] = [];
 	@observable filters: any = {};
 	@observable lsdata: any = null;
 	@observable allDisabled: any = {
@@ -1054,6 +1056,29 @@ class Store {
 		this.totalDeathCount = 0;
 		const filterByCause = this.selectedCauseOfDeath;
 
+		const fetchIndis = async () => {
+			const url = `/analytics?dimension=pe:202305,ou:LEVEL-iITwmH31lPe,dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
+			const res = await this.engine.query(url);
+			console.log("res fetch indis", res);
+			const headers = getHeaders(res.headers);
+			const dxkey = headers.find((h: any) => h.name === "dx")?.index;
+			const oukey = headers.find((h: any) => h.name === "ou")?.index;
+			const pekey = headers.find((h: any) => h.name === "pe")?.index;
+			const valuekey = headers.find((h: any) => h.name === "value")?.index;
+			const obj = {}
+			res.rows.forEach((row: any, index: number) => {
+				const _oukey = row[oukey];
+				const _dxkey = row[dxkey];
+				if (!obj[_oukey])
+				 obj[_oukey] = {};
+				obj[_oukey][_dxkey] = row[valuekey];
+			});
+			console.log("obj", obj);
+			this.allIndis = obj;
+		 }
+		fetchIndis();
+
+
 		try {
 			let data = null;
 			let prevData = null;
@@ -1084,6 +1109,13 @@ class Store {
 
 				const res = await this.engine.query(query1);
 				data = res.events;
+				this.allDeaths = data.rows.map((item: any) => {
+					const headers = getHeaders(data.headers);
+					return headers.map((header: any) => {
+						return { [header.name]: item[header.index] };
+					});
+				});
+
 
 				if (!!this.selectedDateRange) {
 					// let query2 = Object.assign({}, query1);
@@ -1293,6 +1325,20 @@ class Store {
 			let prevDiseases: any = {};
 			let orgDiseases: any = {};
 			let prevOrgDiseases: any = {};
+
+			console.log("data", data)
+			this.allDeaths = data?.rows.map((item: any) => {
+				const headers = getHeaders(data.headers);
+				const obj = {}
+				headers.forEach((header: any) => {
+					obj[header.name] = item[header.index];
+				});
+				obj["dOrgUnitName"] = this.getOrgUnitName(obj["orgUnit"]);
+				obj["dOrgUnitLevels"] = this.getOrgUnitLevels(obj["orgUnit"]);
+				obj["cOrgUnit"] = getParentOrg(obj["orgUnit"]);
+
+				return obj;
+			})
 
 			if (!!prevData) {
 				const { headers, rows } = prevData;
@@ -1847,6 +1893,37 @@ class Store {
 		return [];
 	}
 
+	
+	getOrgUnitName = (id: string) => {
+		const found = this.programOrganisationUnits.find(
+			(u: any) => u.id === id
+		);
+		if (found) {
+			return found.name;
+		}
+		return "";
+	};
+
+	getCurrentOrgUnitLevel = () => {
+		const found = this.userOrgUnits.find(
+			(u: any) => u.id === this.selectedOrgUnit
+		);
+		if (!!found)
+			return found.level;
+		return 0;
+	}
+
+	getOrgUnitLevels = (id: string) => {
+		const found = this.programOrganisationUnits.find(
+			(u: any) => u.id === id
+		);
+
+		if (found) {
+			return found.ancestors;
+		}
+		return [];
+	};
+
 	@computed get printColumns() {
 		return this.availablePrintDataElements.filter((de: any) => de.selected);
 	}
@@ -1973,6 +2050,16 @@ class Store {
 }
 
 export const store = new Store();
+
+function getHeaders(headers: Array<any>) {
+	return headers.map((h: any, index: number) => {
+		return {
+			name: h.name,
+			index,
+		};
+	});
+}
+
 
 function getHeaderIndexes(headers: Array<any>) {
 	const orgUnitIndex = headers.findIndex((h: any) => h.name === "orgUnit");

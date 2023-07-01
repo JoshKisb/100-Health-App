@@ -206,7 +206,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
                </div>
             </Popover>
          </div>
-         <div className="flex mt-2" style={{  width: "100%", justifyContent: "flex-end", marginBottom: "-45px" }}>
+         <div className="flex mt-2" style={{  width: "100%", justifyContent: "flex-end", marginBottom: "-5px" }}>
             <div className="flex" style={{  }}>
             <div style={{ width: "40%", paddingRight: "6px" }}>
                <Select
