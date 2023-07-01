@@ -5,6 +5,8 @@ import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
 
+const analyticsjson = require("./assets/analytics.json");
+
 const _ = require("lodash");
 
 const extraHeaders = window.location.origin.includes("local")
@@ -1057,8 +1059,19 @@ class Store {
 		const filterByCause = this.selectedCauseOfDeath;
 
 		const fetchIndis = async () => {
-			const url = `/api/37/analytics?dimension=pe:202305,ou:LEVEL-iITwmH31lPe,dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
-			const res = await this.engine.link.fetch(url);
+			const url = `https://hmis.health.go.ug/api/37/analytics?dimension=pe:202305,ou:LEVEL-iITwmH31lPe,dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
+			const creds = {
+				username: "moh-rch.dmurokora",
+				password: "Dhis@2022"
+			}
+			
+			const credentials = btoa(`${creds.username}:${creds.password}`);
+			const res = await fetch(url, {
+				headers: { "Authorization": `Basic ${credentials}` }
+			}).then((res) => res.json())
+			.catch((err) => console.log("err", err));
+			// const res = analyticsjson;
+			
 			console.log("res fetch indis", res);
 			const headers = getHeaders(res.headers);
 			const dxkey = headers.find((h: any) => h.name === "dx")?.index;

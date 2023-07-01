@@ -36,6 +36,7 @@ export const WeeklyReport = observer(() => {
    const [currChartType, setCurrChartType] = useState("column");
    const currDiseases = useRef([]);
 
+
    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage || allLanguages[0]);
 
    const groupDeathsToOrgUnits = (deaths) => {
@@ -178,13 +179,26 @@ export const WeeklyReport = observer(() => {
       setCurrChartType(chartType);
       if (chartType == "pie") {
          opts = pieOptions;
-         if (!!currDiseases.current)
-            opts.series[0].data = currDiseases.current.map((d: any) => {
-               return {
-                  name: d.name,
-                  y: d.count,
-               };
-            });
+         // if (!!currDiseases.current)
+         console.log("pie chart", currDiseases.current)
+         console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
+         const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
+         const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
+         const allDeaths = indi1 + indi2;
+         const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
+         const nonApprovedDeaths = allDeaths - approvedDeaths;
+
+         opts.series[0].data = [
+            {
+               name: "Approved Deaths",
+               y: approvedDeaths,
+            },
+            {
+               name: "Non Approved Deaths",
+               y: nonApprovedDeaths,
+            },
+         ];
+         
       } else if (chartType == "column") {
          opts = colOptions ?? {};
          if (!!currDiseases.current && opts !== undefined) {
@@ -213,7 +227,8 @@ export const WeeklyReport = observer(() => {
 
       if (!!chart.current && !!opts) {
          chart.current.destroy();
-         chart.current = Highcharts.chart("topdiseases", opts);
+         console.log("reload chart", opts)
+         chart.current = Highcharts.chart("topdiseasesm", opts);
       }
    };
 
@@ -244,54 +259,58 @@ export const WeeklyReport = observer(() => {
             currDiseases.current = sortedDiseases;
             if (currChartType == "column") {
                chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
+               
+               chart.current.series[0].setData(
+                  sortedDiseases.map((d: any) => {                  
+                        return {
+                           y: d.count,
+                           color: "red",
+                        };                  
+                  }),
+                  true
+               ); //setting data
+               chart.current.series[1].setData(
+                  sortedDiseases.map((d: any) => {
+                     if (currChartType == "column")
+                        return {
+                           y: d.approved,
+                           color: "blue",
+                        };
+                     
+                  }),
+                  true
+               ); //setting data
+   
+               chart.current.series[2].setData(
+                  sortedDiseases.map((d: any) => {
+                     if (currChartType == "column")
+                        return {
+                           y: d.indi1,
+                           color: "green",
+                        };
+                     
+                  }),
+                  true
+               ); //setting data
+            } else if (currChartType == "pie") {
+               console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
+               const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
+               const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
+               const allDeaths = indi1 + indi2;
+               const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
+               const nonApprovedDeaths = allDeaths - approvedDeaths;
+      
+               chart.current.series[0].setData([
+                  {
+                     name: "Approved Deaths",
+                     y: approvedDeaths,
+                  },
+                  {
+                     name: "Non Approved Deaths",
+                     y: nonApprovedDeaths,
+                  },
+               ]);
             }
-            chart.current.series[0].setData(
-               sortedDiseases.map((d: any) => {
-                  if (currChartType == "column")
-                     return {
-                        y: d.count,
-                        color: "red",
-                     };
-                  else
-                     return {
-                        name: d.name,
-                        y: d.count,
-                     };
-               }),
-               true
-            ); //setting data
-            chart.current.series[1].setData(
-               sortedDiseases.map((d: any) => {
-                  if (currChartType == "column")
-                     return {
-                        y: d.approved,
-                        color: "blue",
-                     };
-                  else
-                     return {
-                        name: d.name,
-                        y: d.approved,
-                     };
-               }),
-               true
-            ); //setting data
-
-            chart.current.series[2].setData(
-               sortedDiseases.map((d: any) => {
-                  if (currChartType == "column")
-                     return {
-                        y: d.indi1,
-                        color: "green",
-                     };
-                  else
-                     return {
-                        name: d.name,
-                        y: d.indi1 + d.indi2,
-                     };
-               }),
-               true
-            ); //setting data
-
             
          }
          chart.current.hideLoading();
