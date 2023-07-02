@@ -5,7 +5,7 @@ import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
 
-const analyticsjson = require("./assets/analytics.json");
+// const analyticsjson = require("./assets/analytics.json");
 
 const _ = require("lodash");
 
@@ -1067,11 +1067,11 @@ class Store {
 			}
 			
 			const credentials = btoa(`${creds.username}:${creds.password}`);
-			// const res = await fetch(url, {
-			// 	headers: { "Authorization": `Basic ${credentials}` }
-			// }).then((res) => res.json())
-			// .catch((err) => console.log("err", err));
-			const res = analyticsjson;
+			const res = await fetch(url, {
+				headers: { "Authorization": `Basic ${credentials}` }
+			}).then((res) => res.json())
+			.catch((err) => console.log("err", err));
+			// const res = analyticsjson;
 			
 			console.log("res fetch indis", res);
 			const headers = getHeaders(res.headers);

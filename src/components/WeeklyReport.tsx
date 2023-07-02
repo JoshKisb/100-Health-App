@@ -32,6 +32,8 @@ Highcharts.AST.allowedAttributes.push("viewBox");
 export const WeeklyReport = observer(() => {
    const store = useStore();
    let chart: any = useRef(null);
+   let chart2: any = useRef(null);
+   let chart3: any = useRef(null);
    const [chartTitle, setChartTitle] = useState("Mortality Indicators");
    const [currChartType, setCurrChartType] = useState("column");
    const currDiseases = useRef([]);
@@ -169,10 +171,10 @@ export const WeeklyReport = observer(() => {
       },
       series: [
          {
-            name: "Deaths",
+            name: "Approved Death Records",
             colorByPoint: true,
             data: [{}],
-         } as any,
+         } as any,        
       ],
       credits: {
          enabled: false,
@@ -182,66 +184,107 @@ export const WeeklyReport = observer(() => {
    const changeChartType = (chartType: string) => {
       let opts = null;
       setCurrChartType(chartType);
-      if (chartType == "pie") {
-         opts = pieOptions;
-         // if (!!currDiseases.current)
-         console.log("pie chart", currDiseases.current)
-         console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
-         const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
-         const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
-         const allDeaths = indi1 + indi2;
-         const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
-         const nonApprovedDeaths = allDeaths - approvedDeaths;
+      // if (chartType == "pie") {
+      //    opts = pieOptions;
+      //    const opts2 = {...opts, series: [
+      //       {
+      //          name: "Aggregate Death Records",
+      //          colorByPoint: true,
+      //          data: [{}],
+      //       } as any,
+      //    ]}
+      //    // if (!!currDiseases.current)
+      //    console.log("pie chart", currDiseases.current)
+      //    console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
+      //    const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
+      //    const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
+      //    const allDeaths = store.allDeaths.length;
+      //    const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
+      //    const nonApprovedDeaths = allDeaths - approvedDeaths;
 
-         opts.series[0].data = [
-            {
-               name: "Approved Deaths",
-               y: approvedDeaths,
-            },
-            {
-               name: "Non Approved Deaths",
-               y: nonApprovedDeaths,
-            },
-         ];
+      //    const aggregate = parseInt(indi1) + parseInt(indi2);
+      //    const nonApprovedAggreagate = aggregate - approvedDeaths;
          
-      } else if (chartType == "column") {
-         opts = colOptions ?? {};
-         if (!!currDiseases.current && opts !== undefined) {
-            opts.xAxis[0].categories = currDiseases.current?.map((d: any) => d?.name);
-            opts.series[0].data = currDiseases.current?.map((d: any) => {
-               return {
-                  y: d.count,
-                  color: "red",
-               };
-            });
-            opts.series[1].data = currDiseases.current?.map((d: any) => {
-               return {
-                  y: d.approved,
-                  color: "blue",
-               };
-            });
-            opts.series[2].data = currDiseases.current?.map((d: any) => {
-               return {
-                  y: d.indi1 + d.indi2,
-                  color: "green",
-               };
-            });
-            
-         }
-      }
 
-      if (!!chart.current && !!opts) {
-         chart.current.destroy();
-         console.log("reload chart", opts)
-         chart.current = Highcharts.chart("topdiseasesm", opts);
-      }
+      //    opts.series[0].data = [
+      //       {
+      //          name: "Approved Deaths",
+      //          y: approvedDeaths,
+      //       },
+      //       {
+      //          name: "Non Approved Deaths",
+      //          y: nonApprovedDeaths,
+      //       },
+      //    ];
+
+         
+      //    opts2.series[0].data = [
+      //       {
+      //          name: "Approved Aggregate",
+      //          y: approvedDeaths,
+      //       },
+      //       {
+      //          name: "Non Approved Aggregate",
+      //          y: nonApprovedAggreagate,
+      //       },
+      //    ];
+
+      //    if (!!chart2.current && !!opts2) {
+      //       chart2.current.destroy();
+      //    }
+      //    chart2.current = Highcharts.chart("topdiseasesm2", opts2);
+
+
+      //    if (!!chart3.current && !!opts) {
+      //       chart3.current.destroy();
+      //    }          
+      //    chart3.current = Highcharts.chart("topdiseasesm1", opts);
+         
+         
+      // } else if (chartType == "column") {
+      //    // if (!!chart2.current) chart2.current.destroy();
+      //    opts = colOptions ?? {};
+      //    if (!!currDiseases.current && opts !== undefined) {
+      //       opts.xAxis[0].categories = currDiseases.current?.map((d: any) => d?.name);
+      //       opts.series[0].data = currDiseases.current?.map((d: any) => {
+      //          return {
+      //             y: d.count,
+      //             color: "red",
+      //          };
+      //       });
+      //       opts.series[1].data = currDiseases.current?.map((d: any) => {
+      //          return {
+      //             y: d.approved,
+      //             color: "blue",
+      //          };
+      //       });
+      //       opts.series[2].data = currDiseases.current?.map((d: any) => {
+      //          return {
+      //             y: d.indi1 + d.indi2,
+      //             color: "green",
+      //          };
+      //       });
+            
+      //    }
+      //    if (!!chart.current && !!opts) {
+      //       chart.current.destroy();
+      //    }
+      //       console.log("reload chart", opts)
+      //       chart.current = Highcharts.chart("topdiseasesm", opts);
+         
+      // }
+
+      
+
+      
    };
 
    useEffect(() => {
       console.log("EventList:hook nationalitySelect", store.selectedNationality);
 
-      const opts = currChartType == "column" ? colOptions : pieOptions;
-      chart.current = Highcharts.chart("topdiseasesm", opts);
+      let opts = colOptions;    
+      chart.current = Highcharts.chart("topdiseasesm", colOptions);
+      chart3.current = Highcharts.chart("topdiseasesm1", pieOptions);
       console.log("currChartx", chart.current);
 
       store.queryTopEvents().then(() => {
@@ -262,7 +305,7 @@ export const WeeklyReport = observer(() => {
             console.log("sortedDiseases", sortedDiseases);
 
             currDiseases.current = sortedDiseases;
-            if (currChartType == "column") {
+            // if (currChartType == "column") {
                chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
                
                chart.current.series[0].setData(
@@ -290,32 +333,81 @@ export const WeeklyReport = observer(() => {
                   sortedDiseases.map((d: any) => {
                      if (currChartType == "column")
                         return {
-                           y: d.indi1,
+                           y: d.aggregate,
                            color: "green",
                         };
                      
                   }),
                   true
                ); //setting data
-            } else if (currChartType == "pie") {
-               console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
-               const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
-               const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
-               const allDeaths = indi1 + indi2;
-               const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
-               const nonApprovedDeaths = allDeaths - approvedDeaths;
+            // } else if (currChartType == "pie") {
+
+         const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
+         const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
+         const allDeaths = store.allDeaths.length;
+         const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
+         const nonApprovedDeaths = allDeaths - approvedDeaths;
+
+         const aggregate = parseInt(indi1) + parseInt(indi2);
+         const nonApprovedAggreagate = Math.min(aggregate - approvedDeaths, 0);
+         opts = pieOptions;
+
+         const opts2 = {...opts, series: [
+            {
+               name: "Aggregate Death Records",
+               colorByPoint: true,
+               data: [{}],
+            } as any,
+         ]}
+         
+
+         opts.series[0].data = [
+            {
+               name: "Approved Deaths",
+               y: approvedDeaths,
+            },
+            {
+               name: "Non Approved Deaths",
+               y: nonApprovedDeaths,
+            },
+         ];
+
+         
+         opts2.series[0].data = [
+            {
+               name: "Approved Aggregate",
+               y: approvedDeaths,
+            },
+            {
+               name: "Non Approved Aggregate",
+               y: nonApprovedAggreagate,
+            },
+         ];
+
+         console.log("opts 123", opts, opts2)
+         
+         chart2.current = Highcharts.chart("topdiseasesm2", opts2);
+                
+         chart3.current = Highcharts.chart("topdiseasesm1", opts);
+
+               // console.log("all indis org", store.selectedOrgUnit, store.allIndis[store.selectedOrgUnit], store.allIndis)
+               // const indi1 = store.allIndis[store.selectedOrgUnit]?.["vyOajQA5xTu"] ?? 0;
+               // const indi2 = store.allIndis[store.selectedOrgUnit]?.["T8W0wbzErSF"] ?? 0;
+               // const allDeaths = indi1 + indi2;
+               // const approvedDeaths = store.allDeaths.filter((d) => d["twVlVWM3ffz"] != "Not Approved").length;
+               // const nonApprovedDeaths = allDeaths - approvedDeaths;
       
-               chart.current.series[0].setData([
-                  {
-                     name: "Approved Deaths",
-                     y: approvedDeaths,
-                  },
-                  {
-                     name: "Non Approved Deaths",
-                     y: nonApprovedDeaths,
-                  },
-               ]);
-            }
+               // chart3.current.series[0].setData([
+               //    {
+               //       name: "Approved Deaths",
+               //       y: approvedDeaths,
+               //    },
+               //    {
+               //       name: "Non Approved Deaths",
+               //       y: nonApprovedDeaths,
+               //    },
+               // ]);
+            // }
             
          }
          chart.current.hideLoading();
@@ -332,19 +424,47 @@ export const WeeklyReport = observer(() => {
 
    return (
       <div id="topdiseaseswrapper">
+         
          <div
             id="topdiseasesm"
             style={{
                width: "100%",
                height: "400px",
                marginBottom: "20px",
+               ...(!currChartType || currChartType == "column" ? {} : { display: "none" }),
             }}
          ></div>
+         
+         
+        
+         <div style={{ 
+            display: "flex", 
+            ...(!currChartType || currChartType == "column" ? { display: "none" } : {} ),
+            }}>
+         <div
+            id="topdiseasesm1"
+            style={{
+               width: "50%",
+               height: "400px",
+               marginBottom: "20px",
+            }}
+         ></div>
+         <div
+            id="topdiseasesm2"
+            style={{
+               width: "50%",
+               height: "400px",
+               marginBottom: "20px",
+            }}
+         ></div>
+         </div>
+         
 
          <div
             className="chartOpts"
             style={{
                left: 0,
+               paddingRight: "40px",
             }}
          >
             <div
