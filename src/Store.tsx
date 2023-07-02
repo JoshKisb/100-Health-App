@@ -5,7 +5,7 @@ import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
 
-// const analyticsjson = require("./assets/analytics.json");
+const analyticsjson = require("./assets/analytics.json");
 
 const _ = require("lodash");
 
@@ -1059,7 +1059,8 @@ class Store {
 		const filterByCause = this.selectedCauseOfDeath;
 
 		const fetchIndis = async () => {
-			const level = Math.min(this.getCurrentOrgUnitLevel(), 1);
+			const currOrgLevel = this.getCurrentOrgUnitLevel();
+			const level = Math.min(currOrgLevel, 1);
 			const url = `https://hmis.health.go.ug/api/37/analytics?dimension=pe:202305,ou:LEVEL-${level},dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
 			const creds = {
 				username: "moh-rch.dmurokora",
@@ -1083,9 +1084,12 @@ class Store {
 			res.rows.forEach((row: any, index: number) => {
 				const _oukey = row[oukey];
 				const _dxkey = row[dxkey];
-				if (!obj[_oukey])
-				 obj[_oukey] = {};
-				obj[_oukey][_dxkey] = row[valuekey];
+				const oulevel = Math.min(parseInt(this.getOrgUnitLevel(_oukey), 0));;
+				if (oulevel == currOrgLevel + 1) {
+					if (!obj[_oukey])
+					obj[_oukey] = {};
+					obj[_oukey][_dxkey] = row[valuekey];
+				}
 			});
 			console.log("obj", obj);
 			this.allIndis = obj;
@@ -1914,18 +1918,29 @@ class Store {
 		);
 		if (found) {
 			return found.name;
+		} else {
+			const found = this.userOrgUnits.find(
+				(u: any) => u.id === id
+			);
+			if (!!found)
+				return found.name;
 		}
 		return "";
 	};
 
 	getCurrentOrgUnitLevel = () => {
+		return this.getOrgUnitLevel(this.selectedOrgUnit);
+	}
+
+	getOrgUnitLevel = (id: string) => {
 		const found = this.userOrgUnits.find(
-			(u: any) => u.id === this.selectedOrgUnit
+			(u: any) => u.id === id
 		);
 		if (!!found)
 			return found.level;
 		return 0;
 	}
+
 
 	getOrgUnitLevels = (id: string) => {
 		const found = this.programOrganisationUnits.find(
