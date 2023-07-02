@@ -251,11 +251,11 @@ export const EventList = observer(() => {
    return (
       <div>
          <Tabs onChange={() => {}} type="card">
-            <TabPane tab="Top 20 Causes of Death" key="1">
-               <TopDiseasesChart />
-            </TabPane>
-            <TabPane tab="Mortality Report" key="2">
+            <TabPane tab="Mortality Report" key="1">
                <WeeklyReport />
+            </TabPane>
+            <TabPane tab="Top 20 Causes of Death" key="2">
+               <TopDiseasesChart />
             </TabPane>
          </Tabs>         
          
