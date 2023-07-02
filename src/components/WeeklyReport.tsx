@@ -62,12 +62,17 @@ export const WeeklyReport = observer(() => {
       });
 
       return Object.keys(deathOrgs).map((orgUnit) => {
+         const indi1 = parseInt(store.allIndis[orgUnit]?.["vyOajQA5xTu"] ?? 0);
+         const indi2 = parseInt(store.allIndis[orgUnit]?.["T8W0wbzErSF"] ?? 0);
          return {
             name: store.getOrgUnitName(orgUnit),
             orgUnit,
             deaths: deathOrgs[orgUnit],
             count: deathOrgs[orgUnit].length,
             approved: deathOrgs[orgUnit].filter((d) => d["twVlVWM3ffz"] != "Not Approved").length,
+            indi1,
+            indi2,
+            aggregate: indi1 + indi2,
          };
       });
    };
