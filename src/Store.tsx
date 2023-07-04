@@ -1060,7 +1060,7 @@ class Store {
 
 		const fetchIndis = async () => {
 			const currOrgLevel = this.getCurrentOrgUnitLevel();
-			const level = Math.min(currOrgLevel, 1);
+			const level = (Number(currOrgLevel) || 0) + 1;			
 			const url = `https://hmis.health.go.ug/api/37/analytics?dimension=pe:202305,ou:LEVEL-${level},dx:vyOajQA5xTu;T8W0wbzErSF&displayProperty=NAME&includeNumDen=true&skipMeta=true&skipData=false`;
 			const creds = {
 				username: "moh-rch.dmurokora",
