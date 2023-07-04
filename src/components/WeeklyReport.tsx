@@ -68,7 +68,11 @@ export const WeeklyReport = observer(() => {
       console.log("deathOrgs", deathOrgs);
 
       // return Object.keys(deathOrgs).map((orgUnit) => {
-      return Object.keys(store.allIndis).map((orgUnit) => {
+      const uniqOrgs = Array.from(new Set([
+         ...Object.keys(deathOrgs), 
+         ...Object.keys(store.allIndis)
+      ]));
+      return uniqOrgs.map((orgUnit) => {
          const indi1 = parseInt(store.allIndis[orgUnit]?.["vyOajQA5xTu"] ?? 0);
          const indi2 = parseInt(store.allIndis[orgUnit]?.["T8W0wbzErSF"] ?? 0);
          return {
