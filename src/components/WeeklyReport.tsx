@@ -68,10 +68,14 @@ export const WeeklyReport = observer(() => {
       console.log("deathOrgs", deathOrgs);
 
       // return Object.keys(deathOrgs).map((orgUnit) => {
+         const currOrgLevel = store.getCurrentOrgUnitLevel();
       const uniqOrgs = Array.from(new Set([
          ...Object.keys(deathOrgs), 
          ...Object.keys(store.allIndis)
-      ]));
+      ])).filter((orgUnit) => {
+         const oulevel = Math.min(parseInt(store.getOrgUnitLevel(orgUnit), 0));
+         return oulevel == currOrgLevel + 1;
+      });
       return uniqOrgs.map((orgUnit) => {
          const indi1 = parseInt(store.allIndis[orgUnit]?.["vyOajQA5xTu"] ?? 0);
          const indi2 = parseInt(store.allIndis[orgUnit]?.["T8W0wbzErSF"] ?? 0);
