@@ -1380,6 +1380,7 @@ export const DataEntryForm = observer(() => {
 
 		  console.log("clean defaults", defaults)
 		  form.setFieldsValue({ e96GB4CXyd3: "Female" })
+		  setPersonsAge(0);
 		  setPersonsGender("Female");
 		  localStorage.removeItem("mcodtemp")
 		  
