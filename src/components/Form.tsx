@@ -1902,14 +1902,7 @@ export const DataEntryForm = observer(() => {
 					<div style={{ display: "flex", alignItems: "center" }}>
 					<Form.Item
 						label={activeLanguage.lang["Date of Entry"]}
-						rules={[
-							{
-								type: "object",
-								required: true,
-								message:
-									activeLanguage.lang["Please select date!"],
-							},
-						]}
+						
 						name="eventDate"
 						className="m-0"
 						style={{ marginRight: "15px" }}
@@ -2042,12 +2035,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										rules={[
-											{
-												required: false,
-												message: "Enter full name",
-											},
-										]}
+										
 										name="ZYKmQ9GPOaF"
 										className="m-0"
 									>
@@ -2272,14 +2260,7 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									{!forceResetDOB ? (
 										<Form.Item
-											rules={[
-												{
-													type: "object",
-													required: false,
-													message:
-														"Please select date or mark age as unknown!",
-												},
-											]}
+											
 											name="RbrUuKFSqkZ"
 											className="m-0"
 										>
@@ -2364,17 +2345,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1 d-flex">
 									<Form.Item
-										rules={[
-											{
-												type: "integer",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Enter a valid age below 120"
-													],
-												max: 120,
-											},
-										]}
+										
 										name="q7e7FOXKnOf"
 										className="m-0"
 									>
@@ -2430,12 +2401,7 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 									<Form.Item
-										rules={[
-											{
-												type: "integer",
-												required: false,												
-											},
-										]}
+									
 										name="n9s5bKgCCVq"
 										className="m-0"
 										style={{ width: "100%" }}
@@ -2479,15 +2445,7 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									{optionSets ? (
 										<Form.Item
-											rules={[
-												{
-													required: false,
-													message:
-														activeLanguage.lang[
-															"Sex is required"
-														],
-												},
-											]}
+										
 											name="e96GB4CXyd3"
 											className="m-0"
 										>
@@ -2578,9 +2536,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										rules={[
-											
-										]}
+									
 										name="i8rrl8YWxLF"
 										className="m-0"
 									>
@@ -4341,16 +4297,7 @@ export const DataEntryForm = observer(() => {
 									<Form.Item
 										name="j5TIQx3gHyF"
 										className="m-0"
-										rules={[
-											{
-												type: "object",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Please select date!"
-													],
-											},
-										]}
+									
 									>
 										<DatePicker
 											disabledDate={notTomorrow}
@@ -4722,16 +4669,7 @@ export const DataEntryForm = observer(() => {
 									<Form.Item
 										name="U18Tnfz9EKd"
 										className="m-0"
-										rules={[
-											{
-												type: "object",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Please select date of injury"
-													],
-											},
-										]}
+									
 									>
 										<DatePicker
 											disabledDate={notTomorrow}
@@ -4895,17 +4833,7 @@ export const DataEntryForm = observer(() => {
 									<Form.Item
 										name="jf9TogeSZpk"
 										className="m-0"
-										rules={[
-											{
-												type: "number",
-												required: false,
-												message:
-													activeLanguage.lang[
-														"Can not be more than 24 hours"
-													],
-												max: 24,
-											},
-										]}
+									
 									>
 										
 										<InputNumber
