@@ -4901,16 +4901,7 @@ export const DataEntryForm = observer(() => {
 											}
 										/>
 									</Form.Item>
-									{form.getFieldValue("lQ1Byr04JTx") < 10 ||
-									form.getFieldValue("lQ1Byr04JTx") > 55 ? (
-										<span style={{ color: "red" }}>
-											{
-												activeLanguage.lang[
-													"Completed weeks of death should be between 10 and 54 weeks"
-												]
-											}
-										</span>
-									) : null}
+									
 								</td>
 								<td className="border p-1">
 									<b>
@@ -4935,16 +4926,7 @@ export const DataEntryForm = observer(() => {
 											}
 										/>
 									</Form.Item>
-									{form.getFieldValue("DdfDMFW4EJ9") < 10 ||
-									form.getFieldValue("DdfDMFW4EJ9") > 60 ? (
-										<span style={{ color: "orange" }}>
-											{
-												activeLanguage.lang[
-													"Mothers age is not between 10 and 60 years"
-												]
-											}
-										</span>
-									) : null}
+									
 								</td>
 							</tr>
 
