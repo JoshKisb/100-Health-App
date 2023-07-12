@@ -1365,6 +1365,14 @@ export const DataEntryForm = observer(() => {
 					delete defaults[mcodmap[key]];
 				}
 
+				if (key === "dob" && !!lsdefaults[key]) {
+					const _dob = moment(lsdefaults[key]);					
+					form.setFieldsValue({						
+						RbrUuKFSqkZ: _dob,
+					});
+				}
+
+
 				if (dateFields.indexOf(mcodmap[key]) !== -1 && !!lsdefaults[key]) {
 					defaults[mcodmap[key]] = moment(lsdefaults[key]);
 				} 
