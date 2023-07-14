@@ -4866,18 +4866,7 @@ export const DataEntryForm = observer(() => {
 												store.allDisabled.xAWYJtQsg8M 
 											}
 										/>
-									</Form.Item>									
-									{form.getFieldValue("xAWYJtQsg8M") < 100 ||
-									form.getFieldValue("xAWYJtQsg8M") >
-										10000 ? (
-										<span style={{ color: "red" }}>
-											{
-												activeLanguage.lang[
-													"Weight should be between 100 and 1000 grams"
-												]
-											}
-										</span>
-									) : null}
+									</Form.Item>
 								</td>
 							</tr>
 							<tr>

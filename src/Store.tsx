@@ -559,7 +559,9 @@ class Store {
 							this.userOrgUnits = [...this.userOrgUnits, org];
 							console.log("setting org unite", org);
 							this.selectedOrgUnit = this.lsdata["orgUnit"]							
-						} else if(!!this.lsdata["event"]) {
+						} 
+						
+						if(!!this.lsdata["ZKBE8Xm9DJG"]) {
 							console.log("ss", this.lsdata["event"])
 							const fillInfo = async () => {
 								const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
@@ -567,6 +569,9 @@ class Store {
 									this.currentEventObj = e;
 							}
 							fillInfo();
+						}
+						
+						if(!!this.lsdata["event"]) {
 							const parent: any = await this.getEvent(this.lsdata["event"])							   								
 							
 							this.actualSelOrgUnit = this.selectedOrgUnit;
