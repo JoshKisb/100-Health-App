@@ -43,7 +43,7 @@ import { useNinApi }  from "./../utils/ninApi"
 import { useTranslation } from "../utils/useTranslation";
 import { dateFields } from "../Store";
 import { DorisReportModal } from "./DorisReportModal";
-import { da } from "date-fns/locale";
+import { mcodmap } from "../Store";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -79,39 +79,7 @@ const customFieldsReservedIds = [
 const { Option } = Select;
 const { Title } = Typography;
 
-const mcodmap = {
-	hcu4LCAMSkz: "dsiwvNQLe5n", // village 
-	ByIsCiqkq4v: "ymyLrfEcYkD",
-	jdxl2rdeDEk: "lQ1Byr04JTx",
-	WzauwhVOwM0: "i8rrl8YWxLF",
-	eJwpqR9t7YM: "RJhbkjYrODG",
-	FIfoObQJvNp: "ZYKmQ9GPOaF",
-	uFoaTRJ16Ch: "gNM2Yhypydx",
-	K4FUK590rIU: "KsGOxFyzIs1",
-	FHmHV9mElbD: "u44XP9fZweA", // district
-	ioXkKfrgCJa: "t5nTEmlScSt", // subcounty
-	iJqBq0kQtWO: "q7e7FOXKnOf",
-	AqXDMjrPUEE: "Z41di0TRjIu",
-	XW2CKaAiMKc: "xAWYJtQsg8M",
-	js6jQi1rx1j: "jY3K6Bv4o9Q",
-	ZKBE8Xm9DJG: "ZKBE8Xm9DJG",
-	sfpqAeqKeyQ: "sfpqAeqKeyQ",
-	zb7uTuBCPrN: "zb7uTuBCPrN",
-	CnPGhOcERFF: "CnPGhOcERFF",
-	xeE5TQLvucB: "xeE5TQLvucB",
-	Ylht9kCLSRW: "Ylht9kCLSRW",
-	myydnkmLfhp: "myydnkmLfhp",
-	
-	QGFYJK00ES7: "aC64sB86ThG",
-	aC64sB86ThG: "QGFYJK00ES7",
 
-	cmZrrHfTxW3: "cmZrrHfTxW3",
-	eCVDO6lt4go: "eCVDO6lt4go",
-	hO8No9fHVd2: "hO8No9fHVd2",
-	fleGy9CvHYh: "fleGy9CvHYh",
-	WkXxkKEJLsg: "WkXxkKEJLsg",
-	CupbOInqvJI: "MOstDqSY0gO",
-}
 
 export const DataEntryForm = observer(() => {
 	const [form] = Form.useForm();
