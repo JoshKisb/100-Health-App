@@ -4,6 +4,7 @@ import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
+import { notification } from "antd";
 
 const analyticsjson = require("./assets/analytics.json");
 
@@ -120,31 +121,31 @@ const query = {
 	me: {
 		resource: "me.json",
 		params: {
-			fields: "*,organisationUnits[*]",
+			fields: "*",
 		},
 	},
-	orgs: {
+	orgs: { // userOrgUnits
 		resource: "organisationUnits.json",
 		params: {
 			paging: "false",
 			fields: "id,name,path,leaf,level,parent[id]",
 		},
 	},	
-	program: {
+	program: { // programOrganisationUnits
 		resource: `programs/vf8dN49jprI`,
 		params: {
 			fields:
 				"organisationUnits[id,name,ancestors[id,name,level]],programStages[programStageDataElements[displayInReports,dataElement[id,name,code]]]",
 		},
 	},
-	categories: {
-		resource: "categories.json",
-		params: {
-			fields: "name,id,code,categoryOptions[id,name]",
-			paging: "false",
-			filter: "code:in:[RT01]",
-		},
-	},
+	// categories: {
+	// 	resource: "categories.json",
+	// 	params: {
+	// 		fields: "name,id,code,categoryOptions[id,name]",
+	// 		paging: "false",
+	// 		filter: "code:in:[RT01]",
+	// 	},
+	// },
 	options: {
 		resource: "optionSets.json",
 		params: {
@@ -475,6 +476,10 @@ class Store {
 				this.programOrganisationUnits = units;
 				const programStage = data.program.programStages[0];
 
+				if (!!this.lsdata) {
+					this.fetchLocalStorageEvent();
+				}
+
 				if (!!this.activeLanguage?.lang) {
 					let al = this.activeLanguage?.lang;
 
@@ -551,46 +556,7 @@ class Store {
 
 					this.userOrgUnitsLoaded = true;
 
-					if (!!this.lsdata) {
-						if (!!this.lsdata["orgUnit"]) {
-							this.actualSelOrgUnit = this.selectedOrgUnit;
-							const org = this.programOrganisationUnits.find(o => o.id === this.lsdata["orgUnit"])
-							org.leaf = true;
-							this.userOrgUnits = [...this.userOrgUnits, org];
-							console.log("setting org unite", org);
-							this.selectedOrgUnit = this.lsdata["orgUnit"]							
-						} 
-						
-						if(!!this.lsdata["ZKBE8Xm9DJG"]) {
-							console.log("ss", this.lsdata["event"])
-							const fillInfo = async () => {
-								const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
-								if (!!e)
-									this.currentEventObj = e;
-							}
-							fillInfo();
-						}
-						
-						if(!!this.lsdata["event"]) {
-							const parent: any = await this.getEvent(this.lsdata["event"])							   								
-							
-							this.actualSelOrgUnit = this.selectedOrgUnit;
-							const org = this.programOrganisationUnits.find(o => o.id === parent.orgUnit)
-							org.leaf = true;
-							this.userOrgUnits = [...this.userOrgUnits, org];
-							console.log("setting org unite", org);
-							this.selectedOrgUnit = parent.orgUnit;
-							
-						}
-				
-						if(!!this.lsdata["nationality"]) {
-							const nId = this.nationalitySelect?.find(n => n.name === this.lsdata["nationality"])?.id
-							console.log("setting nat", nId);
-							if (!!nId)
-								this.selectedNationality = nId;
-						}
-						
-					}
+					
 				}
 				// console.log("test13", test13);
 			} catch (e) {
@@ -599,6 +565,49 @@ class Store {
 			}
 		}
 	};
+
+	@action fetchLocalStorageEvent = async () => {
+		
+		if (!!this.lsdata["orgUnit"]) {
+			this.actualSelOrgUnit = this.selectedOrgUnit;
+			const org = this.programOrganisationUnits.find(o => o.id === this.lsdata["orgUnit"])
+			org.leaf = true;
+			this.userOrgUnits = [...this.userOrgUnits, org];
+			console.log("setting org unite", org);
+			this.selectedOrgUnit = this.lsdata["orgUnit"]							
+		} 
+		
+		if(!!this.lsdata["ZKBE8Xm9DJG"]) {
+			console.log("ss", this.lsdata["event"])
+			const fillInfo = async () => {
+				const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
+				if (!!e)
+					this.currentEventObj = e;
+			}
+			fillInfo();
+		}
+		
+		if(!!this.lsdata["event"]) {
+			const parent: any = await this.getEvent(this.lsdata["event"])							   								
+			
+			this.actualSelOrgUnit = this.selectedOrgUnit;
+			const org = this.programOrganisationUnits.find(o => o.id === parent.orgUnit)
+			org.leaf = true;
+			this.userOrgUnits = [...this.userOrgUnits, org];
+			console.log("setting org unite", org);
+			this.selectedOrgUnit = parent.orgUnit;
+			
+		}
+
+		if(!!this.lsdata["nationality"]) {
+			const nId = this.nationalitySelect?.find(n => n.name === this.lsdata["nationality"])?.id
+			console.log("setting nat", nId);
+			if (!!nId)
+				this.selectedNationality = nId;
+		}
+		
+		
+	}
 
 	@action getAllLanguages = async (
 		languageName?: string,
@@ -1750,7 +1759,17 @@ class Store {
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
+			console.log("muation", createMutation)
 			await this.engine.mutate(createMutation);
+
+			if (!!this.lsdata) {
+				notification.success({
+					message: "MCCOD record saved successfully!",
+					// description: "Your translation passed all validation checks!",
+					onClick: () => {},
+					duration: 3,
+				});
+			}
 			
 			this.selectedOrgUnit = this.actualSelOrgUnit;
 			this.queryEvents().then(() => {});
@@ -2077,7 +2096,14 @@ class Store {
 
 			const dFromPairs = fromPairs(d);
 			console.log("dfp", dFromPairs)
-			return {...dFromPairs, ...this.lsdata};
+			const nonemptylsdata = Object.entries(this.lsdata).reduce((acc, [key, value]) => {
+				if (value !== null && value !== undefined && value !== '') {
+				  acc[key] = value;
+				}
+				return acc;
+			  }, {});
+				
+			return {...nonemptylsdata, ...dFromPairs};
 		}
 		return {};
 	}

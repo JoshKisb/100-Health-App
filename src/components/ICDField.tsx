@@ -58,7 +58,7 @@ export const ICDField: SFC<ICD> = observer(
 
     //
     const [value, setValue] = useState("");
-    const [visible, setVisible] = useState(!form.getFieldValue(field));
+    const [visible, setVisible] = useState(false);
     const store = useStore();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -289,7 +289,7 @@ export const ICDField: SFC<ICD> = observer(
 
     useEffect(() => {
       
-      console.log("form val", dvalue)
+      console.log("form val", dvalue, (!!dvalue && !!visible ? false: visible))
       setVisible((v) => 
         !!dvalue && !!v ? false: v
       )
@@ -300,6 +300,8 @@ export const ICDField: SFC<ICD> = observer(
       }
 
     }, [dvalue, next, store])
+
+    console.log("visible", visible)
 
     return (
       <div style={styles.icdContainerStyles} id={id}>

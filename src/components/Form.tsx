@@ -97,12 +97,14 @@ const mcodmap = {
 	ZKBE8Xm9DJG: "ZKBE8Xm9DJG",
 	sfpqAeqKeyQ: "sfpqAeqKeyQ",
 	zb7uTuBCPrN: "zb7uTuBCPrN",
-	QGFYJK00ES7: "QGFYJK00ES7",
 	CnPGhOcERFF: "CnPGhOcERFF",
 	xeE5TQLvucB: "xeE5TQLvucB",
 	Ylht9kCLSRW: "Ylht9kCLSRW",
 	myydnkmLfhp: "myydnkmLfhp",
-	aC64sB86ThG: "aC64sB86ThG",
+	
+	QGFYJK00ES7: "aC64sB86ThG",
+	aC64sB86ThG: "QGFYJK00ES7",
+
 	cmZrrHfTxW3: "cmZrrHfTxW3",
 	eCVDO6lt4go: "eCVDO6lt4go",
 	hO8No9fHVd2: "hO8No9fHVd2",
@@ -282,6 +284,8 @@ export const DataEntryForm = observer(() => {
 	const [underlyingCauses, setUnderlyingCauses] = useState(
 		underlyingCauseObject
 	);
+
+	const [defaultUCause, setDefaultUCause] = useState<any>({});
 
 	const [underlyingCauseChosen, setUnderlyingCauseChosen] = useState(false);
 
@@ -1405,6 +1409,15 @@ export const DataEntryForm = observer(() => {
 			if (defaults.QTKk2Xt8KDu) {
 				setUnderlyingCauseText(`${defaults.QTKk2Xt8KDu}`);
 			}
+
+			setDefaultUCause((s) => ({
+				sfpqAeqKeyQ: defaults.sfpqAeqKeyQ || s.sfpqAeqKeyQ,
+				zb7uTuBCPrN: defaults.zb7uTuBCPrN || s.zb7uTuBCPrN,
+				QGFYJK00ES7: defaults.QGFYJK00ES7 || s.QGFYJK00ES7,
+				CnPGhOcERFF: defaults.CnPGhOcERFF || s.CnPGhOcERFF,
+			}))
+
+
 			if (defaults.sJhOdGLD5lj) {
 				setUnderlyingCauseCode(`${defaults.sJhOdGLD5lj}`);
 			}
@@ -2840,7 +2853,7 @@ export const DataEntryForm = observer(() => {
 										}}
 										disabled={store.allDisabled.sfpqAeqKeyQ}
 										next="Ylht9kCLSRW"
-										dvalue={form.getFieldValue("sfpqAeqKeyQ")}
+										dvalue={defaultUCause.sfpqAeqKeyQ}
 										form={form}
 										field="sfpqAeqKeyQ"
 										codeField="zD0E77W4rFs"
