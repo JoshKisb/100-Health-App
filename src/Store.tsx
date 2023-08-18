@@ -1115,12 +1115,12 @@ class Store {
 				password: "Dhis@2022"
 			}
 			
-			const credentials = btoa(`${creds.username}:${creds.password}`);
-			const res = await fetch(url, {
-				headers: { "Authorization": `Basic ${credentials}` }
-			}).then((res) => res.json())
-			.catch((err) => console.log("err", err));
-			// const res = analyticsjson;
+			// const credentials = btoa(`${creds.username}:${creds.password}`);
+			// const res = await fetch(url, {
+			// 	headers: { "Authorization": `Basic ${credentials}` }
+			// }).then((res) => res.json())
+			// .catch((err) => console.log("err", err));
+			const res = analyticsjson;
 			
 			console.log("res fetch indis", res);
 			const headers = getHeaders(res.headers);
