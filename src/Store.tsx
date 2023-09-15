@@ -434,7 +434,31 @@ class Store {
 
 		
 		const result = {};
+		const years = [2022, 2023];
+		const sexes = [1, 2];
 
+		const pops = [];
+
+		years.forEach(year => {
+		sexes.forEach(sex => {
+			pops.push({ year, sex });
+		});
+		});
+
+		pops.forEach((el) => {
+			result[`${el.sex}-${el.year}`] = {
+				country_area: "Uganda",
+				iso3_code: "UGA",
+				data_type: "Population",
+				year: el.year,
+				icd_code: "",
+				sex_code: el.sex,
+				total_num: 0,
+				age_ranges: Object.fromEntries(age_ranges.map((age_range) => [age_range, 0])),
+			};
+		})
+		
+		
 		for (const row of res.rows) {
   			// const country_area = row[headers.country_area];
 			// const iso3_code = row[headers.iso3_code];
@@ -451,8 +475,8 @@ class Store {
 			// if this is the first time we've seen this key, initialize the object
 			if (!result[key]) {
 				result[key] = {
-					country_area: "Trainingland",
-					iso3_code: "USA",
+					country_area: "Uganda",
+					iso3_code: "UGA",
 					data_type: "mortality",
 					year,
 					icd_code,
