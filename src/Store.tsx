@@ -9,6 +9,7 @@ import { notification } from "antd";
 const analyticsjson = require("./assets/analytics.json");
 
 const _ = require("lodash");
+const anacodpopulation = require("./assets/anacodpopulation.json")
 
 const extraHeaders = window.location.origin.includes("local")
 	? { Authorization: `${process.env.REACT_APP_DHIS2_AUTHORIZATION}` }
@@ -437,13 +438,13 @@ class Store {
 		const years = [2022, 2023];
 		const sexes = [1, 2];
 
-		const pops = [];
+		const pops = anacodpopulation;
 
-		years.forEach(year => {
-		sexes.forEach(sex => {
-			pops.push({ year, sex });
-		});
-		});
+		// years.forEach(year => {
+		// sexes.forEach(sex => {
+		// 	pops.push({ year, sex });
+		// });
+		// });
 
 		pops.forEach((el) => {
 			result[`${el.sex}-${el.year}`] = {
@@ -453,8 +454,8 @@ class Store {
 				year: el.year,
 				icd_code: "",
 				sex_code: el.sex,
-				total_num: 0,
-				age_ranges: Object.fromEntries(age_ranges.map((age_range) => [age_range, 0])),
+				total_num: el.total_num,
+				age_ranges: el.population, // Object.fromEntries(age_ranges.map((age_range) => [age_range, 0])),
 			};
 		})
 		
