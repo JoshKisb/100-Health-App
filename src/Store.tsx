@@ -406,9 +406,9 @@ class Store {
 		this.selectedLevel = level;
 	};
 
-	@action fetchAnacodData = async () => {
+	@action fetchAnacodData = async (year) => {
 		const url = `/api/29/analytics/events/query/vf8dN49jprI.json?` +
-		"dimension=pe:2022;2023;2021" +
+		`dimension=pe:${year}` +
 		`&dimension=ou:${this.selectedOrgUnit}` +
 		"&dimension=aKclf7Yl1PE.ZKBE8Xm9DJG" +
 		"&dimension=aKclf7Yl1PE.MOstDqSY0gO" +
@@ -532,7 +532,8 @@ class Store {
 				country_area: "Uganda",
 				iso3_code: "UGA",
 				data_type: "Population",
-				year: el.year,
+				// year: el.year,
+				year,
 				icd_code: "",
 				sex_code: el.sex,
 				total_num: el.total_num,
