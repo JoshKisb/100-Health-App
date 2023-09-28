@@ -541,7 +541,7 @@ class Store {
 			};
 		})
 		
-		
+		const totals = {"1": 0, "2": 0, "9": 0}
 		for (const row of res.rows) {
   			// const country_area = row[headers.country_area];
 			// const iso3_code = row[headers.iso3_code];
@@ -551,6 +551,9 @@ class Store {
 			const sex = row[headers.e96GB4CXyd3].toLowerCase();
 			const sex_code = sex == "male" ? 1 : (sex == "female" ? 2 : 9);
 			const age = row[headers.q7e7FOXKnOf];
+
+			
+			totals[`${sex_code}`]++;
 
 			// create the key for this row based on year, sex, and icd_code
 			const key = `${year}-${sex_code}-${icd_code}`;
@@ -578,6 +581,12 @@ class Store {
 				result[key].age_ranges.age_unknown += 1;
 			}
 			result[key].total_num += 1;
+		}
+
+		for (const item in result) {
+			if (result[item].data_type != "Population")
+				break;
+			result[item]["total_num"] = totals[result[item]["sex_code"]];
 		}
 
 		console.log(result);
