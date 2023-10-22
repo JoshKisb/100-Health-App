@@ -1200,7 +1200,7 @@ export const DataEntryForm = observer(() => {
 			intervalB,
 			intervalC,
 			intervalD,
-			dateBirth: dateOfBirth?.toISOString(),
+			dateBirth: dateOfBirth?.toISOString() ?? null,
 			dateDeath: dateOfDeath?.toISOString(),
 			// maternalDeathWasPregnant 
 			// For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
