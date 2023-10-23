@@ -730,7 +730,7 @@ class Store {
 		if(!!this.lsdata["ZKBE8Xm9DJG"]) {
 			console.log("ss", this.lsdata["event"])
 			const fillInfo = async () => {
-				const e: any = await this.getEvent(this.lsdata["ZKBE8Xm9DJG"])							   								
+				const e: any = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"])							   								
 				if (!!e)
 					this.currentEventObj = e;
 			}
@@ -1648,7 +1648,7 @@ class Store {
 		}
 	};
 
-	@action getEvent = async (casenumber) => {
+	@action getEventByCase = async (casenumber) => {
 		let query1: any = {
 			event: {
 				resource: `events.json`,
@@ -1663,6 +1663,36 @@ class Store {
 			const data = await this.engine.query(query1);
 			console.log({data})
 			return !!data.events ? data.events[0] : null;
+			// runInAction(() => {
+			// 	this.data = data.events;
+
+			// 	this.data.headers = this.data.headers.map(
+			// 		(a: any, i: number) => {
+			// 			return {
+			// 				...a,
+			// 				i,
+			// 			};
+			// 		}
+			// 	);
+			// 	this.total = this.data.metaData.pager.total;
+			// });
+		} catch (e) {
+			console.log("exxx", e);
+		}
+	}
+
+	@action getEvent = async (eventId) => {
+		let query1: any = {
+			event: {
+				resource: `events/${eventId}.json`,
+			},
+		}
+
+		try {
+			console.log("q11", query1)
+			const data = await this.engine.query(query1);
+			console.log({data})
+			return data.event;
 			// runInAction(() => {
 			// 	this.data = data.events;
 
