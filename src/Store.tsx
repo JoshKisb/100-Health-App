@@ -1648,10 +1648,13 @@ class Store {
 		}
 	};
 
-	@action getEvent = async (eventId) => {
+	@action getEvent = async (casenumber) => {
 		let query1: any = {
 			event: {
-				resource: `events/${eventId}.json`,
+				resource: `events.json`,
+				program: this.program,
+				programStage: this.programStage,
+				filter: `ZKBE8Xm9DJG:in:${casenumber}`
 			},
 		}
 
@@ -1659,7 +1662,7 @@ class Store {
 			console.log("q11", query1)
 			const data = await this.engine.query(query1);
 			console.log({data})
-			return data.event;
+			return !!data.events ? data.events[0] : null;
 			// runInAction(() => {
 			// 	this.data = data.events;
 
