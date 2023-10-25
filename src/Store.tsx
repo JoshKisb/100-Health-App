@@ -731,8 +731,10 @@ class Store {
 			console.log("ss", this.lsdata["event"])
 			const fillInfo = async () => {
 				const e: any = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"])							   								
-				if (!!e)
+				if (!!e) {
 					this.currentEventObj = e;
+					this.lsdata["setevent"] = e.event;
+				}
 			}
 			fillInfo();
 		}
@@ -1938,7 +1940,7 @@ class Store {
 			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
 		} else if(!!this.currentEventObj || this.lsdata) {
-			event = { ...event, event: this.currentEventObj?.event ?? this.lsdata?.ZKBE8Xm9DJG };
+			event = { ...event, event: this.currentEventObj?.event ?? this.lsdata?.setevent };
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
