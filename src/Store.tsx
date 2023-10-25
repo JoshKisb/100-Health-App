@@ -1943,9 +1943,9 @@ class Store {
 			createMutation = { ...createMutation, data: event };
 
 		} else if(!!this.currentEventObj || this.lsdata) {
-			const evt = this.currentEventObj?.event ?? this.lsdata?.setevent ?? this.lsdata?.event;
+			const evt = this.currentEventObj?.event ?? this.lsdata?.setevent;
 			event = { ...event, event: evt };
-			console.log("saving evt", event);
+			console.log("saving evt", evt);
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
