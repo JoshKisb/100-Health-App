@@ -730,8 +730,10 @@ class Store {
 		if(!!this.lsdata["ZKBE8Xm9DJG"]) {
 			console.log("ss", this.lsdata["event"])
 			const fillInfo = async () => {
+				console.log("fetching by case number", this.lsdata["ZKBE8Xm9DJG"])
 				const e: any = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"])							   								
 				if (!!e) {
+					console.log("fetching by case number", e)
 					this.currentEventObj = e;
 					this.lsdata["setevent"] = e.event;
 				}
@@ -741,7 +743,7 @@ class Store {
 		
 		if(!!this.lsdata["event"]) {
 			const parent: any = await this.getEvent(this.lsdata["event"])							   								
-			
+			console.log("parant is", parent);
 			this.actualSelOrgUnit = this.selectedOrgUnit;
 			const org = this.programOrganisationUnits.find(o => o.id === parent.orgUnit)
 			org.leaf = true;
@@ -1652,18 +1654,20 @@ class Store {
 
 	@action getEventByCase = async (casenumber) => {
 		let query1: any = {
-			event: {
+			events: {
 				resource: `events.json`,
-				program: this.program,
-				programStage: this.programStage,
-				filter: `ZKBE8Xm9DJG:in:${casenumber}`
+				params: {
+					program: this.program,
+					programStage: this.programStage,
+					filter: `ZKBE8Xm9DJG:in:${casenumber}`
+				}
 			},
 		}
 
 		try {
-			console.log("q11", query1)
+			console.log("case number query", query1)
 			const data = await this.engine.query(query1);
-			console.log({data})
+			console.log("case number daya", data)
 			return !!data.events ? data.events[0] : null;
 			// runInAction(() => {
 			// 	this.data = data.events;
@@ -1691,9 +1695,7 @@ class Store {
 		}
 
 		try {
-			console.log("q11", query1)
 			const data = await this.engine.query(query1);
-			console.log({data})
 			return data.event;
 			// runInAction(() => {
 			// 	this.data = data.events;
@@ -1935,12 +1937,15 @@ class Store {
 			resource: "events",
 			data: event,
 		};
-		console.log("vvv", this)
+		console.log("vvv", this.currentEvent, this.editing, this.lsdata)
 		if ((this.editing && this.currentEvent)) {
 			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
+
 		} else if(!!this.currentEventObj || this.lsdata) {
-			event = { ...event, event: this.currentEventObj?.event ?? this.lsdata?.setevent };
+			const evt = this.currentEventObj?.event ?? this.lsdata?.setevent ?? this.lsdata?.event;
+			event = { ...event, event: evt };
+			console.log("saving evt", event);
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
