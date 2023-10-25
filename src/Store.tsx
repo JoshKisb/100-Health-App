@@ -733,9 +733,8 @@ class Store {
 				console.log("fetching by case number", this.lsdata["ZKBE8Xm9DJG"])
 				const e: any = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"])							   								
 				if (!!e) {
-					console.log("fetching by case number", e)
+					console.log("fetched by case number", e)
 					this.currentEventObj = e;
-					this.lsdata["setevent"] = e.event;
 				}
 			}
 			fillInfo();
@@ -1668,7 +1667,7 @@ class Store {
 			console.log("case number query", query1)
 			const data = await this.engine.query(query1);
 			console.log("case number daya", data)
-			return !!data.events ? data.events[0] : null;
+			return !!data.events ? data.events.events[0] : null;
 			// runInAction(() => {
 			// 	this.data = data.events;
 
@@ -1937,7 +1936,7 @@ class Store {
 			resource: "events",
 			data: event,
 		};
-		console.log("vvv", this.currentEvent, this.editing, this.lsdata)
+		console.log("vvv", this.currentEvent, this.editing, JSON.stringify(this.lsdata))
 		if ((this.editing && this.currentEvent)) {
 			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
