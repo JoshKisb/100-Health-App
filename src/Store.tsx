@@ -594,7 +594,42 @@ class Store {
 		}
 	
 		console.log(result);
-		return result;
+		//return result;
+
+		const values = addZZZZ(result);
+	
+		pops.forEach((el) => {
+		  result[`ZZZZ-${el.sex}-${year}`] = {
+			country_area: 'Uganda',
+			iso3_code: 'UGA',
+			data_type: 'mortality',
+			year,
+			icd_code: 'ZZZZ',
+			sex_code: el.sex_code,
+			total_num: values[el.sex]['total_num'],
+			age_ranges: values[el.sex]['age_ranges'],
+		  };
+		});
+
+		let _results = {};
+		for (const item in result) {
+		  if (result[item].data_type !== 'Population') continue;
+		  _results[item] = result[item];
+		}
+		for (const item in result) {
+		  if (result[item].icd_code !== 'ZZZZ') continue;
+		  _results[item] = result[item];
+		}
+		for (const item in result) {
+		  if (
+			result[item].data_type !== 'mortality' &&
+			result[item].icd_code === 'ZZZZ'
+		  )
+			continue;
+		  _results[item] = result[item];
+		}
+	
+		return _results;
 
 	}
 

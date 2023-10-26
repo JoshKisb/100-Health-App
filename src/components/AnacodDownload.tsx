@@ -43,7 +43,7 @@ const AnacodDownload = () => {
     const headers = [
       "country_area",
       "iso3_code",
-      "year",
+      "year4",
       "data_type",
       "icd_code",
       "sex_code",
