@@ -268,6 +268,15 @@ export const DataEntryForm = observer(() => {
 	const [fromReview, setFromReview] = useState(false);
 
 	const onFinish = async (values: any) => {
+		if (!store.selectedNationality) {
+			notification.error({
+				message: "Validation Error!",
+				description: `Please select a nationality!`,
+				onClick: () => {},
+				duration: 3,
+			  });
+			return;
+		}
 		// Force form to acknowledge controlled values
 		if (approvalStatus) {
 			values.twVlVWM3ffz = approvalStatus;
