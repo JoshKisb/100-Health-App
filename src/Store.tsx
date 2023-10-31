@@ -5,6 +5,7 @@ import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
 import { notification } from "antd";
+import { addZZZZ } from "./utils/download-utils";
 
 const analyticsjson = require("./assets/analytics.json");
 
@@ -39,6 +40,7 @@ export const mcodmap = {
 	XW2CKaAiMKc: "xAWYJtQsg8M",
 	js6jQi1rx1j: "jY3K6Bv4o9Q",
 	ZKBE8Xm9DJG: "ZKBE8Xm9DJG",
+	itNUbtIXfCT: "ZKBE8Xm9DJG",
 	sfpqAeqKeyQ: "sfpqAeqKeyQ",
 	zb7uTuBCPrN: "zb7uTuBCPrN",
 	CnPGhOcERFF: "CnPGhOcERFF",
@@ -549,54 +551,91 @@ class Store {
 		
 		const totals = {"1": 0, "2": 0, "9": 0}
 		for (const row of res.rows) {
-  			// const country_area = row[headers.country_area];
-			// const iso3_code = row[headers.iso3_code];
-			const date = row[headers.eventdate];
+		  // const country_area = row[headers.country_area];
+		  // const iso3_code = row[headers.iso3_code];
+		  const date = row[headers.eventdate];
 			const year = !!date ? date.split("-")[0] : "Unknown";
-			const icd_code = row[headers.dTd7txVzhgY];
-			const sex = row[headers.e96GB4CXyd3].toLowerCase();
+		  const icd_code = row[headers.dTd7txVzhgY];
+		  const sex = row[headers.e96GB4CXyd3].toLowerCase();
 			const sex_code = sex == "male" ? 1 : (sex == "female" ? 2 : 9);
-			const age = row[headers.q7e7FOXKnOf];
-
+		  const age = row[headers.q7e7FOXKnOf];
+	
 			
-			totals[`${sex_code}`]++;
-
-			// create the key for this row based on year, sex, and icd_code
-			const key = `${year}-${sex_code}-${icd_code}`;
-
-			// if this is the first time we've seen this key, initialize the object
-			if (!result[key]) {
-				result[key] = {
+		  totals[`${sex_code}`]++;
+	
+		  // create the key for this row based on year, sex, and icd_code
+		  const key = `${year}-${sex_code}-${icd_code}`;
+	
+		  // ignore rows that don't have an icd_code
+		  if (!icd_code) continue;
+		  // if this is the first time we've seen this key, initialize the object
+		  if (!result[key]) {
+			result[key] = {
 					country_area: "Uganda",
 					iso3_code: "UGA",
 					data_type: "mortality",
-					year,
-					icd_code,
-					sex_code,
-					total_num: 0,
+			  year,
+			  icd_code,
+			  sex_code,
+			  total_num: 0,
 					age_ranges: Object.fromEntries(age_ranges.map((age_range) => [age_range, 0])),
-				};
-			}
-
-			// update the total_num and age range fields for this row
-			if (!!age || age === 0) {
-				let ageRange = Math.floor(Math.min(age, 99) / 5) * 5;
-				if (ageRange == 0 && age > 0) ageRange = 1; 
-				result[key].age_ranges[`age_${ageRange}`] += 1;
-			} else {
-				result[key].age_ranges.age_unknown += 1;
-			}
-			result[key].total_num += 1;
+			};
+		  }
+	
+		  // update the total_num and age range fields for this row
+		  if (!!age || age === 0) {
+			let ageRange = Math.floor(Math.min(age, 99) / 5) * 5;
+			if (ageRange == 0 && age > 0) ageRange = 1;
+			result[key].age_ranges[`age_${ageRange}`] += 1;
+		  } else {
+			result[key].age_ranges.age_unknown += 1;
+		  }
+		  result[key].total_num += 1;
 		}
-
+	
 		for (const item in result) {
 			if (result[item].data_type != "Population")
 				break;
 			result[item]["total_num"] = totals[result[item]["sex_code"]];
 		}
-
+	
 		console.log(result);
-		return result;
+		//return result;
+
+		const values = addZZZZ(result);
+	
+		pops.forEach((el) => {
+		  result[`ZZZZ-${el.sex}-${year}`] = {
+			country_area: 'Uganda',
+			iso3_code: 'UGA',
+			data_type: 'mortality',
+			year,
+			icd_code: 'ZZZZ',
+			sex_code: el.sex_code,
+			total_num: values[el.sex]['total_num'],
+			age_ranges: values[el.sex]['age_ranges'],
+		  };
+		});
+
+		let _results = {};
+		for (const item in result) {
+		  if (result[item].data_type !== 'Population') continue;
+		  _results[item] = result[item];
+		}
+		for (const item in result) {
+		  if (result[item].icd_code !== 'ZZZZ') continue;
+		  _results[item] = result[item];
+		}
+		for (const item in result) {
+		  if (
+			result[item].data_type !== 'mortality' &&
+			result[item].icd_code === 'ZZZZ'
+		  )
+			continue;
+		  _results[item] = result[item];
+		}
+	
+		return _results;
 
 	}
 
@@ -736,16 +775,19 @@ class Store {
 		if(!!this.lsdata["ZKBE8Xm9DJG"]) {
 			console.log("ss", this.lsdata["event"])
 			const fillInfo = async () => {
+				console.log("fetching by case number", this.lsdata["ZKBE8Xm9DJG"])
 				const e: any = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"])							   								
-				if (!!e)
+				if (!!e) {
+					console.log("fetched by case number", e)
 					this.currentEventObj = e;
+				}
 			}
 			fillInfo();
 		}
 		
 		if(!!this.lsdata["event"]) {
 			const parent: any = await this.getEvent(this.lsdata["event"])							   								
-			
+			console.log("parant is", parent);
 			this.actualSelOrgUnit = this.selectedOrgUnit;
 			const org = this.programOrganisationUnits.find(o => o.id === parent.orgUnit)
 			org.leaf = true;
@@ -756,7 +798,8 @@ class Store {
 		}
 
 		if(!!this.lsdata["nationality"]) {
-			const nId = this.nationalitySelect?.find(n => n.name === this.lsdata["nationality"])?.id
+			console.log("nationSel", this.nationalitySelect);
+			const nId = this.nationalitySelect?.find(n => this.lsdata["nationality"].toLowerCase().includes(n.shortName.toLowerCase()))?.id
 			console.log("setting nat", nId);
 			if (!!nId)
 				this.selectedNationality = nId;
@@ -1656,19 +1699,21 @@ class Store {
 
 	@action getEventByCase = async (casenumber) => {
 		let query1: any = {
-			event: {
+			events: {
 				resource: `events.json`,
+				params: {
 				program: this.program,
 				programStage: this.programStage,
 				filter: `ZKBE8Xm9DJG:in:${casenumber}`
+				}
 			},
 		}
 
 		try {
-			console.log("q11", query1)
+			console.log("case number query", query1)
 			const data = await this.engine.query(query1);
-			console.log({data})
-			return !!data.events ? data.events[0] : null;
+			console.log("case number daya", data)
+			return !!data.events ? data.events.events[0] : null;
 			// runInAction(() => {
 			// 	this.data = data.events;
 
@@ -1939,12 +1984,15 @@ class Store {
 			resource: "events",
 			data: event,
 		};
-		console.log("vvv", this)
+		console.log("vvv", this.currentEvent, this.editing, JSON.stringify(this.lsdata))
 		if ((this.editing && this.currentEvent)) {
 			event = { ...event, event: this.currentEvent[0] };
 			createMutation = { ...createMutation, data: event };
+
 		} else if(!!this.currentEventObj || this.lsdata) {
-			event = { ...event, event: this.currentEventObj?.event ?? this.lsdata?.ZKBE8Xm9DJG };
+			const evt = this.currentEventObj?.event ?? this.lsdata?.setevent;
+			event = { ...event, event: evt };
+			console.log("saving evt", evt);
 			createMutation = { ...createMutation, data: event };
 		}
 		try {
