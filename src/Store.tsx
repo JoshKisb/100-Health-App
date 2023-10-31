@@ -264,6 +264,7 @@ class Store {
 	@observable allDeaths: any[] = [];
 	@observable filters: any = {};
 	@observable lsdata: any = null;
+	@observable isIframeEdit: boolean = false;
 	@observable allDisabled: any = {
 		ZKBE8Xm9DJG: false,
 		ZYKmQ9GPOaF: false,
@@ -380,6 +381,7 @@ class Store {
 	};
 	@action setNewFromLocalStorage = (ls: any) => {
 		this.showForm();
+		//TODO: What is this here?
 		console.log("lsss", ls)
 		if (!!ls["jY3K6Bv4o9Q"])
 		ls["jY3K6Bv4o9Q"] = ls["jY3K6Bv4o9Q"] === "true" ? "Yes" : "No";
@@ -399,6 +401,10 @@ class Store {
 			console.log(e);
 		}
 	};
+
+	@action setIsIframeEdit = async (isIframeEdit: boolean) => {
+		this.isIframeEdit = isIframeEdit
+	}
 
 	@action setSelectedCOD = (causeOfDeath) => {
 		this.selectedCauseOfDeath = causeOfDeath;
