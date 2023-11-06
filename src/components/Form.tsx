@@ -268,6 +268,15 @@ export const DataEntryForm = observer(() => {
 	const [fromReview, setFromReview] = useState(false);
 
 	const onFinish = async (values: any) => {
+		if (!store.selectedNationality) {
+			notification.error({
+				message: "Validation Error!",
+				description: `Please select a nationality!`,
+				onClick: () => {},
+				duration: 3,
+			  });
+			return;
+		}
 		// Force form to acknowledge controlled values
 		if (approvalStatus) {
 			values.twVlVWM3ffz = approvalStatus;
@@ -1200,7 +1209,7 @@ export const DataEntryForm = observer(() => {
 			intervalB,
 			intervalC,
 			intervalD,
-			dateBirth: dateOfBirth?.toISOString(),
+			dateBirth: dateOfBirth?.toISOString() ?? null,
 			dateDeath: dateOfDeath?.toISOString(),
 			// maternalDeathWasPregnant 
 			// For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
@@ -1214,7 +1223,7 @@ export const DataEntryForm = observer(() => {
 
 		};
 		// "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
-		const url = "https://ug.sk-engine.cloud/icd-api/icd/release/11/2023-01/doris?" + new URLSearchParams(payload);
+		const url = "hmis-dev.health.go.ug/icd-api/icd/release/11/2023-01/doris?" + new URLSearchParams(payload);
 		const res = await fetch(url, {
 			// body: JSON.stringify(payload),
 			method: 'GET',
@@ -1226,7 +1235,7 @@ export const DataEntryForm = observer(() => {
 		}).then((response) => response.json());
 
 		const nameres = await fetch(
-			res.uri.replace("http://id.who.int", "https://ug.sk-engine.cloud/icd-api"),
+			res.uri.replace("http://id.who.int", "https://hmis-dev.health.go.ug/icd-api"),
 			{
 				method: 'GET',
 				headers: {

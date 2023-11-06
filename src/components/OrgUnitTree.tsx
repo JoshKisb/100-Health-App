@@ -3,6 +3,7 @@ import { TreeSelect, Select, Button, Popover, Spin, DatePicker } from "antd";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import moment, { Moment } from "moment";
+import { getQueryParams } from "../utils/extra";
 
 const { Option } = Select;
 
@@ -111,6 +112,16 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
    };
 
    useEffect(() => {
+
+      //TODO If you have a query param called edit set
+
+      const params = getQueryParams();
+      if(params['iframe_edit'] != undefined && params['iframe_edit'] == 'true'){
+         store.setIsIframeEdit(true);
+         localStorage.setItem("mcodtemp", JSON.stringify(params));
+         debugger
+      }
+
       const mcodtemp = localStorage.getItem("mcodtemp");
       console.log("checking ls", mcodtemp);
       if (!!mcodtemp) {
@@ -145,6 +156,7 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
                   allowClear={true}
                   placeholder={activeLanguage?.lang["Nationality"]}
                   onChange={store.setSelectedNationality}
+                  disabled={store.isIframeEdit}
                   size="large"
                   value={store.selectedNationality}
                >
