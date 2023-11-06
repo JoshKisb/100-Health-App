@@ -329,16 +329,37 @@ export const DataEntryForm = observer(() => {
 		}
 	};
 
-	const onCancel = () => {
-		if (!!fromReview) {
-			// console.log("window", window);
-			// window.close();
-			(window.parent as any).closeIframe();
-		} else {
-			store.showEvents();
-			store.enableForm();
-		}
-	}
+
+	// const onCancel = () => {
+	// 	if (!!fromReview) {
+	// 		// console.log("window", window);
+	// 		// window.close();
+	// 		// (window.parent as any).closeIframe();
+	// 		localStorage.clear()
+	// 		window.location.href = "/";
+	// 	} else {
+	// 		store.showEvents();
+	// 		store.enableForm();
+	// 	}
+	// }
+
+    const onCancel = () => {
+        if (!!fromReview) {
+            if (window !== window.parent) {
+                // Your app is loaded in an iframe, so close the iframe
+                (window.parent as any).closeIframe();
+            } else {
+                // Your app is not in an iframe, so close the window
+                // window.close();
+				localStorage.clear()
+				// window.location.href = "/";
+				window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
+            }
+        } else {
+            store.showEvents();
+            store.enableForm();
+        }
+    }
 
 	const notTomorrow = (date: moment.Moment) => {
 		return date.isAfter(moment());

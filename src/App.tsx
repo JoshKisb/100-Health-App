@@ -95,7 +95,7 @@ export const App = observer(() => {
 				</div>
 			) : (
 				<div className="p-2">
-					<OrgUnitTree loading={loading || fetching} fetching={fetching} />
+					{ store.currentPage === "1" ? <OrgUnitTree loading={loading || fetching} fetching={fetching} /> : <></>}
 					{/* <DataEntryForm /> */}
 					{store.currentPage === "3" ? <DataEntryForm /> : <EventList />}
 				</div>
