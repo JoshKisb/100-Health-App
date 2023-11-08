@@ -366,33 +366,33 @@ export const DataEntryForm = observer(() => {
 
 	const [testVal, setTestVal] = useState("");
 	const buttonA = () => {
-		// form.setFieldsValue({ QHY3iYRLvMp: "" });
+		// form.setFieldsValue({ cSDJ9kSJkFP: "" });
 		// button()
 		setTestVal("");
 	};
 	const [testVal2, setTestVal2] = useState("");
 	const buttonB = () => {
-		// form.setFieldsValue({ QHY3iYRLvMp: "" });
+		// form.setFieldsValue({ cSDJ9kSJkFP: "" });
 		// button()
 		setTestVal2("");
 	};
 	const [testVal3, setTestVal3] = useState("");
 	const buttonC = () => {
-		// form.setFieldsValue({ QHY3iYRLvMp: "" });
+		// form.setFieldsValue({ cSDJ9kSJkFP: "" });
 		// button()
 		setTestVal3("");
 	};
 
 	const [testVal4, setTestVal4] = useState("");
 	const buttonD = () => {
-		// form.setFieldsValue({ QHY3iYRLvMp: "" });
+		// form.setFieldsValue({ cSDJ9kSJkFP: "" });
 		// button()
 		setTestVal4("");
 	};
 
 	// const [testValUnderlying, setTestValUnderlying] = useState("");
 	// const buttonUnderlying = () => {
-	//     // form.setFieldsValue({ QHY3iYRLvMp: "" });
+	//     // form.setFieldsValue({ cSDJ9kSJkFP: "" });
 	//     // button()
 	//     setTestValUnderlying("");
 	// };
@@ -2394,19 +2394,13 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 									<Form.Item
 									
-										name="n9s5bKgCCVq"
+										name="WYykJO0Vh3s"
 										className="m-0"
 										style={{ width: "100%" }}
 									>
-										<InputNumber
-											size="large"
-											placeholder="months"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.n9s5bKgCCVq 
-											}
+										  {optionSet("Age_Type", "WYykJO0Vh3s")}
 											
-										/>
+										
 									</Form.Item>
 								</td>
 							</tr>
@@ -2876,7 +2870,7 @@ export const DataEntryForm = observer(() => {
 								{/* CAUSE OF DEATH */}
 								<td className="border p-1">
 									<Form.Item
-										name="QHY3iYRLvMp"
+										name="cSDJ9kSJkFP"
 										className="m-0"
 									>
 										<table>
@@ -2887,7 +2881,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.QHY3iYRLvMp 
+																.cSDJ9kSJkFP 
 														}
 														value={testVal}
 														onChange={(e: any) => {
@@ -2919,7 +2913,7 @@ export const DataEntryForm = observer(() => {
 																"sfpqAeqKeyQ"
 															);
 															store.disableValue(
-																"QHY3iYRLvMp"
+																"cSDJ9kSJkFP"
 															);
 															store.disableValue(
 																"Ylht9kCLSRW"
@@ -3044,7 +3038,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="NkiH8GTX6HC"
+										name="uckvenVFnwf"
 										className="m-0"
 									>
 										<table>
@@ -3055,7 +3049,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.NkiH8GTX6HC 
+																.uckvenVFnwf 
 														}
 														value={testVal2}
 														onChange={(e: any) => {
@@ -3088,7 +3082,7 @@ export const DataEntryForm = observer(() => {
 															);
 
 															store.disableValue(
-																"NkiH8GTX6HC"
+																"uckvenVFnwf"
 															);
 															store.disableValue(
 																"myydnkmLfhp"
@@ -3205,7 +3199,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="SDPq8UURlWc"
+										name="ZFdJRT3PaUd"
 										className="m-0"
 									>
 										<table>
@@ -3216,7 +3210,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.SDPq8UURlWc 
+																.ZFdJRT3PaUd 
 														}
 														value={testVal3}
 														onChange={(e: any) => {
@@ -3248,7 +3242,7 @@ export const DataEntryForm = observer(() => {
 																"QGFYJK00ES7"
 															);
 															store.disableValue(
-																"SDPq8UURlWc"
+																"ZFdJRT3PaUd"
 															);
 															store.disableValue(
 																"aC64sB86ThG"
@@ -3364,7 +3358,7 @@ export const DataEntryForm = observer(() => {
 								</td>
 								<td className="border p-1">
 									<Form.Item
-										name="zqW9xWyqOur"
+										name="Op5pSvgHo1M"
 										className="m-0"
 									>
 										<table>
@@ -3375,7 +3369,7 @@ export const DataEntryForm = observer(() => {
 														disabled={
 															store.viewMode ||
 															store.allDisabled
-																.zqW9xWyqOur 
+																.Op5pSvgHo1M 
 														}
 														value={testVal4}
 														onChange={(e: any) => {
@@ -3407,7 +3401,7 @@ export const DataEntryForm = observer(() => {
 																"CnPGhOcERFF"
 															);
 															store.disableValue(
-																"zqW9xWyqOur"
+																"Op5pSvgHo1M"
 															);
 															store.disableValue(
 																"cmZrrHfTxW3"

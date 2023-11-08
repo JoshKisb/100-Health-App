@@ -140,7 +140,7 @@ const dlcolumns = [
 	// "eCVDO6lt4go",
 	// "QGFYJK00ES7",
 	// "CnPGhOcERFF",
-	// "QHY3iYRLvMp",
+	// "cSDJ9kSJkFP",
 	// "k9xdBQzYMXo",
 	// "yftBZ5bSEOb",
 	// "fJUy96o8akn",
@@ -189,7 +189,7 @@ const query = {
 			fields: "id,code,options[code,name]",
 			paging: "false",
 			filter:
-				"code:in:[SX01,YN01,MD01,PD01,TI01,100U,100ATPOINT,100RefLevels]",
+				"code:in:[SX01,YN01,MD01,PD01,TI01,100U,100ATPOINT,100RefLevels,Age_Type]",
 		},
 	},
 };
@@ -342,17 +342,17 @@ class Store {
 		uckvenVFnwf: false,
 		ZFdJRT3PaUd: false,
 		Op5pSvgHo1M: false,
-		QHY3iYRLvMp: false,
-		NkiH8GTX6HC: false,
-		SDPq8UURlWc: false,
-		zqW9xWyqOur: false,
+		//cSDJ9kSJkFP: false,
+		//uckvenVFnwf: false,
+		//ZFdJRT3PaUd: false,
+		//Op5pSvgHo1M: false,
 		ctbKSNV2cg7: false,
 		T4uxg60Lalw: false,
 		twVlVWM3ffz: false,
 		QDHeWslaEoH: false,
 		WqYvFt79TQB: false,
 		se3wRj1bYPo: false,
-		n9s5bKgCCVq: false,
+		WYykJO0Vh3s: false,
 	};
 
 	@action showEvents = () => {

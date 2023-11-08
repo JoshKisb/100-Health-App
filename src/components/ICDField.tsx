@@ -328,7 +328,7 @@ export const ICDField: SFC<ICD> = observer(
                 if (codeField === "zD0E77W4rFs") {
                   store.enableValue("zD0E77W4rFs");
                   store.enableValue("sfpqAeqKeyQ");
-                  store.disableValue("QHY3iYRLvMp");
+                  store.disableValue("cSDJ9kSJkFP");
                 }
 
                 console.log("input working");
@@ -358,7 +358,7 @@ export const ICDField: SFC<ICD> = observer(
                 if (codeField === "zD0E77W4rFs") {
                   store.disableValue("zD0E77W4rFs");
                   store.disableValue("sfpqAeqKeyQ");
-                  store.enableValue("QHY3iYRLvMp");
+                  store.enableValue("cSDJ9kSJkFP");
                   store.enableValue("Ylht9kCLSRW");
                   form.setFieldsValue({ zD0E77W4rFs: null });
                   form.setFieldsValue({ sfpqAeqKeyQ: null });
@@ -367,7 +367,7 @@ export const ICDField: SFC<ICD> = observer(
                 if (codeField === "tuMMQsGtE69") {
                   store.disableValue("tuMMQsGtE69");
                   store.disableValue("zb7uTuBCPrN");
-                  store.enableValue("NkiH8GTX6HC");
+                  store.enableValue("uckvenVFnwf");
                   store.enableValue("myydnkmLfhp");
                   form.setFieldsValue({ tuMMQsGtE69: null });
                   form.setFieldsValue({ zb7uTuBCPrN: null });
@@ -376,7 +376,7 @@ export const ICDField: SFC<ICD> = observer(
                 if (codeField === "C8n6hBilwsX") {
                   store.disableValue("C8n6hBilwsX");
                   store.disableValue("QGFYJK00ES7");
-                  store.enableValue("SDPq8UURlWc");
+                  store.enableValue("ZFdJRT3PaUd");
                   store.enableValue("aC64sB86ThG");
                   form.setFieldsValue({ C8n6hBilwsX: null });
                   form.setFieldsValue({ QGFYJK00ES7: null });
@@ -385,7 +385,7 @@ export const ICDField: SFC<ICD> = observer(
                 if (codeField === "IeS8V8Yf40N") {
                   store.disableValue("IeS8V8Yf40N");
                   store.disableValue("CnPGhOcERFF");
-                  store.enableValue("zqW9xWyqOur");
+                  store.enableValue("Op5pSvgHo1M");
                   store.enableValue("cmZrrHfTxW3");
                   form.setFieldsValue({ IeS8V8Yf40N: null });
                   form.setFieldsValue({ CnPGhOcERFF: null });

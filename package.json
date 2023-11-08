@@ -2,6 +2,7 @@
   "name": "mccod",
   "version": "0.1.0",
   "private": true,
+  "proxy":"http://localhost:8080",
   "homepage": ".",
   "cacheVersion": "1",
   "dependencies": {
