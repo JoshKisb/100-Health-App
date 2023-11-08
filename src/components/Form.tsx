@@ -2419,7 +2419,14 @@ export const DataEntryForm = observer(() => {
 										className="m-0"
 										style={{ width: "100%" }}
 									>
-										  {optionSet("Age_Type", "WYykJO0Vh3s")}
+										<InputNumber
+											size="large"
+											placeholder="months"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n9s5bKgCCVq
+											}
+										/>
 											
 										
 									</Form.Item>

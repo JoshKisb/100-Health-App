@@ -35,7 +35,9 @@ export const mcodmap = {
 	K4FUK590rIU: "KsGOxFyzIs1",
 	FHmHV9mElbD: "u44XP9fZweA", // district
 	ioXkKfrgCJa: "t5nTEmlScSt", // subcounty
-	iJqBq0kQtWO: "q7e7FOXKnOf",
+	iJqBq0kQtWO: "q7e7FOXKnOf", // age mapping for 020
+	ZBvxrMFv9aW: "e96GB4CXyd3", //sex form 017
+	babyName: "ZYKmQ9GPOaF",
 	AqXDMjrPUEE: "Z41di0TRjIu",
 	XW2CKaAiMKc: "xAWYJtQsg8M",
 	js6jQi1rx1j: "jY3K6Bv4o9Q",
@@ -57,6 +59,11 @@ export const mcodmap = {
 	fleGy9CvHYh: "fleGy9CvHYh",
 	WkXxkKEJLsg: "WkXxkKEJLsg",
 	CupbOInqvJI: "MOstDqSY0gO",
+
+
+	rjoVXlCWLYM: "WYykJO0Vh3s",  //age in minutes
+	rDI0uhcVLAk: "q7e7FOXKnOf",  //age in hours
+	quKRjZzkSRA: "q7e7FOXKnOf",  //age in days
 }
 
 const dlcolumns = [
