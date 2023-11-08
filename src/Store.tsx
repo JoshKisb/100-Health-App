@@ -61,9 +61,10 @@ export const mcodmap = {
 	CupbOInqvJI: "MOstDqSY0gO",
 
 
-	rjoVXlCWLYM: "WYykJO0Vh3s",  //age in minutes
-	rDI0uhcVLAk: "q7e7FOXKnOf",  //age in hours
-	quKRjZzkSRA: "q7e7FOXKnOf",  //age in days
+	//rjoVXlCWLYM: "WYykJO0Vh3s",  //age in Months
+	rjoVXlCWLYM: "TgFI46omIEg",  // minutes
+	rDI0uhcVLAk: "VJXpmHCaAFG",  //age in hours
+	quKRjZzkSRA: "v8mvHHXo06E",  //age in days
 }
 
 const dlcolumns = [
@@ -360,6 +361,12 @@ class Store {
 		WqYvFt79TQB: false,
 		se3wRj1bYPo: false,
 		WYykJO0Vh3s: false,
+		TgFI46omIEg: false,
+		VJXpmHCaAFG: false,
+		v8mvHHXo06E: false,
+
+
+
 	};
 
 	@action showEvents = () => {

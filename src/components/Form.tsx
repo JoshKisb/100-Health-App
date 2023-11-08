@@ -2430,6 +2430,57 @@ export const DataEntryForm = observer(() => {
 											
 										
 									</Form.Item>
+									<Form.Item
+									
+										name="TgFI46omIEg"
+										className="m-0"
+										style={{ width: "100%" }}
+									>
+										<InputNumber
+											size="large"
+											placeholder="Minutes"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n9s5bKgCCVq
+											}
+										/>
+											
+										
+									</Form.Item>
+									<Form.Item
+									
+										name="VJXpmHCaAFG"
+										className="m-0"
+										style={{ width: "100%" }}
+									>
+										<InputNumber
+											size="large"
+											placeholder="Hours"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n9s5bKgCCVq
+											}
+										/>
+											
+										
+									</Form.Item>
+									<Form.Item
+									
+										name="v8mvHHXo06E"
+										className="m-0"
+										style={{ width: "100%" }}
+									>
+										<InputNumber
+											size="large"
+											placeholder="Days"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.n9s5bKgCCVq
+											}
+										/>
+											
+										
+									</Form.Item>
 								</td>
 							</tr>
 							<tr>
