@@ -2414,7 +2414,6 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 									<Form.Item
-									
 										name="WYykJO0Vh3s"
 										className="m-0"
 										style={{ width: "100%" }}
@@ -2430,57 +2429,65 @@ export const DataEntryForm = observer(() => {
 											
 										
 									</Form.Item>
-									<Form.Item
-									
-										name="TgFI46omIEg"
-										className="m-0"
-										style={{ width: "100%" }}
-									>
-										<InputNumber
+									{/*check for baby age fields */}
+									{
+										mcodmap.rjoVXlCWLYM !== undefined && mcodmap.rjoVXlCWLYM && (
+											<Form.Item
+												name="TgFI46omIEg"
+												className="m-0"
+												style={{ width: "100%" }}
+												label="Minutes"
+											>
+												<InputNumber
+													size="large"
+													placeholder="0"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.n9s5bKgCCVq
+													}
+												/>
+											</Form.Item>
+										)
+									}
+									{
+										mcodmap.rDI0uhcVLAk !== undefined && mcodmap.rDI0uhcVLAk && (
+											<Form.Item
+											name="VJXpmHCaAFG"
+											className="m-0"
+											style={{ width: "100%" }}
+											label="Hours"
+											>
+											<InputNumber
 											size="large"
-											placeholder="Minutes"
+											placeholder="0"
 											disabled={
 												store.viewMode ||
 												store.allDisabled.n9s5bKgCCVq
-											}
-										/>
-											
-										
-									</Form.Item>
-									<Form.Item
-									
-										name="VJXpmHCaAFG"
-										className="m-0"
-										style={{ width: "100%" }}
-									>
-										<InputNumber
-											size="large"
-											placeholder="Hours"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.n9s5bKgCCVq
-											}
-										/>
-											
-										
-									</Form.Item>
-									<Form.Item
-									
-										name="v8mvHHXo06E"
-										className="m-0"
-										style={{ width: "100%" }}
-									>
-										<InputNumber
-											size="large"
-											placeholder="Days"
-											disabled={
-												store.viewMode ||
-												store.allDisabled.n9s5bKgCCVq
-											}
-										/>
-											
-										
-									</Form.Item>
+												}
+											/>
+											</Form.Item>
+										)}
+									{
+
+										mcodmap.quKRjZzkSRA !== undefined && mcodmap.quKRjZzkSRA && (
+											<Form.Item
+												name="v8mvHHXo06E"
+												className="m-0"
+												style={{ width: "100%" }}
+												label="Days"
+											>
+												<InputNumber
+													size="large"
+													placeholder="0"
+													disabled={
+														store.viewMode ||
+														store.allDisabled.n9s5bKgCCVq
+													}
+												/>
+
+											</Form.Item>
+										)
+									}
 								</td>
 							</tr>
 							<tr>
