@@ -2361,6 +2361,7 @@ export const DataEntryForm = observer(() => {
 										
 										name="q7e7FOXKnOf"
 										className="m-0"
+										label="Years"
 									>
 										<InputNumber
 											size="large"
@@ -2417,6 +2418,7 @@ export const DataEntryForm = observer(() => {
 										name="WYykJO0Vh3s"
 										className="m-0"
 										style={{ width: "100%" }}
+										label="Months:"
 									>
 										<InputNumber
 											size="large"
@@ -2449,6 +2451,8 @@ export const DataEntryForm = observer(() => {
 											</Form.Item>
 										)
 									}
+
+
 									{
 										mcodmap.rDI0uhcVLAk !== undefined && mcodmap.rDI0uhcVLAk && (
 											<Form.Item
@@ -2488,6 +2492,14 @@ export const DataEntryForm = observer(() => {
 											</Form.Item>
 										)
 									}
+									{/*fix css for age row*/}
+									<Form.Item
+										// name="v8mvHHXo06E"
+										className="m-0"
+										style={{ width: "100%" }}
+									>
+
+									</Form.Item>
 								</td>
 							</tr>
 							<tr>
@@ -3036,14 +3048,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{optionSets ? (
+									{/*{optionSets ? (*/}
 										<Form.Item
 											name="Ylht9kCLSRW"
 											className="m-0"
 										>
-											{optionSet("TI01", "Ylht9kCLSRW")}
+											{/*{optionSet("TI01", "Ylht9kCLSRW")}*/}
+											<Select placeholder="Select an option">
+												<Option value="Minutes">Minutes</Option>
+												<Option value="Hours">Hours</Option>
+												<Option value="Days">Days</Option>
+												<Option value="Weeks">Weeks</Option>
+												<Option value="Months">Months</Option>
+												<Option value="Years">Years</Option>
+											</Select>
 										</Form.Item>
-									) : null}
+									{/*) : null}*/}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3205,14 +3225,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{optionSets ? (
+									{/*{optionSets ? (*/}
 										<Form.Item
 											name="myydnkmLfhp"
 											className="m-0"
 										>
-											{optionSet("TI01", "myydnkmLfhp")}
+											{/*{optionSet("TI01", "myydnkmLfhp")}*/}
+											<Select placeholder="Select an option">
+												<Option value="Minutes">Minutes</Option>
+												<Option value="Hours">Hours</Option>
+												<Option value="Days">Days</Option>
+												<Option value="Weeks">Weeks</Option>
+												<Option value="Months">Months</Option>
+												<Option value="Years">Years</Option>
+											</Select>
 										</Form.Item>
-									) : null}
+									{/*) : null}*/}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3365,14 +3393,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{optionSets ? (
+									{/*{optionSets ? (*/}
 										<Form.Item
 											name="aC64sB86ThG"
 											className="m-0"
 										>
-											{optionSet("TI01", "aC64sB86ThG")}
+											{/*{optionSet("TI01", "aC64sB86ThG")}*/}
+											<Select placeholder="Select an option">
+												<Option value="Minutes">Minutes</Option>
+												<Option value="Hours">Hours</Option>
+												<Option value="Days">Days</Option>
+												<Option value="Weeks">Weeks</Option>
+												<Option value="Months">Months</Option>
+												<Option value="Years">Years</Option>
+											</Select>
 										</Form.Item>
-									) : null}
+									{/*) : null}*/}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3524,14 +3560,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{optionSets ? (
+									{/*{optionSets ? (*/}
 										<Form.Item
 											name="cmZrrHfTxW3"
 											className="m-0"
 										>
-											{optionSet("TI01", "cmZrrHfTxW3")}
+											{/*{optionSet("TI01", "cmZrrHfTxW3")}*/}
+											<Select placeholder="Select an option">
+												<Option value="Minutes">Minutes</Option>
+												<Option value="Hours">Hours</Option>
+												<Option value="Days">Days</Option>
+												<Option value="Weeks">Weeks</Option>
+												<Option value="Months">Months</Option>
+												<Option value="Years">Years</Option>
+											</Select>
 										</Form.Item>
-									) : null}
+									{/*) : null}*/}
 								</td>
 								<td className="border p-1">
 									<Form.Item

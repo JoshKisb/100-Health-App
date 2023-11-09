@@ -36,8 +36,6 @@ export const mcodmap = {
 	FHmHV9mElbD: "u44XP9fZweA", // district
 	ioXkKfrgCJa: "t5nTEmlScSt", // subcounty
 	iJqBq0kQtWO: "q7e7FOXKnOf", // age mapping for 020
-	ZBvxrMFv9aW: "e96GB4CXyd3", //sex form 017
-	babyName: "ZYKmQ9GPOaF",
 	AqXDMjrPUEE: "Z41di0TRjIu",
 	XW2CKaAiMKc: "xAWYJtQsg8M",
 	js6jQi1rx1j: "jY3K6Bv4o9Q",
@@ -60,11 +58,15 @@ export const mcodmap = {
 	WkXxkKEJLsg: "WkXxkKEJLsg",
 	CupbOInqvJI: "MOstDqSY0gO",
 
-
+	babyName: "ZYKmQ9GPOaF", // from 017
+	ZBvxrMFv9aW: "e96GB4CXyd3", //sex form 017
 	//rjoVXlCWLYM: "WYykJO0Vh3s",  //age in Months
-	rjoVXlCWLYM: "TgFI46omIEg",  // minutes
-	rDI0uhcVLAk: "VJXpmHCaAFG",  //age in hours
-	quKRjZzkSRA: "v8mvHHXo06E",  //age in days
+	rjoVXlCWLYM: "TgFI46omIEg",  // minutes form 017
+	rDI0uhcVLAk: "VJXpmHCaAFG",  //age in hours form 017
+	quKRjZzkSRA: "v8mvHHXo06E",  //age in days form 017
+	m8jUvzBgYga: "lQ1Byr04JTx",  //Number of completed weeks of pregnancy form 017
+	//dKQIx7sVFbD: "",  // parish form 017
+	T0f4UTwxd6Q: "dsiwvNQLe5n",  //village form 017
 }
 
 const dlcolumns = [
