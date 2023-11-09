@@ -1399,6 +1399,7 @@ export const DataEntryForm = observer(() => {
 		  
 		} 
 		form.setFieldsValue(defaults)
+		setTestVal2(defaults["uckvenVFnwf"] as string);
 		
 		console.log({defaults});
 		if (Object.keys(defaults).length) {
@@ -3048,22 +3049,23 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{/*{optionSets ? (*/}
+									{optionSets ? (
+
 										<Form.Item
 											name="Ylht9kCLSRW"
 											className="m-0"
 										>
-											{/*{optionSet("TI01", "Ylht9kCLSRW")}*/}
-											<Select placeholder="Select an option">
+											{optionSet("TI01", "Ylht9kCLSRW")}
+											{/* <Select placeholder="Select an option">
 												<Option value="Minutes">Minutes</Option>
 												<Option value="Hours">Hours</Option>
 												<Option value="Days">Days</Option>
 												<Option value="Weeks">Weeks</Option>
 												<Option value="Months">Months</Option>
 												<Option value="Years">Years</Option>
-											</Select>
+											</Select> */}
 										</Form.Item>
-									{/*) : null}*/}
+									) : null}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3225,22 +3227,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{/*{optionSets ? (*/}
+									{optionSets ? (
 										<Form.Item
 											name="myydnkmLfhp"
 											className="m-0"
 										>
-											{/*{optionSet("TI01", "myydnkmLfhp")}*/}
-											<Select placeholder="Select an option">
+											{optionSet("TI01", "myydnkmLfhp")}
+											{/* <Select placeholder="Select an option">
 												<Option value="Minutes">Minutes</Option>
 												<Option value="Hours">Hours</Option>
 												<Option value="Days">Days</Option>
 												<Option value="Weeks">Weeks</Option>
 												<Option value="Months">Months</Option>
 												<Option value="Years">Years</Option>
-											</Select>
+											</Select> */}
 										</Form.Item>
-									{/*) : null}*/}
+									) : null}
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3393,22 +3395,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{/*{optionSets ? (*/}
+									{optionSets ? (
 										<Form.Item
 											name="aC64sB86ThG"
 											className="m-0"
 										>
-											{/*{optionSet("TI01", "aC64sB86ThG")}*/}
-											<Select placeholder="Select an option">
+											{optionSet("TI01", "aC64sB86ThG")}
+											{/* <Select placeholder="Select an option">
 												<Option value="Minutes">Minutes</Option>
 												<Option value="Hours">Hours</Option>
 												<Option value="Days">Days</Option>
 												<Option value="Weeks">Weeks</Option>
 												<Option value="Months">Months</Option>
 												<Option value="Years">Years</Option>
-											</Select>
+											</Select> */}
 										</Form.Item>
-									{/*) : null}*/}
+									) : null} 
 								</td>
 								<td className="border p-1">
 									<Form.Item
@@ -3560,22 +3562,22 @@ export const DataEntryForm = observer(() => {
 									</Form.Item>
 								</td>
 								<td className="border p-1">
-									{/*{optionSets ? (*/}
+									{optionSets ? (
 										<Form.Item
 											name="cmZrrHfTxW3"
 											className="m-0"
 										>
-											{/*{optionSet("TI01", "cmZrrHfTxW3")}*/}
-											<Select placeholder="Select an option">
+											{optionSet("TI01", "cmZrrHfTxW3")}
+											{/* <Select placeholder="Select an option">
 												<Option value="Minutes">Minutes</Option>
 												<Option value="Hours">Hours</Option>
 												<Option value="Days">Days</Option>
 												<Option value="Weeks">Weeks</Option>
 												<Option value="Months">Months</Option>
 												<Option value="Years">Years</Option>
-											</Select>
+											</Select> */}
 										</Form.Item>
-									{/*) : null}*/}
+									) : null}
 								</td>
 								<td className="border p-1">
 									<Form.Item

@@ -706,7 +706,7 @@ class Store {
 						.fetch(url, options)
 						.catch((err: any) => err);
 
-					console.log("meta", result.meta);
+					console.log("meta", result.meta, this.optionSets);
 
 					this.availableDataElements = programStage.programStageDataElements.map(
 						(de: any) => {
