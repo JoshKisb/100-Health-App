@@ -327,8 +327,7 @@ export const EventList = observer(() => {
                      return {
                         onClick: (event: any) => {
                            store.setCurrentEvent(record);
-                           store.edit();
-                           store.showForm();
+                           store.editEvent();
                         },
                      };
                   }}
