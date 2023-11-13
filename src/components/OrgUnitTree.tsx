@@ -29,7 +29,7 @@ interface OrgUnitTreeTypes {
 
 const { RangePicker } = DatePicker;
 
-const defaultRange: any = [moment().subtract(1, "years"), moment(), moment().subtract(2, "years")];
+const defaultRange: any = [moment().subtract(2, "months"), moment(), moment().subtract(4, "months")];
 
 export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ loading, fetching }) => {
    const [categoryOptionCombos, setCategoryOptionCombos] = useState([]);
