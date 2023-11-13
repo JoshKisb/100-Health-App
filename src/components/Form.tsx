@@ -83,12 +83,12 @@ const { Title } = Typography;
 
 export const DataEntryForm = observer(() => {
 	const [form] = Form.useForm();
-	const [optionSets, setOptionSets] = useState<any>();
 	const [drawerVisible, setDrawerVisible] = useState(false);
 	const tr = useTranslation();
 	const [dorisReport, setDorisReport] = useState("");
-
+	
 	const store = useStore();
+	const optionSets = store.optionSets;
 	const [activeLanguage, setActiveLanguage] = useState(
 		store.activeLanguage || allLanguages[0]
 	);
