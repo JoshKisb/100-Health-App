@@ -366,9 +366,9 @@ export const DataEntryForm = observer(() => {
 	};
 
 	useEffect(() => {
-		store.loadUserOrgUnits().then(() => {
-			setOptionSets(store.optionSets);
-		});
+		// store.loadUserOrgUnits().then(() => {
+		// 	setOptionSets(store.optionSets);
+		// });
 
 		store.enableValue("t5nTEmlScSt");
 		store.enableValue("u44XP9fZweA");

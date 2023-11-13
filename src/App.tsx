@@ -28,7 +28,10 @@ export const App = observer(() => {
 		async function test() {
 			setFetching(true);
 			console.log("Fetching orgs...");
-			await store.loadUserOrgUnits();
+			await Promise.all([
+				store.initApp(),
+				store.loadUserOrgUnits()
+			]);
 			setFetching(false);
 		}
 		test();

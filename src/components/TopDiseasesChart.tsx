@@ -420,84 +420,9 @@ export const TopDiseasesChart = observer(() => {
       chart.current = Highcharts.chart("topdiseases", opts);
       console.log("currChartx", chart.current);
 
-      store.queryTopEvents().then(() => {
-         if (!!store.topDiseases) {
-            let sortedDiseases = store.topDiseases;
-            let totalMortalityFilteredDeathCount = 0;
-            let totalGenderFilteredDeathCount = 0;
-
-            if (
-               (!store.currentOrganisation && !!store.selectedCauseOfDeath && !!store.selectedOrgUnit) ||
-               !!store.selectedLevel
-            ) {
-               sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
-            } else if (!store.currentOrganisation && !!store.selectedOrgUnit && !store.selectedCauseOfDeath) {
-               sortedDiseases = groupDiseaseToFilters(store.allDiseases);
-            }
-
-            if (mortalityFilter || genderFilter) {
-               console.log("mortalityFilter", mortalityFilter);
-               console.log("genderFilter", genderFilter);
-
-               const filtered = filterTheDiseases();
-               console.log("filtered 2", filtered);
-               console.log("total", store.totalDeathCount);
-
-               sortedDiseases = filtered.sortedDiseases;
-               totalGenderFilteredDeathCount = filtered.totalGenderFilteredDeathCount;
-               totalMortalityFilteredDeathCount = filtered.totalMortalityFilteredDeathCount;
-            }
-
-            let title = !!store.selectedCauseOfDeath
-               ? `${store.selectedCauseOfDeath} contributed ${(
-                    (store.totalCauseDeathCount / store.totalDeathCount) *
-                    100
-                 ).toFixed(2)}%  of total reported deaths`
-               : "Top 20 causes of death";
-            if (!!mortalityFilter) {
-               title = `${title} [${mortalityFilter} ${(
-                  (totalMortalityFilteredDeathCount / store.totalDeathCount) *
-                  100
-               ).toFixed(2)}% of total]`;
-            }
-            if (!!genderFilter) {
-               let mortalityStr = "";
-               if (!!mortalityFilter) {
-                  mortalityStr = `that are ${mortalityFilter}`;
-               }
-               title = `${title} [${genderFilter} ${(
-                  (totalGenderFilteredDeathCount / store.totalDeathCount) *
-                  100
-               ).toFixed(2)}% ${mortalityStr}]`;
-            }
-            if (!!store.selectedOrgUnitName) title = `${title} in ${store.selectedOrgUnitName}`;
-            setChartTitle(title);
-            chart.current.setTitle({ text: title });
-
-            currDiseases.current = sortedDiseases;
-            if (currChartType == "column") {
-               chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
-            }
-            chart.current.series[0].setData(
-               sortedDiseases.map((d: any) => {
-                  if (currChartType == "column")
-                     return {
-                        y: d.count,
-                        color: d.count > d.prev ? "red" : d.count == d.prev ? "#2f7ed8" : "green",
-                     };
-                  else
-                     return {
-                        name: d.name,
-                        y: d.count,
-                     };
-               }),
-               true
-            ); //setting data
-         }
-         chart.current.hideLoading();
-      });
-
-      store.queryEvents().then(() => {});
+      qEvents();
+      
+      // store.queryEvents().then(() => {});
    }, [
       store?.selectedNationality,
       store?.nationalitySelect,
@@ -505,6 +430,84 @@ export const TopDiseasesChart = observer(() => {
       store?.selectedLevel,
       store.selectedOrgUnit,
    ]);
+
+   const qEvents = async () => {
+      await store.queryTopEvents();
+      if (!!store.topDiseases) {
+         let sortedDiseases = store.topDiseases;
+         let totalMortalityFilteredDeathCount = 0;
+         let totalGenderFilteredDeathCount = 0;
+
+         if (
+            (!store.currentOrganisation && !!store.selectedCauseOfDeath && !!store.selectedOrgUnit) ||
+            !!store.selectedLevel
+         ) {
+            sortedDiseases = groupDiseaseToOrgUnits(store.allDiseases);
+         } else if (!store.currentOrganisation && !!store.selectedOrgUnit && !store.selectedCauseOfDeath) {
+            sortedDiseases = groupDiseaseToFilters(store.allDiseases);
+         }
+
+         if (mortalityFilter || genderFilter) {
+            console.log("mortalityFilter", mortalityFilter);
+            console.log("genderFilter", genderFilter);
+
+            const filtered = filterTheDiseases();
+            console.log("filtered 2", filtered);
+            console.log("total", store.totalDeathCount);
+
+            sortedDiseases = filtered.sortedDiseases;
+            totalGenderFilteredDeathCount = filtered.totalGenderFilteredDeathCount;
+            totalMortalityFilteredDeathCount = filtered.totalMortalityFilteredDeathCount;
+         }
+
+         let title = !!store.selectedCauseOfDeath
+            ? `${store.selectedCauseOfDeath} contributed ${(
+                  (store.totalCauseDeathCount / store.totalDeathCount) *
+                  100
+               ).toFixed(2)}%  of total reported deaths`
+            : "Top 20 causes of death";
+         if (!!mortalityFilter) {
+            title = `${title} [${mortalityFilter} ${(
+               (totalMortalityFilteredDeathCount / store.totalDeathCount) *
+               100
+            ).toFixed(2)}% of total]`;
+         }
+         if (!!genderFilter) {
+            let mortalityStr = "";
+            if (!!mortalityFilter) {
+               mortalityStr = `that are ${mortalityFilter}`;
+            }
+            title = `${title} [${genderFilter} ${(
+               (totalGenderFilteredDeathCount / store.totalDeathCount) *
+               100
+            ).toFixed(2)}% ${mortalityStr}]`;
+         }
+         if (!!store.selectedOrgUnitName) title = `${title} in ${store.selectedOrgUnitName}`;
+         setChartTitle(title);
+         chart.current.setTitle({ text: title });
+
+         currDiseases.current = sortedDiseases;
+         if (currChartType == "column") {
+            chart.current.xAxis[0].setCategories(sortedDiseases.map((d: any) => d.name)); //setting category
+         }
+         chart.current.series[0].setData(
+            sortedDiseases.map((d: any) => {
+               if (currChartType == "column")
+                  return {
+                     y: d.count,
+                     color: d.count > d.prev ? "red" : d.count == d.prev ? "#2f7ed8" : "green",
+                  };
+               else
+                  return {
+                     name: d.name,
+                     y: d.count,
+                  };
+            }),
+            true
+         ); //setting data
+      }
+      chart.current.hideLoading();
+   }
 
    return (
       <div id="topdiseaseswrapper">
