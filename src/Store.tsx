@@ -2078,7 +2078,7 @@ class Store {
         title: c.title,
       };
     });
-    console.log(filters);
+    console.log({filters});
     this.filters = filters;
   };
 

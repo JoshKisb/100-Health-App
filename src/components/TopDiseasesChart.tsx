@@ -40,8 +40,6 @@ export const TopDiseasesChart = observer(() => {
    const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
    const [currChartType, setCurrChartType] = useState("column");
    const currDiseases = useRef([]);
-   const [filtersInitialized, setFiltersInitialized] = useState(false);
-
    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage || allLanguages[0]);
 
    const groupDiseaseToOrgUnits = (diseases, prevDiseases = null) => {
@@ -298,14 +296,6 @@ export const TopDiseasesChart = observer(() => {
          chart.current = Highcharts.chart("topdiseases", opts);
       }
    };
-
-   useEffect(() => {
-      if (filtersInitialized || !store?.data?.headers) return;
-      console.log("Setting inital filters");
-      store.setInitialFilters();
-
-      setFiltersInitialized(true);
-   }, [store?.data?.headers]);
 
    useEffect(() => {
       if (!chart.current) return;

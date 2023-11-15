@@ -148,7 +148,7 @@ export const EventList = observer(() => {
   const dropdowns = useRef([]);
   const [downloadData, setDownloadData] = useState([]);
   const [downloadng, setDownloadng] = useState(false);
-
+  const [filtersInitialized, setFiltersInitialized] = useState(false);
   const csvBtn = useRef(null);
 
   // const myPicker = useRef<HTMLInputElement|null>(null);
@@ -315,6 +315,14 @@ export const EventList = observer(() => {
     store.clearEventList();
     store.queryEvents();
   }, [store, store.selectedNationality, store.selectedOrgUnit, store.selectedDlDateRange])
+
+  useEffect(() => {
+       if (filtersInitialized || !store?.data) return;
+       console.log("Setting inital filters");
+       store.setInitialFilters();
+ 
+       setFiltersInitialized(true);
+    }, [store?.data]);
 
   const columnsWithAction: any = store.columns.length ? [
     ...store.columns,
