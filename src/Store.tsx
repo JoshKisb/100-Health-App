@@ -398,11 +398,12 @@ class Store {
   };
 
   @action showEvents = () => {
+    console.log("shw orggg", this.actualSelOrgUnit)
     this.data = null;
     this.edit();
     this.currentEvent = null;
     this.editing = false;
-    this.selectedOrgUnit = this.actualSelOrgUnit;
+    this.selectedOrgUnit = this.actualSelOrgUnit ?? this.selectedOrgUnit;
     this.currentPage = "1";
   };
   @action showForm = () => (this.currentPage = "3");
@@ -417,8 +418,8 @@ class Store {
   @action view = () => (this.viewMode = true);
   @action setCurrentEvent = (event: any) => {
     this.currentEvent = event;
-    this.actualSelOrgUnit = this.selectedOrgUnit;
-    console.log("setting org unit", this.currentEventOrgUnit);
+    this.actualSelOrgUnit = this.selectedOrgUnit ?? this.actualSelOrgUnit;
+    console.log("setting org unit", this.currentEventOrgUnit, this.actualSelOrgUnit);
     this.selectedOrgUnit = this.currentEventOrgUnit;
   };
   @action setNewFromLocalStorage = (ls: any) => {
@@ -798,6 +799,7 @@ class Store {
         // this.dEs[dE.code] = options;
         // });
         let name = trOptions?.name ?? de.dataElement.name;
+        name = name.replace(/^HMIS_100_\s*/,'')
         return {
           ...de.dataElement,
           realname: de.dataElement.name,
@@ -815,7 +817,7 @@ class Store {
 
   @action fetchLocalStorageEvent = async () => {
     if (!!this.lsdata["orgUnit"]) {
-      this.actualSelOrgUnit = this.selectedOrgUnit;
+      this.actualSelOrgUnit = this.selectedOrgUnit ?? this.actualSelOrgUnit;
       const org = this.programOrganisationUnits.find(
         (o) => o.id === this.lsdata["orgUnit"]
       );
@@ -841,7 +843,7 @@ class Store {
     if (!!this.lsdata["event"]) {
       const parent: any = await this.getEvent(this.lsdata["event"]);
       console.log("parant is", parent);
-      this.actualSelOrgUnit = this.selectedOrgUnit;
+      this.actualSelOrgUnit = this.selectedOrgUnit ?? this.actualSelOrgUnit;
       const org = this.programOrganisationUnits.find(
         (o) => o.id === parent.orgUnit
       );
@@ -2019,7 +2021,7 @@ class Store {
       JSON.stringify(this.lsdata)
     );
     if (this.editing && this.currentEvent) {
-      event = { ...event, event: this.currentEvent[0] };
+      event = { ...event, event: this.currentEvent.event };
       createMutation = { ...createMutation, data: event };
     } else if (!!this.currentEventObj || this.lsdata) {
       const evt = this.currentEventObj?.event ?? this.lsdata?.setevent;
@@ -2049,7 +2051,7 @@ class Store {
   };
 
   @action deleteEvent = async (eventId = null) => {
-    const eid = eventId ?? this.currentEvent?.[0];
+    const eid = eventId ?? this.currentEvent;
     try {
       if (eid) {
         const createMutation = {
@@ -2171,6 +2173,7 @@ class Store {
           return {
             key: col.id,
             title: col.name,
+            // width: 100,
             dataIndex: "dataValues",
             render: (values: any) => {
               const dv = values.find(dv => dv.dataElement == col.id)

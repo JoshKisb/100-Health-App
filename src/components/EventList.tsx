@@ -113,7 +113,8 @@ const DeleteRecordAction = observer(({ record }) => {
   console.log("record", record)
   const handleDelete = async () => {
     setLoading(true);
-    await store.deleteEvent(record[0]);
+    await store.deleteEvent(record.event);
+    store.queryEvents();
     notification.success({
       message: "Record deleted successfully",
       duration: 3,
@@ -320,6 +321,7 @@ export const EventList = observer(() => {
     {
       title: "Action",
       key: "action",
+      // fixed: "right",
       dataIndex: null,
       render: (_, record) => <DeleteRecordAction record={record} />,
     },
@@ -412,11 +414,13 @@ export const EventList = observer(() => {
             </div>
           </div>
 
+          <div style={{ width: "100%", overflowX: "auto"}}>
           <Table
-            rowKey={(record: any) => record[0]}
+            rowKey={(record: any) => record.event}
             dataSource={store.data}
             columns={columnsWithAction}
             rowClassName={() => "l"}
+            bordered
             onRow={(record, rowIndex) => {
               // Fix for age that doesn't show if its zero
               // console.log("Record is ", record);
@@ -438,6 +442,7 @@ export const EventList = observer(() => {
             }}
             onChange={store.handleChange}
           />
+          </div>
         </Card>
       ) : null}
       <Drawer
