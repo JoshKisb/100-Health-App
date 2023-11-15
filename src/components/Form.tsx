@@ -324,8 +324,8 @@ export const DataEntryForm = observer(() => {
 				rvalues[rkey] = !!val ? val : "";
 			})
 			console.log("rvalues", rvalues);
-			(window.parent as any).returntoreview(rvalues);
-			(window.parent as any).closeIframe();
+			(window.parent as any).returntoreview?.(rvalues);
+			(window.parent as any).closeIframe?.();
 		}
 	};
 
@@ -1344,7 +1344,7 @@ export const DataEntryForm = observer(() => {
 	
 
 	useEffect(() => {
-		console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
+		// console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
 		console.log("defaultValues: ", store.defaultValues);
 		form.setFieldsValue({"eventDate": moment()})
 		let defaults = store.defaultValues;
@@ -1409,66 +1409,66 @@ export const DataEntryForm = observer(() => {
 		if (Object.keys(defaults).length) {
 			setEditing(true);
 			// Auto-populate form if it is an existing form being edited
-			if (defaults.QTKk2Xt8KDu) {
-				setUnderlyingCauseText(`${defaults.QTKk2Xt8KDu}`);
+			if (defaults["QTKk2Xt8KDu"]) {
+				setUnderlyingCauseText(`${defaults["QTKk2Xt8KDu"]}`);
 			}
 
 			setDefaultUCause((s) => ({
-				sfpqAeqKeyQ: defaults.sfpqAeqKeyQ || s.sfpqAeqKeyQ,
-				zb7uTuBCPrN: defaults.zb7uTuBCPrN || s.zb7uTuBCPrN,
-				QGFYJK00ES7: defaults.QGFYJK00ES7 || s.QGFYJK00ES7,
-				CnPGhOcERFF: defaults.CnPGhOcERFF || s.CnPGhOcERFF,
+				sfpqAeqKeyQ: defaults["sfpqAeqKeyQ"] || s.sfpqAeqKeyQ,
+				zb7uTuBCPrN: defaults["zb7uTuBCPrN"] || s.zb7uTuBCPrN,
+				QGFYJK00ES7: defaults["QGFYJK00ES7"] || s.QGFYJK00ES7,
+				CnPGhOcERFF: defaults["CnPGhOcERFF"] || s.CnPGhOcERFF,
 			}))
 
 
-			if (defaults.sJhOdGLD5lj) {
-				setUnderlyingCauseCode(`${defaults.sJhOdGLD5lj}`);
+			if (defaults["sJhOdGLD5lj"]) {
+				setUnderlyingCauseCode(`${defaults["sJhOdGLD5lj"]}`);
 			}
-			if (defaults.t5nTEmlScSt) {
-				setChosenSubcounty(`${defaults.t5nTEmlScSt}`);
+			if (defaults["t5nTEmlScSt"]) {
+				setChosenSubcounty(`${defaults["t5nTEmlScSt"]}`);
 			}
-			if (defaults.u44XP9fZweA) {
-				setChosenDistrict(`${defaults.u44XP9fZweA}`);
+			if (defaults["u44XP9fZweA"]) {
+				setChosenDistrict(`${defaults["u44XP9fZweA"]}`);
 			}			
-			if (defaults.QDHeWslaEoH) {
-				setChosenFacility(`${defaults.QDHeWslaEoH}`);
+			if (defaults["QDHeWslaEoH"]) {
+				setChosenFacility(`${defaults["QDHeWslaEoH"]}`);
 			}
 			setUnderlyingCauseChosen(true);
-			if (defaults.e96GB4CXyd3) {
-				setPersonsGender(`${defaults.e96GB4CXyd3}`);
+			if (defaults["e96GB4CXyd3"]) {
+				setPersonsGender(`${defaults["e96GB4CXyd3"]}`);
 			}
-			if (defaults.q7e7FOXKnOf) {
-				setPersonsAge(Number(`${defaults.q7e7FOXKnOf}`));
+			if (defaults["q7e7FOXKnOf"]) {
+				setPersonsAge(Number(`${defaults["q7e7FOXKnOf"]}`));
 			}
-			if (defaults.zwKo51BEayZ) {
-				setChosenRegion(`${defaults.zwKo51BEayZ}`);
+			if (defaults["zwKo51BEayZ"]) {
+				setChosenRegion(`${defaults["zwKo51BEayZ"]}`);
 			}
-			// setChosenFacility(`${defaults.referredValueSavedHere}`);
-			if (defaults.q7e7FOXKnOf) {
+			// setChosenFacility(`${defaults["referredValueSavedHere"]}`);
+			if (defaults["q7e7FOXKnOf"]) {
 				form.setFieldsValue({
-					q7e7FOXKnOf: Number(`${defaults.q7e7FOXKnOf}`),
+					q7e7FOXKnOf: Number(`${defaults["q7e7FOXKnOf"]}`),
 				});
 				// console.log("Chosen district is =>", defaults);
 			}
 
-			if (defaults.twVlVWM3ffz) {
+			if (defaults["twVlVWM3ffz"]) {
 				setApprovalStatusFromEditedForm(
-					`${defaults.twVlVWM3ffz}`
+					`${defaults["twVlVWM3ffz"]}`
 				);
 			}
 
-			if (defaults.lu9BiHPxNqH) {
+			if (defaults["lu9BiHPxNqH"]) {
 				setDeclarationsDefault({
-					u9tYUv6AM51: defaults.u9tYUv6AM51 ? true : false,
-					ZXZZfzBpu8a: defaults.ZXZZfzBpu8a ? true : false,
-					cp5xzqVU2Vw: defaults.cp5xzqVU2Vw ? true : false,
-					lu9BiHPxNqH: `${defaults.lu9BiHPxNqH}`,
+					u9tYUv6AM51: defaults["u9tYUv6AM51"] ? true : false,
+					ZXZZfzBpu8a: defaults["ZXZZfzBpu8a"] ? true : false,
+					cp5xzqVU2Vw: defaults["cp5xzqVU2Vw"] ? true : false,
+					lu9BiHPxNqH: `${defaults["lu9BiHPxNqH"]}`,
 				});
 			} else {
 				setDeclarationsDefault({
-					u9tYUv6AM51: defaults.u9tYUv6AM51 ? true : false,
-					ZXZZfzBpu8a: defaults.ZXZZfzBpu8a ? true : false,
-					cp5xzqVU2Vw: defaults.cp5xzqVU2Vw ? true : false,
+					u9tYUv6AM51: defaults["u9tYUv6AM51"] ? true : false,
+					ZXZZfzBpu8a: defaults["ZXZZfzBpu8a"] ? true : false,
+					cp5xzqVU2Vw: defaults["cp5xzqVU2Vw"] ? true : false,
 					lu9BiHPxNqH: "",
 				});
 			}

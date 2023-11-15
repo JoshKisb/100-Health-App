@@ -429,6 +429,7 @@ export const TopDiseasesChart = observer(() => {
       store.selectedCauseOfDeath,
       store?.selectedLevel,
       store.selectedOrgUnit,
+      store.selectedDateRange
    ]);
 
    const qEvents = async () => {

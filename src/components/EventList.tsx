@@ -313,7 +313,7 @@ export const EventList = observer(() => {
   useEffect(() => {
     store.clearEventList();
     store.queryEvents();
-  }, [store, store.selectedNationality, store.selectedOrgUnit])
+  }, [store, store.selectedNationality, store.selectedOrgUnit, store.selectedDlDateRange])
 
   const columnsWithAction: any = store.columns.length ? [
     ...store.columns,
@@ -414,7 +414,7 @@ export const EventList = observer(() => {
 
           <Table
             rowKey={(record: any) => record[0]}
-            dataSource={store.data.rows}
+            dataSource={store.data}
             columns={columnsWithAction}
             rowClassName={() => "l"}
             onRow={(record, rowIndex) => {

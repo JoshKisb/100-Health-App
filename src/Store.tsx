@@ -178,9 +178,9 @@ const orgQuery = {
 
 const initQuery = {
   me: {
-    resource: "me.json",
+    resource: "me",
     params: {
-      fields: "*",
+      fields: "id,name,username,surname,firstName",
     },
   },
   program: {
@@ -1295,22 +1295,18 @@ class Store {
     prev: string
   ) => {
     this.selectedDateRange = [start, end, prev];
-    await this.queryTopEvents();
   };
 
   @action clearSelectedDateRange = async () => {
     this.selectedDateRange = null;
-    await this.queryTopEvents();
   };
 
   @action changeSelectedDlDateRange = async (start: string, end: string) => {
     this.selectedDlDateRange = [start, end];
-    await this.queryEvents();
   };
 
   @action clearSelectedDlDateRange = async () => {
     this.selectedDlDateRange = null;
-    await this.queryEvents();
   };
 
   @action fetchIndis = async () => {
@@ -1703,11 +1699,11 @@ class Store {
         this.totalDeathCount = rows.length;
       }
 
-      console.log("prevDiseases", prevDiseases);
+      // console.log("prevDiseases", prevDiseases);
 
       let totalCauseDeathCount = 0;
       if (!!filterByCause) {
-        console.log("---------------------------------");
+        // console.log("---------------------------------");
         const f = new CauseOfDeathFilter();
         diseases = f.apply(diseases, filterByCause);
         Object.keys(diseases).forEach(
@@ -1717,10 +1713,10 @@ class Store {
 
       this.totalCauseDeathCount = totalCauseDeathCount;
       this.allDiseases = diseases;
-      console.log("allDiseases", this.allDiseases);
-      console.log("causeOfDeath", filterByCause);
-      console.log("this.totalCauseDeathCount", this.totalCauseDeathCount);
-      console.log("totalCauseDeathCount", totalCauseDeathCount);
+      // console.log("allDiseases", this.allDiseases);
+      // console.log("causeOfDeath", filterByCause);
+      // console.log("this.totalCauseDeathCount", this.totalCauseDeathCount);
+      // console.log("totalCauseDeathCount", totalCauseDeathCount);
 
       this.topDiseases = Object.values(diseases)
         ?.sort((a: any, b: any) => a.count - b.count)
@@ -1803,7 +1799,7 @@ class Store {
 
   @action clearEventList = () => {
     if (!!this.data)
-      this.data.rows = [];
+      this.data = [];
   }
 
   @action queryEvents = async () => {
@@ -1811,7 +1807,7 @@ class Store {
     if (this.canFetchData) {
       let query1: any = {
         events: {
-          resource: "events/query.json",
+          resource: "tracker/events",
           params: {
             page: this.page,
             pageSize: this.pageSize,
@@ -1842,21 +1838,22 @@ class Store {
         });
       }
 
-      console.log(query1);
-
+      
       try {
         const data = await this.engine.query(query1);
+        console.log(query1, data);
 
         runInAction(() => {
-          this.data = data.events;
+          this.data = data.events.instances;
 
-          this.data.headers = this.data.headers.map((a: any, i: number) => {
-            return {
-              ...a,
-              i,
-            };
-          });
-          this.total = this.data.metaData.pager.total;
+          // this.data.headers = this.data.headers.map((a: any, i: number) => {
+          //   return {
+          //     ...a,
+          //     i,
+          //   };
+          // });
+          this.total = data.events.total ?? this.data.length;
+          console.log("total", this.total)
         });
       } catch (e) {
         console.log(e);
@@ -2166,22 +2163,18 @@ class Store {
 
   @computed get columns() {
     if (
-      this.data &&
-      this.data.headers.length > 0 &&
-      this.data.rows.length > 0
+      this.data 
     ) {
       return this.availableDataElements
         .filter((de: any) => de.selected)
         .map((col: any) => {
-          const found = this.data.headers.find((c: any) => {
-            return col.id === c.name;
-          });
           return {
-            key: found.name,
+            key: col.id,
             title: col.name,
-            dataIndex: found.name,
-            render: (text: any, row: any) => {
-              return row[found.i];
+            dataIndex: "dataValues",
+            render: (values: any) => {
+              const dv = values.find(dv => dv.dataElement == col.id)
+              return dv?.value;
             },
           };
         });
@@ -2308,40 +2301,19 @@ class Store {
   }
   @computed get currentEventOrgUnit() {
     //console.log("cuureEvOr", this.data.headers)
-    if (this.data && this.data.headers.length > 0 && this.currentEvent) {
-      const orgidx = this.data.headers.findIndex((h) => h.name === "orgUnit");
+    if (this.data && this.currentEvent) {
+      // const orgidx = this.data.headers.findIndex((h) => h.name === "orgUnit");
       //console.log("orgidx", orgidx)
-      return this.currentEvent[orgidx];
+      return this.currentEvent.orgUnit;
     }
 
     return null;
   }
 
   @computed get defaultValues() {
-    if (this.data && this.data.headers.length > 0 && this.currentEvent) {
-      // console.log("we have default values");
-      const d = this.data.headers
-        .map((c: any) => {
-          let value = this.currentEvent[c.i];
-
-          if (dateFields.indexOf(c.name) !== -1 && value !== "") {
-            value = moment(value);
-          } else if (c.name === "jY3K6Bv4o9Q") {
-            value = value === "true" ? "Yes" : "No";
-          } else if (value === "true") {
-            value = true;
-          } else if (value === "false") {
-            value = false;
-          }
-          return [c.name, value];
-        })
-        .filter((v: any) => !!v[1]);
-
-      const dFromPairs = fromPairs(d);
-
-      return dFromPairs;
-    } else if (!!this.currentEventObj) {
-      const d = this.currentEventObj.dataValues
+    const obj = this.currentEvent ?? this.currentEventObj;
+    if (!!obj) {
+      const d = obj.dataValues
         .map((de) => {
           let value = de.value;
 
@@ -2360,6 +2332,7 @@ class Store {
 
       const dFromPairs = fromPairs(d);
       console.log("dfp", dFromPairs);
+      if (!!this.currentEventObj) {
       const nonemptylsdata = Object.entries(this.lsdata).reduce(
         (acc, [key, value]) => {
           if (value !== null && value !== undefined && value !== "") {
@@ -2369,8 +2342,9 @@ class Store {
         },
         {}
       );
-
       return { ...nonemptylsdata, ...dFromPairs };
+      }
+return dFromPairs;
     }
     return {};
   }
