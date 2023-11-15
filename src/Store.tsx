@@ -4,8 +4,9 @@ import moment from "moment";
 import englishMeta from "./components/LanguageConfigPage/fullMetaData.json";
 import { CauseOfDeathFilter } from "./filters";
 import { ApiStore } from "./stores/api";
-import { notification } from "antd";
+import { Space, notification } from "antd";
 import { addZZZZ } from "./utils/download-utils";
+import React from "react";
 
 const analyticsjson = require("./assets/analytics.json");
 
@@ -2045,20 +2046,21 @@ class Store {
       }
 
       this.selectedOrgUnit = this.actualSelOrgUnit;
-      this.queryEvents().then(() => {});
+      this.queryEvents();
     } catch (error) {
       console.error("Failed to fetch projects", error);
     }
     this.showEvents();
   };
 
-  @action deleteEvent = async () => {
+  @action deleteEvent = async (eventId = null) => {
+    const eid = eventId ?? this.currentEvent?.[0];
     try {
-      if (this.currentEvent) {
+      if (eid) {
         const createMutation = {
           type: "delete",
           resource: "events",
-          id: this.currentEvent[0],
+          id: eid,
         };
         await this.engine.mutate(createMutation);
         this.showEvents();
@@ -2067,6 +2069,8 @@ class Store {
       console.log(e);
     }
   };
+
+
 
   @action setInitialFilters = () => {
     let filters = {};
@@ -2183,6 +2187,8 @@ class Store {
             },
           };
         });
+
+        
     }
     return [];
   }
