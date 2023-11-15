@@ -430,18 +430,8 @@ class Store {
     this.lsdata = ls;
   };
   @action setSelectedNationality = async (nationality: any) => {
-    try {
       console.log("Nationality is ", nationality);
-      this.selectedNationality = nationality;
-      this.queryTopEvents();
-      if (this.canInsert) {
-        await this.queryEvents();
-      } else {
-        this.data = null;
-      }
-    } catch (e) {
-      console.log(e);
-    }
+      this.selectedNationality = nationality;   
   };
 
   @action setIsIframeEdit = async (isIframeEdit: boolean) => {
@@ -1740,6 +1730,7 @@ class Store {
       this.loadingTopDiseases = false;
     } catch (e) {
       console.log(e);
+      this.topDiseases = [];
       this.loadingTopDiseases = false;
     }
   };
@@ -1808,6 +1799,13 @@ class Store {
       console.log("exxx", e);
     }
   };
+
+
+  @action clearEventList = () => {
+    if (!!this.data)
+      this.data.rows = [];
+  }
+
   @action queryEvents = async () => {
     console.log("canFetch", this.canFetchData);
     if (this.canFetchData) {

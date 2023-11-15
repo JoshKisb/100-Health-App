@@ -310,7 +310,12 @@ export const EventList = observer(() => {
     </Menu>
   );
 
-  const columnsWithAction: any = [
+  useEffect(() => {
+    store.clearEventList();
+    store.queryEvents();
+  }, [store, store.selectedNationality, store.selectedOrgUnit])
+
+  const columnsWithAction: any = store.columns.length ? [
     ...store.columns,
     {
       title: "Action",
@@ -318,7 +323,9 @@ export const EventList = observer(() => {
       dataIndex: null,
       render: (_, record) => <DeleteRecordAction record={record} />,
     },
-  ];
+  ] : [];
+
+
 
   console.log("columnsWithAction", columnsWithAction);
   // console.log(store.data ? JSON.parse(JSON.stringify(store.data)) : "");
