@@ -27,12 +27,18 @@ export const App = observer(() => {
 		if (store?.organisationUnits?.length || store?.fetchingOrgUnits) return;
 		async function test() {
 			setFetching(true);
-			console.log("Fetching orgs...");
-			await Promise.all([
-				store.initApp(),
-				store.loadUserOrgUnits()
-			]);
-			setFetching(false);
+			try {
+				console.log("Fetching orgs...");
+				await Promise.all([
+					store.initApp(),
+					store.loadUserOrgUnits()
+				]);
+			} catch (error) {
+				console.log({error})
+			} finally {
+				setFetching(false);
+			}
+			
 		}
 		test();
 	}, []);
