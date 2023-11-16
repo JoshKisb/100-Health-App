@@ -692,7 +692,7 @@ class Store {
         .map((optionSet: any) => {
           return [optionSet.code, optionSet.options];
         });
-      this.optionSets = fromPairs(options);
+      this.optionSets = options.length > 0 ? fromPairs(options) : this.optionSets;
 
       const units = dprogram.organisationUnits;
 
