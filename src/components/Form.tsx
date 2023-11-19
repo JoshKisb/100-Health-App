@@ -382,6 +382,7 @@ export const DataEntryForm = observer(() => {
 		store.enableValue("roxn33dtLLx");
 		store.enableValue("RbrUuKFSqkZ");
 		store.enableValue("q7e7FOXKnOf");
+		store.enableValue("FGagV1Utrdh");
 
 	}, [store]);
 
@@ -1994,6 +1995,26 @@ export const DataEntryForm = observer(() => {
 									/>
 								</Form.Item>
 							</td>
+							<td className="border p-1">
+									<h3 >INPATIENT NUMMBER</h3>  
+								</td>
+								<td className="border p-1">
+								<Form.Item
+										name="FGagV1Utrdh"
+										className="m-0"
+										style={{ height: "0rem" }}
+									>
+										<Input
+											
+											size="large"
+											disabled={
+												store.viewMode ||
+												store.allDisabled.ZYKmQ9GPOaF
+											}
+										/>
+									</Form.Item> 
+								</td>
+						
 							</tr>
 							{store.selectedNationality !== "l4UMmqvSBe5" &&
 							<tr>
@@ -2084,9 +2105,8 @@ export const DataEntryForm = observer(() => {
 										}
 									</h3>
 								</td>
-								<td className="border p-1">
-									{/* <b>Region2</b> */}
-								</td>
+								
+
 								<td className="border p-1">
 									<Form.Item
 										name="twVlVWM3ffz"
@@ -2103,6 +2123,8 @@ export const DataEntryForm = observer(() => {
 										/>
 									</Form.Item>
 								</td>
+
+
 							</tr>
 					
 								
