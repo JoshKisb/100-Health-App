@@ -360,6 +360,7 @@ export const DataEntryForm = observer(() => {
                         // Check if the request was successful
                         if (response.ok) {
                             console.log('Data saved successfully!');
+                            localStorage.removeItem("mcodtemp");
                             // Close the iframe
                             // window.parent.closeIframe();
                         } else {
