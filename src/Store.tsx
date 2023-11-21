@@ -69,6 +69,9 @@ export const mcodmap = {
   m8jUvzBgYga: "lQ1Byr04JTx", //Number of completed weeks of pregnancy form 017
   //dKQIx7sVFbD: "",  // parish form 017
   T0f4UTwxd6Q: "dsiwvNQLe5n", //village form 017
+  t5nTEmlScSt:  "u44XP9fZweA", //district form 017
+  u44XP9fZweA: "t5nTEmlScSt",  // subcounty form 017
+
 };
 
 const dlcolumns = [
