@@ -361,7 +361,7 @@ export const DataEntryForm = observer(() => {
                         if (response.ok) {
                             console.log('Data saved successfully!');
                             localStorage.removeItem("mcodtemp");
-                            // Close the iframe
+                            window.close();
                             // window.parent.closeIframe();
                         } else {
                             console.error('Failed to save data:', response.statusText);
@@ -499,22 +499,29 @@ export const DataEntryForm = observer(() => {
     // }
 
     const onCancel = () => {
-        if (!!fromReview) {
-            if (window !== window.parent) {
-                // Your app is loaded in an iframe, so close the iframe
-                (window.parent as any).closeIframe();
-            } else {
-                // Your app is not in an iframe, so close the window
-                // window.close();
-                localStorage.clear()
-                // window.location.href = "/";
-                window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
-            }
+        const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
+        if (window.location.href.includes(allowedUrl)) {
+            window.close();
         } else {
-            store.showEvents();
-            store.enableForm();
+
+            if (!!fromReview) {
+                if (window !== window.parent) {
+                    // Your app is loaded in an iframe, so close the iframe
+                    (window.parent as any).closeIframe();
+                } else {
+                    // Your app is not in an iframe, so close the window
+                    // window.close();
+                    localStorage.clear()
+                    // window.location.href = "/";
+                    window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
+                }
+            } else {
+                store.showEvents();
+                store.enableForm();
+            }
         }
     }
+
 
     const notTomorrow = (date: moment.Moment) => {
         return date.isAfter(moment());
