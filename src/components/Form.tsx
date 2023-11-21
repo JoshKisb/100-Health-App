@@ -282,7 +282,10 @@ export const DataEntryForm = observer(() => {
         const parentWindowUrl = window.parent.location.href;
         // console.log("window url is", parentWindowUrl)
 
-        try {
+        // check for  parent window url
+        if (parentWindowUrl.includes('tbl-ecbss-dev.health.go.ug/')) {
+            // console.log("parent window url is", parentWindowUrl)
+
             // Load values from local storage
             const storedDataString = localStorage.getItem("mcodtemp");
 
@@ -299,7 +302,6 @@ export const DataEntryForm = observer(() => {
                     Object.entries(originalData)
                         .filter(([key]) => keysToInclude.includes(key))
                 );
-
 
                 const newValues = {
                     attributeCategoryOptions: 'l4UMmqvSBe5',
@@ -337,99 +339,98 @@ export const DataEntryForm = observer(() => {
                     ],
                 };
 
-                console.log("filtered", filteredData)
+                const saveDataUrl = 'https://hmis-tests.health.go.ug/api/40/events';
 
-                // Check if the parent window URL matches the expected URL
-                if (parentWindowUrl.includes('tbl-ecbss-dev.health.go.ug/')) {
-                    const saveDataUrl = 'https://hmis-tests.health.go.ug/api/40/events';
+                // Post data to a different URL
+                try {
+                    const response = await fetch(saveDataUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Basic ' + btoa('hisp.skununka:Nomisr123$$$$'),
+                        },
+                        body: JSON.stringify(newValues),
+                        credentials: 'include',
+                    });
 
-                    // Post data to a different URL
-                    try {
-                        const response = await fetch(saveDataUrl, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': 'Basic ' + btoa('hisp.skununka:Nomisr123$$$$'),
-                            },
-                            body: JSON.stringify(newValues),
-                            credentials: 'include',
-                        });
+                    console.log("payload values are", newValues);
 
-                        console.log("payload values are", newValues);
-
-                        // Check if the request was successful
-                        if (response.ok) {
-                            console.log('Data saved successfully!');
-                            localStorage.removeItem("mcodtemp");
-                            window.close();
-                            // window.parent.closeIframe();
-                        } else {
-                            console.error('Failed to save data:', response.statusText);
-                        }
-                    } catch (error) {
-                        console.error('Error saving data:', error);
+                    // Check if the request was successful
+                    if (response.ok) {
+                        console.log('Data saved successfully!');
+                        localStorage.removeItem("mcodtemp");
+                        window.close();
+                        // window.parent.closeIframe();
+                    } else {
+                        console.error('Failed to save data:', response.statusText);
                     }
-                } else {
-                    console.warn('Parent window URL does not match the expected URL.');
-
-                    // Handle the case where the parent window URL does not match
-
-                    if (approvalStatus) {
-                        values.twVlVWM3ffz = approvalStatus;
-                    }
-                    if (chosenRegionToSubmit || chosenRegion) {
-                        values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
-                    }
-                    // if() values.dTd7txVzhgY = underlyingCauseCode; // ???
-                    if (underlyingCauseText) {
-                        values.QTKk2Xt8KDu = underlyingCauseText;
-                    } // text
-                    if (underlyingCauseCode) {
-                        values.sJhOdGLD5lj = underlyingCauseCode;
-                    } // term = code
-                    if (underlyingCauseURI) {
-                        values.L97MrAMAav9 = underlyingCauseURI;
-                    } // uri
-                    if (chosenDistrictToSubmit) {
-                        values.u44XP9fZweA = chosenDistrictToSubmit;
-                    } // district
-                    if (chosenSubCounty) {
-                        values.t5nTEmlScSt = chosenSubCounty;
-                    } // subcounty
-                    if (chosenFacilityToSubmit || chosenFacility) {
-                        values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
-                    }
-                    console.log("Saved ", chosenFacilityToSubmit);
-                    values = {
-                        ...values,
-                        ...declarations,
-                    };
-                    // Object.keys(declarations).forEach(item=>{
-                    //   if(declarations[item]){
-                    //     values[item]=declarations[item]
-                    //   }
-
-                    // })
-                    console.log("values", values);
-
-                    await store.addEvent(values);
-                    if (!!fromReview) {
-                        let rvalues = {};
-                        Object.keys(mcodmap).forEach(rkey => {
-                            const val = values[mcodmap[rkey]];
-                            rvalues[rkey] = !!val ? val : "";
-                        })
-                        console.log("rvalues", rvalues);
-                        (window.parent as any).returntoreview?.(rvalues);
-                        (window.parent as any).closeIframe?.();
-                    }
+                } catch (error) {
+                    console.error('Error saving data:', error);
                 }
-            }
-        } catch (e) {
-            // Handle errors during parsing or other operations
-            console.error('Error:', e);
-        }
 
+
+            } //close if stored data
+
+                // console.log("filtered", filteredData)
+
+
+        } else {
+
+            // console.warn('Else block, Parent window URL does not match the expected URL.');
+
+            // Handle the case where the parent window URL does not match
+
+            if (approvalStatus) {
+                values.twVlVWM3ffz = approvalStatus;
+            }
+            if (chosenRegionToSubmit || chosenRegion) {
+                values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
+            }
+            // if() values.dTd7txVzhgY = underlyingCauseCode; // ???
+            if (underlyingCauseText) {
+                values.QTKk2Xt8KDu = underlyingCauseText;
+            } // text
+            if (underlyingCauseCode) {
+                values.sJhOdGLD5lj = underlyingCauseCode;
+            } // term = code
+            if (underlyingCauseURI) {
+                values.L97MrAMAav9 = underlyingCauseURI;
+            } // uri
+            if (chosenDistrictToSubmit) {
+                values.u44XP9fZweA = chosenDistrictToSubmit;
+            } // district
+            if (chosenSubCounty) {
+                values.t5nTEmlScSt = chosenSubCounty;
+            } // subcounty
+            if (chosenFacilityToSubmit || chosenFacility) {
+                values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
+            }
+            console.log("Saved ", chosenFacilityToSubmit);
+            values = {
+                ...values,
+                ...declarations,
+            };
+            // Object.keys(declarations).forEach(item=>{
+            //   if(declarations[item]){
+            //     values[item]=declarations[item]
+            //   }
+
+            // })
+            console.log("values", values);
+
+            await store.addEvent(values);
+            if (!!fromReview) {
+                let rvalues = {};
+                Object.keys(mcodmap).forEach(rkey => {
+                    const val = values[mcodmap[rkey]];
+                    rvalues[rkey] = !!val ? val : "";
+                })
+                console.log("rvalues", rvalues);
+                (window.parent as any).returntoreview?.(rvalues);
+                (window.parent as any).closeIframe?.();
+            }
+
+        }
 
         // if (approvalStatus) {
         // 	values.twVlVWM3ffz = approvalStatus;
