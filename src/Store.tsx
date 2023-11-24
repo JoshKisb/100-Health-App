@@ -403,7 +403,7 @@ class Store {
   };
 
   @action showEvents = () => {
-    console.log("shw orggg", this.actualSelOrgUnit)
+    // console.log("shw orggg", this.actualSelOrgUnit)
     this.data = null;
     this.edit();
     this.currentEvent = null;
@@ -707,8 +707,8 @@ class Store {
       if (!!this.lsdata) {
         this.fetchLocalStorageEvent();
       }
-
-      this.initLanguage(programStage);
+      console.log("optionsets b4 init", this.optionSets)
+      await this.initLanguage(programStage);
     } catch (e) {
       console.log("errrruuuooorrrr", e);
       // this.fetchingOrgUnits = false;
@@ -755,14 +755,14 @@ class Store {
         .fetch(url, options)
         .catch((err: any) => err);
 
-      console.log("meta", result.meta, this.optionSets);
-
-      this.setDataElements(programStage, result.meta.dataElements);
-      this.setOptionSets(result.meta.optionSets, result.meta.options);
-      this.setNationalitySelect(
-        result.meta.categories,
-        result.meta.categoryOptions
-      );
+        
+        this.setDataElements(programStage, result.meta.dataElements);
+        this.setOptionSets(result.meta.optionSets, result.meta.options);
+        this.setNationalitySelect(
+          result.meta.categories,
+          result.meta.categoryOptions
+          );
+          console.log("meta", result.meta, this.optionSets, this.nationalitySelect);
     }
   };
 

@@ -508,13 +508,13 @@ export const DataEntryForm = observer(() => {
             if (!!fromReview) {
                 if (window !== window.parent) {
                     // Your app is loaded in an iframe, so close the iframe
-                    (window.parent as any).closeIframe();
+    				(window.parent as any).closeIframe();
                 } else {
                     // Your app is not in an iframe, so close the window
                     // window.close();
-                    localStorage.clear()
+                localStorage.clear()
                     // window.location.href = "/";
-                    window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
+                window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
                 }
             } else {
                 store.showEvents();
@@ -1371,64 +1371,64 @@ export const DataEntryForm = observer(() => {
         const intervalDVal = form.getFieldValue("eCVDO6lt4go");
         const intervalD = (!!intervalDType && !!intervalDVal) ? moment.duration({[intervalDType]: intervalDVal}).toISOString() : null;
 
-        const dateOfDeath = moment(actualTimeOfDeath);
-        const ageOfIndividual = form.getFieldValue("q7e7FOXKnOf");
-        const dateOfBirth = form.getFieldValue("RbrUuKFSqkZ");
-        const wasPregnant = form.getFieldValue("zcn7acUB6x1");
-        const pregnacyContribute = form.getFieldValue("AJAraEcfH63")
-        const pregTime = form.getFieldValue("KpfvNQSsWIw");
+		const dateOfDeath = moment(actualTimeOfDeath);
+		const ageOfIndividual = form.getFieldValue("q7e7FOXKnOf");
+		const dateOfBirth = form.getFieldValue("RbrUuKFSqkZ");
+		const wasPregnant = form.getFieldValue("zcn7acUB6x1");
+		const pregnacyContribute = form.getFieldValue("AJAraEcfH63")
+		const pregTime = form.getFieldValue("KpfvNQSsWIw");
+		
+		const payload = {
+			sex: personsGender == "Male" ? "1" 
+				: personsGender == "Female" ? "2"
+				: "9",
+			// estimatedAge // Provided in ISO_8601 format https://en.wikipedia.org/wiki/ISO_8601#Durations. 
+			// E.g. P10YD 10 years, P9M 9 months, P5D 5 days, PT10H 10 hours, PT10M 10 minutes
+			estimatedAge: personsAge ? moment.duration({ years: personsAge }).toISOString() : "",
+			causeOfDeathCodeA: underlyingCauses["diseaseTitleA"],
+			causeOfDeathCodeB: underlyingCauses["diseaseTitleB"],
+			causeOfDeathCodeC: underlyingCauses["diseaseTitleC"],
+			causeOfDeathCodeD: underlyingCauses["diseaseTitleD"],
+			intervalA,
+			intervalB,
+			intervalC,
+			intervalD,
+			dateBirth: dateOfBirth?.toISOString() ?? "",
+			dateDeath: dateOfDeath?.toISOString() ?? "",
+			// maternalDeathWasPregnant 
+			// For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
+			maternalDeathWasPregnant: wasPregnant == "Yes" ? "1" : wasPregnant == "No" ? "0" : "9",
+			// maternalDeathPregnancyContribute 
+			// Did pregnancy contribute to death 0: No, - 1: Yes, - 9: Unknown
+			maternalDeathPregnancyContribute: pregnacyContribute == "Yes" ? "1" : pregnacyContribute == "No" ? "0" : "9",
+			// timeFromPregnancy
+			// 1: Within 42 days before death - 2: Between 43 days up to 1 year before death - 9:Unknown
+			timeFromPregnancy: pregTime == "Within 42 days before the death" ? "1" : pregTime == "Between 43 days up to 1 year before death" ? "2": "9",
 
-        const payload = {
-            sex: personsGender == "Male" ? "1"
-                : personsGender == "Female" ? "2"
-                    : "9",
-            // estimatedAge // Provided in ISO_8601 format https://en.wikipedia.org/wiki/ISO_8601#Durations.
-            // E.g. P10YD 10 years, P9M 9 months, P5D 5 days, PT10H 10 hours, PT10M 10 minutes
-            estimatedAge: moment.duration({years: personsAge}).toISOString(),
-            causeOfDeathCodeA: underlyingCauses["diseaseTitleA"],
-            causeOfDeathCodeB: underlyingCauses["diseaseTitleB"],
-            causeOfDeathCodeC: underlyingCauses["diseaseTitleC"],
-            causeOfDeathCodeD: underlyingCauses["diseaseTitleD"],
-            intervalA,
-            intervalB,
-            intervalC,
-            intervalD,
-            dateBirth: dateOfBirth?.toISOString() ?? null,
-            dateDeath: dateOfDeath?.toISOString(),
-            // maternalDeathWasPregnant
-            // For women, was the deceased pregnant 0: No, - 1: Yes, - 9: Unknown
-            maternalDeathWasPregnant: wasPregnant == "Yes" ? "1" : wasPregnant == "No" ? "0" : "9",
-            // maternalDeathPregnancyContribute
-            // Did pregnancy contribute to death 0: No, - 1: Yes, - 9: Unknown
-            maternalDeathPregnancyContribute: pregnacyContribute == "Yes" ? "1" : pregnacyContribute == "No" ? "0" : "9",
-            // timeFromPregnancy
-            // 1: Within 42 days before death - 2: Between 43 days up to 1 year before death - 9:Unknown
-            timeFromPregnancy: pregTime == "Within 42 days before the death" ? "1" : pregTime == "Between 43 days up to 1 year before death" ? "2" : "9",
+		};
+		// "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
+		const url = "https://ug.sk-engine.cloud/icd-api/icd/release/11/2023-01/doris?" + new URLSearchParams(payload);
+		const res = await fetch(url, {
+			// body: JSON.stringify(payload),
+			method: 'GET',
+			headers: {
+				"Content-Type": "application/json",
+				"API-Version": "v2",
+				"Accept-Language": "en",	
+			}
+		}).then((response) => response.json());
 
-        };
-        // "https://icd.who.int/doris/api/ucod/underlyingcauseofdeath/ICD11"
-        const url = "hmis-dev.health.go.ug/icd-api/icd/release/11/2023-01/doris?" + new URLSearchParams(payload);
-        const res = await fetch(url, {
-            // body: JSON.stringify(payload),
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "API-Version": "v2",
-                "Accept-Language": "en",
-            }
-        }).then((response) => response.json());
-
-        const nameres = await fetch(
-            res.uri.replace("http://id.who.int", "https://hmis-dev.health.go.ug/icd-api"),
-            {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "API-Version": "v2",
-                    "Accept-Language": "en",
-                }
-            }).then((response) => response.json());
-
+		const nameres = await fetch(
+			res.uri.replace("http://id.who.int", "https://ug.sk-engine.cloud/icd-api"),
+			{
+				method: 'GET',
+				headers: {
+					"Content-Type": "application/json",
+					"API-Version": "v2",
+					"Accept-Language": "en",	
+				}
+			}).then((response) => response.json());
+		
 
         console.log("resd", res);
         form.setFieldsValue({
@@ -1504,6 +1504,7 @@ export const DataEntryForm = observer(() => {
         // Force ant design to acknowledge the changed value
     };
 
+	
 
     useEffect(() => {
         // console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
