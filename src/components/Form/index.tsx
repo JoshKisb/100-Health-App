@@ -512,9 +512,11 @@ export const DataEntryForm = observer(() => {
                 } else {
                     // Your app is not in an iframe, so close the window
                     // window.close();
-                localStorage.clear()
-                    // window.location.href = "/";
-                window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
+                    localStorage.clear()
+                        // window.location.href = "/";
+                    // window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
+                    store.showEvents();
+                    // store.enableForm();        
                 }
             } else {
                 store.showEvents();
