@@ -25,25 +25,24 @@ import {
 import {SettingOutlined} from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
 import {observer} from "mobx-react";
-import {FormPrint} from "./FormPrint";
-import {ICDField} from "./ICDField";
-import {useStore} from "../Context";
+import {FormPrint} from "../FormPrint";
+import {ICDField} from "../ICDField";
+import {useStore} from "../../Context";
 import {isArray, isEmpty} from "lodash";
 
 import moment from "moment";
-import DistSearchPopup, {validSearchTypes} from "./DistrictSearch";
-import ApprovalRights from "./ApprovalRights";
-import Declarations from "./Declarations";
+import DistSearchPopup, {validSearchTypes} from "../DistrictSearch";
+import ApprovalRights from "../ApprovalRights";
+import Declarations from "../Declarations";
 
 // Languages
-import englishString from "./../assets/english.json";
-import frenchString from "./../assets/french.json";
+import englishString from "../../assets/english.json";
+import frenchString from "../../assets/french.json";
 import {AnyARecord} from "dns";
-import {useNinApi} from "./../utils/ninApi"
-import {useTranslation} from "../utils/useTranslation";
-import {dateFields} from "../Store";
-import {DorisReportModal} from "./DorisReportModal";
-import {mcodmap} from "../Store";
+import {useNinApi} from "../../utils/ninApi"
+import {useTranslation} from "../../utils/useTranslation";
+import {dateFields, mcodmap} from "../../Store";
+import {DorisReportModal} from "../DorisReportModal";
 
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
@@ -429,6 +428,7 @@ export const DataEntryForm = observer(() => {
                 (window.parent as any).returntoreview?.(rvalues);
                 (window.parent as any).closeIframe?.();
             }
+            
 
         }
 

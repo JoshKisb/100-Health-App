@@ -1773,6 +1773,28 @@ class Store {
     }
   };
 
+  getEventByNIN = async (nin) => {
+    let query1: any = {
+      events: {
+        resource: `events.json`,
+        params: {
+          program: this.program,
+          programStage: this.programStage,
+          filter: `MOstDqSY0gO:in:${nin}`,
+        },
+      },
+    };
+
+    try {
+      const data = await this.engine.query(query1);
+      console.log("nin data", data);
+      return !!data.events ? data.events.events[0] : null;
+      
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
   @action getEvent = async (eventId) => {
     let query1: any = {
       event: {
@@ -1980,6 +2002,8 @@ class Store {
     }
   };
 
+  
+
   @action addEvent = async (form: any) => {
     const { eventDate, ...rest } = form;
 
@@ -2028,24 +2052,34 @@ class Store {
     if (this.editing && this.currentEvent) {
       event = { ...event, event: this.currentEvent.event };
       createMutation = { ...createMutation, data: event };
-    } else if (!!this.currentEventObj || this.lsdata) {
+    } else if (!!this.currentEventObj || this.lsdata?.setevent) {
       const evt = this.currentEventObj?.event ?? this.lsdata?.setevent;
       event = { ...event, event: evt };
       console.log("saving evt", evt);
       createMutation = { ...createMutation, data: event };
+    } else {
+      const found = await this.getEventByNIN(form["MOstDqSY0gO"]);
+      if (!!found) {
+        notification.error({
+          message: "Failed to save MCCOD Record",
+          description: "A record with the same NIN was already recorded.",
+          duration: 4,
+        })
+        return;
+      }
     }
     try {
       console.log("muation", createMutation);
       await this.engine.mutate(createMutation);
 
-      if (!!this.lsdata) {
+      
         notification.success({
           message: "MCCOD record saved successfully!",
           // description: "Your translation passed all validation checks!",
           onClick: () => {},
           duration: 3,
         });
-      }
+      
 
       this.selectedOrgUnit = this.actualSelOrgUnit;
       this.queryEvents();
