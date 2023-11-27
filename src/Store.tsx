@@ -2057,14 +2057,15 @@ class Store {
       event = { ...event, event: evt };
       console.log("saving evt", evt);
       createMutation = { ...createMutation, data: event };
-    } else {
+    } else if (!!form["MOstDqSY0gO"]) {
       const found = await this.getEventByNIN(form["MOstDqSY0gO"]);
       if (!!found) {
         notification.error({
           message: "Failed to save MCCOD Record",
-          description: "A record with the same NIN was already recorded.",
+          description: "An event with the same NIN was already recorded.",
           duration: 4,
         })
+        this.selectedOrgUnit = this.actualSelOrgUnit;
         return;
       }
     }
