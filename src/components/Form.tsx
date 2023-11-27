@@ -500,10 +500,10 @@ export const DataEntryForm = observer(() => {
     // }
 
     const onCancel = () => {
-        const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
-        if (window.location.href.includes(allowedUrl)) {
-            window.close();
-        } else {
+        // const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
+        // if (window.location.href.includes(allowedUrl)) {
+        //     window.close();
+        // } else {
 
             if (!!fromReview) {
                 if (window !== window.parent) {
@@ -522,7 +522,7 @@ export const DataEntryForm = observer(() => {
                 store.showEvents();
                 store.enableForm();
             }
-        }
+        // }
     }
 
 
