@@ -2087,6 +2087,7 @@ class Store {
     } catch (error) {
       console.error("Failed to fetch projects", error);
     }
+    this.selectedOrgUnit = this.actualSelOrgUnit;
     this.showEvents();
   };
 
