@@ -2026,7 +2026,7 @@ class Store {
 
     console.log("OBJECT ENTRIES ARE:", dataValues);
     let event: any = {
-      attributeCategoryOptions: this.selectedNationality,
+      attributeCategoryOptions: this.selectedNationality || 'l4UMmqvSBe5',
       orgUnit: this.selectedOrgUnit,
       program: this.program,
       programStage: this.programStage,

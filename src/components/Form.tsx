@@ -294,17 +294,19 @@ export const DataEntryForm = observer(() => {
                 console.log("original data", originalData)
 
                 // Specify which keys to include from the stored data
-                const keysToInclude = ['event', 'orgUnit'];
+                // const keysToInclude = ['event', 'orgUnit'];
 
                 // Filter the originalData object to include only specified keys
-                const filteredData = Object.fromEntries(
-                    Object.entries(originalData)
-                        .filter(([key]) => keysToInclude.includes(key))
-                );
+                // const filteredData = Object.fromEntries(
+                //     Object.entries(originalData)
+                //         .filter(([key]) => keysToInclude.includes(key))
+                // );
 
                 const newValues = {
                     attributeCategoryOptions: 'l4UMmqvSBe5',
-                    ...filteredData,
+                    // ...filteredData,
+                    event: store.currentEvent,
+                    orgUnit: store.selectedOrgUnit,
                     program: 'vf8dN49jprI',
                     programStage: 'aKclf7Yl1PE',
                     eventDate: '2023-11-17',
@@ -338,6 +340,7 @@ export const DataEntryForm = observer(() => {
                     ],
                 };
 
+
                 const saveDataUrl = 'https://hmis-tests.health.go.ug/api/40/events';
 
                 // Post data to a different URL
@@ -353,12 +356,15 @@ export const DataEntryForm = observer(() => {
                     });
 
                     console.log("payload values are", newValues);
+                    // console.log('storage data:', filteredData)
 
                     // Check if the request was successful
                     if (response.ok) {
                         console.log('Data saved successfully!');
+                        localStorage.clear()
                         localStorage.removeItem("mcodtemp");
-                        window.close();
+                        // window.close();
+                        (window.parent as any).closeIframe();
                         // window.parent.closeIframe();
                     } else {
                         console.error('Failed to save data:', response.statusText);
@@ -416,6 +422,8 @@ export const DataEntryForm = observer(() => {
 
             // })
             console.log("values", values);
+            localStorage.clear();
+            console.log('Local storage cleared successfully.');
 
             await store.addEvent(values);
             if (!!fromReview) {
@@ -428,7 +436,7 @@ export const DataEntryForm = observer(() => {
                 (window.parent as any).returntoreview?.(rvalues);
                 (window.parent as any).closeIframe?.();
             }
-            
+
 
         }
 
@@ -468,6 +476,7 @@ export const DataEntryForm = observer(() => {
         // //   }
         //
         // // })
+        // // values.attributeCategoryOptions = 'l4UMmqvSBe5';
         // console.log("values", values);
         //
         // await store.addEvent(values);
