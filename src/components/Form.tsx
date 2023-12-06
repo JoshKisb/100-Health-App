@@ -2191,30 +2191,30 @@ export const DataEntryForm = observer(() => {
                             </td>
 
                         </tr>
-                        {store.selectedNationality !== "l4UMmqvSBe5" &&
-                            <tr>
-                                <td className="border p-1">
-                                    <b>
-                                        {tr("Type Of ID")}
-                                    </b>
-                                </td>
-                                <td className="border p-1">
-                                    <Form.Item name="xxx6yjtuN2f" className="m-0">
-                                        <Select
-                                            size="large"
-                                            disabled={
-                                                store.viewMode ||
-                                                store.allDisabled.xxx6yjtuN2f
-                                            }
-                                        >
-                                            {idTypeOptions.map(opt => (
-                                                <Option key={opt} value={opt}>{opt}</Option>
-                                            ))}
-                                        </Select>
-                                    </Form.Item>
-                                </td>
-                                <td className="border p-1" colSpan={2}></td>
-                            </tr>}
+                        {/*{store.selectedNationality !== "l4UMmqvSBe5" &&*/}
+                        {/*    <tr>*/}
+                        {/*        <td className="border p-1">*/}
+                        {/*            <b>*/}
+                        {/*                {tr("Type Of ID")}*/}
+                        {/*            </b>*/}
+                        {/*        </td>*/}
+                        {/*        <td className="border p-1">*/}
+                        {/*            <Form.Item name="xxx6yjtuN2f" className="m-0">*/}
+                        {/*                <Select*/}
+                        {/*                    size="large"*/}
+                        {/*                    disabled={*/}
+                        {/*                        store.viewMode ||*/}
+                        {/*                        store.allDisabled.xxx6yjtuN2f*/}
+                        {/*                    }*/}
+                        {/*                >*/}
+                        {/*                    {idTypeOptions.map(opt => (*/}
+                        {/*                        <Option key={opt} value={opt}>{opt}</Option>*/}
+                        {/*                    ))}*/}
+                        {/*                </Select>*/}
+                        {/*            </Form.Item>*/}
+                        {/*        </td>*/}
+                        {/*        <td className="border p-1" colSpan={2}></td>*/}
+                        {/*    </tr>}*/}
                         <tr>
                             <td className="border p-1">
                                 <b>
