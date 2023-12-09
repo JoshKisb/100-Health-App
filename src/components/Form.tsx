@@ -284,14 +284,14 @@ export const DataEntryForm = observer(() => {
 
         // check for  parent window url
         if (parentWindowUrl.includes('tbl-ecbss-dev.health.go.ug/')) {
-            // console.log("parent window url is", parentWindowUrl)
+            console.log("parent window url is", parentWindowUrl)
 
             // Load values from local storage
-            const storedDataString = localStorage.getItem("mcodtemp");
-
+            const storedDataString = store.lsdata;
+            console.log("original data", storedDataString)
             // Check if the stored data exists
             if (storedDataString) {
-                const originalData = JSON.parse(storedDataString);
+                const originalData = store.lsdata; //JSON.parse(storedDataString);
                 console.log("original data", originalData)
 
                 // Specify which keys to include from the stored data
@@ -305,10 +305,11 @@ export const DataEntryForm = observer(() => {
 
                 const newValues = {
                     attributeCategoryOptions: 'l4UMmqvSBe5',
-                    ...filteredData,
+                    ...filteredData,                    
                     program: 'vf8dN49jprI',
                     programStage: 'aKclf7Yl1PE',
                     eventDate: '2023-11-17',
+                    orgUnit: store.selectedOrgUnit,
                     dataValues: [
                         {dataElement: 'ZKBE8Xm9DJG', value: values['ZKBE8Xm9DJG']},
                         {dataElement: 'MOstDqSY0gO', value: values['MOstDqSY0gO']},
@@ -339,6 +340,10 @@ export const DataEntryForm = observer(() => {
                     ],
                 };
 
+                if (store.currentEventObj?.event) {
+                    newValues["event"] = store.currentEventObj.event;
+                }
+
                 const saveDataUrl = 'https://hmis-tests.health.go.ug/api/40/events';
 
                 // Post data to a different URL
@@ -360,6 +365,17 @@ export const DataEntryForm = observer(() => {
                         console.log('Data saved successfully!');
                         localStorage.removeItem("mcodtemp");
                         window.close();
+                        if (!!fromReview) {
+                            let rvalues = {};
+                            Object.keys(mcodmap).forEach(rkey => {
+                                const val = values[mcodmap[rkey]];
+                                rvalues[rkey] = !!val ? val : "";
+                            })
+                            console.log("rvalues", rvalues);
+                            (window.parent as any).returntoreview?.(rvalues);
+                            (window.parent as any).closeIframe?.();
+                        }
+              
                         // window.parent.closeIframe();
                     } else {
                         console.error('Failed to save data:', response.statusText);

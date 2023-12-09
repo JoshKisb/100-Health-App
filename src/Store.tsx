@@ -1741,7 +1741,7 @@ class Store {
   @action getEventByCase = async (casenumber) => {
     let query1: any = {
       events: {
-        resource: `events.json`,
+        resource: `events`,
         params: {
           program: this.program,
           programStage: this.programStage,
@@ -1749,12 +1749,31 @@ class Store {
         },
       },
     };
+// to check if event / case number is already there
+    const fetchEventUrl = `https://hmis-tests.health.go.ug/api/40/events?program=${this.program}&programStage=${this.programStage}&filter=ZKBE8Xm9DJG:in:${casenumber}`;
 
+    // Post data to a different URL
     try {
+        const response = await fetch(fetchEventUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa('hisp.skununka:Nomisr123$$$$'),
+            },
+            credentials: 'include',
+        });
+
+        // console.log("payload values are", newValues);
+
+        // Check if the request was successful
+        if (response.ok) {
+    // try {
       console.log("case number query", query1);
-      const data = await this.engine.query(query1);
-      console.log("case number daya", data);
-      return !!data.events ? data.events.events[0] : null;
+      // const data = await this.engine.query(query1);
+      const data = await response.json()
+      console.log("case number data", response, data);
+      return !!data?.events ? data.events[0] : null;
+        }
       // runInAction(() => {
       // 	this.data = data.events;
 
@@ -1769,7 +1788,7 @@ class Store {
       // 	this.total = this.data.metaData.pager.total;
       // });
     } catch (e) {
-      console.log("exxx", e);
+      console.log("error fetch by case", e);
     }
   };
 
