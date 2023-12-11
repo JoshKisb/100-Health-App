@@ -516,27 +516,29 @@ export const DataEntryForm = observer(() => {
     // }
 
     const onCancel = () => {
-        const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
-        if (window.location.href.includes(allowedUrl)) {
-            window.close();
-        } else {
+        // const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
+        // if (window.location.href.includes(allowedUrl)) {
+        //     window.close();
+        // } else {
 
-            if (!!fromReview) {
-                if (window !== window.parent) {
-                    // Your app is loaded in an iframe, so close the iframe
-                    (window.parent as any).closeIframe();
-                } else {
-                    // Your app is not in an iframe, so close the window
-                    // window.close();
-                    localStorage.clear()
-                    // window.location.href = "/";
-                    window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
-                }
+        if (!!fromReview) {
+            if (window !== window.parent) {
+                // Your app is loaded in an iframe, so close the iframe
+                (window.parent as any).closeIframe();
             } else {
+                // Your app is not in an iframe, so close the window
+                // window.close();
+                localStorage.clear()
+                // window.location.href = "/";
+                // window.location.href = "/api/apps/Medical-Certificate-of-Cause-of-Death/index.html";
                 store.showEvents();
-                store.enableForm();
+                // store.enableForm();
             }
+        } else {
+            store.showEvents();
+            store.enableForm();
         }
+        // }
     }
 
 
