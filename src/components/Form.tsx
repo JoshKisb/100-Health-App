@@ -2826,6 +2826,7 @@ export const DataEntryForm = observer(() => {
                                     className="m-0"
                                 >
                                     <DatePicker
+                                        defaultValue={actualTimeOfDeath}
                                         disabledDate={notTomorrow}
                                         size="large"
                                         showTime
