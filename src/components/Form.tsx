@@ -1515,12 +1515,12 @@ export const DataEntryForm = observer(() => {
         // Force ant design to acknowledge the changed value
     };
 
-	
+
 
     useEffect(() => {
         // console.log("j5TIQx3gHyF is ", store.defaultValues.j5TIQx3gHyF);
         console.log("defaultValues: ", store.defaultValues);
-        form.setFieldsValue({"eventDate": moment()})
+        // form.setFieldsValue({"eventDate": moment()})
         let defaults = store.defaultValues;
 
         const mcodtemp = localStorage.getItem("mcodtemp");
@@ -2094,7 +2094,6 @@ export const DataEntryForm = observer(() => {
                     <div style={{display: "flex", alignItems: "center"}}>
                         <Form.Item
                             label={activeLanguage.lang["Date of Entry"]}
-
                             name="eventDate"
                             className="m-0"
                             style={{marginRight: "15px"}}
@@ -2843,6 +2842,7 @@ export const DataEntryForm = observer(() => {
                                             store.allDisabled.i8rrl8YWxLF
                                         }
                                         onChange={(e: any) => {
+                                            form.setFieldsValue({eventDate: e});
                                             var minutes = 1000 * 60;
                                             var hours = minutes * 60;
                                             var days = hours * 24;
