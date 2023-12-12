@@ -2100,6 +2100,7 @@ export const DataEntryForm = observer(() => {
                             style={{marginRight: "15px"}}
                         >
                             <DatePicker
+                                defaultValue={actualTimeOfDeath}
                                 disabledDate={notTomorrow}
                                 size="large"
                                 disabled={store.viewMode}
