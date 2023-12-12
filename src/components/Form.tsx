@@ -2103,7 +2103,8 @@ export const DataEntryForm = observer(() => {
                                 defaultValue={actualTimeOfDeath}
                                 disabledDate={notTomorrow}
                                 size="large"
-                                disabled={store.viewMode}
+                                // disabled={store.viewMode}
+                                disabled={true}
                                 placeholder={activeLanguage.lang["Select a Date"]}
                             />
                         </Form.Item>
