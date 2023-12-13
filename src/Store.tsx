@@ -2093,7 +2093,7 @@ class Store {
 			}
 		}
 		if (!!form["ZKBE8Xm9DJG"]) {
-			const found = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"]);
+			const found = await this.getEventByCase(form["ZKBE8Xm9DJG"]);
 			if (!!found && evt !== found.event) {
 				notification.error({
 					message: "Failed to save MCCOD Record",
