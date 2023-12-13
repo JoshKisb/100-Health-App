@@ -2092,6 +2092,19 @@ class Store {
 				return;
 			}
 		}
+		if (!!form["ZKBE8Xm9DJG"]) {
+			const found = await this.getEventByCase(this.lsdata["ZKBE8Xm9DJG"]);
+			if (!!found && evt !== found.event) {
+				notification.error({
+					message: "Failed to save MCCOD Record",
+					description:
+						"An event with the same Case number was already recorded.",
+					duration: 4,
+				});
+				this.selectedOrgUnit = this.actualSelOrgUnit;
+				return;
+			}
+		}
 		try {
 			console.log("muation", createMutation);
 			await this.engine.mutate(createMutation);
