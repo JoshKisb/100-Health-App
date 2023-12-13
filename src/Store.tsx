@@ -2045,15 +2045,6 @@ class Store {
 
 		console.log("OBJECT ENTRIES ARE:", dataValues);
 		let event: any = {
-			attributeCategoryOptions: this.selectedNationality,
-			orgUnit: this.selectedOrgUnit,
-			program: this.program,
-			programStage: this.programStage,
-			eventDate: moment(eventDate).format("YYYY-MM-DD"),
-			dataValues,
-		};
-		console.log("OBJECT ENTRIES ARE:", dataValues);
-		let event: any = {
 			attributeCategoryOptions: this.selectedNationality || "l4UMmqvSBe5",
 			orgUnit: this.selectedOrgUnit,
 			program: this.program,
