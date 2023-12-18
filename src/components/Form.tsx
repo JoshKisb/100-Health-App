@@ -309,7 +309,7 @@ export const DataEntryForm = observer(() => {
                     orgUnit: store.selectedOrgUnit,
                     program: 'vf8dN49jprI',
                     programStage: 'aKclf7Yl1PE',
-                    eventDate: '2023-11-17',
+                    eventDate: moment(),
                     dataValues: [
                         {dataElement: 'ZKBE8Xm9DJG', value: values['ZKBE8Xm9DJG']},
                         {dataElement: 'MOstDqSY0gO', value: values['MOstDqSY0gO']},
@@ -2096,7 +2096,7 @@ export const DataEntryForm = observer(() => {
                             label={activeLanguage.lang["Date of Entry"]}
                             name="eventDate"
                             className="m-0"
-                            style={{marginRight: "15px"}}
+                            style={{display: "none", marginRight: "15px"}}
                         >
                             <DatePicker
                                 defaultValue={actualTimeOfDeath}
