@@ -1813,6 +1813,28 @@ class Store {
 		}
 	};
 
+	@action getEventByInpatientNo = async (inpatientno) => {
+		let query1: any = {
+			events: {
+				resource: `events.json`,
+				params: {
+					program: this.program,
+					programStage: this.programStage,
+					filter: `FGagV1Utrdh:in:${inpatientno}`,
+				},
+			},
+		};
+
+		try {
+			console.log("inpatient number", query1);
+			const data = await this.engine.query(query1);
+			console.log("inpatient number", data);
+			return !!data.events ? data.events.events[0] : null;
+		} catch (e) {
+			console.log("exxx", e);
+		}
+	};
+
 	@action getEvent = async (eventId) => {
 		let query1: any = {
 			event: {
@@ -2099,6 +2121,19 @@ class Store {
 					message: "Failed to save MCCOD Record",
 					description:
 						"An event with the same Case number was already recorded.",
+					duration: 4,
+				});
+				this.selectedOrgUnit = this.actualSelOrgUnit;
+				return;
+			}
+		}
+		if (!!form["FGagV1Utrdh"]) {
+			const found = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
+			if (!!found && evt !== found.event) {
+				notification.error({
+					message: "Failed to save MCCOD Record",
+					description:
+						"An event with the same Inpatient number was already recorded.",
 					duration: 4,
 				});
 				this.selectedOrgUnit = this.actualSelOrgUnit;
