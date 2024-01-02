@@ -2102,44 +2102,109 @@ class Store {
 			createMutation = { ...createMutation, data: event };
 		}
 
-		if (!!form["MOstDqSY0gO"]) {
-			const found = await this.getEventByNIN(form["MOstDqSY0gO"]);
-			if (!!found && evt !== found.event) {
-				notification.error({
-					message: "Failed to save MCCOD Record",
-					description: "An event with the same NIN was already recorded.",
-					duration: 4,
-				});
-				this.selectedOrgUnit = this.actualSelOrgUnit;
-				return;
+		// if (!!form["MOstDqSY0gO"]) {
+		// 	const found = await this.getEventByNIN(form["MOstDqSY0gO"]);
+		// 	if (!!found && evt !== found.event) {
+		// 		notification.error({
+		// 			message: "Failed to save MCCOD Record",
+		// 			description: "An event with the same NIN was already recorded.",
+		// 			duration: 4,
+		// 		});
+		// 		this.selectedOrgUnit = this.actualSelOrgUnit;
+		// 		return;
+		// 	}
+		// }
+		// if (!!form["ZKBE8Xm9DJG"]) {
+		// 	const found = await this.getEventByCase(form["ZKBE8Xm9DJG"]);
+		// 	if (!!found && evt !== found.event) {
+		// 		notification.error({
+		// 			message: "Failed to save MCCOD Record",
+		// 			description:
+		// 				"An event with the same Case number was already recorded.",
+		// 			duration: 4,
+		// 		});
+		// 		this.selectedOrgUnit = this.actualSelOrgUnit;
+		// 		return;
+		// 	}
+		// }
+		// if (!!form["FGagV1Utrdh"]) {
+		// 	const found = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
+		// 	if (!!found && evt !== found.event) {
+		// 		notification.error({
+		// 			message: "Failed to save MCCOD Record",
+		// 			description:
+		// 				"An event with the same Inpatient number was already recorded.",
+		// 			duration: 4,
+		// 		});
+		// 		this.selectedOrgUnit = this.actualSelOrgUnit;
+		// 		return;
+		// 	}
+		// }
+
+		// if (!!form["ZKBE8Xm9DJG"]) {
+		// 	const found = await this.getEventByCase(form["ZKBE8Xm9DJG"]);
+		// 	if (!!found && evt !== found.event) {
+		// 		const userConfirmed = window.confirm(
+		// 			"An event with the same Case number was already recorded. Do you want to proceed?"
+		// 		);
+		//
+		// 		if (!userConfirmed) {
+		// 			notification.error({
+		// 				message: "Failed to save MCCOD Record",
+		// 				description:
+		// 					"An event with the same Case number was already recorded.",
+		// 				duration: 4,
+		// 			});
+		// 			this.selectedOrgUnit = this.actualSelOrgUnit;
+		// 			return;
+		// 		}
+		// 	}
+		// }
+		//
+
+
+		if (!!form["ZKBE8Xm9DJG"] || !!form["FGagV1Utrdh"] || !!form["MOstDqSY0gO"]) {
+			let errorMessage = "";
+
+			if (!!form["ZKBE8Xm9DJG"]) {
+				const foundCase = await this.getEventByCase(form["ZKBE8Xm9DJG"]);
+				if (!!foundCase && evt !== foundCase.event) {
+					errorMessage += "An event with the same Case number was already recorded.\n";
+				}
+			}
+
+			if (!!form["FGagV1Utrdh"]) {
+				const foundInpatient = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
+				if (!!foundInpatient && evt !== foundInpatient.event) {
+					errorMessage += "An event with the same Inpatient number was already recorded.\n";
+				}
+			}
+
+			if (!!form["MOstDqSY0gO"]) {
+				const foundNIN = await this.getEventByNIN(form["MOstDqSY0gO"]);
+				if (!!foundNIN && evt !== foundNIN.event) {
+					errorMessage += "An event with the same NIN was already recorded.\n";
+				}
+			}
+
+			if (errorMessage) {
+				const userConfirmed = window.confirm(
+					`${errorMessage}Do you want to proceed?`
+				);
+
+				if (!userConfirmed) {
+					notification.error({
+						message: "Failed to save MCCOD Record",
+						description:
+							"An event with the same Case number was already recorded.",
+						duration: 4,
+					});
+					this.selectedOrgUnit = this.actualSelOrgUnit;
+					return;
+				}
 			}
 		}
-		if (!!form["ZKBE8Xm9DJG"]) {
-			const found = await this.getEventByCase(form["ZKBE8Xm9DJG"]);
-			if (!!found && evt !== found.event) {
-				notification.error({
-					message: "Failed to save MCCOD Record",
-					description:
-						"An event with the same Case number was already recorded.",
-					duration: 4,
-				});
-				this.selectedOrgUnit = this.actualSelOrgUnit;
-				return;
-			}
-		}
-		if (!!form["FGagV1Utrdh"]) {
-			const found = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
-			if (!!found && evt !== found.event) {
-				notification.error({
-					message: "Failed to save MCCOD Record",
-					description:
-						"An event with the same Inpatient number was already recorded.",
-					duration: 4,
-				});
-				this.selectedOrgUnit = this.actualSelOrgUnit;
-				return;
-			}
-		}
+
 		try {
 			console.log("muation", createMutation);
 			await this.engine.mutate(createMutation);
