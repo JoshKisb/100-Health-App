@@ -79,8 +79,8 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": " Medical Certificate of Cause of Death",
-    "description": " Medical Certificate of Cause of Death",
+    "name": " Mccod top 20",
+    "description": " mccod top 20",
     "launch_path": "index.html",
     "icons": {
       "16": "assets/icons/image001.png",
