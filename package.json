@@ -77,16 +77,17 @@
       "last 1 safari version"
     ]
   },
-  "manifest.webapp": {
-    "version": "2.0.0",
-    "name": " Mccod top 20",
-    "description": " mccod top 20",
-    "launch_path": "index.html",
-    "icons": {
-      "16": "assets/icons/image001.png",
-      "48": "assets/icons/image001.png",
-      "128": "assets/icons/image001.png"
-    },
+    "manifest.webapp": {
+      "version": "2.0.0",
+      "name": " mccod top 20",
+      "description": " Medical Certificate of Cause of Death",
+      "launch_path": "index.html",
+      "appType":"DASHBOARD_WIDGET",
+      "icons": {
+        "16": "assets/icons/image001.png",
+        "48": "assets/icons/image001.png",
+        "128": "assets/icons/image001.png"
+      },
     "developer": {
       "name": "HISP",
       "url": "http://dhis2.org"
