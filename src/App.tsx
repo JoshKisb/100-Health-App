@@ -122,16 +122,16 @@ export const App = observer(() => {
 
   return (
     <StoreContext.Provider value={store}>
-      {/*<HeaderBar*/}
-		{/*		appName={" Medical Certificate of Cause of Death"}*/}
-		{/*		style={{*/}
-		{/*			left: 0,*/}
-		{/*			position: "fixed",*/}
-		{/*			top: 0,*/}
-		{/*			width: "100%",*/}
-		{/*			zIndex: 1000,*/}
-		{/*		}}*/}
-		{/*	/>*/}
+      <HeaderBar
+				appName={" Medical Certificate of Cause of Death"}
+				style={{
+					left: 0,
+					position: "fixed",
+					top: 0,
+					width: "100%",
+					zIndex: 1000,
+				}}
+			/>
       {store.currentPage === "4" ? (
         <div className="p-2">
           <ApiConfigPage />
@@ -148,7 +148,7 @@ export const App = observer(() => {
             <></>
           )}
           {/* <DataEntryForm /> */}
-          {store.currentPage === "1" ?  <EventList /> : <DataEntryForm />}
+          {store.currentPage === "1" ?  <EventList /> :  <EventList />}
         </div>
       )}
     </StoreContext.Provider>
