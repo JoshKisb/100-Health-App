@@ -32,7 +32,8 @@ export const mcodmap = {
 	WzauwhVOwM0: "i8rrl8YWxLF",
 	eJwpqR9t7YM: "RJhbkjYrODG",
 	FIfoObQJvNp: "ZYKmQ9GPOaF",
-	H34bcwaOliX: "FGagV1Utrdh",
+	H34bcwaOliX: "FGagV1Utrdh",  //form 17 inpatient number
+	BRtcz4HV7Ak: "FGagV1Utrdh", //form 20 inpatient number
 	uFoaTRJ16Ch: "gNM2Yhypydx",
 	K4FUK590rIU: "KsGOxFyzIs1",
 	FHmHV9mElbD: "u44XP9fZweA", // district
