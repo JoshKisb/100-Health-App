@@ -486,7 +486,7 @@ export const TopDiseasesChart = observer(() => {
                if (currChartType == "column")
                   return {
                      y: d.count,
-                     color: d.count > d.prev ? "red" : d.count == d.prev ? "#2f7ed8" : "green",
+                     color: d.count > d.prev ? "green" : d.count == d.prev ? "#2f7ed8" : "green",
                   };
                else
                   return {
