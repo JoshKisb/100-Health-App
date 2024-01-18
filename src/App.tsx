@@ -9,8 +9,8 @@ import { store } from "./Store";
 import { OrgUnitTree } from "./components/OrgUnitTree";
 import { StoreContext } from "./Context";
 import { EventList } from "./components/EventList";
-import LanguageConfigPage from "./components/LanguageConfigPage";
-import ApiConfigPage from "./components/ApiConfigPage";
+
+
 
 const extraHeaders =
   process.env.NODE_ENV === "development"
@@ -132,25 +132,13 @@ export const App = observer(() => {
 					zIndex: 1000,
 				}}
 			/>
-      {store.currentPage === "4" ? (
+
         <div className="p-2">
-          <ApiConfigPage />
-        </div>
-      ) : store.currentPage === "2" ? (
-        <div className="p-2">
-          <LanguageConfigPage next={goToEvents} />
-        </div>
-      ) : (
-        <div className="p-2">
-          {store.currentPage === "1" ? (
             <OrgUnitTree loading={loading || fetching} fetching={fetching} />
-          ) : (
-            <></>
-          )}
-          {/* <DataEntryForm /> */}
-          {store.currentPage === "1" ?  <EventList /> :  <EventList />}
+
+            {store.currentPage === "1" ?  <EventList /> : store.currentPage === "3" ? <EventList/> : <DataEntryForm />}
         </div>
-      )}
+
     </StoreContext.Provider>
   );
 });
