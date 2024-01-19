@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FunctionComponent } from "react";
-import { TreeSelect, Select, Button, Popover, Spin, DatePicker } from "antd";
+import { TreeSelect, Select, Spin, DatePicker } from "antd";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import moment, { Moment } from "moment";
@@ -46,6 +46,11 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
       setUnits(store.organisationUnits);
       console.log("otddddd", store.organisationUnits);
    };
+
+   //set National as default
+   useEffect(() =>{
+      store.selectedNationality = 'l4UMmqvSBe5'
+   },[]);
 
    useEffect(() => {
       store.selectedDateRange = [
@@ -170,56 +175,6 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
                   ))}
                </Select>
             </div>
-            {/*<Popover*/}
-            {/*   placement="bottomRight"*/}
-            {/*   title="Organisation Units Missing"*/}
-            {/*   content="Please contact your administrator to assign the form to the organisation unit you selected."*/}
-            {/*   visible={showWarn}*/}
-            {/*>*/}
-            {/*   <div className="w-2/12 p-2 text-right" onMouseEnter={checkIfWarnApplies} onMouseLeave={handleWarnClose}>*/}
-            {/*      <Button*/}
-            {/*         size="large"*/}
-            {/*         onClick={store.viewMode ? store.editEvent : store.showForm}*/}
-            {/*         disabled={!store.canInsert || store.forceDisable}*/}
-            {/*      >*/}
-            {/*         {store.viewMode ? activeLanguage?.lang["Edit Event"] : activeLanguage?.lang["Add Event"]}*/}
-            {/*      </Button>*/}
-            {/*   </div>*/}
-            {/*</Popover>*/}
-
-            {/*<Popover*/}
-            {/*   placement="bottomRight"*/}
-            {/*   title="Insufficient Permissions"*/}
-            {/*   content="Please contact your administrator to change the api settings for you."*/}
-            {/*   visible={showApiWarn}*/}
-            {/*>*/}
-            {/*   <div*/}
-            {/*      className="w-2/12 p-2 text-right"*/}
-            {/*      onMouseEnter={checkIfApiWarnApplies}*/}
-            {/*      onMouseLeave={handleApiWarnClose}*/}
-            {/*   >*/}
-            {/*      <Button size="large" onClick={store.showApi} disabled={!userIsAuthorized}>*/}
-            {/*         {activeLanguage?.lang["API"] ?? "API"}*/}
-            {/*      </Button>*/}
-            {/*   </div>*/}
-            {/*</Popover>*/}
-
-            {/*<Popover*/}
-            {/*   placement="bottomRight"*/}
-            {/*   title="Insufficient Permissions"*/}
-            {/*   content="Please contact your administrator to change the active language for you."*/}
-            {/*   visible={showLangWarn}*/}
-            {/*>*/}
-            {/*   <div*/}
-            {/*      className="w-2/12 p-2 text-right"*/}
-            {/*      onMouseEnter={checkIfLangWarnApplies}*/}
-            {/*      onMouseLeave={handleLangWarnClose}*/}
-            {/*   >*/}
-            {/*      <Button size="large" onClick={showLangConfig} disabled={!userIsAuthorized}>*/}
-            {/*         {activeLanguage?.lang["Change Language"]}*/}
-            {/*      </Button>*/}
-            {/*   </div>*/}
-            {/*</Popover>*/}
          </div>
          <div className="flex mt-2" style={{  width: "100%", justifyContent: "flex-end", marginBottom: "-5px" }}>
             <div className="flex" style={{  }}>
