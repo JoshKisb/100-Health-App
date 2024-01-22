@@ -2,7 +2,7 @@
   "name": "mccod",
   "version": "0.1.0",
   "private": true,
-  "proxy":"http://localhost:8080",
+  "proxy": "http://localhost:8080",
   "homepage": ".",
   "cacheVersion": "1",
   "dependencies": {
@@ -47,6 +47,7 @@
     "react-csv": "^2.0.3",
     "react-date-range": "^1.4.0",
     "react-dom": "^16.12.0",
+    "react-excel-renderer": "^1.1.0",
     "react-hook-form": "^5.6.2",
     "react-papaparse": "^3.17.2",
     "react-router-dom": "^5.1.2",
@@ -77,17 +78,17 @@
       "last 1 safari version"
     ]
   },
-    "manifest.webapp": {
-      "version": "2.0.0",
-      "name": " mccod top 20",
-      "description": " Medical Certificate of Cause of Death",
-      "launch_path": "index.html",
-      "appType":"DASHBOARD_WIDGET",
-      "icons": {
-        "16": "assets/icons/image001.png",
-        "48": "assets/icons/image001.png",
-        "128": "assets/icons/image001.png"
-      },
+  "manifest.webapp": {
+    "version": "2.0.0",
+    "name": "file upload",
+    "description": " Upload excel files",
+    "launch_path": "index.html",
+    "appType": "DASHBOARD_WIDGET",
+    "icons": {
+      "16": "assets/icons/image001.png",
+      "48": "assets/icons/image001.png",
+      "128": "assets/icons/image001.png"
+    },
     "developer": {
       "name": "HISP",
       "url": "http://dhis2.org"
