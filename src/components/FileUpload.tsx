@@ -16,7 +16,7 @@ function FileUpload() {
             const formData = new FormData();
             formData.append('file', excelFile);
 
-            const response = await axios.post('YOUR_ENDPOINT_URL', formData, {
+            const response = await axios.post('http://localhost:3000/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -24,8 +24,37 @@ function FileUpload() {
 
             console.log('Upload successful:', response.data);
 
-            // Set the Excel data received from the server if needed
-            setExcelData(response.data);
+            // Parse the Excel data into a JSON payload
+            ExcelRenderer(excelFile, (err, resp) => {
+                if (err) {
+                    console.error('Error parsing Excel data:', err);
+                } else {
+                    const jsonData = [];
+
+                    // Assuming the first row in Excel is the header
+                    const headers = resp.rows[0];
+
+                    // Iterate through rows starting from the second row (index 1)
+                    for (let i = 1; i < resp.rows.length; i++) {
+                        const row = resp.rows[i];
+                        const rowData = {};
+
+                        // Iterate through columns
+                        for (let j = 0; j < headers.length; j++) {
+                            const header = headers[j];
+                            const cellValue = row[j];
+
+                            // Use header as key and cellValue as value in JSON
+                            rowData[header] = cellValue;
+                        }
+
+                        jsonData.push(rowData);
+                    }
+
+                    // jsonData now contains the Excel data in JSON format
+                    console.log('Excel data as JSON:', jsonData);
+                }
+            });
         } catch (error) {
             console.error('Error uploading file:', error);
         }
