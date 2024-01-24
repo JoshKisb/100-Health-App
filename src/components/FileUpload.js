@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import {parseISO, format} from "date-fns";
 
 function ExcelToJsonConverter() {
     const [file, setFile] = useState(null);
     const [jsonData, setJsonData] = useState('');
 
-    const formatToYYYYMMDD = (dateString) => {
-        console.log(dateString)
-        const date = new Date(dateString);
-
-        // Check if the date is valid
-        if (isNaN(date.getTime())) {
-            return 'Invalid Date';
-        }
-
-        // Use toISOString to get the date in YYYY-MM-DD format
-        return date.toISOString().split('T')[0];
-    };
+    // const formatToYYYYMMDD = (dateString) => {
+    //     try {
+    //         console.log(dateString)
+    //         // Parse the date string using date-fns
+    //         const parsedDate = parseISO(dateString);
+    //
+    //         // Format the parsed date to YYYY-MM-DD
+    //         return format(parsedDate, 'yyyy-MM-dd');
+    //     } catch (error) {
+    //         console.error('Error parsing date:', error);
+    //         return 'Invalid Date';
+    //     }
+    // };
 
     const handleConvert = () => {
         if (file) {
@@ -35,7 +37,7 @@ function ExcelToJsonConverter() {
                         trackedEntityInstance: row.trackedEntityInstance,
                         orgUnit: row.OrgUIDs,
                         trackedEntityType: "T5DWDr5Swce",
-                        attributes: Object.keys(row).map(key => ({
+                        attributes: Object.keys(row).slice(3, 14).map((key) => ({
                             attribute: key,
                             value: row[key]
                         })),
@@ -43,10 +45,10 @@ function ExcelToJsonConverter() {
                             {
                                 orgUnit: row.orgUnitId,
                                 program: row.programId,
-                                enrollmentDate: formatToYYYYMMDD(row.EnrollmentDate),
-                                incidentDate: formatToYYYYMMDD(row.IncidentDate),
+                                enrollmentDate: row.enrollmentDate,
+                                incidentDate: row.incidentDate,
                                 status: "ACTIVE",
-                                attributes: Object.keys(row).map(key => ({
+                                attributes: Object.keys(row).slice(3, 14).map((key) => ({
                                     attribute: key,
                                     value: row[key]
                                 })),
@@ -57,7 +59,7 @@ function ExcelToJsonConverter() {
                                         eventDate: "YYYY-MM-DD",
                                         status: "COMPLETED",
                                         programStage: row.programStageId,
-                                        dataValues: Object.keys(row).map(key => ({
+                                        dataValues: Object.keys(row).slice(15, 29).map((key) => ({
                                             dataElement: key,
                                             value: row[key]
                                         }))
