@@ -64,6 +64,17 @@ function ExcelToJsonConverter() {
                                             value: row[key]
                                         }))
                                     },
+                                    {
+                                        program: row.programId,
+                                        orgUnit: row.orgUnitId,
+                                        eventDate: "YYYY-MM-DD",
+                                        status: "COMPLETED",
+                                        programStage: row.programStageId,
+                                        dataValues: Object.keys(row).slice(15, 29).map((key) => ({
+                                            dataElement: key,
+                                            value: row[key]
+                                        }))
+                                    },
                                     // Add more events if needed
                                 ]
                             }
