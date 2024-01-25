@@ -635,6 +635,18 @@ export const DataEntryForm = observer(() => {
         }
     }, [store?.selectedNationality])
 
+    //CHECK FOR CASE NUMBER PREFIXES
+    const checkMinistryCaseNumber = (_, value) => {
+
+        const isValid = value && (value.includes('PERI') || value.includes('MATERNAL'));
+
+        if (!isValid) {
+            return Promise.reject('Value must include "PERI" or "MATERNAL"');
+        }
+
+        return Promise.resolve();
+    };
+
     const ninValidation = store?.selectedNationality === "l4UMmqvSBe5" ? {
         rules: [
             {len: 14, message: "NIN should have 14 characters"}
@@ -2159,6 +2171,9 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     name="ZKBE8Xm9DJG"
                                     className="m-0"
+                                    rules={[{required: true, message: 'Ministry of Health National Case Number is required'},
+                                        // { validator: checkMinistryCaseNumber },
+                                    ]}
                                 >
                                     <Input
                                         size="large"
