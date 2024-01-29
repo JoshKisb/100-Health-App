@@ -5,6 +5,8 @@ import './FileUpload.css';
 function ExcelToJsonConverter() {
     const [file, setFile] = useState(null);
     const [jsonData, setJsonData] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [uploading, setUploading] = useState(false);
 
     // Function to format the Excel date serial number
     const formatDateFromExcelSerial = (excelSerial) => {
@@ -32,6 +34,8 @@ function ExcelToJsonConverter() {
 
     const handleConvert = () => {
         if (file) {
+            setUploading(true);
+            setLoading(true);
             const reader = new FileReader();
             reader.onload = async (e) => {
                 const data = e.target.result;
@@ -248,7 +252,8 @@ function ExcelToJsonConverter() {
                 // } catch (error) {
                 //     console.error('Error posting data to the API:', error);
                 // }
-
+                setUploading(false);
+                setLoading(false);
             };
             reader.readAsBinaryString(file);
         }
@@ -331,7 +336,10 @@ function ExcelToJsonConverter() {
         <div className="form-container">
             <h1> Upload Excel File </h1>
             <input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
-            <button className="upload-btn" onClick={handleConvert}>Upload</button>
+            <button className="upload-btn" onClick={handleConvert} disabled={uploading}>
+                {uploading ? 'Uploading...' : 'Upload'}
+            </button>
+            {loading && <div className="progress-bar">uploading data please wait...</div>}
             <pre>{jsonData}</pre>
         </div>
     );

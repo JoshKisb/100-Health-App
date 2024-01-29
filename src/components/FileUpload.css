@@ -18,6 +18,12 @@ input[type="file"] {
     cursor: pointer;
 }
 
+.upload-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+
+}
+
 pre {
     margin-top: 20px;
     font-family: monospace;
