@@ -114,6 +114,7 @@ function ExcelToJsonConverter() {
                                 programStage: "nknoeOj6dLq",
                                 orgUnit: row.OrgUIDs,
                                 trackedEntityInstance: row.TrackedEntityInstances,
+                                trackedEntityType: "T5DWDr5Swce",
                                 status: "COMPLETED",
                                 eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
                                 completedDate: "2024-01-27"
@@ -257,11 +258,25 @@ function ExcelToJsonConverter() {
     // Function to check if ID exists at a particular endpoint
     const checkIdExistence = async (id) => {
         try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/Xs87tljEM8L?fields=createdByUserInfo[${id}]`);
-            return response.ok;
+            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/${id}`,{
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                },
+            });
+
+            if (response.status === 200){
+                console.log(`id ${id} found`, response.status)
+                return true
+            } else {
+                console.log(`id ${id} not found`, response.status)
+                return false
+            }
         } catch (error) {
+
             console.error('Error checking ID existence:', error);
-            return false;
+
         }
     };
 
