@@ -188,7 +188,14 @@ export const TopDiseasesChart = observer(() => {
             text: "Death count",
          },
       },
-      series: [{ name: "Deaths" } as any],
+      series: [
+          {
+             name: "Deaths",
+             dataLabels:{
+                enabled: true, // Enable data labels for each point
+                format: '{y}', // Display the y value on each column
+             },
+          } as any],
       tooltip: {
          useHTML: true,
          pointFormatter: function () {
