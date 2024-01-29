@@ -130,7 +130,7 @@ function ExcelToJsonConverter() {
                         // If ID doesn't exist, create payload and post
 
                         const convertedJsonData = {
-                            trackedEntityInstances: {
+                            trackedEntityInstances: [{
                                 trackedEntityInstance: row.TrackedEntityInstances,
                                 orgUnit: row.OrgUIDs,
                                 trackedEntityType: "T5DWDr5Swce",
@@ -173,7 +173,7 @@ function ExcelToJsonConverter() {
                                         ]
                                     }
                                 ]
-                            }
+                            }]
                         };
 
                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
