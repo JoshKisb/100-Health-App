@@ -111,6 +111,10 @@ function ExcelToJsonConverter() {
                                     dataElement: "ArUaftNaqGt",
                                     value: formatDateFromExcelSerial(row.ArUaftNaqGt)
                                 },
+                                {
+                                    dataElement: "WnHQ3OUmUal",
+                                    value: formatDateFromExcelSerial(row.WnHQ3OUmUal)
+                                },
 
                             ],
                                 event: "unVgHirSaRI",
@@ -156,7 +160,7 @@ function ExcelToJsonConverter() {
                                                 dataValues: Object.keys(row).slice(12, 24).map((key) => ({
                                                     dataElement: key,
                                                     // value: row[key]
-                                                    value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' ? formatDateFromExcelSerial(row[key]) : row[key]
+                                                    value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
                                                 }))
                                             },
                                             {
