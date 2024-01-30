@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import * as XLSX from 'xlsx';
 import './FileUpload.css';
 
@@ -126,6 +126,7 @@ function ExcelToJsonConverter() {
                         setJsonData(JSON.stringify(updatedData, null, 2));
 
                         await updateRecord(id, updatedData);
+
                     } else {
                         // If ID doesn't exist, create payload and post
 
@@ -152,7 +153,7 @@ function ExcelToJsonConverter() {
                                                 eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
                                                 status: "COMPLETED",
                                                 programStage: "nknoeOj6dLq",
-                                                dataValues: Object.keys(row).slice(12, 23).map((key) => ({
+                                                dataValues: Object.keys(row).slice(12, 24).map((key) => ({
                                                     dataElement: key,
                                                     // value: row[key]
                                                     value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' ? formatDateFromExcelSerial(row[key]) : row[key]
@@ -164,7 +165,7 @@ function ExcelToJsonConverter() {
                                                 eventDate: formatDateFromExcelSerial(row.eventTwoDate),
                                                 status: "COMPLETED",
                                                 programStage: "s1kg8duJ8U1",
-                                                dataValues: Object.keys(row).slice(24, 29).map((key) => ({
+                                                dataValues: Object.keys(row).slice(25, 30).map((key) => ({
                                                     dataElement: key,
                                                     value: row[key]
                                                 }))
@@ -179,8 +180,10 @@ function ExcelToJsonConverter() {
                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
 
                         await createRecord(convertedJsonData);
+
                     }
                 }
+                await resetTable();
 
                 // const convertedJsonData = {
                 //     trackedEntityInstances: json.map(row => ({
@@ -331,6 +334,21 @@ function ExcelToJsonConverter() {
             console.error('Error posting payload:', error);
         }
     };
+
+    const resetTable = async () => {
+        try {
+            // console.log("response is", response)
+            return await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/query.json?ou=O2I1C1KOAgg&ouMode=SELECTED&program=h0iSBI3xoS6', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                },
+            });
+        } catch (error){
+            console.error('Error getting data', error)
+        }
+    }
 
     return (
         <div className="form-container">
