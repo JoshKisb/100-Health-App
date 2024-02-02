@@ -47,83 +47,62 @@ function ExcelToJsonConverter() {
                 // setJsonData(JSON.stringify(json, null, 2));
 
                 // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(13);
+                const columnNames = Object.keys(json[0]).slice(13,25);
+                const eventTwoColumnNames = Object.keys(json[0]).slice(26,30);
 
                 for (const row of json) {
                     const id = row.TrackedEntityInstances; //  'ID'  column name
                     const exists = await checkIdExistence(id);
                     if (exists) {
                         // Generate dataValues array dynamically based on column names
-                        const dataValues = columnNames.map(columnName => ({
+                        const eventOne = columnNames.map(columnName => ({
+                            dataElement: columnName,
+                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                        }));
+
+                        const eventTwo = eventTwoColumnNames.map(columnName => ({
                             dataElement: columnName,
                             value: row[columnName]
                         }));
 
                         // If ID exists, update record
-                        const updatedData =
-                            {
-                            // dataValues: [
-                            //     {
-                            //     dataElement: "fYXMas63RqZ",
-                            //     value: row.fYXMas63RqZ
-                            //      },
-                            //     {
-                            //     dataElement: "oGFnDgZdYIA",
-                            //     value: row.oGFnDgZdYIA
-                            //     },
-                            //     {
-                            //         dataElement: "kQFrmVd1l4C",
-                            //         value: row.kQFrmVd1l4C
-                            //     },
-                            //     {
-                            //         dataElement: "JIF7nUXfOE5",
-                            //         value: row.JIF7nUXfOE5
-                            //     },
-                            //     {
-                            //         dataElement: "Aav31h4Hw9j",
-                            //         value: row.Aav31h4Hw9j
-                            //     },
-                            //     {
-                            //         dataElement: "oclRmA0Ddw5",
-                            //         value: row.oclRmA0Ddw5
-                            //     },
-                            //     {
-                            //         dataElement: "KONsaMibMDN",
-                            //         value: row.KONsaMibMDN
-                            //     },
-                            //     {
-                            //         dataElement: "oAq0Td1SkV7",
-                            //         value: row.oAq0Td1SkV7
-                            //     },
-                            //     {
-                            //         dataElement: "uxHOAUsyDKz",
-                            //         value: formatDateFromExcelSerial(row.uxHOAUsyDKz)
-                            //     },
-                            //     {
-                            //         dataElement: "sKrn2rY6l0w",
-                            //         value: formatDateFromExcelSerial(row.sKrn2rY6l0w)
-                            //     },
-                            //     {
-                            //         dataElement: "ArUaftNaqGt",
-                            //         value: formatDateFromExcelSerial(row.ArUaftNaqGt)
-                            //     },
-                            //     {
-                            //         dataElement: "WnHQ3OUmUal",
-                            //         value: formatDateFromExcelSerial(row.WnHQ3OUmUal)
-                            //     },
-                            //
-                            // ],
-
-                                dataValues: dataValues,
-                                event: "unVgHirSaRI",
-                                program: "h0iSBI3xoS6",
-                                programStage: "nknoeOj6dLq",
-                                orgUnit: row.OrgUIDs,
-                                trackedEntityInstance: row.TrackedEntityInstances,
-                                trackedEntityType: "T5DWDr5Swce",
-                                eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                                completedDate: "2024-01-27"
+                        const updatedData ={
+                            events:[
+                                {
+                                    dataValues: eventOne,
+                                    event: "unVgHirSaRI",
+                                    program: "h0iSBI3xoS6",
+                                    programStage: "nknoeOj6dLq",
+                                    orgUnit: row.OrgUIDs,
+                                    trackedEntityInstance: row.TrackedEntityInstances,
+                                    trackedEntityType: "T5DWDr5Swce",
+                                    eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
+                                    completedDate: "2024-01-27"
+                                },
+                                {
+                                    dataValues: eventTwo,
+                                    event: "unVgHirSaRI",
+                                    program: "h0iSBI3xoS6",
+                                    programStage: "nknoeOj6dLq",
+                                    orgUnit: row.OrgUIDs,
+                                    trackedEntityInstance: row.TrackedEntityInstances,
+                                    trackedEntityType: "T5DWDr5Swce",
+                                    eventDate: formatDateFromExcelSerial(row.eventTwoDate),
+                                    completedDate: "2024-01-27"
+                                }
+                            ]
                         }
+                        //     {
+                        //         dataValues: eventOne,
+                        //         event: "unVgHirSaRI",
+                        //         program: "h0iSBI3xoS6",
+                        //         programStage: "nknoeOj6dLq",
+                        //         orgUnit: row.OrgUIDs,
+                        //         trackedEntityInstance: row.TrackedEntityInstances,
+                        //         trackedEntityType: "T5DWDr5Swce",
+                        //         eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
+                        //         completedDate: "2024-01-27"
+                        // }
                         setJsonData(JSON.stringify(updatedData, null, 2));
 
                         await updateRecord(id, updatedData);
