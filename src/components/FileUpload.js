@@ -70,7 +70,7 @@ function ExcelToJsonConverter() {
                             events:[
                                 {
                                     dataValues: eventOne,
-                                    event: "unVgHirSaRI",
+                                    // event: "unVgHirSaRI",
                                     program: "h0iSBI3xoS6",
                                     programStage: "nknoeOj6dLq",
                                     orgUnit: row.OrgUIDs,
@@ -81,7 +81,7 @@ function ExcelToJsonConverter() {
                                 },
                                 {
                                     dataValues: eventTwo,
-                                    event: "unVgHirSaRI",
+                                    // event: "unVgHirSaRI",
                                     program: "h0iSBI3xoS6",
                                     programStage: "s1kg8duJ8U1",
                                     orgUnit: row.OrgUIDs,
