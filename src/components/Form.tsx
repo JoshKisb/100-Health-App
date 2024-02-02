@@ -2882,13 +2882,13 @@ export const DataEntryForm = observer(() => {
                                             );
                                             // console.log("function diffdate has been run ");
 
-                                            if (diff_date < 25) {
-                                                window.alert(
-                                                    activeLanguage.lang[
-                                                        "Please remember that you should also complete the section 'Fetal or infant Death'"
-                                                        ]
-                                                );
-                                            }
+                                            // if (diff_date < 25) {
+                                            //     window.alert(
+                                            //         activeLanguage.lang[
+                                            //             "Please remember that you should also complete the section 'Fetal or infant Death'"
+                                            //             ]
+                                            //     );
+                                            // }
                                         }}
                                     />
                                 </Form.Item>
