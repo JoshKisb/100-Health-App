@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import * as XLSX from 'xlsx';
 import './FileUpload.css';
 
@@ -7,6 +7,14 @@ function ExcelToJsonConverter() {
     const [jsonData, setJsonData] = useState('');
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
+    const [createdEventsCount, setCreatedEventsCount] = useState(0);
+    const [updatedEventsCount, setUpdatedEventsCount] = useState(0);
+
+    useEffect(() => {
+        // Reset events count when file changes
+        setCreatedEventsCount(0);
+        setUpdatedEventsCount(0);
+    }, [file]);
 
     // Function to format the Excel date serial number
     const formatDateFromExcelSerial = (excelSerial) => {
@@ -49,6 +57,8 @@ function ExcelToJsonConverter() {
                 // Get column names from the first row (excluding first 13 columns)
                 const columnNames = Object.keys(json[0]).slice(13,24);
                 const eventTwoColumnNames = Object.keys(json[0]).slice(25,30);
+                let createdCount = 0;
+                let updatedCount = 0;
 
                 for (const row of json) {
                     const id = row.TrackedEntityInstances; //  'ID'  column name
@@ -105,7 +115,8 @@ function ExcelToJsonConverter() {
                         // }
                         setJsonData(JSON.stringify(updatedData, null, 2));
 
-                        await updateRecord(id, updatedData);
+                        await updateRecord(id, updatedData, updatedCount);
+                        // updatedCount++;
 
                     } else {
                         // If ID doesn't exist, create payload and post
@@ -156,86 +167,23 @@ function ExcelToJsonConverter() {
 
                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
 
-                        await createRecord(convertedJsonData);
+                        await createRecord(convertedJsonData,createdCount);
+                        // createdCount++;
 
                     }
                 }
+
+                // setCreatedEventsCount(createdCount);
+                // setUpdatedEventsCount(updatedCount);
                 await resetTable();
 
-                // const convertedJsonData = {
-                //     trackedEntityInstances: json.map(row => ({
-                //         trackedEntityInstance: row.TrackedEntityInstances,
-                //         orgUnit: row.OrgUIDs,
-                //         trackedEntityType: "T5DWDr5Swce",
-                //         attributes: Object.keys(row).slice(4, 12).map((key) => ({
-                //             attribute: key,
-                //             value: row[key]
-                //         })),
-                //         enrollments: [
-                //             {
-                //                 orgUnit: row.OrgUIDs,
-                //                 program: "h0iSBI3xoS6",
-                //                 enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
-                //                 incidentDate: formatDateFromExcelSerial(row.IncidentDate),
-                //                 status: "ACTIVE",
-                //                 events: [
-                //                     {
-                //                         program: "h0iSBI3xoS6",
-                //                         orgUnit: row.OrgUIDs,
-                //                         eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                //                         status: "COMPLETED",
-                //                         programStage: "nknoeOj6dLq",
-                //                         dataValues: Object.keys(row).slice(12, 23).map((key) => ({
-                //                             dataElement: key,
-                //                             // value: row[key]
-                //                             value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' ? formatDateFromExcelSerial(row[key]) : row[key]
-                //                         }))
-                //                     },
-                //                     {
-                //                         program: "h0iSBI3xoS6",
-                //                         orgUnit: row.OrgUIDs,
-                //                         eventDate: formatDateFromExcelSerial(row.eventTwoDate),
-                //                         status: "COMPLETED",
-                //                         programStage: "s1kg8duJ8U1",
-                //                         dataValues: Object.keys(row).slice(24, 29).map((key) => ({
-                //                             dataElement: key,
-                //                             value: row[key]
-                //                         }))
-                //                     },
-                //                     // Add more events if needed
-                //                 ]
-                //             }
-                //         ]
-                //     }))
-                // };
-
-                // setJsonData(JSON.stringify(convertedJsonData, null, 2));
-
-
-                //  POST jsonData to an API endpoint
-                // try {
-                //     const response = await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances', {
-                //         method: 'POST',
-                //         headers: {
-                //             'Content-Type': 'application/json',
-                //             'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
-                //         },
-                //         body: JSON.stringify(convertedJsonData),
-                //         credentials: 'include',
-                //     });
-                //
-                //     if (response.ok) {
-                //         console.log('Data successfully posted to the API');
-                //     } else {
-                //         console.error('Failed to post data to the API');
-                //     }
-                // } catch (error) {
-                //     console.error('Error posting data to the API:', error);
-                // }
                 setUploading(false);
                 setLoading(false);
             };
             reader.readAsBinaryString(file);
+        } else {
+            // If no file is uploaded, show a message
+            alert("Please select an Excel file before clicking Upload.");
         }
 
     };
@@ -266,7 +214,7 @@ function ExcelToJsonConverter() {
     };
 
     // Function to update record at
-    const updateRecord = async (id, data) => {
+    const updateRecord = async (id, data, updatedCount) => {
 
         //  POST jsonData to an API endpoint
         try {
@@ -285,13 +233,16 @@ function ExcelToJsonConverter() {
             } else {
                 console.error(`Failed to update record with ID ${id}.`);
             }
+            updatedCount++;
+
         } catch (error) {
             console.error(`Error updating record with ID ${id}:`, error);
         }
+        setUpdatedEventsCount(updatedCount);
     };
 
     // Function to create payload
-    const createRecord = async (data) => {
+    const createRecord = async (data, createdCount) => {
         try {
             const response = await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances', {
                 method: 'POST',
@@ -307,9 +258,12 @@ function ExcelToJsonConverter() {
             } else {
                 console.error('Failed to post payload.');
             }
+            createdCount++;
+
         } catch (error) {
             console.error('Error posting payload:', error);
         }
+        setCreatedEventsCount(createdCount);
     };
 
     const resetTable = async () => {
@@ -327,15 +281,46 @@ function ExcelToJsonConverter() {
         }
     }
 
+    // Render the summary table only if uploading is complete
+    const renderSummaryTable = () => {
+        // if (!uploading) {
+        if (jsonData) { //set this to show table after uploading
+            return (
+                <div className="summary-table">
+                    <h2>Summary</h2>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Events Created</th>
+                            <th>Events Updated</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{createdEventsCount}</td>
+                            <td>{updatedEventsCount}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className="form-container">
             <h1> Upload Excel File </h1>
+            <div className="file-upload">
             <input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
             <button className="upload-btn" onClick={handleConvert} disabled={uploading}>
                 {uploading ? 'Uploading...' : 'Upload'}
             </button>
+        </div>
             {loading && <div className="progress-bar">uploading data please wait...</div>}
-            <pre>{jsonData}</pre>
+            {/*{!file && <div className="no-file-message">Please upload a file.</div>}*/}
+            {/*<pre>{jsonData}</pre>*/}
+            {renderSummaryTable()}
         </div>
     );
 }
