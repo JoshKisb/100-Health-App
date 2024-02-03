@@ -2837,9 +2837,10 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item
-
                                     name="i8rrl8YWxLF"
                                     className="m-0"
+                                    rules={[{required: true, message: 'Date and time of death is required'},
+                                    ]}
                                 >
                                     <DatePicker
                                         defaultValue={actualTimeOfDeath}
