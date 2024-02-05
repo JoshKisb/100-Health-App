@@ -1,29 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
-import {
-  Table,
-  Card,
-  Drawer,
-  List,
-  Checkbox,
-  Select,
-  Space,
-  notification,
-} from "antd";
-import {
-  DeleteOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
+import { Table, Card, Drawer, List, Checkbox, Select, Space, notification} from "antd";
+import {DeleteOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
 import Highcharts, { Options } from "highcharts";
 import { DatePicker, Input, Menu, Dropdown, Button, Form, Popover } from "antd";
-import {
-  AudioOutlined,
-  DownOutlined,
-  LoadingOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons";
+import { AudioOutlined, DownOutlined, LoadingOutlined, DownloadOutlined,} from "@ant-design/icons";
 import { CSVLink } from "react-csv";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
@@ -33,6 +15,8 @@ import { useConfig } from "@dhis2/app-runtime";
 import { TopDiseasesChart } from "./TopDiseasesChart";
 import { Tabs } from "antd";
 import { WeeklyReport } from "./WeeklyReport";
+// @ts-ignore
+import dataDictionary from '../assets/DATA_DICTIONARY_V1.csv'
 
 require("highcharts/modules/exporting")(Highcharts);
 
@@ -296,12 +280,18 @@ export const EventList = observer(() => {
     }
   };
 
-  const handleDataDicDl = () => {
-    const link = document.createElement("a");
-    link.href = "assets/DATA DICTIONARY.csv";
-    link.download = "DATA DICTIONARY.csv";
-    link.click();
-  };
+   const handleDataDicDl = () => {
+      const link = document.createElement("a");
+      link.href = "assets/DATA DICTIONARY.csv";
+      link.download = "DATA DICTIONARY.csv";
+      link.click();
+    };
+
+
+  const downloadFile = () => {
+    console.log("Download function called");
+    window.location.href = dataDictionary;
+  }
 
   const menu = (
     <Menu>
@@ -379,7 +369,7 @@ export const EventList = observer(() => {
                     <Menu.Item>
                       <AnacodDownload />
                     </Menu.Item>
-                    <Menu.Item onClick={() => handleDataDicDl()}>
+                    <Menu.Item onClick={() => downloadFile()}>
                       Data Dictionary
                     </Menu.Item>
                   </Menu>
