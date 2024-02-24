@@ -56,7 +56,7 @@ function ExcelToJsonConverter() {
 
                 // Get column names from the first row (excluding first 13 columns)
                 const columnNames = Object.keys(json[0]).slice(12,26);
-                const eventTwoColumnNames = Object.keys(json[0]).slice(26,31);
+                const eventTwoColumnNames = Object.keys(json[0]).slice(27,31);
                 let createdCount = 0;
                 let updatedCount = 0;
                 // console.log("event one", columnNames)
@@ -74,7 +74,7 @@ function ExcelToJsonConverter() {
 
                         const eventTwo = eventTwoColumnNames.map(columnName => ({
                             dataElement: columnName,
-                            value: columnName === 'eventTwoDate' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                            value: row[columnName]
                         }));
 
                         // If ID exists, update record
