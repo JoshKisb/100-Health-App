@@ -55,10 +55,12 @@ function ExcelToJsonConverter() {
                 // setJsonData(JSON.stringify(json, null, 2));
 
                 // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(13,24);
-                const eventTwoColumnNames = Object.keys(json[0]).slice(25,30);
+                const columnNames = Object.keys(json[0]).slice(12,26);
+                const eventTwoColumnNames = Object.keys(json[0]).slice(26,31);
                 let createdCount = 0;
                 let updatedCount = 0;
+                // console.log("event one", columnNames)
+                // console.log("event two", eventTwoColumnNames)
 
                 for (const row of json) {
                     const id = row.TrackedEntityInstances; //  'ID'  column name
