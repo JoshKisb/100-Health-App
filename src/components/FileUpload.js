@@ -74,7 +74,7 @@ function ExcelToJsonConverter() {
 
                         const eventTwo = eventTwoColumnNames.map(columnName => ({
                             dataElement: columnName,
-                            value: row[columnName]
+                            value: columnName === 'eventTwoDate' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
                         }));
 
                         // If ID exists, update record
