@@ -20,7 +20,7 @@ import {
     Col,
     Row,
     Switch,
-    Radio
+    Radio, message
 } from "antd";
 import {SettingOutlined} from "@ant-design/icons";
 import ReactToPrint from "react-to-print";
@@ -2171,8 +2171,24 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     name="ZKBE8Xm9DJG"
                                     className="m-0"
-                                    rules={[{required: true, message: 'Ministry of Health National Case Number is required'},
+
+                                    rules={[
+                                        { required: true, message: 'Ministry of Health National Case Number is required' },
                                         // { validator: checkMinistryCaseNumber },
+                                        !store.editing && {
+                                            validator: async (_, value) => {
+                                                const fieldValue = form.getFieldValue("ZKBE8Xm9DJG");
+                                                if (fieldValue) {
+                                                    const foundCase = await store.getEventByCase(fieldValue);
+                                                    if (foundCase && null !== foundCase.event) {
+                                                        // If a value exists and it's different from the current event's value, show error
+                                                        message.error('An event with the same Case number was already recorded.');
+                                                        return Promise.reject('An event with the same Case number was already recorded.');
+                                                    }
+                                                }
+                                                return Promise.resolve();
+                                            },
+                                        },
                                     ]}
                                 >
                                     <Input
@@ -2195,6 +2211,24 @@ export const DataEntryForm = observer(() => {
 
                                     name="FGagV1Utrdh"
                                     className="m-0"
+                                    rules={
+                                        !store.editing ? [
+                                            {
+                                                validator: async (_, value) => {
+                                                    const fieldValue = form.getFieldValue("FGagV1Utrdh");
+                                                    if (fieldValue) {
+                                                        const foundInpatient = await store.getEventByInpatientNo(fieldValue);
+                                                        if (foundInpatient && null !== foundInpatient.event) {
+                                                            // If a value exists and it's different from the current event's value, show error
+                                                            message.error('An event with the same Inpatient number was already recorded.');
+                                                            return Promise.reject('An event with the same Inpatient number was already recorded.');
+                                                        }
+                                                    }
+                                                    return Promise.resolve();
+                                                },
+                                            },
+                                        ] : []
+                                    }
                                 >
                                     <Input
                                         size="large"
@@ -2207,30 +2241,7 @@ export const DataEntryForm = observer(() => {
                             </td>
 
                         </tr>
-                        {/*{store.selectedNationality !== "l4UMmqvSBe5" &&*/}
-                        {/*    <tr>*/}
-                        {/*        <td className="border p-1">*/}
-                        {/*            <b>*/}
-                        {/*                {tr("Type Of ID")}*/}
-                        {/*            </b>*/}
-                        {/*        </td>*/}
-                        {/*        <td className="border p-1">*/}
-                        {/*            <Form.Item name="xxx6yjtuN2f" className="m-0">*/}
-                        {/*                <Select*/}
-                        {/*                    size="large"*/}
-                        {/*                    disabled={*/}
-                        {/*                        store.viewMode ||*/}
-                        {/*                        store.allDisabled.xxx6yjtuN2f*/}
-                        {/*                    }*/}
-                        {/*                >*/}
-                        {/*                    {idTypeOptions.map(opt => (*/}
-                        {/*                        <Option key={opt} value={opt}>{opt}</Option>*/}
-                        {/*                    ))}*/}
-                        {/*                </Select>*/}
-                        {/*            </Form.Item>*/}
-                        {/*        </td>*/}
-                        {/*        <td className="border p-1" colSpan={2}></td>*/}
-                        {/*    </tr>}*/}
+
                         <tr>
                             <td className="border p-1">
                                 <b>
@@ -2242,6 +2253,25 @@ export const DataEntryForm = observer(() => {
                                     {...ninValidation}
                                     name="MOstDqSY0gO"
                                     className="m-0"
+                                    rules={ //add existing nin check
+
+                                        !store.editing ? [
+                                            {
+                                                validator: async (_, value) => {
+                                                    const fieldValue = form.getFieldValue("MOstDqSY0gO");
+                                                    if (fieldValue) {
+                                                        const foundNIN = await store.getEventByNIN(fieldValue);
+                                                        if (foundNIN && null !== foundNIN.event) {
+                                                            // If a value exists and it's different from the current event's value, show error
+                                                            message.error('An event with the same NIN was already recorded.');
+                                                            return Promise.reject('An event with the same NIN was already recorded.');
+                                                        }
+                                                    }
+                                                    return Promise.resolve();
+                                                },
+                                            },
+                                        ] : []
+                                }
                                 >
                                     <Input
                                         size="large"
