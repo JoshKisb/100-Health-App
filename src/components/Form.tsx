@@ -336,6 +336,7 @@ export const DataEntryForm = observer(() => {
                         {dataElement: 'QTKk2Xt8KDu', value: values['QTKk2Xt8KDu']},
                         {dataElement: 'u9tYUv6AM51', value: values['u9tYUv6AM51']},
                         {dataElement: 'WkXxkKEJLsg', value: values['WkXxkKEJLsg']},
+                        {dataElement: 'W0r4m6NiLsy', value: values['W0r4m6NiLsy']}, //eventdate
 
                     ],
                 };
