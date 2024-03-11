@@ -67,30 +67,32 @@ function ExcelToJsonConverter() {
                     const exists = await checkIdExistence(id);
                     if (exists) {
                         // Generate dataValues array dynamically based on column names
-                        const eventOne = columnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
-                        }));
+                        // const eventOne = columnNames.map(columnName => ({
+                        //     dataElement: columnName,
+                        //     value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                        // }));
 
                         const eventTwo = eventTwoColumnNames.map(columnName => ({
                             dataElement: columnName,
                             value: row[columnName]
-                        }));
+                        })).filter(row => row.value === true);
+                        console.log("true values ", eventTwo)
+
 
                         // If ID exists, update record
                         const updatedData ={
                             events:[
-                                {
-                                    dataValues: eventOne,
-                                    // event: "unVgHirSaRI",
-                                    program: "h0iSBI3xoS6",
-                                    programStage: "nknoeOj6dLq",
-                                    orgUnit: row.OrgUIDs,
-                                    trackedEntityInstance: row.TrackedEntityInstances,
-                                    trackedEntityType: "T5DWDr5Swce",
-                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
-                                    completedDate: "2024-01-27"
-                                },
+                                // {
+                                //     dataValues: eventOne,
+                                //     // event: "unVgHirSaRI",
+                                //     program: "h0iSBI3xoS6",
+                                //     programStage: "nknoeOj6dLq",
+                                //     orgUnit: row.OrgUIDs,
+                                //     trackedEntityInstance: row.TrackedEntityInstances,
+                                //     trackedEntityType: "T5DWDr5Swce",
+                                //     eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
+                                //     completedDate: "2024-01-27"
+                                // },
                                 {
                                     dataValues: eventTwo,
                                     // event: "unVgHirSaRI",
@@ -104,17 +106,7 @@ function ExcelToJsonConverter() {
                                 }
                             ]
                         }
-                        //     {
-                        //         dataValues: eventOne,
-                        //         event: "unVgHirSaRI",
-                        //         program: "h0iSBI3xoS6",
-                        //         programStage: "nknoeOj6dLq",
-                        //         orgUnit: row.OrgUIDs,
-                        //         trackedEntityInstance: row.TrackedEntityInstances,
-                        //         trackedEntityType: "T5DWDr5Swce",
-                        //         eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                        //         completedDate: "2024-01-27"
-                        // }
+
                         setJsonData(JSON.stringify(updatedData, null, 2));
 
                         await updateRecord(id, updatedData, updatedCount);
