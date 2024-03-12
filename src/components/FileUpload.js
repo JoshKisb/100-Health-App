@@ -68,6 +68,30 @@ function ExcelToJsonConverter() {
                     // console.log(exists.eventId)
                     if (exists.found) {
 
+                        // Generate dataValues array dynamically based on column names
+                        const eventOne = columnNames.map(columnName => ({
+                            dataElement: columnName,
+                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                        }));
+
+                        const evenOneData = {
+                            events: [
+                                {
+                                    dataValues: eventOne,
+                                    // event: "unVgHirSaRI",
+                                    program: "h0iSBI3xoS6",
+                                    programStage: "nknoeOj6dLq",
+                                    orgUnit: row.OrgUIDs,
+                                    trackedEntityInstance: row.TrackedEntityInstances,
+                                    trackedEntityType: "T5DWDr5Swce",
+                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
+                                    completedDate: "2024-01-27"
+                                }
+                            ]
+                        }
+                        await eventOneRecord(id, evenOneData, updatedCount);
+
+
                         const eventTwo = eventTwoColumnNames.map(columnName => ({
                             dataElement: columnName,
                             value: row[columnName]
@@ -85,7 +109,7 @@ function ExcelToJsonConverter() {
 
                             setJsonData(JSON.stringify(updatedData, null, 2));
                             console.log("update data", updatedData);
-                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount++);
+                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
                             // updatedCount++;
                         }
 
@@ -125,7 +149,7 @@ function ExcelToJsonConverter() {
                                                 orgUnit: row.OrgUIDs,
                                                 eventDate: formatDateFromExcelSerial(row.eventTwoDate),
                                                 programStage: "s1kg8duJ8U1",
-                                                dataValues: Object.keys(row).slice(25, 30).map((key) => ({
+                                                dataValues: Object.keys(row).slice(27, 31).map((key) => ({
                                                     dataElement: key,
                                                     value: row[key]
                                                 }))
@@ -139,7 +163,7 @@ function ExcelToJsonConverter() {
 
                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
 
-                        // await createRecord(convertedJsonData,createdCount);
+                        await createRecord(convertedJsonData,createdCount);
                         // createdCount++;
 
                     }
@@ -214,6 +238,34 @@ function ExcelToJsonConverter() {
             console.error('Error checking ID existence:', error);
 
         }
+    };
+
+    // Function to update event one
+    const eventOneRecord = async (id, data, updatedCount) => {
+
+        //  POST jsonData to an API endpoint
+        try {
+            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                },
+                body: JSON.stringify(data),
+                credentials: 'include',
+            });
+
+            if (response.ok) {
+                console.log(`Record with ID ${id} updated successfully.`);
+            } else {
+                console.error(`Failed to update record with ID ${id}.`);
+            }
+            updatedCount++;
+
+        } catch (error) {
+            console.error(`Error updating record with ID ${id}:`, error);
+        }
+        setUpdatedEventsCount(updatedCount);
     };
 
     // Function to update record at
