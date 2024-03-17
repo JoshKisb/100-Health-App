@@ -82,8 +82,8 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": "file upload",
-    "description": " Upload excel files",
+    "name": "corus app",
+    "description": " Upload excel files  and download",
     "launch_path": "index.html",
     "appType": "APP",
     "icons": {

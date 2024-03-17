@@ -1,382 +1,164 @@
-import React, {useEffect, useState} from 'react';
-import * as XLSX from 'xlsx';
+import React, {useState} from 'react';
 import './FileUpload.css';
 
 function ExcelToJsonConverter() {
     const [file, setFile] = useState(null);
-    const [jsonData, setJsonData] = useState('');
-    const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [createdEventsCount, setCreatedEventsCount] = useState(0);
-    const [updatedEventsCount, setUpdatedEventsCount] = useState(0);
+    const [fileType, setFileType] = useState('');
+    const [orgUnit, setOrgUnit] = useState('');
+    const [period, setPeriod] = useState('');
+    const [buttonStatus, setButtonStatus] = useState('Start Service');
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [showDownloadButton, setShowDownloadButton] = useState(false);
 
-    useEffect(() => {
-        // Reset events count when file changes
-        setCreatedEventsCount(0);
-        setUpdatedEventsCount(0);
-    }, [file]);
-
-    // Function to format the Excel date serial number
-    const formatDateFromExcelSerial = (excelSerial) => {
-        // Convert the Excel serial number to milliseconds
-        const milliseconds = (excelSerial - 25569) * 24 * 60 * 60 * 1000;
-
-        // Check if milliseconds is a valid number
-        if (isNaN(milliseconds) || !isFinite(milliseconds)) {
-            console.error('Invalid milliseconds:', milliseconds);
-            return 'Invalid Date';
-        }
-
-        // Calculate the date from the base date (January 1, 1970)
-        const date = new Date(milliseconds);
-
-
-        // Check if the Date object is valid
-        if (isNaN(date.getTime())) {
-            console.error('Invalid Date object:', date);
-            return 'Invalid Date';
-        }
-
-        return date.toISOString();
+    const handleFileTypeChange = (event) => {
+        setFileType(event.target.value);
     };
 
-    const handleConvert = () => {
-        if (file) {
-            setUploading(true);
-            setLoading(true);
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                const data = e.target.result;
-                const workbook = XLSX.read(data, {type: "binary"});
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const json = XLSX.utils.sheet_to_json(worksheet);
-                // console.log(json)
-                // setJsonData(JSON.stringify(json, null, 2));
+    const handleOrgUnitChange = (event) => {
+        setOrgUnit(event.target.value);
+    };
 
-                // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(12,26);
-                const eventTwoColumnNames = Object.keys(json[0]).slice(27,44);
-                let createdCount = 0;
-                let updatedCount = 0;
-                // console.log("event one", columnNames)
-                // console.log("event two", eventTwoColumnNames)
+    const handlePeriodChange = (event) => {
+        setPeriod(event.target.value);
+    };
 
-                for (const row of json) {
-                    const id = row.TrackedEntityInstances; //  'ID'  column name
-                    const exists = await checkIdExistence(id);
-                    // console.log(exists.eventId)
-                    if (exists.found) {
+    const handleUpload = () => {
+        // Check if file, fileType, orgUnit, and period are not empty
+        // if (!file || !fileType || !orgUnit || !period) {
+        //     alert('Please fill in all the fields');
+        //     return;
+        // }
+        console.log("File Type:", fileType);
+        console.log("Organization Unit:", orgUnit);
+        console.log("Period:", period);
 
-                        // Generate dataValues array dynamically based on column names
-                        const eventOne = columnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
-                        }));
+        // Set uploading state to true to show "Uploading..." text
+        setUploading(true);
 
-                        const evenOneData = {
-                            events: [
-                                {
-                                    dataValues: eventOne,
-                                    // event: "unVgHirSaRI",
-                                    program: "h0iSBI3xoS6",
-                                    programStage: "nknoeOj6dLq",
-                                    orgUnit: row.OrgUIDs,
-                                    trackedEntityInstance: row.TrackedEntityInstances,
-                                    trackedEntityType: "T5DWDr5Swce",
-                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
-                                    completedDate: "2024-01-27"
-                                }
-                            ]
-                        }
-                        await eventOneRecord(id, evenOneData, updatedCount);
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('fileType', fileType);
+        formData.append('orgUnit', orgUnit);
+        formData.append('period', period);
 
-
-                        const eventTwo = eventTwoColumnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: row[columnName]
-                        })).filter(row => row.value === true);
-                        console.log("true values ", eventTwo)
-
-                        // update data
-                        for (const event of eventTwo) {
-                            const updatedData = {
-                                dataValues: [{
-                                    dataElement: event.dataElement,
-                                    value: event.value
-                                }]
-                            };
-
-                            setJsonData(JSON.stringify(updatedData, null, 2));
-                            console.log("update data", updatedData);
-                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
-                            // updatedCount++;
-                        }
-
-
-                    } else {
-                        // If ID doesn't exist, create payload and post
-
-                        const convertedJsonData = {
-                            trackedEntityInstances: [{
-                                trackedEntityInstance: row.TrackedEntityInstances,
-                                orgUnit: row.OrgUIDs,
-                                trackedEntityType: "T5DWDr5Swce",
-                                attributes: Object.keys(row).slice(4, 12).map((key) => ({
-                                    attribute: key,
-                                    value: row[key]
-                                })),
-                                enrollments: [
-                                    {
-                                        orgUnit: row.OrgUIDs,
-                                        program: "h0iSBI3xoS6",
-                                        enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
-                                        incidentDate: formatDateFromExcelSerial(row.IncidentDate),
-                                        events: [
-                                            {
-                                                program: "h0iSBI3xoS6",
-                                                orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                                                programStage: "nknoeOj6dLq",
-                                                dataValues: Object.keys(row).slice(12, 24).map((key) => ({
-                                                    dataElement: key,
-                                                    // value: row[key]
-                                                    value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
-                                                }))
-                                            },
-                                            {
-                                                program: "h0iSBI3xoS6",
-                                                orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.eventTwoDate),
-                                                programStage: "s1kg8duJ8U1",
-                                                dataValues: Object.keys(row).slice(27, 44).map((key) => ({
-                                                    dataElement: key,
-                                                    value: row[key]
-                                                }))
-                                            },
-                                            // Add more events if needed
-                                        ]
-                                    }
-                                ]
-                            }]
-                        };
-
-                        setJsonData(JSON.stringify(convertedJsonData, null, 2));
-
-                        await createRecord(convertedJsonData,createdCount);
-                        // createdCount++;
-
-                    }
+        fetch('https://simon-file-generator.onrender.com/process', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-
-                // setCreatedEventsCount(createdCount);
-                // setUpdatedEventsCount(updatedCount);
-                await resetTable();
-
+                // Reset input fields and uploading state after successful upload
+                setFile(null);
+                // setFileType('');
+                setOrgUnit('');
+                setPeriod('');
                 setUploading(false);
-                setLoading(false);
-            };
-            reader.readAsBinaryString(file);
-        } else {
-            // If no file is uploaded, show a message
-            alert("Please select an Excel file before clicking Upload.");
-        }
+                setShowDownloadButton(true);
+                return response.json();
+            })
+            .then(data => {
+                // Handle response data as needed
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error('There was a problem with the request:', error);
+                setUploading(false); // Reset uploading state on error
+            });
 
     };
 
-    // Function to check if ID exists at a particular endpoint
-    const checkIdExistence = async (id) => {
-        let result = {
-            found: false,
-            eventId: null
-        };
-        try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/${id}?fields=enrollments[events[event,programStage,eventDate,orgUnit]]`,{
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
-                },
-            });
 
+    // start service
+    const startService = () => {
+        // Change button text to "Starting..." while loading
+        setButtonStatus('Starting...');
+        setButtonDisabled(true)
 
-            if (response.status === 200){
-                console.log(`id ${id} found`, response.status)
-
-                // Extract JSON data from the response
-                const data = await response.json();
-                const enrollments = data.enrollments
-
-
-                // Looping through enrollments to find the event ID with the specified program stage
-                let eventId = null;
-                for (const enrollment of enrollments) {
-                    const events = enrollment.events;
-                    const filteredEvents = events.filter(event => event.programStage === "s1kg8duJ8U1");
-
-                    if (filteredEvents.length > 1) {
-                        console.log("There are more than one event");
-                        result.found = true;
-                        break; // Exit loop if more than one event is found
-                    } else if (filteredEvents.length === 1) {
-                        eventId = filteredEvents[0].event;
-                        // Proceed to update
-                        console.log("Event ID:", eventId);
-                        result.found = true;
-                        result.eventId = filteredEvents[0].event;
-                        break; // Exit loop if one event is found
-                    }
+        fetch('https://simon-file-generator.onrender.com')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-
-                return result
-            } else {
-                console.log(`id ${id} not found`, response.status)
-                return false
-            }
-        } catch (error) {
-
-            console.error('Error checking ID existence:', error);
-
-        }
+                // Change button text to "Service Started" and disable button after successful response
+                setButtonStatus('Service Started');
+                setButtonDisabled(true);
+                return response.json();
+            })
+            .then(data => {
+                // Handle response data as needed
+                console.log(data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error('There was a problem with the request:', error);
+                // Reset button text and enable it in case of error
+                setButtonStatus('Start Service');
+                setButtonDisabled(false);
+            });
     };
 
-    // Function to update event one
-    const eventOneRecord = async (id, data, updatedCount) => {
 
-        //  POST jsonData to an API endpoint
-        try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/events', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                console.log(`Record with ID ${id} updated successfully.`);
-            } else {
-                console.error(`Failed to update record with ID ${id}.`);
-            }
-            updatedCount++;
-
-        } catch (error) {
-            console.error(`Error updating record with ID ${id}:`, error);
-        }
-        setUpdatedEventsCount(updatedCount);
-    };
-
-    // Function to update record at
-    const updateRecord = async (eventId, id, data, updatedCount) => {
-
-        //  POST jsonData to an API endpoint
-        try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/events/${eventId}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Sci_test:Save1234!'),
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                console.log(`Record with ID ${id} updated successfully.`);
-            } else {
-                console.error(`Failed to update record with ID ${id}.`);
-            }
-            updatedCount++;
-
-        } catch (error) {
-            console.error(`Error updating record with ID ${id}:`, error);
-        }
-        setUpdatedEventsCount(updatedCount);
-    };
-
-    // Function to create payload
-    const createRecord = async (data, createdCount) => {
-        try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-            if (response.ok) {
-                console.log('Payload posted successfully.');
-            } else {
-                console.error('Failed to post payload.');
-            }
-            createdCount++;
-
-        } catch (error) {
-            console.error('Error posting payload:', error);
-        }
-        setCreatedEventsCount(createdCount);
-    };
-
-    const resetTable = async () => {
-        try {
-            // console.log("response is", response)
-            return await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/query.json?ou=O2I1C1KOAgg&ouMode=SELECTED&program=h0iSBI3xoS6', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
-                },
-            });
-        } catch (error){
-            console.error('Error getting data', error)
-        }
-    }
-
-    // Render the summary table only if uploading is complete
-    const renderSummaryTable = () => {
-        // if (!uploading) {
-        if (jsonData) { //set this to show table after uploading
-            return (
-                <div className="summary-table">
-                    <h2>Summary</h2>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Events Created</th>
-                            <th>Events Updated</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>{createdEventsCount}</td>
-                            <td>{updatedEventsCount}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            );
-        }
-        return null;
+    const handleDownload = () => {
+        // if (!fileType) {
+        //     alert('Please select a file type');
+        //     return;
+        // }
+        // Construct the download URL based on the selected file type
+        // Perform download action
+        window.location.href = `https://simon-file-generator.onrender.com/download/${fileType}`;
     };
 
     return (
         <div className="form-container">
             <h1> Upload Excel File </h1>
             <div className="file-upload">
-            <input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
-            <button className="upload-btn" onClick={handleConvert} disabled={uploading}>
-                {uploading ? 'Uploading...' : 'Upload'}
-            </button>
+                {/* File Type */}
+                <div className="input-container">
+                    <label htmlFor="file-type-dropdown">File Type:</label>
+                    <select id="file-type-dropdown" className="file-type-dropdown" value={fileType}
+                            onChange={handleFileTypeChange}>
+                        <option value="">select type</option>
+                        <option value="ptme">ptme</option>
+                        <option value="cd">cd</option>
+                        <option value="arv">arv</option>
+                        {/* Add more options as needed */}
+                    </select>
+                </div>
+                {/* Organization Unit */}
+                <div className="input-container">
+                    <label htmlFor="org-unit">Organization Unit:</label>
+                    <input type="text" id="org-unit" placeholder="Organization Unit" value={orgUnit}
+                           onChange={handleOrgUnitChange}/>
+                </div>
+                {/* Period */}
+                <div className="input-container">
+                    <label htmlFor="period">Period:</label>
+                    <input type="number" id="period" placeholder="Period" value={period}
+                           onChange={handlePeriodChange}/>
+                </div>
+                {/* File Upload */}
+                <input type="file" className="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
+            </div>
+            <div className="buttons-container">
+                {/* Button to start service */}
+                <button className="start-service-btn" onClick={startService} disabled={buttonDisabled}>
+                    {buttonStatus}
+                </button>
+                <button className="upload-btn" onClick={handleUpload} disabled={uploading}>
+                    {uploading ? 'Uploading...' : 'Upload'}
+                </button>
+                {showDownloadButton && (
+                    <button className="download-btn" onClick={handleDownload}>
+                        Download File
+                    </button>
+                )}
+            </div>
         </div>
-            {loading && <div className="progress-bar">uploading data please wait...</div>}
-            {/*{!file && <div className="no-file-message">Please upload a file.</div>}*/}
-            {/*<pre>{jsonData}</pre>*/}
-            {renderSummaryTable()}
-        </div>
+
     );
 }
 export default ExcelToJsonConverter;

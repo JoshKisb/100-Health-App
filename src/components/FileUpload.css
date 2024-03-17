@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 500px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -40,43 +40,52 @@ input[type="file"] {
     align-items: center;
 }
 
-.progress-bar {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #b9a9a9;
-    border-radius: 5px;
-}
-
-pre {
-    margin-top: 20px;
-    font-family: monospace;
-    white-space: pre-wrap;
-}
 
 .summary-table {
     margin-top: 20px;
 }
 
-.summary-table table {
+.start-service-btn{
+    padding: 10px 20px;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+.start-service-btn:hover {
+    background-color: darkgreen;
+}
+
+.start-service-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+
+}
+
+
+.input-container {
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-container input,
+.input-container select {
     width: 100%;
-    border-collapse: collapse;
-}
-
-.summary-table th,
-.summary-table td {
-    border: 1px solid #dddddd;
     padding: 8px;
-    text-align: left;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-.summary-table th {
-    background-color: #63b3ed;
-}
-
-.summary-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.summary-table tbody tr:hover {
-    background-color: #f0f0f0;
+.file{
+    padding-left: 30px;
+    padding-top: 20px;
 }
