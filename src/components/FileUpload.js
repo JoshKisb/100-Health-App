@@ -38,8 +38,8 @@ function ExcelToJsonConverter() {
 
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('fileType', fileType);
-        formData.append('orgUnit', orgUnit);
+        formData.append('file_type', fileType);
+        formData.append('orgunit', orgUnit);
         formData.append('period', period);
 
         fetch('https://simon-file-generator.onrender.com/process', {
