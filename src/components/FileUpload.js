@@ -29,10 +29,11 @@ function FileUpload() {
 
     // function handles fetching data from the API based on the input query
     const searchOrgUnits = async (query) => {
-        const url = `https://ug.sk-engine.cloud/hmis/api/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=7`;
+        const baseUrl = process.env.REACT_APP_BASE_URL
+        const url = `${baseUrl}api/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=7`;
 
-        const username = 'admin';
-        const password = 'Nomisr123$$';
+        const username = process.env.REACT_APP_USERNAME;
+        const password = process.env.REACT_APP_PASSWORD;
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa(username + ':' + password));
 
