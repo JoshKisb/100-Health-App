@@ -36,8 +36,9 @@ function ExcelToJsonConverter() {
         headers.set('Authorization', 'Basic ' + btoa(username + ':' + password));
 
         try {
-            const response = await fetch(url);
+            const response = await fetch(url,{headers});
             const data = await response.json();
+            console.log("search", data)
             setOrgUnits(data.organisationUnits);
         } catch (error) {
             console.error('Error fetching data:', error);
