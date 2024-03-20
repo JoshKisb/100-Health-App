@@ -28,7 +28,7 @@ function ExcelToJsonConverter() {
 
     // function handles fetching data from the API based on the input query
     const searchOrgUnits = async (query) => {
-        const url = `https://ug.sk-engine.cloud/int2/api/37/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=15`;
+        const url = `https://ug.sk-engine.cloud/hmis/api/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=15`;
 
         const username = 'admin';
         const password = 'district';
