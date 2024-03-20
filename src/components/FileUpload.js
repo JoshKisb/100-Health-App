@@ -39,7 +39,8 @@ function ExcelToJsonConverter() {
             const response = await fetch(url,{headers});
             const data = await response.json();
             console.log("search", data)
-            setOrgUnits(data.organisationUnits);
+            setOrgUnits(data?.organisationUnits);
+            console.log("set org units", orgUnits)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -179,7 +180,7 @@ function ExcelToJsonConverter() {
                         onChange={handleInputChange}
                     />
                     <ul>
-                        {orgUnits.map((unit) => (
+                        {orgUnits?.map((unit) => (
                             <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
                                 {unit.displayName}
                             </li>
