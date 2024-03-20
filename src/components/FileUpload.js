@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import './FileUpload.css';
 
-function ExcelToJsonConverter() {
+function FileUpload() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [fileType, setFileType] = useState('');
@@ -13,6 +13,7 @@ function ExcelToJsonConverter() {
 
     const [query, setQuery] = useState(''); //state holds the current value of the input field
     const [orgUnits, setOrgUnits] = useState([]); //state holds the list of organization units fetched from the API
+    const [isListOpen, setIsListOpen] = useState(false);
 
     const handleFileTypeChange = (event) => {
         setFileType(event.target.value);
@@ -28,15 +29,15 @@ function ExcelToJsonConverter() {
 
     // function handles fetching data from the API based on the input query
     const searchOrgUnits = async (query) => {
-        const url = `https://ug.sk-engine.cloud/hmis/api/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=15`;
+        const url = `https://ug.sk-engine.cloud/hmis/api/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=7`;
 
         const username = 'admin';
-        const password = 'district';
+        const password = 'Nomisr123$$';
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa(username + ':' + password));
 
         try {
-            const response = await fetch(url,{headers});
+            const response = await fetch(url, {headers});
             const data = await response.json();
             console.log("search", data)
             setOrgUnits(data?.organisationUnits);
@@ -50,12 +51,14 @@ function ExcelToJsonConverter() {
         const inputValue = event.target.value;
         setQuery(inputValue);
         searchOrgUnits(inputValue);
+        setIsListOpen(true);
     };
 
     const handleOrgUnitSelect = (unit) => {
         setQuery(unit.displayName);
         // You can use unit.id for whatever further processing you need
         setOrgUnitId(unit.id)
+        setIsListOpen(false);
     };
 
     const handleUpload = () => {
@@ -172,20 +175,24 @@ function ExcelToJsonConverter() {
 
                 <div className="input-container">
                     <label htmlFor="org-unit">Organization Unit:</label>
-                    <input
-                        type="text"
-                        id="org-unit"
-                        placeholder="Organization Unit"
-                        value={query}
-                        onChange={handleInputChange}
-                    />
-                    <ul>
-                        {orgUnits?.map((unit) => (
-                            <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
-                                {unit.displayName}
-                            </li>
-                        ))}
-                    </ul>
+                    <div className="org-unit-dropdown">
+                        <input
+                            type="text"
+                            id="org-unit"
+                            placeholder="Organization Unit"
+                            value={query}
+                            onChange={handleInputChange}
+                        />
+                        {isListOpen && (
+                            <ul className="org-unit-list">
+                                {orgUnits.map((unit) => (
+                                    <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
+                                        {unit.displayName}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                 </div>
 
                 {/* Period */}
@@ -195,7 +202,7 @@ function ExcelToJsonConverter() {
                            onChange={handlePeriodChange}/>
                 </div>
                 {/* File Upload */}
-                <input type="file" className="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
+                <input type="file" className="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])}/>
             </div>
             <div className="buttons-container">
                 {/* Button to start service */}
@@ -215,4 +222,5 @@ function ExcelToJsonConverter() {
 
     );
 }
-export default ExcelToJsonConverter;
+
+export default FileUpload;
