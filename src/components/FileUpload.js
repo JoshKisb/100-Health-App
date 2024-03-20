@@ -5,22 +5,55 @@ function ExcelToJsonConverter() {
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [fileType, setFileType] = useState('');
-    const [orgUnit, setOrgUnit] = useState('');
+    const [orgUnitId, setOrgUnitId] = useState('');
     const [period, setPeriod] = useState('');
     const [buttonStatus, setButtonStatus] = useState('Start Service');
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [showDownloadButton, setShowDownloadButton] = useState(false);
+
+    const [query, setQuery] = useState(''); //state holds the current value of the input field
+    const [orgUnits, setOrgUnits] = useState([]); //state holds the list of organization units fetched from the API
 
     const handleFileTypeChange = (event) => {
         setFileType(event.target.value);
     };
 
     const handleOrgUnitChange = (event) => {
-        setOrgUnit(event.target.value);
+        setOrgUnitId(event.target.value);
     };
 
     const handlePeriodChange = (event) => {
         setPeriod(event.target.value);
+    };
+
+    // function handles fetching data from the API based on the input query
+    const searchOrgUnits = async (query) => {
+        const url = `https://ug.sk-engine.cloud/int2/api/37/organisationUnits?fields=id,displayName,code,path,publicAccess,access,lastUpdated,children[id,displayName,code,publicAccess,access,path,children::isNotEmpty]&paging=true&withinUserHierarchy=true&query=${query}&pageSize=15`;
+
+        const username = 'admin';
+        const password = 'district';
+        const headers = new Headers();
+        headers.set('Authorization', 'Basic ' + btoa(username + ':' + password));
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+            setOrgUnits(data.organisationUnits);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+
+    const handleInputChange = (event) => {
+        const inputValue = event.target.value;
+        setQuery(inputValue);
+        searchOrgUnits(inputValue);
+    };
+
+    const handleOrgUnitSelect = (unit) => {
+        setQuery(unit.displayName);
+        // You can use unit.id for whatever further processing you need
+        setOrgUnitId(unit.id)
     };
 
     const handleUpload = () => {
@@ -30,7 +63,7 @@ function ExcelToJsonConverter() {
         //     return;
         // }
         console.log("File Type:", fileType);
-        console.log("Organization Unit:", orgUnit);
+        console.log("Organization Unit:", orgUnitId);
         console.log("Period:", period);
 
         // Set uploading state to true to show "Uploading..." text
@@ -39,7 +72,7 @@ function ExcelToJsonConverter() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('file_type', fileType);
-        formData.append('orgunit', orgUnit);
+        formData.append('orgunit', orgUnitId);
         formData.append('period', period);
 
         fetch('https://simon-file-generator.onrender.com/process', {
@@ -53,7 +86,7 @@ function ExcelToJsonConverter() {
                 // Reset input fields and uploading state after successful upload
                 setFile(null);
                 // setFileType('');
-                setOrgUnit('');
+                setOrgUnitId('');
                 setPeriod('');
                 setUploading(false);
                 setShowDownloadButton(true);
@@ -129,11 +162,30 @@ function ExcelToJsonConverter() {
                     </select>
                 </div>
                 {/* Organization Unit */}
+                {/*<div className="input-container">*/}
+                {/*    <label htmlFor="org-unit">Organization Unit:</label>*/}
+                {/*    <input type="text" id="org-unit" placeholder="Organization Unit" value={orgUnit}*/}
+                {/*           onChange={handleOrgUnitChange}/>*/}
+                {/*</div>*/}
+
                 <div className="input-container">
                     <label htmlFor="org-unit">Organization Unit:</label>
-                    <input type="text" id="org-unit" placeholder="Organization Unit" value={orgUnit}
-                           onChange={handleOrgUnitChange}/>
+                    <input
+                        type="text"
+                        id="org-unit"
+                        placeholder="Organization Unit"
+                        value={query}
+                        onChange={handleInputChange}
+                    />
+                    <ul>
+                        {orgUnits.map((unit) => (
+                            <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
+                                {unit.displayName}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
+
                 {/* Period */}
                 <div className="input-container">
                     <label htmlFor="period">Period:</label>
