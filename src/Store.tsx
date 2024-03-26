@@ -73,6 +73,7 @@ export const mcodmap = {
 	t5nTEmlScSt: "u44XP9fZweA", //district form 017
 	u44XP9fZweA: "t5nTEmlScSt", // subcounty form 017
 	Dq9aH0aZ2wb: "i8rrl8YWxLF", // date and time of death form 17
+	ZkNDFfFSTYg: "ZkNDFfFSTYg", // linked value
 };
 
 const dlcolumns = [

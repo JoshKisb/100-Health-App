@@ -337,6 +337,7 @@ export const DataEntryForm = observer(() => {
                         {dataElement: 'u9tYUv6AM51', value: values['u9tYUv6AM51']},
                         {dataElement: 'WkXxkKEJLsg', value: values['WkXxkKEJLsg']},
                         {dataElement: 'W0r4m6NiLsy', value: values['W0r4m6NiLsy']}, //eventdate
+                        {dataElement: 'ZkNDFfFSTYg', value: defaultValue}, // Linked value
 
                     ],
                 };
@@ -1993,6 +1994,9 @@ export const DataEntryForm = observer(() => {
         // console.log("ev", e)
         setNotifyx(e.target.value);
     }
+    console.log(store.isIframeEdit)
+    const defaultValue = store.isIframeEdit ? "Linked" : ""; // Check if loaded in iframe
+    console.log(defaultValue)
 
     const printComponentRef = useRef(null);
     return (
@@ -2241,6 +2245,23 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
 
+                            {/*linked form item*/}
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="ZkNDFfFSTYg"
+                                    className="m-0"
+                                    // initialValue={defaultValue} // Set default value here
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            true
+                                        }
+                                        value ={defaultValue}
+                                        type = "hidden"
+                                    />
+                                </Form.Item>
+                            </td>
                         </tr>
 
                         <tr>
