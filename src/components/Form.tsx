@@ -3868,6 +3868,216 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
                         </tr>
+
+
+
+                        <tr>
+                            <td className="border p-1" colSpan={2} rowSpan={5}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other significant conditions contributing to death (time intervals can be included in brackets after the condition)"
+                                            ]
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={1}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other 1"
+                                            ] ?? "Other 1"
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <ICDField
+                                    id="icdField5"
+                                    form={form}
+                                    field="xeE5TQLvucB"
+                                    codeField="ctbKSNV2cg7"
+                                    uriField="T4uxg60Lalw"
+                                />
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <Form.Item
+                                    name="ctbKSNV2cg7"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        readOnly={true}
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.TRu1GOUwtq5
+                                        }
+                                    />
+                                </Form.Item>
+
+                                <Form.Item
+                                    name="T4uxg60Lalw"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        type="hidden"
+                                        size="small"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.T4uxg60Lalw
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <td className="border p-1" colSpan={1}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other 2"
+                                            ] ?? "Other 2"
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <ICDField
+                                    id="icdField6"
+                                    form={form}
+                                    field="mI0UjQioE7E"
+                                    codeField="krhrEBwJeNC"
+                                    uriField=""
+                                />
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <Form.Item
+                                    name="krhrEBwJeNC"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        readOnly={true}
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.krhrEBwJeNC
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td className="border p-1" colSpan={1}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other 3"
+                                            ] ?? "Other 3"
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <ICDField
+                                    id="icdField7"
+                                    form={form}
+                                    field="u5ebhwtAmpU"
+                                    codeField="ZKtS7L49Poo"
+                                    uriField=""
+                                />
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <Form.Item
+                                    name="ZKtS7L49Poo"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        readOnly={true}
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.ZKtS7L49Poo
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td className="border p-1" colSpan={1}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other 4"
+                                            ] ?? "Other 4"
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <ICDField
+                                    id="icdField8"
+                                    form={form}
+                                    field="OxJgcwH15L7"
+                                    codeField="fJDDc9mlubU"
+                                    uriField=""
+                                />
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <Form.Item
+                                    name="fJDDc9mlubU"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        readOnly={true}
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.fJDDc9mlubU
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+
+                        <tr>
+                            <td className="border p-1" colSpan={1}>
+                                <b>
+                                    {
+                                        activeLanguage.lang[
+                                            "Other 5"
+                                            ] ?? "Other 5"
+                                    }
+                                </b>
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <ICDField
+                                    id="icdField9"
+                                    form={form}
+                                    field="Zrn8LD3LoKY"
+                                    codeField="z89Wr84V2G6"
+                                    uriField=""
+                                />
+                            </td>
+                            <td className="border p-1" colSpan={2}>
+                                <Form.Item
+                                    name="z89Wr84V2G6"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        readOnly={true}
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.z89Wr84V2G6
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+
                         <tr>
                             <td className="border p-1" colSpan={2}>
                                 <b>
@@ -4266,212 +4476,6 @@ export const DataEntryForm = observer(() => {
                         )}
 
 
-                        <tr>
-                            <td className="border p-1" colSpan={2} rowSpan={5}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other significant conditions contributing to death (time intervals can be included in brackets after the condition)"
-                                            ]
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={1}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other 1"
-                                            ] ?? "Other 1"
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <ICDField
-                                    id="icdField5"
-                                    form={form}
-                                    field="xeE5TQLvucB"
-                                    codeField="ctbKSNV2cg7"
-                                    uriField="T4uxg60Lalw"
-                                />
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <Form.Item
-                                    name="ctbKSNV2cg7"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        readOnly={true}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.TRu1GOUwtq5
-                                        }
-                                    />
-                                </Form.Item>
-
-                                <Form.Item
-                                    name="T4uxg60Lalw"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        type="hidden"
-                                        size="small"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.T4uxg60Lalw
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td className="border p-1" colSpan={1}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other 2"
-                                            ] ?? "Other 2"
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <ICDField
-                                    id="icdField6"
-                                    form={form}
-                                    field="mI0UjQioE7E"
-                                    codeField="krhrEBwJeNC"
-                                    uriField=""
-                                />
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <Form.Item
-                                    name="krhrEBwJeNC"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        readOnly={true}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.krhrEBwJeNC
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td className="border p-1" colSpan={1}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other 3"
-                                            ] ?? "Other 3"
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <ICDField
-                                    id="icdField7"
-                                    form={form}
-                                    field="u5ebhwtAmpU"
-                                    codeField="ZKtS7L49Poo"
-                                    uriField=""
-                                />
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <Form.Item
-                                    name="ZKtS7L49Poo"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        readOnly={true}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ZKtS7L49Poo
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td className="border p-1" colSpan={1}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other 4"
-                                            ] ?? "Other 4"
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <ICDField
-                                    id="icdField8"
-                                    form={form}
-                                    field="OxJgcwH15L7"
-                                    codeField="fJDDc9mlubU"
-                                    uriField=""
-                                />
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <Form.Item
-                                    name="fJDDc9mlubU"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        readOnly={true}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.fJDDc9mlubU
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                        </tr>
-
-                        <tr>
-                            <td className="border p-1" colSpan={1}>
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Other 5"
-                                            ] ?? "Other 5"
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <ICDField
-                                    id="icdField9"
-                                    form={form}
-                                    field="Zrn8LD3LoKY"
-                                    codeField="z89Wr84V2G6"
-                                    uriField=""
-                                />
-                            </td>
-                            <td className="border p-1" colSpan={2}>
-                                <Form.Item
-                                    name="z89Wr84V2G6"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        readOnly={true}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.z89Wr84V2G6
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                        </tr>
 
                         <tr>
                             <td>
