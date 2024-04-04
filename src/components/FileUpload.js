@@ -55,8 +55,8 @@ function ExcelToJsonConverter() {
                 // setJsonData(JSON.stringify(json, null, 2));
 
                 // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(12,26);
-                const eventTwoColumnNames = Object.keys(json[0]).slice(27,44);
+                const columnNames = Object.keys(json[0]).slice(17,19);
+                // const eventTwoColumnNames = Object.keys(json[0]).slice(17,19);
                 let createdCount = 0;
                 let updatedCount = 0;
                 // console.log("event one", columnNames)
@@ -71,47 +71,46 @@ function ExcelToJsonConverter() {
                         // Generate dataValues array dynamically based on column names
                         const eventOne = columnNames.map(columnName => ({
                             dataElement: columnName,
-                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                            value: columnName === 'Hbsnwhwon0Z' || columnName === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
                         }));
 
                         const evenOneData = {
                             events: [
                                 {
                                     dataValues: eventOne,
-                                    // event: "unVgHirSaRI",
-                                    program: "h0iSBI3xoS6",
-                                    programStage: "nknoeOj6dLq",
+                                    program: "ruZAggu6Wbc",
+                                    programStage: "ph3BMHqmq4l",
                                     orgUnit: row.OrgUIDs,
                                     trackedEntityInstance: row.TrackedEntityInstances,
-                                    trackedEntityType: "T5DWDr5Swce",
-                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
+                                    trackedEntityType: "b8gedH8Po5d",
+                                    eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
                                     completedDate: "2024-01-27"
                                 }
                             ]
                         }
                         await eventOneRecord(id, evenOneData, updatedCount);
+console.log(evenOneData)
 
-
-                        const eventTwo = eventTwoColumnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: row[columnName]
-                        })).filter(row => row.value === true);
-                        console.log("true values ", eventTwo)
-
-                        // update data
-                        for (const event of eventTwo) {
-                            const updatedData = {
-                                dataValues: [{
-                                    dataElement: event.dataElement,
-                                    value: event.value
-                                }]
-                            };
-
-                            setJsonData(JSON.stringify(updatedData, null, 2));
-                            console.log("update data", updatedData);
-                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
-                            // updatedCount++;
-                        }
+                        // const eventTwo = eventTwoColumnNames.map(columnName => ({
+                        //     dataElement: columnName,
+                        //     value: row[columnName]
+                        // })).filter(row => row.value === true);
+                        // console.log("true values ", eventTwo)
+                        //
+                        // // update data
+                        // for (const event of eventTwo) {
+                        //     const updatedData = {
+                        //         dataValues: [{
+                        //             dataElement: event.dataElement,
+                        //             value: event.value
+                        //         }]
+                        //     };
+                        //
+                        //     setJsonData(JSON.stringify(updatedData, null, 2));
+                        //     console.log("update data", updatedData);
+                        //     await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
+                        //     // updatedCount++;
+                        // }
 
 
                     } else {
@@ -121,10 +120,10 @@ function ExcelToJsonConverter() {
                             trackedEntityInstances: [{
                                 trackedEntityInstance: row.TrackedEntityInstances,
                                 orgUnit: row.OrgUIDs,
-                                trackedEntityType: "T5DWDr5Swce",
-                                attributes: Object.keys(row).slice(4, 12).map((key) => ({
+                                trackedEntityType: "b8gedH8Po5d",
+                                attributes: Object.keys(row).slice(4, 16).map((key) => ({
                                     attribute: key,
-                                    value: row[key]
+                                    value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key]
                                 })),
                                 enrollments: [
                                     {
@@ -134,26 +133,26 @@ function ExcelToJsonConverter() {
                                         incidentDate: formatDateFromExcelSerial(row.IncidentDate),
                                         events: [
                                             {
-                                                program: "h0iSBI3xoS6",
+                                                program: "ruZAggu6Wbc",
                                                 orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                                                programStage: "nknoeOj6dLq",
-                                                dataValues: Object.keys(row).slice(12, 24).map((key) => ({
+                                                eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
+                                                programStage: "ph3BMHqmq4l",
+                                                dataValues: Object.keys(row).slice(16, 19).map((key) => ({
                                                     dataElement: key,
                                                     // value: row[key]
-                                                    value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
+                                                    value: key === 'Hbsnwhwon0Z' || key === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[key]) : row[key]
                                                 }))
                                             },
-                                            {
-                                                program: "h0iSBI3xoS6",
-                                                orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.eventTwoDate),
-                                                programStage: "s1kg8duJ8U1",
-                                                dataValues: Object.keys(row).slice(27, 44).map((key) => ({
-                                                    dataElement: key,
-                                                    value: row[key]
-                                                }))
-                                            },
+                                            // {
+                                            //     program: "h0iSBI3xoS6",
+                                            //     orgUnit: row.OrgUIDs,
+                                            //     eventDate: formatDateFromExcelSerial(row.eventTwoDate),
+                                            //     programStage: "s1kg8duJ8U1",
+                                            //     dataValues: Object.keys(row).slice(27, 44).map((key) => ({
+                                            //         dataElement: key,
+                                            //         value: row[key]
+                                            //     }))
+                                            // },
                                             // Add more events if needed
                                         ]
                                     }
@@ -165,7 +164,7 @@ function ExcelToJsonConverter() {
 
                         await createRecord(convertedJsonData,createdCount);
                         // createdCount++;
-
+console.log("2", convertedJsonData)
                     }
                 }
 
@@ -212,7 +211,7 @@ function ExcelToJsonConverter() {
                 let eventId = null;
                 for (const enrollment of enrollments) {
                     const events = enrollment.events;
-                    const filteredEvents = events.filter(event => event.programStage === "s1kg8duJ8U1");
+                    const filteredEvents = events.filter(event => event.programStage === "ph3BMHqmq4l");
 
                     if (filteredEvents.length > 1) {
                         console.log("There are more than one event");
@@ -245,11 +244,11 @@ function ExcelToJsonConverter() {
 
         //  POST jsonData to an API endpoint
         try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/events', {
+            const response = await fetch('https://ug.sk-engine.cloud/int2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa('admin:district'),
                 },
                 body: JSON.stringify(data),
                 credentials: 'include',
@@ -273,11 +272,11 @@ function ExcelToJsonConverter() {
 
         //  POST jsonData to an API endpoint
         try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/events/${eventId}/${id}`, {
+            const response = await fetch(`https://ug.sk-engine.cloud/int2/api/events/${eventId}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Sci_test:Save1234!'),
+                    'Authorization': 'Basic ' + btoa('admin:district'),
                 },
                 body: JSON.stringify(data),
                 credentials: 'include',
@@ -299,11 +298,11 @@ function ExcelToJsonConverter() {
     // Function to create payload
     const createRecord = async (data, createdCount) => {
         try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances', {
+            const response = await fetch('https://ug.sk-engine.cloud/int2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa('admin:district'),
                 },
                 body: JSON.stringify(data),
                 credentials: 'include',
