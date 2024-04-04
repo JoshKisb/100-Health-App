@@ -63,109 +63,158 @@ function ExcelToJsonConverter() {
                 // console.log("event two", eventTwoColumnNames)
 
                 for (const row of json) {
-                    const id = row.TrackedEntityInstances; //  'ID'  column name
-                    const exists = await checkIdExistence(id);
+                    // const id = row.TrackedEntityInstances; //  'ID'  column name
+                    // const exists = await checkIdExistence(id);
                     // console.log(exists.eventId)
-                    if (exists.found) {
-
-                        // Generate dataValues array dynamically based on column names
-                        const eventOne = columnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: columnName === 'Hbsnwhwon0Z' || columnName === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
-                        }));
-
-                        const evenOneData = {
-                            events: [
+                    const convertedJsonData = {
+                        trackedEntityInstances: [{
+                            trackedEntityInstance: row.TrackedEntityInstances,
+                            orgUnit: row.OrgUIDs,
+                            trackedEntityType: "b8gedH8Po5d",
+                            attributes: Object.keys(row).slice(4, 16).map((key) => ({
+                                attribute: key,
+                                value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key]
+                            })),
+                            enrollments: [
                                 {
-                                    dataValues: eventOne,
-                                    program: "ruZAggu6Wbc",
-                                    programStage: "ph3BMHqmq4l",
                                     orgUnit: row.OrgUIDs,
-                                    trackedEntityInstance: row.TrackedEntityInstances,
-                                    trackedEntityType: "b8gedH8Po5d",
-                                    eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
-                                    completedDate: "2024-01-27"
+                                    program: "h0iSBI3xoS6",
+                                    enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
+                                    incidentDate: formatDateFromExcelSerial(row.IncidentDate),
+                                    events: [
+                                        {
+                                            program: "ruZAggu6Wbc",
+                                            orgUnit: row.OrgUIDs,
+                                            eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
+                                            programStage: "ph3BMHqmq4l",
+                                            dataValues: Object.keys(row).slice(16, 19).map((key) => ({
+                                                dataElement: key,
+                                                // value: row[key]
+                                                value: key === 'Hbsnwhwon0Z' || key === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[key]) : row[key]
+                                            }))
+                                        },
+                                        // {
+                                        //     program: "h0iSBI3xoS6",
+                                        //     orgUnit: row.OrgUIDs,
+                                        //     eventDate: formatDateFromExcelSerial(row.eventTwoDate),
+                                        //     programStage: "s1kg8duJ8U1",
+                                        //     dataValues: Object.keys(row).slice(27, 44).map((key) => ({
+                                        //         dataElement: key,
+                                        //         value: row[key]
+                                        //     }))
+                                        // },
+                                        // Add more events if needed
+                                    ]
                                 }
                             ]
-                        }
-                        await eventOneRecord(id, evenOneData, updatedCount);
-console.log(evenOneData)
+                        }]
+                    };
 
-                        // const eventTwo = eventTwoColumnNames.map(columnName => ({
-                        //     dataElement: columnName,
-                        //     value: row[columnName]
-                        // })).filter(row => row.value === true);
-                        // console.log("true values ", eventTwo)
-                        //
-                        // // update data
-                        // for (const event of eventTwo) {
-                        //     const updatedData = {
-                        //         dataValues: [{
-                        //             dataElement: event.dataElement,
-                        //             value: event.value
-                        //         }]
-                        //     };
-                        //
-                        //     setJsonData(JSON.stringify(updatedData, null, 2));
-                        //     console.log("update data", updatedData);
-                        //     await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
-                        //     // updatedCount++;
-                        // }
+                    setJsonData(JSON.stringify(convertedJsonData, null, 2));
 
-
-                    } else {
-                        // If ID doesn't exist, create payload and post
-
-                        const convertedJsonData = {
-                            trackedEntityInstances: [{
-                                trackedEntityInstance: row.TrackedEntityInstances,
-                                orgUnit: row.OrgUIDs,
-                                trackedEntityType: "b8gedH8Po5d",
-                                attributes: Object.keys(row).slice(4, 16).map((key) => ({
-                                    attribute: key,
-                                    value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key]
-                                })),
-                                enrollments: [
-                                    {
-                                        orgUnit: row.OrgUIDs,
-                                        program: "h0iSBI3xoS6",
-                                        enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
-                                        incidentDate: formatDateFromExcelSerial(row.IncidentDate),
-                                        events: [
-                                            {
-                                                program: "ruZAggu6Wbc",
-                                                orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
-                                                programStage: "ph3BMHqmq4l",
-                                                dataValues: Object.keys(row).slice(16, 19).map((key) => ({
-                                                    dataElement: key,
-                                                    // value: row[key]
-                                                    value: key === 'Hbsnwhwon0Z' || key === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[key]) : row[key]
-                                                }))
-                                            },
-                                            // {
-                                            //     program: "h0iSBI3xoS6",
-                                            //     orgUnit: row.OrgUIDs,
-                                            //     eventDate: formatDateFromExcelSerial(row.eventTwoDate),
-                                            //     programStage: "s1kg8duJ8U1",
-                                            //     dataValues: Object.keys(row).slice(27, 44).map((key) => ({
-                                            //         dataElement: key,
-                                            //         value: row[key]
-                                            //     }))
-                                            // },
-                                            // Add more events if needed
-                                        ]
-                                    }
-                                ]
-                            }]
-                        };
-
-                        setJsonData(JSON.stringify(convertedJsonData, null, 2));
-
-                        await createRecord(convertedJsonData,createdCount);
-                        // createdCount++;
-console.log("2", convertedJsonData)
-                    }
+                    await createRecord(convertedJsonData,createdCount);
+                    // createdCount++;
+                    console.log("2", convertedJsonData)
+//                     if (exists.found) {
+//
+//                         // Generate dataValues array dynamically based on column names
+//                         const eventOne = columnNames.map(columnName => ({
+//                             dataElement: columnName,
+//                             value: columnName === 'Hbsnwhwon0Z' || columnName === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+//                         }));
+//
+//                         const evenOneData = {
+//                             events: [
+//                                 {
+//                                     dataValues: eventOne,
+//                                     program: "ruZAggu6Wbc",
+//                                     programStage: "ph3BMHqmq4l",
+//                                     orgUnit: row.OrgUIDs,
+//                                     trackedEntityInstance: row.TrackedEntityInstances,
+//                                     trackedEntityType: "b8gedH8Po5d",
+//                                     eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
+//                                     completedDate: "2024-01-27"
+//                                 }
+//                             ]
+//                         }
+//                         await eventOneRecord(id, evenOneData, updatedCount);
+// console.log(evenOneData)
+//
+//                         // const eventTwo = eventTwoColumnNames.map(columnName => ({
+//                         //     dataElement: columnName,
+//                         //     value: row[columnName]
+//                         // })).filter(row => row.value === true);
+//                         // console.log("true values ", eventTwo)
+//                         //
+//                         // // update data
+//                         // for (const event of eventTwo) {
+//                         //     const updatedData = {
+//                         //         dataValues: [{
+//                         //             dataElement: event.dataElement,
+//                         //             value: event.value
+//                         //         }]
+//                         //     };
+//                         //
+//                         //     setJsonData(JSON.stringify(updatedData, null, 2));
+//                         //     console.log("update data", updatedData);
+//                         //     await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
+//                         //     // updatedCount++;
+//                         // }
+//
+//
+//                     } else {
+//                         // If ID doesn't exist, create payload and post
+//
+//                         const convertedJsonData = {
+//                             trackedEntityInstances: [{
+//                                 trackedEntityInstance: row.TrackedEntityInstances,
+//                                 orgUnit: row.OrgUIDs,
+//                                 trackedEntityType: "b8gedH8Po5d",
+//                                 attributes: Object.keys(row).slice(4, 16).map((key) => ({
+//                                     attribute: key,
+//                                     value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key]
+//                                 })),
+//                                 enrollments: [
+//                                     {
+//                                         orgUnit: row.OrgUIDs,
+//                                         program: "h0iSBI3xoS6",
+//                                         enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
+//                                         incidentDate: formatDateFromExcelSerial(row.IncidentDate),
+//                                         events: [
+//                                             {
+//                                                 program: "ruZAggu6Wbc",
+//                                                 orgUnit: row.OrgUIDs,
+//                                                 eventDate: formatDateFromExcelSerial(row.hIlkAjG1GIG),
+//                                                 programStage: "ph3BMHqmq4l",
+//                                                 dataValues: Object.keys(row).slice(16, 19).map((key) => ({
+//                                                     dataElement: key,
+//                                                     // value: row[key]
+//                                                     value: key === 'Hbsnwhwon0Z' || key === 'hIlkAjG1GIG' ? formatDateFromExcelSerial(row[key]) : row[key]
+//                                                 }))
+//                                             },
+//                                             // {
+//                                             //     program: "h0iSBI3xoS6",
+//                                             //     orgUnit: row.OrgUIDs,
+//                                             //     eventDate: formatDateFromExcelSerial(row.eventTwoDate),
+//                                             //     programStage: "s1kg8duJ8U1",
+//                                             //     dataValues: Object.keys(row).slice(27, 44).map((key) => ({
+//                                             //         dataElement: key,
+//                                             //         value: row[key]
+//                                             //     }))
+//                                             // },
+//                                             // Add more events if needed
+//                                         ]
+//                                     }
+//                                 ]
+//                             }]
+//                         };
+//
+//                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
+//
+//                         await createRecord(convertedJsonData,createdCount);
+//                         // createdCount++;
+// console.log("2", convertedJsonData)
+//                     }
                 }
 
                 // setCreatedEventsCount(createdCount);
