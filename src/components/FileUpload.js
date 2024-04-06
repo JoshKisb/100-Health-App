@@ -73,12 +73,12 @@ function ExcelToJsonConverter() {
                             trackedEntityType: "b8gedH8Po5d",
                             attributes: Object.keys(row).slice(4, 16).map((key) => ({
                                 attribute: key,
-                                value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key]
+                                value: key === 'GMmO9behnq4'  ? formatDateFromExcelSerial(row[key]) : row[key].toString()
                             })),
                             enrollments: [
                                 {
                                     orgUnit: row.OrgUIDs,
-                                    program: "h0iSBI3xoS6",
+                                    program: "ruZAggu6Wbc",
                                     enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
                                     incidentDate: formatDateFromExcelSerial(row.IncidentDate),
                                     events: [
@@ -114,7 +114,6 @@ function ExcelToJsonConverter() {
 
                     await createRecord(convertedJsonData,createdCount);
                     // createdCount++;
-                    console.log("2", convertedJsonData)
 //                     if (exists.found) {
 //
 //                         // Generate dataValues array dynamically based on column names
@@ -219,7 +218,7 @@ function ExcelToJsonConverter() {
 
                 // setCreatedEventsCount(createdCount);
                 // setUpdatedEventsCount(updatedCount);
-                await resetTable();
+                // await resetTable();
 
                 setUploading(false);
                 setLoading(false);
@@ -293,7 +292,7 @@ function ExcelToJsonConverter() {
 
         //  POST jsonData to an API endpoint
         try {
-            const response = await fetch('https://ug.sk-engine.cloud/int2', {
+            const response = await fetch(process.env.REACT_APP_DHIS2_BASE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -321,7 +320,7 @@ function ExcelToJsonConverter() {
 
         //  POST jsonData to an API endpoint
         try {
-            const response = await fetch(`https://ug.sk-engine.cloud/int2/api/events/${eventId}/${id}`, {
+            const response = await fetch(`${process.env.REACT_APP_DHIS2_BASE_URL}/api/events/${eventId}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -347,7 +346,7 @@ function ExcelToJsonConverter() {
     // Function to create payload
     const createRecord = async (data, createdCount) => {
         try {
-            const response = await fetch('https://ug.sk-engine.cloud/int2', {
+            const response = await fetch(`${process.env.REACT_APP_DHIS2_BASE_URL}api/trackedEntityInstances`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -415,11 +414,11 @@ function ExcelToJsonConverter() {
         <div className="form-container">
             <h1> Upload Excel File </h1>
             <div className="file-upload">
-            <input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
-            <button className="upload-btn" onClick={handleConvert} disabled={uploading}>
-                {uploading ? 'Uploading...' : 'Upload'}
-            </button>
-        </div>
+                <input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])} />
+                <button className="upload-btn" onClick={handleConvert} disabled={uploading}>
+                    {uploading ? 'Uploading...' : 'Upload'}
+                </button>
+            </div>
             {loading && <div className="progress-bar">uploading data please wait...</div>}
             {/*{!file && <div className="no-file-message">Please upload a file.</div>}*/}
             {/*<pre>{jsonData}</pre>*/}
