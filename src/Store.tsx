@@ -61,7 +61,8 @@ export const mcodmap = {
 	WkXxkKEJLsg: "WkXxkKEJLsg",
 	CupbOInqvJI: "MOstDqSY0gO",
 
-	babyName: "ZYKmQ9GPOaF", // from 017
+	xpJgWYFpvht: "ZYKmQ9GPOaF", // form 017 mother intials as baby name
+	// babyName: "ZYKmQ9GPOaF", // foom 017
 	ZBvxrMFv9aW: "e96GB4CXyd3", //sex form 017
 	//rjoVXlCWLYM: "WYykJO0Vh3s",  //age in Months
 	rjoVXlCWLYM: "TgFI46omIEg", // minutes form 017
