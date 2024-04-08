@@ -1587,10 +1587,10 @@ export const DataEntryForm = observer(() => {
 
         }
         form.setFieldsValue(defaults)
-        setTestVal(defaults["cSDJ9kSJkFP"] as string);
-        setTestVal2(defaults["uckvenVFnwf"] as string);
-        setTestVal3(defaults["ZFdJRT3PaUd"] as string);
-        setTestVal4(defaults["Op5pSvgHo1M"] as string);
+        // setTestVal(defaults["cSDJ9kSJkFP"] as string);
+        // setTestVal2(defaults["uckvenVFnwf"] as string);
+        // setTestVal3(defaults["ZFdJRT3PaUd"] as string);
+        // setTestVal4(defaults["Op5pSvgHo1M"] as string);
 
 
         console.log({defaults});
