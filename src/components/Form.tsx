@@ -1402,6 +1402,38 @@ export const DataEntryForm = observer(() => {
 		const wasPregnant = form.getFieldValue("zcn7acUB6x1");
 		const pregnacyContribute = form.getFieldValue("AJAraEcfH63")
 		const pregTime = form.getFieldValue("KpfvNQSsWIw");
+		const others = [
+            { 
+                code: form.getFieldValue("ctbKSNV2cg7"),
+                uri: form.getFieldValue("T4uxg60Lalw"),
+            },
+            { 
+                code: form.getFieldValue("krhrEBwJeNC"),
+                // uri: form.getFieldValue("T4uxg60Lalw"),
+            },
+            { 
+                code: form.getFieldValue("ZKtS7L49Poo"),
+                // uri: form.getFieldValue("T4uxg60Lalw"),
+            },
+            { 
+                code: form.getFieldValue("fJDDc9mlubU"),
+                // uri: form.getFieldValue("T4uxg60Lalw"),
+            },
+            { 
+                code: form.getFieldValue("z89Wr84V2G6"),
+                // uri: form.getFieldValue("T4uxg60Lalw"),
+            }
+        ];
+
+        const otherCodes = others
+            .filter(item => item.code) 
+            .map(item => item.code)
+            .join(',');
+
+        const otherUris = others
+            .filter(item => item.code) 
+            .map(item => item.code)
+            .join(',');
 		
 		const payload = {
 			sex: personsGender == "Male" ? "1" 
@@ -1414,6 +1446,8 @@ export const DataEntryForm = observer(() => {
 			causeOfDeathCodeB: underlyingCauses["diseaseTitleB"],
 			causeOfDeathCodeC: underlyingCauses["diseaseTitleC"],
 			causeOfDeathCodeD: underlyingCauses["diseaseTitleD"],
+            causeOfDeathCodePart2: otherCodes,
+            causeOfDeathUriPart2: otherUris,
 			intervalA,
 			intervalB,
 			intervalC,
