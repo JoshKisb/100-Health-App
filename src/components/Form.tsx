@@ -3931,6 +3931,13 @@ export const DataEntryForm = observer(() => {
                                     field="xeE5TQLvucB"
                                     codeField="ctbKSNV2cg7"
                                     uriField="T4uxg60Lalw"
+                                    addUnderlyingCause={(
+                                        value: any,
+                                        title?: any,
+                                        uri?: any
+                                    ) => {
+                                        setDorisFields();                                        
+                                    }}
                                 />
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -3981,6 +3988,13 @@ export const DataEntryForm = observer(() => {
                                     field="mI0UjQioE7E"
                                     codeField="krhrEBwJeNC"
                                     uriField=""
+                                    addUnderlyingCause={(
+                                        value: any,
+                                        title?: any,
+                                        uri?: any
+                                    ) => {
+                                        setDorisFields();                                        
+                                    }}
                                 />
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -4018,6 +4032,13 @@ export const DataEntryForm = observer(() => {
                                     field="u5ebhwtAmpU"
                                     codeField="ZKtS7L49Poo"
                                     uriField=""
+                                    addUnderlyingCause={(
+                                        value: any,
+                                        title?: any,
+                                        uri?: any
+                                    ) => {
+                                        setDorisFields();                                        
+                                    }}
                                 />
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -4055,6 +4076,13 @@ export const DataEntryForm = observer(() => {
                                     field="OxJgcwH15L7"
                                     codeField="fJDDc9mlubU"
                                     uriField=""
+                                    addUnderlyingCause={(
+                                        value: any,
+                                        title?: any,
+                                        uri?: any
+                                    ) => {
+                                        setDorisFields();                                        
+                                    }}
                                 />
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -4092,6 +4120,13 @@ export const DataEntryForm = observer(() => {
                                     field="Zrn8LD3LoKY"
                                     codeField="z89Wr84V2G6"
                                     uriField=""
+                                    addUnderlyingCause={(
+                                        value: any,
+                                        title?: any,
+                                        uri?: any
+                                    ) => {
+                                        setDorisFields();                                        
+                                    }}
                                 />
                             </td>
                             <td className="border p-1" colSpan={2}>
