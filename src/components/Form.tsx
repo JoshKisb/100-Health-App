@@ -1425,6 +1425,8 @@ export const DataEntryForm = observer(() => {
             }
         ];
 
+        console.log("others obj", others)
+
         const otherCodes = others
             .filter(item => item.code) 
             .map(item => item.code)
