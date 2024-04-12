@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import React from "react";
 import { HeaderBar } from "@dhis2/ui-widgets";
-import ExcelToJsonConverter from "./components/FileUpload";
+import HealthForm from "./components/Form";
 
 
 
@@ -19,7 +19,7 @@ export const App = observer(() => {
                   zIndex: 1000,
               }}
           />
-          <ExcelToJsonConverter/>
+          <HealthForm/>
       </>
 
   );
