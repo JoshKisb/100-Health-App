@@ -10,7 +10,7 @@ export const App = observer(() => {
   return (
       <>
           <HeaderBar
-              appName={" File uploader"}
+              appName={"Health Form"}
               style={{
                   left: 0,
                   position: "fixed",

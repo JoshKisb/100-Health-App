@@ -82,8 +82,8 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": "file upload",
-    "description": " Upload excel files",
+    "name": "health-form",
+    "description": " health form",
     "launch_path": "index.html",
     "appType": "APP",
     "icons": {
