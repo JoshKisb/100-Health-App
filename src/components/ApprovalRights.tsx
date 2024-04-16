@@ -15,7 +15,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
   ({ style, updateApprovalStatus, statusReceived }) => {
     const store = useStore();
     const [userIsAuthorized, setUserIsAuthorized] = useState(false);
-    const [activeLanguage, setActiveLanguage] = useState(store.activeLanguage);
+    const activeLanguage = store.activeLanguage;
     const [approved, setApproved] = useState(false);
     const [approvalText, setApprovalText] = useState("Not Approved");
     const [inputKey, setinputKey] = useState(Math.random());
@@ -68,10 +68,6 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
     useEffect(() => {
       checkApproval();
     }, []);
-
-    useEffect(() => {
-      setActiveLanguage(store.activeLanguage);
-    }, [store.activeLanguage]);
 
     return userIsAuthorized ? (
       <div>
