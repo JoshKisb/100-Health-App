@@ -82,54 +82,148 @@ const PrintableFormData = observer((props: any) => {
 
 	return (
 		<>
-			<table className="my-2 w-full print-table">
-				<tbody>
-					{store.printColumns.map((dataElement) => (
-						<tr key={dataElement.id}>
-							<td style={styles.tableCell}>{dataElement.name}</td>
-							<td style={styles.tableAnswer}>
-								{getDEValue(dataElement.id)}
-							</td>
-						</tr>
-					))}
-				</tbody>
-			</table>
+			<div style={{ backgroundColor: "lightgray", width: "100%", padding: "5px 0", textAlign: "center" }}>
+				<p style={{ margin: 0, color: "black", fontWeight: "bold",fontSize: "20px"}}>
+					{tr('I-INFORMATIONS ADMINISTRATIVES')}
+				</p>
+			</div>
+
+				<div style={{ textAlign: "left" }}>
+					<p style={{ fontStyle: "italic" }}>
+						{ tr('Je soussigné (e) M/Mme1 : ...............................................................................................................................................................................................') }<br/>
+						{ tr(' Qualification:............................................................................................................................................................ N°...................................................') }<br/>
+						{ tr('en service ________________________________________________________________________________________certifie que le deces de') }<br/>
+						{ tr('la personne désignée ci-dessous, est réel et constant.') }<br/>
+						{ tr('Date et heure du décés ________/________/_____________ à ___________________ h_________________mn') }<br/>
+						{ tr('Lieu de décés 2__________________________________________________________________________________') }
+
+					</p>
+				</div>
+
+
+
+			{/*<table className="my-2 w-full print-table">*/}
+
+			{/*	<tbody>*/}
+			{/*		{store.printColumns.map((dataElement) => (*/}
+			{/*			<tr key={dataElement.id}>*/}
+			{/*				<td style={styles.tableCell}>{dataElement.name}</td>*/}
+			{/*				<td style={styles.tableAnswer}>*/}
+			{/*					{getDEValue(dataElement.id)}*/}
+			{/*				</td>*/}
+			{/*			</tr>*/}
+			{/*		))}*/}
+			{/*	</tbody>*/}
+			{/*</table>*/}
+
+			<div style={{ backgroundColor: "lightgray", width: "100%", padding: "5px 0", textAlign: "center" }}>
+				<p style={{ margin: 0, color: "black", fontWeight: "bold", fontSize: "20px"}}>
+					{tr('II-RENSEIGNEMENTS GENERAUX SUR LE DEFUNT ')}
+				</p>
+			</div>
+
+			<div style={{ textAlign: "left" }}>
+				<p style={{ fontStyle: "italic" }}>
+					{ tr('Nom: _______________________________________________________________ Prénom(s): __________________________________________') }<br/>
+					{ tr('Sexe: _____________________________________Néle:___________________/______________/___________________ à  ___________') }<br/>
+					{ tr('ou Age: ________________________________Domicile:________________________________________profession_______________') }<br/>
+					{ tr('Nationalité:............................................................................... N° Identifiant du patient:______________________________') }<br/>
+					{ tr('Adresse: ___________________________________________________________________________') }<br/>
+					{ tr('Personne référente: Norm: _______________________________________Prénom(s) : _______________________________________________-') }<br/>
+					{ tr('Adresse/Tel: ___________________________________________________________________________' )}<br/>
+				</p>
+			</div>
 
 			<div style={{ display: "flex", flexDirection: "column" }}>
 				<div
 					style={{
-						marginTop: "30px",
+						// marginTop: "30px",
 						height: "50px",
-						width: "50%",
+						// width: "50%",
 						display: "flex",
-						alignItems: "flex-end",
+						alignItems: "start",
 					}}
 				>
-					<b style={{ marginBottom: "10px" }}>{ tr('Reported on') }:</b>
-					<div style={{ ...styles.answerLine, marginLeft: "8px" }}>
-						{eventDate}
-					</div>
+					<b style={{ fontWeight: "bold", marginBottom: "10px" }}>{ tr("NB : Obstacle mèdico-lègal à I'inhumation (en raison du caractère violent, indèterminè ou suspect de la mort ou corps non identifiè) : Oui /_/Non/_/ ") }:</b>
+					{/*<div style={{ ...styles.answerLine, marginLeft: "8px" }}>*/}
+					{/*	{eventDate}*/}
+					{/*</div>*/}
 				</div>
-				<div style={{ display: "flex", justifyContent: "flex-end" }}>
+
+				<div
+					style={{
+						marginTop: "10px",
+						// height: "50px",
+						width: "50%",
+						display: "flex",
+						alignItems: "center",
+					}}
+				>
+					<b  className="text-center" style={{ marginBottom: "10px" }}>{ tr('Signature et cachet ') }:</b>
+					{/*<div style={{ ...styles.answerLine, marginLeft: "8px" }}>*/}
+					{/*	{eventDate}*/}
+					{/*</div>*/}
+				</div>
+
+				<div style={{ display: "flex", justifyContent: "start" }}>
 					<div
 						style={{
-							marginTop: "40px",
+							marginTop: "20px",
 							width: "40%",
 							display: "flex",
 							flexDirection: "column",
 						}}
 					>
 						<div style={styles.answerLine}></div>
-						<b>{ tr('Notifier Of Births and Deaths') }</b>
-						<div
-							style={{ ...styles.answerLine, marginTop: "50px" }}
-						>
-							{facility}
-						</div>
-						<b>{ tr('Registration Area') }</b>
+						{/*<b>{ tr('Signature') }</b>*/}
+						{/*<div*/}
+						{/*	style={{ ...styles.answerLine, marginTop: "50px" }}*/}
+						{/*>*/}
+						{/*	{facility}*/}
+						{/*</div>*/}
+						<b>{ tr('1 Barrer les mentions inutiles') }</b>
+						<b>{ tr('2 Hopital, Unitè de soins, domicile') }</b>
+						<b>{ tr('3 Intervalles entre le dèbut du processus et le dècès') }</b>
+						<b>{ tr("4 Dans l'affirmative., veuillez prèciser le motif de la chirurgie (Maladie ou ètat)") }</b>
 					</div>
 				</div>
 			</div>
+
+			{/*<div style={{ display: "flex", flexDirection: "column" }}>*/}
+			{/*	<div*/}
+			{/*		style={{*/}
+			{/*			marginTop: "30px",*/}
+			{/*			height: "50px",*/}
+			{/*			width: "50%",*/}
+			{/*			display: "flex",*/}
+			{/*			alignItems: "flex-end",*/}
+			{/*		}}*/}
+			{/*	>*/}
+			{/*		<b style={{ marginBottom: "10px" }}>{ tr('Reported on') }:</b>*/}
+			{/*		<div style={{ ...styles.answerLine, marginLeft: "8px" }}>*/}
+			{/*			{eventDate}*/}
+			{/*		</div>*/}
+			{/*	</div>*/}
+			{/*	<div style={{ display: "flex", justifyContent: "flex-end" }}>*/}
+			{/*		<div*/}
+			{/*			style={{*/}
+			{/*				marginTop: "40px",*/}
+			{/*				width: "40%",*/}
+			{/*				display: "flex",*/}
+			{/*				flexDirection: "column",*/}
+			{/*			}}*/}
+			{/*		>*/}
+			{/*			<div style={styles.answerLine}></div>*/}
+			{/*			<b>{ tr('Notifier Of Births and Deaths') }</b>*/}
+			{/*			<div*/}
+			{/*				style={{ ...styles.answerLine, marginTop: "50px" }}*/}
+			{/*			>*/}
+			{/*				{facility}*/}
+			{/*			</div>*/}
+			{/*			<b>{ tr('Registration Area') }</b>*/}
+			{/*		</div>*/}
+			{/*	</div>*/}
+			{/*</div>*/}
 		</>
 	);
 });
@@ -138,12 +232,53 @@ const CardTitle = observer((props: any) => {
 	const tr = useTranslation();
 	return (
 		<>
-			<Title className="text-center" level={2}>
-				{ tr('DEATH NOTIFICATION RECORD') }
-			</Title>
+			{/*<Title className="text-center" level={2}>*/}
+			{/*	{ tr('DEATH NOTIFICATION RECORD') }*/}
+			{/*</Title>*/}
+			{/*<p style={{ fontStyle: "italic", textAlign: "center" }}>*/}
+			{/*	{ tr('Registration of Persons Act 2015') }*/}
+			{/*</p>*/}
 			<p style={{ fontStyle: "italic", textAlign: "center" }}>
-				{ tr('Registration of Persons Act 2015') }
+				{ tr("A transmettre à l’officier de l’état civil ") }
 			</p>
+
+			<div style={{ display: "flex", justifyContent: "space-between" }}>
+				<div style={{ textAlign: "left" }}>
+					<p style={{ fontStyle: "italic", textAlign: "justify" }}>
+						{ tr('MINISTERE DE LA SANTE ') }<br/>
+						{ tr(' ET DE L’HYGIENE PUBLIQUE') }
+						<p style={{textAlign:"center", padding: 0}}>
+							{ tr(' .............................') }
+						</p>
+					</p>
+					<p style={{ fontStyle: "italic" }}>
+						{ tr('SECRETARIAT GENERAL') }
+						<p style={{textAlign:"center"}}>
+							{ tr(' .............................') }
+						</p>
+					</p>
+
+					<p style={{ fontStyle: "italic" }}>
+						{ tr('CENTRE HOSPITALIER') }<br/>
+						{ tr(' REGIONAL DE ZINIARE') }
+					</p>
+				</div>
+				<div style={{ textAlign: "right" }}>
+					<Title className="text-right" level={2}>
+						{ tr('BURKINA FASO') }
+					</Title>
+					<p style={{ fontStyle: "italic" }}>
+						{ tr('unite- Progres-Justice') }
+					</p>
+					<p style={{ fontStyle: "italic" }}>
+						{ tr('N°:......................') }
+					</p>
+				</div>
+			</div>
+
+			<Title className="text-center" level={2} style={{ textDecoration: "underline",fontSize: "20px" }}>
+				{ tr('CERTIFICAT MEDICAL DE DECES ') }
+			</Title>
 		</>
 	);
 });
