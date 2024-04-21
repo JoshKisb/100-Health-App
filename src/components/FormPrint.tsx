@@ -61,11 +61,18 @@ const PrintableFormData = observer((props: any) => {
 	const name = props.formVals["ZYKmQ9GPOaF"];
 	const nin = props.formVals["MOstDqSY0gO"];
 	const sex = props.formVals["e96GB4CXyd3"];
+	const dob = props.formVals["RbrUuKFSqkZ"];
+	const age = props.formVals["q7e7FOXKnOf"];
+	const profession = props.formVals["b70okb06FWa"];
 	const district = props.formVals["t5nTEmlScSt"];
 	const subcounty = props.formVals["u44XP9fZweA"];
 	const village = props.formVals["dsiwvNQLe5n"];
+	const inpatientNo = props.formVals["FGagV1Utrdh"];
 	const dod = props.formVals["i8rrl8YWxLF"];
 	const dateOfDeath = !!dod ? moment(dod).format("DD-MMM-YYYY") : "";
+	const timeOfDeath = !!dod ? moment(dod).format('HH:mm:ss') : "";
+	const placeOfBirth = props.formVals["xNCSFrgdUgi"];
+	console.log(dod)
 
 	const parish = "";
 
@@ -94,8 +101,8 @@ const PrintableFormData = observer((props: any) => {
 						{ tr(' Qualification:............................................................................................................................................................ N°...................................................') }<br/>
 						{ tr('en service ________________________________________________________________________________________certifie que le deces de') }<br/>
 						{ tr('la personne désignée ci-dessous, est réel et constant.') }<br/>
-						{ tr('Date et heure du décés ________/________/_____________ à ___________________ h_________________mn') }<br/>
-						{ tr('Lieu de décés 2__________________________________________________________________________________') }
+						{ tr(`Date et heure du décés _________________${dateOfDeath || ""}____________ / _______${timeOfDeath || ""}_____________________________`) }<br/>
+						{ tr(`Lieu de décés 2__________________________${placeOfBirth || ""}________________________________________________________`) }
 
 					</p>
 				</div>
@@ -124,11 +131,11 @@ const PrintableFormData = observer((props: any) => {
 
 			<div style={{ textAlign: "left" }}>
 				<p style={{ fontStyle: "italic" }}>
-					{ tr('Nom: _______________________________________________________________ Prénom(s): __________________________________________') }<br/>
-					{ tr('Sexe: _____________________________________Néle:___________________/______________/___________________ à  ___________') }<br/>
-					{ tr('ou Age: ________________________________Domicile:________________________________________profession_______________') }<br/>
-					{ tr('Nationalité:............................................................................... N° Identifiant du patient:______________________________') }<br/>
-					{ tr('Adresse: ___________________________________________________________________________') }<br/>
+					{ tr(`Nom: _____________${name || ""}____________________________________________ Prénom(s): _________________________________`) }<br/>
+					{ tr(`Sexe: _________${sex}____________________Néle:___________${dob}______________________________`) }<br/>
+					{ tr(`ou Age: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession}_________`) }<br/>
+					{ tr(`Nationalité:............................................................................... N° Identifiant du patient:_________${inpatientNo || ""}_____________________`) }<br/>
+					{ tr(`Adresse: _____________________${village || ""}______________________________________________________`) }<br/>
 					{ tr('Personne référente: Norm: _______________________________________Prénom(s) : _______________________________________________-') }<br/>
 					{ tr('Adresse/Tel: ___________________________________________________________________________' )}<br/>
 				</p>
@@ -263,6 +270,14 @@ const CardTitle = observer((props: any) => {
 						{ tr(' REGIONAL DE ZINIARE') }
 					</p>
 				</div>
+
+				{/*<div style={{ textAlign: "center" }}> /!* Modified style to center align *!/*/}
+				{/*	<p>*/}
+				{/*		<img src="../img/image.jpg" alt="Logo" /></p>*/}
+				{/*</div>*/}
+
+				{/*<img src="img/image.jpg" alt="Ministère de la Santé" style={{ maxWidth: "100px" }} /> /!* Add your image here *!/*/}
+
 				<div style={{ textAlign: "right" }}>
 					<Title className="text-right" level={2}>
 						{ tr('BURKINA FASO') }
