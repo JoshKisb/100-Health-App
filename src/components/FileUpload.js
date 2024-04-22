@@ -7,6 +7,7 @@ function FileUpload() {
     const [fileType, setFileType] = useState('');
     const [orgUnitId, setOrgUnitId] = useState('');
     const [period, setPeriod] = useState('');
+    const [sheetName, setSheetName] = useState('');
     const [buttonStatus, setButtonStatus] = useState('Start Service');
     const [buttonDisabled, setButtonDisabled] = useState(false);
     const [showDownloadButton, setShowDownloadButton] = useState(false);
@@ -21,6 +22,9 @@ function FileUpload() {
 
     const handleOrgUnitChange = (event) => {
         setOrgUnitId(event.target.value);
+
+        // Reset sheetName when changing file type
+        setSheetName('');
     };
 
     const handlePeriodChange = (event) => {
@@ -63,11 +67,7 @@ function FileUpload() {
     };
 
     const handleUpload = () => {
-        // Check if file, fileType, orgUnit, and period are not empty
-        // if (!file || !fileType || !orgUnit || !period) {
-        //     alert('Please fill in all the fields');
-        //     return;
-        // }
+
         console.log("File Type:", fileType);
         console.log("Organization Unit:", orgUnitId);
         console.log("Period:", period);
@@ -81,34 +81,139 @@ function FileUpload() {
         formData.append('orgunit', orgUnitId);
         formData.append('period', period);
 
-        fetch('https://simon-file-generator.onrender.com/process', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
+        // if (fileType === "non-hiv") {
+        //     const data = new FormData();
+        //     data.append('file', file)
+        //
+        //     fetch('https://simon-file-generator.onrender.com/non_hiv/upload', {
+        //         method: 'POST',
+        //         body: data
+        //     }).then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //     })
+        //         .then(data => {
+        //             console.log("the data", data)
+        //         })
+        //         .catch(error => {
+        //             // Handle error
+        //             console.error('There was a problem with the request:', error);
+        //             setUploading(false); // Reset uploading state on error
+        //         });
+        //
+        //     const processData = new FormData();
+        //     processData.append('sheetname', sheetName);
+        //     processData.append('period', period);
+        //
+        //     fetch('https://simon-file-generator.onrender.com/non_hiv/process', {
+        //         method: 'POST',
+        //         body: processData
+        //     }).then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Network response was not ok');
+        //         }
+        //         // Reset input fields and uploading state after successful upload
+        //         setFile(null);
+        //         // setFileType('');
+        //         setSheetName('');
+        //         setPeriod('');
+        //         setUploading(false);
+        //         setShowDownloadButton(true);
+        //         return response.json();
+        //     })
+        //         .then(data => {
+        //             console.log("the data", data)
+        //         })
+        //         .catch(error => {
+        //             // Handle error
+        //             console.error('There was a problem with the request:', error);
+        //             setUploading(false); // Reset uploading state on error
+        //         });
+        //
+        //
+        // }
+        if (fileType === "non-hiv") {
+            const data = new FormData();
+            data.append('file', file);
+
+            fetch('https://simon-file-generator.onrender.com/non_hiv/upload', {
+                method: 'POST',
+                body: data
+            }).then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                // Reset input fields and uploading state after successful upload
-                setFile(null);
-                // setFileType('');
-                setOrgUnitId('');
-                setPeriod('');
-                setUploading(false);
-                setShowDownloadButton(true);
+                // Return the response for chaining
                 return response.json();
             })
-            .then(data => {
-                // Handle response data as needed
-                console.log(data);
-            })
-            .catch(error => {
-                // Handle error
-                console.error('There was a problem with the request:', error);
-                setUploading(false); // Reset uploading state on error
-            });
+                .then(uploadResponse => {
+                    // Here you can access data from the upload response if needed
+                    console.log("Upload response:", uploadResponse);
 
-    };
+                    // Continue with the second fetch
+                    const processData = new FormData();
+                    processData.append('sheetname', sheetName);
+                    processData.append('period', period);
+
+                    return fetch('https://simon-file-generator.onrender.com/non_hiv/process', {
+                        method: 'POST',
+                        body: processData
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Reset input fields and uploading state after successful upload
+                    setFile(null);
+                    setSheetName('');
+                    setPeriod('');
+                    setUploading(false);
+                    setShowDownloadButton(true);
+                    return response.json();
+                })
+                .then(processResponse => {
+                    // Here you can access data from the process response if needed
+                    console.log("Process response:", processResponse);
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('There was a problem with the request:', error);
+                    setUploading(false); // Reset uploading state on error
+                });
+        }
+
+        else {
+            fetch('https://simon-file-generator.onrender.com/process', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    // Reset input fields and uploading state after successful upload
+                    setFile(null);
+                    // setFileType('');
+                    setOrgUnitId('');
+                    setPeriod('');
+                    setUploading(false);
+                    setShowDownloadButton(true);
+                    return response.json();
+                })
+                .then(data => {
+                    // Handle response data as needed
+                    console.log(data);
+                })
+                .catch(error => {
+                    // Handle error
+                    console.error('There was a problem with the request:', error);
+                    setUploading(false); // Reset uploading state on error
+                });
+
+        }
+    }
 
 
     // start service
@@ -164,37 +269,59 @@ function FileUpload() {
                         <option value="ptme">ptme</option>
                         <option value="cd">cd</option>
                         <option value="arv">arv</option>
+                        <option value="non-hiv">non-hiv</option>
                         {/* Add more options as needed */}
                     </select>
                 </div>
-                {/* Organization Unit */}
-                {/*<div className="input-container">*/}
-                {/*    <label htmlFor="org-unit">Organization Unit:</label>*/}
-                {/*    <input type="text" id="org-unit" placeholder="Organization Unit" value={orgUnit}*/}
-                {/*           onChange={handleOrgUnitChange}/>*/}
-                {/*</div>*/}
 
-                <div className="input-container">
-                    <label htmlFor="org-unit">Organization Unit:</label>
-                    <div className="org-unit-dropdown">
-                        <input
-                            type="text"
-                            id="org-unit"
-                            placeholder="Organization Unit"
-                            value={query}
-                            onChange={handleInputChange}
-                        />
-                        {isListOpen && (
-                            <ul className="org-unit-list">
-                                {orgUnits.map((unit) => (
-                                    <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
-                                        {unit.displayName}
-                                    </li>
-                                ))}
-                            </ul>
-                        )}
+                {/* Sheet Name Input (conditionally rendered) */}
+                {fileType === 'non-hiv' && (
+                    <div className="input-container">
+                        <label htmlFor="sheet-name">Sheet Name:</label>
+                        <select id="sheet-name"  value={sheetName}
+                                onChange={(e) => setSheetName(e.target.value)}>
+                            <option value="">select Sheet</option>
+                            <option value="Octobre_FY1">Octobre_FY1</option>
+                            <option value="Novembre_FY1">Novembre_FY1</option>
+                            <option value="Decembre_FY1">Decembre_FY1</option>
+                            <option value="Janvier_FY1">Janvier_FY1</option>
+                            <option value="Fevrier_FY1">Fevrier_FY1</option>
+                            <option value="Mars_FY1">Mars_FY1</option>
+                            <option value="Avril_FY1">Avril_FY1</option>
+                            <option value="Mai_FY1">Mai_FY1</option>
+                            <option value="Septembre_FY1">Septembre_FY1</option>
+                            <option value="Aout_FY1">Aout_FY1</option>
+                            <option value="Juillet_FY1">Juillet_FY1</option>
+                            <option value="Juin_FY1">Juin_FY1</option>
+
+                            {/* Add more options as needed */}
+                        </select>
                     </div>
-                </div>
+                )}
+                {fileType !== 'non-hiv' && (
+                    <div className="input-container">
+                        <label htmlFor="org-unit">Organization Unit:</label>
+                        <div className="org-unit-dropdown">
+                            <input
+                                type="text"
+                                id="org-unit"
+                                placeholder="Organization Unit"
+                                value={query}
+                                onChange={handleInputChange}
+                            />
+                            {isListOpen && (
+                                <ul className="org-unit-list">
+                                    {orgUnits.map((unit) => (
+                                        <li key={unit.id} onClick={() => handleOrgUnitSelect(unit)}>
+                                            {unit.displayName}
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+                )}
+
 
                 {/* Period */}
                 <div className="input-container">
