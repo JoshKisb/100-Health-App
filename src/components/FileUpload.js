@@ -55,23 +55,22 @@ function ExcelToJsonConverter() {
                 // setJsonData(JSON.stringify(json, null, 2));
 
                 // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(12,26);
-                const eventTwoColumnNames = Object.keys(json[0]).slice(27,44);
+                const columnNames = Object.keys(json[0]).slice(14,20);
                 let createdCount = 0;
                 let updatedCount = 0;
                 // console.log("event one", columnNames)
-                // console.log("event two", eventTwoColumnNames)
+
 
                 for (const row of json) {
                     const id = row.TrackedEntityInstances; //  'ID'  column name
                     const exists = await checkIdExistence(id);
                     // console.log(exists.eventId)
-                    if (exists.found) {
+                    if (exists) {
 
                         // Generate dataValues array dynamically based on column names
                         const eventOne = columnNames.map(columnName => ({
                             dataElement: columnName,
-                            value: columnName === 'uxHOAUsyDKz' || columnName === 'sKrn2rY6l0w' || columnName === 'ArUaftNaqGt' || columnName === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[columnName]) : row[columnName]
+                            value: row[columnName]
                         }));
 
                         const evenOneData = {
@@ -79,39 +78,18 @@ function ExcelToJsonConverter() {
                                 {
                                     dataValues: eventOne,
                                     // event: "unVgHirSaRI",
-                                    program: "h0iSBI3xoS6",
-                                    programStage: "nknoeOj6dLq",
+                                    program: row.program,
+                                    programStage: row.programStage,
                                     orgUnit: row.OrgUIDs,
                                     trackedEntityInstance: row.TrackedEntityInstances,
-                                    trackedEntityType: "T5DWDr5Swce",
-                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
+                                    trackedEntityType: "KxjkNKTPWNV",
+                                    eventDate: formatDateFromExcelSerial(row.eventDate),
                                     completedDate: "2024-01-27"
                                 }
                             ]
                         }
                         await eventOneRecord(id, evenOneData, updatedCount);
 
-
-                        const eventTwo = eventTwoColumnNames.map(columnName => ({
-                            dataElement: columnName,
-                            value: row[columnName]
-                        })).filter(row => row.value === true);
-                        console.log("true values ", eventTwo)
-
-                        // update data
-                        for (const event of eventTwo) {
-                            const updatedData = {
-                                dataValues: [{
-                                    dataElement: event.dataElement,
-                                    value: event.value
-                                }]
-                            };
-
-                            setJsonData(JSON.stringify(updatedData, null, 2));
-                            console.log("update data", updatedData);
-                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
-                            // updatedCount++;
-                        }
 
 
                     } else {
@@ -121,37 +99,27 @@ function ExcelToJsonConverter() {
                             trackedEntityInstances: [{
                                 trackedEntityInstance: row.TrackedEntityInstances,
                                 orgUnit: row.OrgUIDs,
-                                trackedEntityType: "T5DWDr5Swce",
-                                attributes: Object.keys(row).slice(4, 12).map((key) => ({
+                                trackedEntityType: "KxjkNKTPWNV",
+                                attributes: Object.keys(row).slice(4, 11).map((key) => ({
                                     attribute: key,
-                                    value: row[key]
+                                    value: key === 'oxX4mTen5y9' ? formatDateFromExcelSerial(row[key]) : row[key]
                                 })),
                                 enrollments: [
                                     {
                                         orgUnit: row.OrgUIDs,
-                                        program: "h0iSBI3xoS6",
+                                        program: row.program,
                                         enrollmentDate: formatDateFromExcelSerial(row.EnrollmentDate),
-                                        incidentDate: formatDateFromExcelSerial(row.IncidentDate),
+                                        incidentDate: formatDateFromExcelSerial(row.incidentDate),
                                         events: [
                                             {
-                                                program: "h0iSBI3xoS6",
+                                                program: row.program,
                                                 orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
-                                                programStage: "nknoeOj6dLq",
-                                                dataValues: Object.keys(row).slice(12, 24).map((key) => ({
-                                                    dataElement: key,
-                                                    // value: row[key]
-                                                    value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
-                                                }))
-                                            },
-                                            {
-                                                program: "h0iSBI3xoS6",
-                                                orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.eventTwoDate),
-                                                programStage: "s1kg8duJ8U1",
-                                                dataValues: Object.keys(row).slice(27, 44).map((key) => ({
+                                                eventDate: formatDateFromExcelSerial(row.eventDate),
+                                                programStage: row.programStage,
+                                                dataValues: Object.keys(row).slice(14, 20).map((key) => ({
                                                     dataElement: key,
                                                     value: row[key]
+                                                    // value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
                                                 }))
                                             },
                                             // Add more events if needed
@@ -191,11 +159,11 @@ function ExcelToJsonConverter() {
             eventId: null
         };
         try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/${id}?fields=enrollments[events[event,programStage,eventDate,orgUnit]]`,{
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/trackedEntityInstances/${id}?fields=enrollments[events[event,programStage,eventDate,orgUnit]]`,{
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_USERNAME}:${process.env.REACT_APP_PASSWORD}`),
                 },
             });
 
@@ -245,11 +213,11 @@ function ExcelToJsonConverter() {
 
         //  POST jsonData to an API endpoint
         try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/events', {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/events`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_USERNAME}:${process.env.REACT_APP_PASSWORD}`),
                 },
                 body: JSON.stringify(data),
                 credentials: 'include',
@@ -268,42 +236,15 @@ function ExcelToJsonConverter() {
         setUpdatedEventsCount(updatedCount);
     };
 
-    // Function to update record at
-    const updateRecord = async (eventId, id, data, updatedCount) => {
-
-        //  POST jsonData to an API endpoint
-        try {
-            const response = await fetch(`https://uthabitiactivity.org/uthabiti/api/events/${eventId}/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Sci_test:Save1234!'),
-                },
-                body: JSON.stringify(data),
-                credentials: 'include',
-            });
-
-            if (response.ok) {
-                console.log(`Record with ID ${id} updated successfully.`);
-            } else {
-                console.error(`Failed to update record with ID ${id}.`);
-            }
-            updatedCount++;
-
-        } catch (error) {
-            console.error(`Error updating record with ID ${id}:`, error);
-        }
-        setUpdatedEventsCount(updatedCount);
-    };
 
     // Function to create payload
     const createRecord = async (data, createdCount) => {
         try {
-            const response = await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances', {
+            const response = await fetch(`${process.env.REACT_APP_BASE_URL}/api/trackedEntityInstances`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_USERNAME}:${process.env.REACT_APP_PASSWORD}`),
                 },
                 body: JSON.stringify(data),
                 credentials: 'include',
@@ -324,11 +265,11 @@ function ExcelToJsonConverter() {
     const resetTable = async () => {
         try {
             // console.log("response is", response)
-            return await fetch('https://uthabitiactivity.org/uthabiti/api/trackedEntityInstances/query.json?ou=O2I1C1KOAgg&ouMode=SELECTED&program=h0iSBI3xoS6', {
+            return await fetch(`${process.env.REACT_APP_BASE_URL}/api/trackedEntityInstances/query.json?ou=O2I1C1KOAgg&ouMode=SELECTED&program=h0iSBI3xoS6`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Basic ' + btoa('Myco:Caf3t3ria!'),
+                    'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_USERNAME}:${process.env.REACT_APP_PASSWORD}`),
                 },
             });
         } catch (error){
