@@ -18,6 +18,7 @@ import moment from "moment";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import { useTranslation } from "../utils/useTranslation";
+import image from './img/logo.jpg';
 
 const { Title } = Typography;
 
@@ -271,12 +272,11 @@ const CardTitle = observer((props: any) => {
 					</p>
 				</div>
 
-				{/*<div style={{ textAlign: "center" }}> /!* Modified style to center align *!/*/}
-				{/*	<p>*/}
-				{/*		<img src="../img/image.jpg" alt="Logo" /></p>*/}
-				{/*</div>*/}
+				<div style={{ textAlign: "center" }}> {/* Modified style to center align */}
+					<p>
+						<img src={image} alt="Logo" /></p>
+				</div>
 
-				{/*<img src="img/image.jpg" alt="Ministère de la Santé" style={{ maxWidth: "100px" }} /> /!* Add your image here *!/*/}
 
 				<div style={{ textAlign: "right" }}>
 					<Title className="text-right" level={2}>
