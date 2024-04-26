@@ -3216,7 +3216,6 @@ export const DataEntryForm = observer(() => {
                                             "Report disease or condition directly leading to death on line"
                                             ]
                                     }
-                                    a
                                 </b>
                             </td>
                             <td className="border p-1">
