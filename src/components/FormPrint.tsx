@@ -18,7 +18,7 @@ import moment from "moment";
 import {observer} from "mobx-react";
 import {useStore} from "../Context";
 import {useTranslation} from "../utils/useTranslation";
-import image from './img/nira logo.png';
+import image from './img/moh_logo.png';
 
 const {Title} = Typography;
 
@@ -208,7 +208,7 @@ const CardTitle = observer((props: any) => {
             </div>
             <div style={{textAlign: "center"}}>
                 <p>
-                    <img src={image} alt="Logo"/></p>
+                    <img src={image} alt="Logo" style={{width:"20%", height: "20%"}}/></p>
             </div>
             <Title className="text-center" level={2}>
                 {tr('DEATH NOTIFICATION RECORD')}
