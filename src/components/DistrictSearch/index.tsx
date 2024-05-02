@@ -340,8 +340,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                         ? store?.activeLanguage?.lang?.["health facilities"] +
                           " "
                         : store?.activeLanguage?.lang?.["regions"] + " "}
-                      {store?.activeLanguage?.lang?.["in"]}{" "}
-                      {parentName || store?.activeLanguage?.lang?.["Uganda"]}
+                      {/*{store?.activeLanguage?.lang?.["in"]}{" "}*/}
+                      {/*{parentName || store?.activeLanguage?.lang?.["Uganda"]}*/}
                     </div>
                   ) : (
                     ""
