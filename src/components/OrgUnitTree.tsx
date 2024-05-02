@@ -234,8 +234,8 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
                   value={store.selectedLevel}
                >
                   <Option value={1}>Level 1</Option>
-                  <Option value={2}>Level 2</Option>
-                  <Option value={3}>Level 3</Option>
+                  <Option value={3}>Level 2</Option> {/*region*/}
+                  <Option value={2}>Level 3</Option> {/*district*/}
                   <Option value={4}>Level 4</Option>
                   <Option value={5}>Level 5</Option>
                </Select>
