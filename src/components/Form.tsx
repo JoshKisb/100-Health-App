@@ -2553,23 +2553,23 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["County"] ?? "County"}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="se3wRj1bYPo"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.se3wRj1bYPo
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>{activeLanguage.lang["County"] ?? "County"}</b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="se3wRj1bYPo"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <Input*/}
+                            {/*            size="large"*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.se3wRj1bYPo*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
 
 
                             <td className="border p-1">
@@ -2577,7 +2577,7 @@ export const DataEntryForm = observer(() => {
                                     {activeLanguage.lang["Date of Birth"]}
                                 </b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1" colSpan={3}>
                                 {!forceResetDOB ? (
                                     <Form.Item
 
@@ -2629,41 +2629,41 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Sub-County"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="u44XP9fZweA"
-                                    className="m-0"
-                                >
-                                    <DistSearchPopup
-                                        // limitedArray={limitedArray}
-                                        parentName={chosenDistrictToSubmit}
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.u44XP9fZweA
-                                        }
-                                        searchType={
-                                            validSearchTypes.subCounty
-                                        }
-                                        setDictatedContent={
-                                            setChosenDistrict
-                                        }
-                                        // limitedArrayParent={limitedArrayParent}
-                                        dictatedContent={chosenSubCounty}
-                                        receiveOutput={(text: any) =>
-                                            setChosenSubcounty(`${text}`)
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>{activeLanguage.lang["Sub-County"]}</b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="u44XP9fZweA"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <DistSearchPopup*/}
+                            {/*            // limitedArray={limitedArray}*/}
+                            {/*            parentName={chosenDistrictToSubmit}*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.u44XP9fZweA*/}
+                            {/*            }*/}
+                            {/*            searchType={*/}
+                            {/*                validSearchTypes.subCounty*/}
+                            {/*            }*/}
+                            {/*            setDictatedContent={*/}
+                            {/*                setChosenDistrict*/}
+                            {/*            }*/}
+                            {/*            // limitedArrayParent={limitedArrayParent}*/}
+                            {/*            dictatedContent={chosenSubCounty}*/}
+                            {/*            receiveOutput={(text: any) =>*/}
+                            {/*                setChosenSubcounty(`${text}`)*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
 
 
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex">
+                            <td className="border p-1 d-flex" colSpan={3}>
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
@@ -2810,29 +2810,29 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Village"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="dsiwvNQLe5n"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.dsiwvNQLe5n
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>{activeLanguage.lang["Village"]}</b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="dsiwvNQLe5n"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <Input*/}
+                            {/*            size="large"*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.dsiwvNQLe5n*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
 
 
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Sex"]}</b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1" colSpan={3}>
                                 {optionSets ? (
                                     <Form.Item
 
@@ -2896,25 +2896,25 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border p-1">
-                                <b>
-                                    {activeLanguage.lang["Place of Birth"]}
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="xNCSFrgdUgi"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.xNCSFrgdUgi
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>*/}
+                            {/*        {activeLanguage.lang["Place of Birth"]}*/}
+                            {/*    </b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="xNCSFrgdUgi"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <Input*/}
+                            {/*            size="large"*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.xNCSFrgdUgi*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
                             <td className="border p-1">
                                 <b>
                                     {
@@ -2924,7 +2924,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1" colSpan={3}>
                                 <Form.Item
                                     name="i8rrl8YWxLF"
                                     className="m-0"
