@@ -1,20 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
-import { observer } from "mobx-react";
-import { useStore } from "../Context";
-import { Table, Card, Drawer, List, Checkbox, Select, Space, notification} from "antd";
-import {DeleteOutlined, EllipsisOutlined, SettingOutlined} from "@ant-design/icons";
-import Highcharts, { Options } from "highcharts";
-import { DatePicker, Input, Menu, Dropdown, Button, Form, Popover } from "antd";
-import { AudioOutlined, DownOutlined, LoadingOutlined, DownloadOutlined,} from "@ant-design/icons";
-import { CSVLink } from "react-csv";
+import React, {useEffect, useRef, useState} from "react";
+import {observer} from "mobx-react";
+import {useStore} from "../Context";
+import {
+    Button,
+    Card,
+    Checkbox,
+    DatePicker,
+    Drawer,
+    Dropdown,
+    Input,
+    List,
+    Menu,
+    notification,
+    Popover,
+    Space,
+    Table,
+    Tabs
+} from "antd";
+import {AudioOutlined, DeleteOutlined, DownOutlined, LoadingOutlined, SettingOutlined} from "@ant-design/icons";
+import Highcharts from "highcharts";
+import {CSVLink} from "react-csv";
 import englishString from "./../assets/english.json";
 import frenchString from "./../assets/french.json";
-import { set } from "lodash";
 import AnacodDownload from "./AnacodDownload";
-import { useConfig } from "@dhis2/app-runtime";
-import { TopDiseasesChart } from "./TopDiseasesChart";
-import { Tabs } from "antd";
-import { WeeklyReport } from "./WeeklyReport";
+import {useConfig} from "@dhis2/app-runtime";
+import {TopDiseasesChart} from "./TopDiseasesChart";
 // @ts-ignore
 import dataDictionary from '../assets/DATA_DICTIONARY_V1.csv'
 
@@ -375,7 +385,22 @@ export const EventList = observer(() => {
                             if(selectedDateRange){
                                 handleDownload(true,selectedDateRange[0], selectedDateRange[1])
                             } else {
-                                handleDownload(true)
+                                // Get the current date
+                                const currentDate = new Date();
+
+                                // Calculate the start date by subtracting 12 months from the current date
+                                const startDate = new Date();
+                                startDate.setMonth(currentDate.getMonth() - 12);
+
+                                //format the date
+                                const formatDateString = (date) => {
+                                    const year = date.getFullYear();
+                                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                                    const day = String(date.getDate()).padStart(2, '0');
+                                    return `${year}-${month}-${day}`;
+                                };
+
+                                handleDownload(true, formatDateString(startDate), formatDateString(currentDate))
                             }
                         }
                         // () => handleDownload(true)
