@@ -2076,8 +2076,25 @@ class Store {
 			program: this.program,
 			programStage: this.programStage,
 			eventDate: moment(eventDate).format("YYYY-MM-DD"),
+			event: "",
 			dataValues,
 		};
+
+		// Find the data element object with ID "ZKBE8Xm9DJG"
+		let zkbe8xValue = event.dataValues.find(element => element.dataElement === "ZKBE8Xm9DJG");
+
+		// If the data element object is found, set the value of the "event" field to match it
+		if (zkbe8xValue) {
+			let value = zkbe8xValue.value;
+
+			if (value.includes("MATERNAL") || value.includes("PERI")) {
+				// Slice the value to use the last 11 digits
+				event.event = value.slice(-11);
+			} else {
+				// Use the original value
+				event.event = value;
+			}
+		}
 
 		const under = {
 			field1: "",
