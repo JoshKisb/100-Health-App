@@ -2033,7 +2033,8 @@ export const DataEntryForm = observer(() => {
     }
     console.log(store.isIframeEdit)
     const defaultValue = store.isIframeEdit ? "Linked" : ""; // Check if loaded in iframe
-    console.log(defaultValue)
+    // console.log(defaultValue)
+
 
     const printComponentRef = useRef(null);
     return (
@@ -2278,6 +2279,25 @@ export const DataEntryForm = observer(() => {
                                             store.viewMode ||
                                             store.allDisabled.FGagV1Utrdh
                                         }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                            {/*event date*/}
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="W0r4m6NiLsy"
+                                    className="m-0"
+                                    initialValue={moment().format('YYYY-MM-DD HH:mm:ss')}
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="new event date"
+                                        disabled={
+                                            true
+                                        }
+                                        // value ={moment().format('YYYY-MM-DD')}
+                                        type = "hidden"
                                     />
                                 </Form.Item>
                             </td>
