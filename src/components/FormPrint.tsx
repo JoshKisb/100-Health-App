@@ -60,25 +60,50 @@ const PrintableFormData = observer((props: any) => {
 	const tr = useTranslation();
 
 	const name = props.formVals["ZYKmQ9GPOaF"];
+	const lastname = props.formVals["ynAIfL7Fef2"];
 	const nin = props.formVals["MOstDqSY0gO"];
 	const sex = props.formVals["e96GB4CXyd3"];
 	const dob = props.formVals["RbrUuKFSqkZ"];
 	const age = props.formVals["q7e7FOXKnOf"];
+	const ageMonths = props.formVals["WYykJO0Vh3s"];
+	const ageDays = props.formVals["v8mvHHXo06E"];
+	const ageHours = props.formVals["VJXpmHCaAFG"];
+	const ageMinutes = props.formVals["TgFI46omIEg"];
 	const profession = props.formVals["b70okb06FWa"];
 	const district = props.formVals["t5nTEmlScSt"];
 	const subcounty = props.formVals["u44XP9fZweA"];
 	const village = props.formVals["dsiwvNQLe5n"];
 	const inpatientNo = props.formVals["FGagV1Utrdh"];
 	const dod = props.formVals["i8rrl8YWxLF"];
-	const dateOfDeath = !!dod ? moment(dod).format("DD-MMM-YYYY") : "";
+	const dateOfDeath = !!dod ? moment(dod).format("DD/MM/YYYY") : "";
 	const timeOfDeath = !!dod ? moment(dod).format('HH:mm:ss') : "";
 	const placeOfBirth = props.formVals["xNCSFrgdUgi"];
+
+
+	const declarant = props.formVals["qhDD59pxEap"];
+	const qualification = props.formVals["hxSaoqC5Uk7"];
+	const employee_id = props.formVals["BlQ0xVxY4xg"];
+	const service = props.formVals["FkwAS4gwdIg"];
+	
+	
+	const ref_firstname = props.formVals["RHlo2ydAm3g"];
+	const ref_lastname = props.formVals["DOM1qoPjK9p"];
+	const ref_address = props.formVals["f3nd8ydHU6K"];
+	
+	const burial_resistance = props.formVals["clTs5F3Y6Ku"];
+	
 	console.log(dod)
 
 	const parish = "";
 
 	const certified = props.certified;
 	const causeOfDeath = props.formVals["QTKk2Xt8KDu"];
+
+	let age_fmt = !!age ? `${age} years` : "";
+	age_fmt += !!ageMonths ? ` ${ageMonths} months`: ""; 
+	age_fmt += !!ageDays ? ` ${ageDays} days`: ""; 
+	age_fmt += !!ageHours ? ` ${ageHours} hours`: ""; 
+	age_fmt += !!ageMinutes ? ` ${ageMinutes} minutes`: ""; 
 
 	const getDEValue = (dataElementId) => {
 		const value = props.formVals[dataElementId];
@@ -98,9 +123,10 @@ const PrintableFormData = observer((props: any) => {
 
 				<div style={{ textAlign: "left" }}>
 					<p style={{ fontStyle: "italic" }}>
-						{ tr('Je soussigné (e) M/Mme1 : ...............................................................................................................................................................................................') }<br/>
-						{ tr(' Qualification:............................................................................................................................................................ N°...................................................') }<br/>
-						{ tr('en service ________________________________________________________________________________________certifie que le deces de') }<br/>
+						{ tr('Je soussigné (e) M/Mme1 :') } 
+						{`.............................${declarant}...........................................................................................................................................................`}<br/>
+						{ tr(`Qualification:...................${qualification || ""}........................................................................................................................... N°....................${employee_id || ""}....................`) }<br/>
+						{ tr(`en service _________________________${service || ""}______________________________________________________certifie que le deces de`) }<br/>
 						{ tr('la personne désignée ci-dessous, est réel et constant.') }<br/>
 						{ tr(`Date et heure du décés _________________${dateOfDeath || ""}____________ / _______${timeOfDeath || ""}_____________________________`) }<br/>
 						{ tr(`Lieu de décés 2__________________________${placeOfBirth || ""}________________________________________________________`) }
@@ -132,13 +158,13 @@ const PrintableFormData = observer((props: any) => {
 
 			<div style={{ textAlign: "left" }}>
 				<p style={{ fontStyle: "italic" }}>
-					{ tr(`Nom: _____________${name || ""}________________________________ Prénom(s): _________________________________`) }<br/>
+					{ tr(`Nom: _____________${name || ""}________________________________ Prénom(s): _____________${lastname || ""}_____________`) }<br/>
 					{ tr(`Sexe: _________${sex||""}____________________Néle:___________${dob|| ""}______________________________`) }<br/>
-					{ tr(`ou Age: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
+					{ tr(`ou Age: ________${age_fmt|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
 					{ tr(`Nationalité:............................................................................... N° Identifiant du patient:_________${inpatientNo || ""}_____________________`) }<br/>
 					{ tr(`Adresse: _____________________${village || ""}______________________________________________________`) }<br/>
-					{ tr('Personne référente: Norm: _______________________________________Prénom(s) : _______________________________________________-') }<br/>
-					{ tr('Adresse/Tel: ___________________________________________________________________________' )}<br/>
+					{ tr(`Personne référente: Norm: ______________${ref_firstname || ""}__________________Prénom(s) : _______________________${ref_lastname || ""}__________________-`) }<br/>
+					{ tr(`Adresse/Tel: __________________________________${ref_address || ""}__________________________________` )}<br/>
 				</p>
 			</div>
 
@@ -152,7 +178,7 @@ const PrintableFormData = observer((props: any) => {
 						alignItems: "start",
 					}}
 				>
-					<b style={{ fontWeight: "bold", marginBottom: "10px" }}>{ tr("NB : Obstacle mèdico-lègal à I'inhumation (en raison du caractère violent, indèterminè ou suspect de la mort ou corps non identifiè) : Oui /_/Non/_/ ") }:</b>
+					<b style={{ fontWeight: "bold", marginBottom: "10px" }}>{ tr("NB : Obstacle mèdico-lègal à I'inhumation (en raison du caractère violent, indèterminè ou suspect de la mort ou corps non identifiè) : Oui /_/Non/_/ ") }: { !!burial_resistance ? "Oui": "Non"}</b>
 					{/*<div style={{ ...styles.answerLine, marginLeft: "8px" }}>*/}
 					{/*	{eventDate}*/}
 					{/*</div>*/}

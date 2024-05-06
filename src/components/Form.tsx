@@ -2341,15 +2341,144 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Declarant") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
 
+                                    name="qhDD59pxEap"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.qhDD59pxEap
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        <tr>
 
                             <td className="border p-1">
                                 <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Name (Full name):"
-                                            ]
-                                    }
+                                    { tr("Qualification de l'agent de santé ayant rempli le formulaire") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="hxSaoqC5Uk7"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.hxSaoqC5Uk7
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Numéro ordre professionnel") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="BlQ0xVxY4xg"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.BlQ0xVxY4xg
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td className="border p-1">
+                                <b>
+                                    { tr("en service") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="FkwAS4gwdIg"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.FkwAS4gwdIg
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Unite/service de soins") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="CMRjkaFwqDt"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.CMRjkaFwqDt
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+                        </tr>
+                        <tr>
+                        
+                            
+                            <td className="border p-1">
+                                <b>
+                                    { tr("préciser autres unité / service de soins") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="F7W75Ilc341"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.F7W75Ilc341
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td className="border p-1">
+                                <b>
+                                    { tr("First Name") }
                                 </b>
                             </td>
                             <td className="border p-1">
@@ -2363,6 +2492,26 @@ export const DataEntryForm = observer(() => {
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.ZYKmQ9GPOaF
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Last Name") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="ynAIfL7Fef2"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.ynAIfL7Fef2
                                         }
                                     />
                                 </Form.Item>
@@ -2440,7 +2589,7 @@ export const DataEntryForm = observer(() => {
 
 
                             <td className="border p-1">
-                                <b>{activeLanguage.lang["Occupation"]}</b>
+                                <b>{tr("Profession")}</b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
@@ -2587,15 +2736,11 @@ export const DataEntryForm = observer(() => {
                                         <DatePicker
                                             disabledDate={notTomorrow}
                                             size="large"
-                                            placeholder={
-                                                activeLanguage.lang[
-                                                    "Select a Date"
-                                                    ]
-                                            }
+                                            format="DD/MM/YYYY HH:mm:ss"
+                                            placeholder={tr("Select a Date")}
                                             disabled={
                                                 store.viewMode ||
-                                                store.allDisabled
-                                                    .RbrUuKFSqkZ
+                                                store.allDisabled.RbrUuKFSqkZ
                                             }
                                             onChange={(e: any) => {
                                                 if (e?._d) {
@@ -2936,12 +3081,8 @@ export const DataEntryForm = observer(() => {
                                         disabledDate={notTomorrow}
                                         size="large"
                                         showTime
-                                        format="YYYY-MM-DD HH:mm:ss"
-                                        placeholder={
-                                            activeLanguage.lang[
-                                                "Select date and time of death"
-                                                ]
-                                        }
+                                        format="DD/MM/YYYY HH:mm:ss"
+                                        placeholder={tr("Select date and time of death")}
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.i8rrl8YWxLF
@@ -2980,6 +3121,91 @@ export const DataEntryForm = observer(() => {
                                             //     );
                                             // }
                                         }}
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+
+                        <tr>
+
+                            <td className="border p-1" colSpan={2}>
+                                <h3
+                                    style={{
+                                        fontWeight: "bolder",
+                                        color: "#000085",
+                                    }}
+                                >
+                                    {tr("Personne référente:")}
+                                </h3>
+                            </td>
+
+
+                            
+
+                        </tr>
+
+                        <tr>
+
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Nom personne referente") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="RHlo2ydAm3g"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.RHlo2ydAm3g
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                            <td className="border p-1">
+                                <b>
+                                    { tr("prenom personne referente") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="DOM1qoPjK9p"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.DOM1qoPjK9p
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td className="border p-1">
+                                <b>
+                                    { tr("Adresse /Tel de la personne referente") }
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="f3nd8ydHU6K"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.f3nd8ydHU6K
+                                        }
                                     />
                                 </Form.Item>
                             </td>
@@ -5652,6 +5878,96 @@ export const DataEntryForm = observer(() => {
                                 ) : null}
                             </td>
                         </tr>
+                        </tbody>
+                    </table>
+                    <table className="my-2 w-full border-collapse px-2"
+                           style={{...(notifyx ? ({display: "none"}) : ({}))}}>
+                        <tbody>
+                        <tr>
+                            <td
+                                colSpan={2}
+                                className="border p-1 text-lg"
+                                style={{background: titleBackgroundColor}}
+                            >
+                                <h3
+                                    style={{
+                                        fontWeight: "bolder",
+                                        color: "#000085",
+                                    }}
+                                >
+                                    {tr("III, Partie 2: Commentaires (signalement médico-légal)")}
+                                </h3>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td className="border p-1">
+                                <b>
+                                    {tr("Obstacle médico-légal à l’inhumation (en raison du caractère violent, indéterminé ou suspect de la mort ou corps non identifié)")}
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="clTs5F3Y6Ku"
+                                    className="m-0"
+                                    valuePropName="checked"
+                                >
+                                    <Checkbox
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.clTs5F3Y6Ku
+                                        }
+                                    >
+                                        {tr("Yes")}
+                                    </Checkbox>
+                                </Form.Item>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td className="border p-1">
+                                <b>
+                                    {tr("mise immédiate en cercueil hermétique en raison du risque contagieux")}
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                            <Form.Item
+                                    name="Ah6nU0tMzZa"
+                                    className="m-0"
+                                    valuePropName="checked"
+                                >
+                                    <Checkbox
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.Ah6nU0tMzZa
+                                        }
+                                    >
+                                        {tr("Yes")}
+                                    </Checkbox>
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="border p-1">
+                                <b>
+                                    {tr("autres situations (à préciser) :")}
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                            <Form.Item
+                                    name="E0VFpoZaH2F"
+                                    className="m-0"
+                                >
+                                    <Input.TextArea                                                                             
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.E0VFpoZaH2F
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+                        </tr>
+                        
                         </tbody>
                     </table>
                     <table className="my-2 w-full border-collapse px-2">
