@@ -2280,13 +2280,13 @@ export const DataEntryForm = observer(() => {
                                         }
                                     />
                                 </Form.Item>
-                            </td>
 
-                            {/*linked form item*/}
-                            <td className="border p-1">
+                                {/*linked form item*/}
+                            
                                 <Form.Item
                                     name="ZkNDFfFSTYg"
                                     className="m-0"
+                                    style={{ display: "none" }}
                                     // initialValue={defaultValue} // Set default value here
                                 >
                                     <Input
@@ -2299,6 +2299,9 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
+
+                            
+                           
                         </tr>
 
                         <tr>
@@ -2473,6 +2476,7 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
+                            <td className="border p-1" colSpan={2}></td>
                         </tr>
                         <tr>
 
@@ -2553,7 +2557,7 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
-
+                            <td className="border p-1"></td>
 
                         </tr>
 
@@ -2808,7 +2812,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex">
+                            <td className="border p-1 d-flex" style={{ maxWidth: "540px" }}>
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
@@ -2869,7 +2873,7 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     name="WYykJO0Vh3s"
                                     className="m-0"
-                                    style={{width: "100%"}}
+                                    style={{}}
                                     label="Months:"
                                 >
                                     <InputNumber
@@ -2889,7 +2893,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="TgFI46omIEg"
                                             className="m-0"
-                                            style={{width: "100%"}}
+                                            style={{}}
                                             label="Minutes"
                                         >
                                             <InputNumber
@@ -2910,7 +2914,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="VJXpmHCaAFG"
                                             className="m-0"
-                                            style={{width: "100%"}}
+                                            style={{}}
                                             label="Hours"
                                         >
                                             <InputNumber
@@ -2929,7 +2933,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="v8mvHHXo06E"
                                             className="m-0"
-                                            style={{width: "100%"}}
+                                            style={{}}
                                             label="Days"
                                         >
                                             <InputNumber
@@ -2948,7 +2952,7 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     // name="v8mvHHXo06E"
                                     className="m-0"
-                                    style={{width: "100%"}}
+                                    style={{}}
                                 >
 
                                 </Form.Item>
