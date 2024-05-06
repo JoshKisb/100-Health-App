@@ -2216,6 +2216,21 @@ export const DataEntryForm = observer(() => {
                                     className="m-0"
 
                                     rules={[
+                                        // Add a custom validator function to check if the field has a value
+                                        ({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                if (!value) {
+                                                    // Return a Promise.reject with an error message if the field is empty
+                                                    return Promise.reject('Ministry of Health National Case Number is required');
+                                                }
+                                                // check for length
+                                                if (value.length < 5) {
+                                                    return Promise.reject('Ministry of Health National Case Number must be more than 5 characters');
+                                                }
+                                                // Return a Promise.resolve if the field has a value
+                                                return Promise.resolve();
+                                            },
+                                        }),
                                         { required: true, message: 'Ministry of Health National Case Number is required' },
                                         // { validator: checkMinistryCaseNumber },
                                         !store.editing && {
