@@ -2812,7 +2812,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex" style={{ maxWidth: "540px" }}>
+                            <td className="border p-1 d-flex" style={{ maxWidth: "480px" }}>
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
@@ -2873,7 +2873,7 @@ export const DataEntryForm = observer(() => {
                                 <Form.Item
                                     name="WYykJO0Vh3s"
                                     className="m-0"
-                                    style={{}}
+                                    style={{ width: "100%" }}
                                     label="Months:"
                                 >
                                     <InputNumber
@@ -2893,7 +2893,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="TgFI46omIEg"
                                             className="m-0"
-                                            style={{}}
+                                            style={{ width: "100%" }}
                                             label="Minutes"
                                         >
                                             <InputNumber
@@ -2914,7 +2914,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="VJXpmHCaAFG"
                                             className="m-0"
-                                            style={{}}
+                                            style={{ width: "100%" }}
                                             label="Hours"
                                         >
                                             <InputNumber
@@ -2933,7 +2933,7 @@ export const DataEntryForm = observer(() => {
                                         <Form.Item
                                             name="v8mvHHXo06E"
                                             className="m-0"
-                                            style={{}}
+                                            style={{ width: "100%" }}
                                             label="Days"
                                         >
                                             <InputNumber
