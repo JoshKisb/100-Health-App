@@ -2812,7 +2812,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex" style={{ maxWidth: "480px" }}>
+                            <td className="border p-1 d-flex" style={{ maxWidth: "470px" }}>
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
