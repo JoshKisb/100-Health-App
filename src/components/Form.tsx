@@ -2252,8 +2252,9 @@ export const DataEntryForm = observer(() => {
                                     <Input
                                         size="large"
                                         disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ZKBE8Xm9DJG
+                                        true
+                                            // store.viewMode ||
+                                            // store.allDisabled.ZKBE8Xm9DJG
                                         }
                                     />
                                 </Form.Item>
