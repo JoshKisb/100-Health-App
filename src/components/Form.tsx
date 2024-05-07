@@ -1272,8 +1272,8 @@ export const DataEntryForm = observer(() => {
                     store.disableValue("dsiwvNQLe5n")
 
 
-                    // xNCSFrgdUgi place of birth
-                    form.setFieldsValue({xNCSFrgdUgi: data.data.address?.parish});
+                    // xNCSFrgdUgi place of death
+                    // form.setFieldsValue({xNCSFrgdUgi: data.data.address?.parish}); turn off auto set
                     store.disableValue("xNCSFrgdUgi")
 
                     //se3wRj1bYPo County
@@ -2934,7 +2934,8 @@ export const DataEntryForm = observer(() => {
                         <tr>
                             <td className="border p-1">
                                 <b>
-                                    {activeLanguage.lang["Place of Birth"]}
+                                    Place of Death
+                                    {/*{activeLanguage.lang["Place of Birth"]}*/}
                                 </b>
                             </td>
                             <td className="border p-1">
