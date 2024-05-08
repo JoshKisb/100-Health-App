@@ -442,73 +442,8 @@ export const DataEntryForm = observer(() => {
 
         }
 
-        // if (approvalStatus) {
-        // 	values.twVlVWM3ffz = approvalStatus;
-        // }
-        // if (chosenRegionToSubmit || chosenRegion) {
-        // 	values.zwKo51BEayZ = chosenRegionToSubmit || chosenRegion;
-        // }
-        // // if() values.dTd7txVzhgY = underlyingCauseCode; // ???
-        // if (underlyingCauseText) {
-        // 	values.QTKk2Xt8KDu = underlyingCauseText;
-        // } // text
-        // if (underlyingCauseCode) {
-        // 	values.sJhOdGLD5lj = underlyingCauseCode;
-        // } // term = code
-        // if (underlyingCauseURI) {
-        // 	values.L97MrAMAav9 = underlyingCauseURI;
-        // } // uri
-        // if (chosenDistrictToSubmit) {
-        // 	values.u44XP9fZweA = chosenDistrictToSubmit;
-        // } // district
-        // if (chosenSubCounty) {
-        // 	values.t5nTEmlScSt = chosenSubCounty;
-        // } // subcounty
-        // if (chosenFacilityToSubmit || chosenFacility) {
-        // 	values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
-        // }
-        // console.log("Saved ", chosenFacilityToSubmit);
-        // values = {
-        // 	...values,
-        // 	...declarations,
-        // };
-        // // Object.keys(declarations).forEach(item=>{
-        // //   if(declarations[item]){
-        // //     values[item]=declarations[item]
-        // //   }
-        //
-        // // })
-        // // values.attributeCategoryOptions = 'l4UMmqvSBe5';
-        // console.log("values", values);
-        //
-        // await store.addEvent(values);
-        // if (!!fromReview) {
-        // 	let rvalues = {};
-        // 	Object.keys(mcodmap).forEach(rkey => {
-        // 		const val = values[mcodmap[rkey]];
-        // 		rvalues[rkey] = !!val ? val : "";
-        // 	})
-        // 	console.log("rvalues", rvalues);
-        // 	(window.parent as any).returntoreview?.(rvalues);
-        // 	(window.parent as any).closeIframe?.();
-        // }
-
-
     };
 
-
-    // const onCancel = () => {
-    // 	if (!!fromReview) {
-    // 		// console.log("window", window);
-    // 		// window.close();
-    // 		// (window.parent as any).closeIframe();
-    // 		localStorage.clear()
-    // 		window.location.href = "/";
-    // 	} else {
-    // 		store.showEvents();
-    // 		store.enableForm();
-    // 	}
-    // }
 
     const onCancel = () => {
         // const allowedUrl = 'tbl-ecbss-dev.health.go.ug';
@@ -2200,7 +2135,7 @@ export const DataEntryForm = observer(() => {
                     <table className="my-2 w-full border-collapse">
                         <tbody>
                         <tr>
-                            <td className="border p-1">
+                            <td className="border p-1"  style={{ width: '25%' }}>
                                 <b>
                                     {
                                         activeLanguage.lang[
@@ -2209,7 +2144,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1"  style={{ width: '25%' }}>
                                 <Form.Item
                                     name="ZKBE8Xm9DJG"
                                     className="m-0"
@@ -2243,12 +2178,12 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
 
-                            <td className="border p-1">
+                            <td className="border p-1"  style={{ width: '25%' }}>
                                 <b>
-                                    Inpatient Number
+                                    Ministry of Health National Health ID
                                 </b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1"  style={{ width: '25%' }}>
                                 <Form.Item
 
                                     name="FGagV1Utrdh"
@@ -2283,7 +2218,7 @@ export const DataEntryForm = observer(() => {
                             </td>
 
                             {/*linked form item*/}
-                            <td className="border p-1">
+                            <td>
                                 <Form.Item
                                     name="ZkNDFfFSTYg"
                                     className="m-0"
@@ -2370,7 +2305,7 @@ export const DataEntryForm = observer(() => {
                         </tr>
                         <tr>
 
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1" colSpan={4}>
 
                                 <h3
                                     style={{
@@ -2387,7 +2322,7 @@ export const DataEntryForm = observer(() => {
                             </td>
 
 
-                            <td className="border p-1">
+                            <td>
                                 <Form.Item
                                     name="twVlVWM3ffz"
                                     className="m-0"
@@ -2408,56 +2343,6 @@ export const DataEntryForm = observer(() => {
 
                         </tr>
 
-
-                        <tr>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Region"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="zwKo51BEayZ"
-                                    className="m-0"
-                                >
-                                    <DistSearchPopup
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.zwKo51BEayZ
-                                        }
-                                        searchType={validSearchTypes.region}
-                                        // setLimitedArray={limitedRegionParent}
-                                        dictatedContent={chosenRegion}
-                                        // setLimitedArrayParent={setLimitedRegionParent}
-                                        receiveOutput={(text: any) => {
-                                            console.log("Chosen region is ", text);
-                                            setChosenRegionToSubmit(
-                                                `${text}`
-                                            );
-                                        }}
-                                    />
-
-                                </Form.Item>
-                            </td>
-
-
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Occupation"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="b70okb06FWa"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.b70okb06FWa
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-                        </tr>
-
                         <tr>
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["District"]}</b>
@@ -2467,24 +2352,32 @@ export const DataEntryForm = observer(() => {
                                     name="t5nTEmlScSt"
                                     className="m-0"
                                 >
-                                    <DistSearchPopup
+                                    <Input
+                                        size="large"
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.t5nTEmlScSt
                                         }
-                                        searchType={
-                                            validSearchTypes.district
-                                        }
-                                        parentName={chosenRegionToSubmit}
-                                        // setLimitedArray={setLimitedDistrictParent}
-                                        dictatedContent={chosenDistrict}
-                                        // setLimitedArrayParent={setLimitedRegionParent}
-                                        receiveOutput={(text: any) =>
-                                            setChosenDistrictToSubmit(
-                                                `${text}`
-                                            )
-                                        }
                                     />
+                                    {/*turn off type to search district*/}
+                                    {/*<DistSearchPopup*/}
+                                    {/*    disabled={*/}
+                                    {/*        store.viewMode ||*/}
+                                    {/*        store.allDisabled.t5nTEmlScSt*/}
+                                    {/*    }*/}
+                                    {/*    searchType={*/}
+                                    {/*        validSearchTypes.district*/}
+                                    {/*    }*/}
+                                    {/*    parentName={chosenRegionToSubmit}*/}
+                                    {/*    // setLimitedArray={setLimitedDistrictParent}*/}
+                                    {/*    dictatedContent={chosenDistrict}*/}
+                                    {/*    // setLimitedArrayParent={setLimitedRegionParent}*/}
+                                    {/*    receiveOutput={(text: any) =>*/}
+                                    {/*        setChosenDistrictToSubmit(*/}
+                                    {/*            `${text}`*/}
+                                    {/*        )*/}
+                                    {/*    }*/}
+                                    {/*/>*/}
                                 </Form.Item>
                                 {/* <Form.Item name="bNpMzyShDCX" className="m-0">
                   <Input
@@ -2553,24 +2446,6 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            {/*<td className="border p-1">*/}
-                            {/*    <b>{activeLanguage.lang["County"] ?? "County"}</b>*/}
-                            {/*</td>*/}
-                            {/*<td className="border p-1">*/}
-                            {/*    <Form.Item*/}
-                            {/*        name="se3wRj1bYPo"*/}
-                            {/*        className="m-0"*/}
-                            {/*    >*/}
-                            {/*        <Input*/}
-                            {/*            size="large"*/}
-                            {/*            disabled={*/}
-                            {/*                store.viewMode ||*/}
-                            {/*                store.allDisabled.se3wRj1bYPo*/}
-                            {/*            }*/}
-                            {/*        />*/}
-                            {/*    </Form.Item>*/}
-                            {/*</td>*/}
-
 
                             <td className="border p-1">
                                 <b>
@@ -2629,41 +2504,28 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            {/*<td className="border p-1">*/}
-                            {/*    <b>{activeLanguage.lang["Sub-County"]}</b>*/}
-                            {/*</td>*/}
-                            {/*<td className="border p-1">*/}
-                            {/*    <Form.Item*/}
-                            {/*        name="u44XP9fZweA"*/}
-                            {/*        className="m-0"*/}
-                            {/*    >*/}
-                            {/*        <DistSearchPopup*/}
-                            {/*            // limitedArray={limitedArray}*/}
-                            {/*            parentName={chosenDistrictToSubmit}*/}
-                            {/*            disabled={*/}
-                            {/*                store.viewMode ||*/}
-                            {/*                store.allDisabled.u44XP9fZweA*/}
-                            {/*            }*/}
-                            {/*            searchType={*/}
-                            {/*                validSearchTypes.subCounty*/}
-                            {/*            }*/}
-                            {/*            setDictatedContent={*/}
-                            {/*                setChosenDistrict*/}
-                            {/*            }*/}
-                            {/*            // limitedArrayParent={limitedArrayParent}*/}
-                            {/*            dictatedContent={chosenSubCounty}*/}
-                            {/*            receiveOutput={(text: any) =>*/}
-                            {/*                setChosenSubcounty(`${text}`)*/}
-                            {/*            }*/}
-                            {/*        />*/}
-                            {/*    </Form.Item>*/}
-                            {/*</td>*/}
 
-
+                            <td className="border p-1">
+                                <b>{activeLanguage.lang["Occupation"]}</b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="b70okb06FWa"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.b70okb06FWa
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex" colSpan={3}>
+                            <td className="border p-1 d-flex">
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
@@ -2896,25 +2758,25 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            {/*<td className="border p-1">*/}
-                            {/*    <b>*/}
-                            {/*        {activeLanguage.lang["Place of Birth"]}*/}
-                            {/*    </b>*/}
-                            {/*</td>*/}
-                            {/*<td className="border p-1">*/}
-                            {/*    <Form.Item*/}
-                            {/*        name="xNCSFrgdUgi"*/}
-                            {/*        className="m-0"*/}
-                            {/*    >*/}
-                            {/*        <Input*/}
-                            {/*            size="large"*/}
-                            {/*            disabled={*/}
-                            {/*                store.viewMode ||*/}
-                            {/*                store.allDisabled.xNCSFrgdUgi*/}
-                            {/*            }*/}
-                            {/*        />*/}
-                            {/*    </Form.Item>*/}
-                            {/*</td>*/}
+                            <td className="border p-1">
+                                <b>
+                                    Place of Death
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="xNCSFrgdUgi"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.xNCSFrgdUgi
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
                             <td className="border p-1">
                                 <b>
                                     {
@@ -3138,7 +3000,7 @@ export const DataEntryForm = observer(() => {
                             <td
                                 colSpan={7}
                                 className="border p-1 text-lg"
-                                style={{background: titleBackgroundColor}}
+                                style={{background: titleBackgroundColor, backgroundColor: "lightblue" }}
                             >
                                 <h3
                                     style={{
@@ -4673,7 +4535,7 @@ export const DataEntryForm = observer(() => {
                             <td
                                 colSpan={2}
                                 className="border p-1 text-lg"
-                                style={{background: titleBackgroundColor}}
+                                style={{background: titleBackgroundColor, backgroundColor: "#fa4545" }}
                             >
                                 <h3
                                     style={{
