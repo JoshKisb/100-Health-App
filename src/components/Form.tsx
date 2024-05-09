@@ -404,10 +404,10 @@ export const DataEntryForm = observer(() => {
                 values.L97MrAMAav9 = underlyingCauseURI;
             } // uri
             if (chosenDistrictToSubmit) {
-                values.u44XP9fZweA = chosenDistrictToSubmit;
+                values.t5nTEmlScSt  = chosenDistrictToSubmit;
             } // district
             if (chosenSubCounty) {
-                values.t5nTEmlScSt = chosenSubCounty;
+                values.u44XP9fZweA = chosenSubCounty;
             } // subcounty
             if (chosenFacilityToSubmit || chosenFacility) {
                 values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
@@ -1584,11 +1584,11 @@ export const DataEntryForm = observer(() => {
             if (defaults["sJhOdGLD5lj"]) {
                 setUnderlyingCauseCode(`${defaults["sJhOdGLD5lj"]}`);
             }
-            if (defaults["t5nTEmlScSt"]) {
-                setChosenSubcounty(`${defaults["t5nTEmlScSt"]}`);
-            }
             if (defaults["u44XP9fZweA"]) {
-                setChosenDistrict(`${defaults["u44XP9fZweA"]}`);
+                setChosenSubcounty(`${defaults["u44XP9fZweA"]}`);
+            }
+            if (defaults["t5nTEmlScSt"]) {
+                setChosenDistrict(`${defaults["t5nTEmlScSt"]}`);
             }
             if (defaults["QDHeWslaEoH"]) {
                 setChosenFacility(`${defaults["QDHeWslaEoH"]}`);
@@ -2352,40 +2352,60 @@ export const DataEntryForm = observer(() => {
                                     name="t5nTEmlScSt"
                                     className="m-0"
                                 >
-                                    <Input
-                                        size="large"
+                                    <DistSearchPopup
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.t5nTEmlScSt
                                         }
+                                        searchType={validSearchTypes.region}
+                                        // setLimitedArray={limitedRegionParent}
+                                        dictatedContent={chosenDistrict}
+                                        // setLimitedArrayParent={setLimitedRegionParent}
+                                        receiveOutput={(text: any) => {
+                                            console.log("Chosen district is ", text);
+                                            setChosenDistrictToSubmit(
+                                                `${text}`
+                                            );
+                                        }}
                                     />
-                                    {/*turn off type to search district*/}
-                                    {/*<DistSearchPopup*/}
-                                    {/*    disabled={*/}
-                                    {/*        store.viewMode ||*/}
-                                    {/*        store.allDisabled.t5nTEmlScSt*/}
-                                    {/*    }*/}
-                                    {/*    searchType={*/}
-                                    {/*        validSearchTypes.district*/}
-                                    {/*    }*/}
-                                    {/*    parentName={chosenRegionToSubmit}*/}
-                                    {/*    // setLimitedArray={setLimitedDistrictParent}*/}
-                                    {/*    dictatedContent={chosenDistrict}*/}
-                                    {/*    // setLimitedArrayParent={setLimitedRegionParent}*/}
-                                    {/*    receiveOutput={(text: any) =>*/}
-                                    {/*        setChosenDistrictToSubmit(*/}
-                                    {/*            `${text}`*/}
-                                    {/*        )*/}
-                                    {/*    }*/}
-                                    {/*/>*/}
+
                                 </Form.Item>
+                            </td>
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>{activeLanguage.lang["District"]}</b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="t5nTEmlScSt"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <DistSearchPopup*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.t5nTEmlScSt*/}
+                            {/*            }*/}
+                            {/*            searchType={*/}
+                            {/*                validSearchTypes.district*/}
+                            {/*            }*/}
+                            {/*            // parentName={chosenRegionToSubmit}*/}
+                            {/*            // setLimitedArray={setLimitedDistrictParent}*/}
+                            {/*            dictatedContent=""*/}
+                            {/*            // setLimitedArrayParent={setLimitedRegionParent}*/}
+                            {/*            receiveOutput={(text: any) =>*/}
+
+                            {/*                setChosenDistrictToSubmit(*/}
+                            {/*                    `${text}`*/}
+                            {/*                )*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
                                 {/* <Form.Item name="bNpMzyShDCX" className="m-0">
                   <Input
                     size="large"
                     disabled={store.viewMode || store.allDisabled.bNpMzyShDCX}
                   />
                 </Form.Item> */}
-                            </td>
+                            {/*</td>*/}
 
                             <td className="border p-1">
                                 <b>
@@ -3000,7 +3020,7 @@ export const DataEntryForm = observer(() => {
                             <td
                                 colSpan={7}
                                 className="border p-1 text-lg"
-                                style={{background: titleBackgroundColor, backgroundColor: "lightblue" }}
+                                style={{background: titleBackgroundColor, backgroundColor: "lightgreen" }}
                             >
                                 <h3
                                     style={{
@@ -4535,7 +4555,7 @@ export const DataEntryForm = observer(() => {
                             <td
                                 colSpan={2}
                                 className="border p-1 text-lg"
-                                style={{background: titleBackgroundColor, backgroundColor: "#fa4545" }}
+                                style={{background: titleBackgroundColor, backgroundColor: "#e18e8e" }}
                             >
                                 <h3
                                     style={{

@@ -206,10 +206,10 @@ const CardTitle = observer((props: any) => {
             <div style={{textAlign: "right"}}>
                 {tr('REG NO:')} {props.caseNumber}
             </div>
-            <div style={{textAlign: "center"}}>
-                <p>
-                    <img src={image} alt="Logo" style={{width:"20%", height: "20%"}}/></p>
-            </div>
+            {/*<div style={{textAlign: "center"}}>*/}
+            {/*    <p>*/}
+            {/*        <img src={image} alt="Logo" style={{width:"20%", height: "20%"}}/></p>*/}
+            {/*</div>*/}
             <Title className="text-center" level={2}>
                 {tr('DEATH NOTIFICATION RECORD')}
             </Title>
