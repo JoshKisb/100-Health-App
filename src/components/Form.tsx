@@ -4555,7 +4555,7 @@ export const DataEntryForm = observer(() => {
                             <td
                                 colSpan={2}
                                 className="border p-1 text-lg"
-                                style={{background: titleBackgroundColor, backgroundColor: "#e18e8e" }}
+                                style={{background: titleBackgroundColor, backgroundColor: "#ecb8b8" }}
                             >
                                 <h3
                                     style={{
