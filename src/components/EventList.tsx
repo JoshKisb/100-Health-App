@@ -343,8 +343,6 @@ export const EventList = observer(() => {
     },
   ] : [];
 
-
-
   console.log("columnsWithAction", columnsWithAction);
   // console.log(store.data ? JSON.parse(JSON.stringify(store.data)) : "");
 

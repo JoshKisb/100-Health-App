@@ -2357,9 +2357,39 @@ class Store {
 		});
 	}
 
+	// @computed get columns() {
+	// 	if (this.data) {
+	// 		return this.availableDataElements
+	// 			.filter((de: any) => de.selected)
+	// 			.map((col: any) => {
+	// 				return {
+	// 					key: col.id,
+	// 					title: col.name,
+	// 					// width: 100,
+	// 					dataIndex: "dataValues",
+	// 					render: (values: any) => {
+	// 						const dv = values.find((dv) => dv.dataElement == col.id);
+	// 						return dv?.value;
+	// 					},
+	// 				};
+	// 			});
+	// 	}
+	// 	return [];
+	// }
 	@computed get columns() {
 		if (this.data) {
-			return this.availableDataElements
+			// check case number
+			const caseNumberColumn = {
+				key: 'ZKBE8Xm9DJG',
+				title: 'Case Number',
+				dataIndex: 'dataValues',
+				render: (values: any) => {
+					const dv = values.find((dv) => dv.dataElement == "ZKBE8Xm9DJG");
+					return dv?.value;
+				},
+			};
+
+			const otherColumns = this.availableDataElements
 				.filter((de: any) => de.selected)
 				.map((col: any) => {
 					return {
@@ -2373,9 +2403,12 @@ class Store {
 						},
 					};
 				});
+
+			return [caseNumberColumn, ...otherColumns];
 		}
 		return [];
 	}
+
 
 	@action getdlcolumns(data) {
 		if (!!data && this.availableDataElements.length > 0) {
