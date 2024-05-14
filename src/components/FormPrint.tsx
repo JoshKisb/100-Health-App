@@ -58,13 +58,15 @@ const PrintableFormData = observer((props: any) => {
 	const facility = store.currentOrganisationTree;
 	const tr = useTranslation();
 
-	const name = props.formVals["ZYKmQ9GPOaF"];
-	const nin = props.formVals["MOstDqSY0gO"];
-	const sex = props.formVals["e96GB4CXyd3"];
-	const district = props.formVals["t5nTEmlScSt"];
-	const subcounty = props.formVals["u44XP9fZweA"];
-	const village = props.formVals["dsiwvNQLe5n"];
-	const dod = props.formVals["i8rrl8YWxLF"];
+	import { elementIdMap } from './elementIdMap';
+
+	const name = props.formVals[elementIdMap.name.id];
+	const nin = props.formVals[elementIdMap.nin.id];
+	const sex = props.formVals[elementIdMap.sex.id];
+	const district = props.formVals[elementIdMap.district.id];
+	const subcounty = props.formVals[elementIdMap.subcounty.id];
+	const village = props.formVals[elementIdMap.village.id];
+	const dod = props.formVals[elementIdMap.dateOfDeath.id];
 	const dateOfDeath = !!dod ? moment(dod).format("DD-MMM-YYYY") : "";
 
 	const parish = "";

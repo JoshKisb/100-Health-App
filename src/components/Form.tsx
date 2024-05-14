@@ -45,6 +45,8 @@ import { dateFields } from "../Store";
 import { DorisReportModal } from "./DorisReportModal";
 import { mcodmap } from "../Store";
 
+import { elementIdMap } from './elementIdMap';
+
 // interface languageString {
 //   English: string[]; // IFoo is indexable; not a new property
 //   French: string[]; // IFoo is indexable; not a new property
@@ -2019,14 +2021,14 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1">
 									<Form.Item
 										
-										name="ZYKmQ9GPOaF"
+										name={elementIdMap.name.id}
 										className="m-0"
 									>
-										<Input
+										<Input  
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.ZYKmQ9GPOaF
+												store.allDisabled[elementIdMap.name.id]
 											}
 										/>
 									</Form.Item>
@@ -2329,14 +2331,14 @@ export const DataEntryForm = observer(() => {
 								<td className="border p-1 d-flex">
 									<Form.Item
 										
-										name="q7e7FOXKnOf"
+										name={elementIdMap.age.id}
 										className="m-0"
 									>
 										<InputNumber
 											size="large"
 											disabled={
 												store.viewMode ||
-												store.allDisabled.q7e7FOXKnOf 
+												store.allDisabled[elementIdMap.age.id]
 											}
 											onChange={(e: any) => {
 												console.log("Age changed to", e);
