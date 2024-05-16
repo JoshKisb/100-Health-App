@@ -139,6 +139,7 @@ export const DataEntryForm = observer(() => {
     const [chosenDistrictToSubmit, setChosenDistrictToSubmit] = useState("");
     const [chosenFacilityToSubmit, setChosenFacilityToSubmit] = useState("");
     const [chosenSubCounty, setChosenSubcounty] = useState("");
+    const [chosenLocOfDeathToSubmit, setChosenLocOfDeathToSubmit] = useState("");
 
     //blacklist
     const blacklistedValues = ["N"];
@@ -261,6 +262,7 @@ export const DataEntryForm = observer(() => {
     const [ageKnown, setAgeKnown] = useState(true);
     const [forceResetDOB, setForceResetDOB] = useState(false);
     const [actualTimeOfDeath, setActualTimeOfDeath] = useState(moment());
+    const [injuryAtWork, setInjuryAtWork] = useState(true);
 
     // End of Testing
     const [fromReview, setFromReview] = useState(false);
@@ -412,6 +414,9 @@ export const DataEntryForm = observer(() => {
             if (chosenFacilityToSubmit || chosenFacility) {
                 values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
             }
+            // if (chosenLocOfDeathToSubmit) {
+            //     values.loc = chosenLocOfDeathToSubmit;
+            // } // location of death
             console.log("Saved ", chosenFacilityToSubmit);
             values = {
                 ...values,
@@ -938,18 +943,28 @@ export const DataEntryForm = observer(() => {
             store.enableValue("AZSlwlRAFig");
         }
 
+        // if (changedValues.U18Tnfz9EKd) {
+        //     if (
+        //         (form.getFieldValue("RbrUuKFSqkZ") &&
+        //             form.getFieldValue("i8rrl8YWxLF") &&
+        //             changedValues.U18Tnfz9EKd.isBefore(
+        //                 form.getFieldValue("RbrUuKFSqkZ")
+        //             )) ||
+        //         changedValues.U18Tnfz9EKd.after(
+        //             form.getFieldValue("i8rrl8YWxLF")
+        //         )
+        //     ) {
+        //         form.setFieldsValue({U18Tnfz9EKd: null});
+        //     }
+        // }
+
         if (changedValues.U18Tnfz9EKd) {
-            if (
-                (form.getFieldValue("RbrUuKFSqkZ") &&
-                    form.getFieldValue("i8rrl8YWxLF") &&
-                    changedValues.U18Tnfz9EKd.isBefore(
-                        form.getFieldValue("RbrUuKFSqkZ")
-                    )) ||
-                changedValues.U18Tnfz9EKd.after(
-                    form.getFieldValue("i8rrl8YWxLF")
-                )
-            ) {
-                form.setFieldsValue({U18Tnfz9EKd: null});
+            const RbrUuKFSqkZ = form.getFieldValue("RbrUuKFSqkZ");
+            const i8rrl8YWxLF = form.getFieldValue("i8rrl8YWxLF");
+
+            if ((RbrUuKFSqkZ && i8rrl8YWxLF && moment(changedValues.U18Tnfz9EKd).isBefore(RbrUuKFSqkZ)) ||
+                (changedValues.U18Tnfz9EKd && moment(changedValues.U18Tnfz9EKd).isAfter(i8rrl8YWxLF))) {
+                form.setFieldsValue({ U18Tnfz9EKd: null });
             }
         }
 
@@ -2180,7 +2195,7 @@ export const DataEntryForm = observer(() => {
 
                             <td className="border p-1"  style={{ width: '25%' }}>
                                 <b>
-                                    Ministry of Health National Health ID
+                                    Unique health ID
                                 </b>
                             </td>
                             <td className="border p-1"  style={{ width: '25%' }}>
@@ -2778,25 +2793,134 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-                            <td className="border p-1">
+                            <td className="border p-1" colSpan={2} style={{ width: "700px" }}>
                                 <b>
-                                    Place of Death
+                                    Place of Death (Check one only)
+                                    {/*{activeLanguage.lang["Place of Birth"]}*/}
                                 </b>
+                                <td> <b>HOSPITAL</b>
+                                    <td>
+                                        <Form.Item
+                                            name="Pe7K0GzBM4f"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.Pe7K0GzBM4f
+                                                }
+                                            >
+                                                Inpatient
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+                                    <td>
+                                        <Form.Item
+                                            name="zOva5u6Hku8"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.zOva5u6Hku8
+                                                }
+                                            >
+                                                ER/Outpatient
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+                                    <td>
+                                        <Form.Item
+                                            name="kfhJtRuczEq"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.kfhJtRuczEq
+                                                }
+                                            >
+                                                DOA
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+                                </td>
+
+                                <td  style={{paddingLeft: "100px"}}> <b>OTHER</b>
+                                    <td>
+                                        <Form.Item
+                                            name="mTZLaxMhlEG"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.mTZLaxMhlEG
+                                                }
+                                            >
+                                                Instituion
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+                                    <td>
+                                        <Form.Item
+                                            name="oeX5dU3s7dW"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.oeX5dU3s7dW
+                                                }
+                                            >
+                                                Residence
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+                                    <td>
+                                        <Form.Item
+                                            name="CdDUEZ8cymj"
+                                            className="m-0"
+                                            valuePropName="checked"
+                                        >
+                                            <Checkbox
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.CdDUEZ8cymj
+                                                }
+                                            >
+                                                Other (Specify)
+                                            </Checkbox>
+                                        </Form.Item>
+                                    </td>
+
+                                </td>
+
+
                             </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="xNCSFrgdUgi"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.xNCSFrgdUgi
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+
+
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
+                            {/*        name="xNCSFrgdUgi"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <Input*/}
+                            {/*            size="large"*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.xNCSFrgdUgi*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
+
+
                             <td className="border p-1">
                                 <b>
                                     {
@@ -2806,7 +2930,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={3}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="i8rrl8YWxLF"
                                     className="m-0"
@@ -2866,6 +2990,38 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td className="border p-1" colSpan={2}>
+                                <b>Location of Death</b>
+                            </td>
+                            {/*no id for this*/}
+                            <td className="border p-1">
+                                <Form.Item
+                                    name=""
+                                    className="m-0"
+                                >
+                                    <DistSearchPopup
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.t5nTEmlScSt
+                                        }
+                                        searchType={validSearchTypes.region}
+                                        // setLimitedArray={limitedRegionParent}
+                                        dictatedContent={chosenDistrict}
+                                        // setLimitedArrayParent={setLimitedRegionParent}
+                                        receiveOutput={(text: any) => {
+                                            console.log("Chosen district is ", text);
+                                            setChosenLocOfDeathToSubmit(
+                                                `${text}`
+                                            );
+                                        }}
+                                    />
+
+                                </Form.Item>
+                            </td>
+                        </tr>
+
                         {customRows.map(
                             (
                                 {
@@ -4785,7 +4941,7 @@ export const DataEntryForm = observer(() => {
                         </tr>
                         <tr>
                             <td className="border p-1">
-                                <b>{activeLanguage.lang["Disease"]}</b>
+                                <b>Natural</b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
@@ -4804,7 +4960,7 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
-                                <b>{activeLanguage.lang["Assault"]}</b>
+                                <b>{activeLanguage.lang["Suicide"]}</b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
@@ -4869,13 +5025,7 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
                             <td className="border p-1">
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Legal intervention"
-                                            ]
-                                    }
-                                </b>
+                                <b>Homicide</b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
@@ -4921,66 +5071,71 @@ export const DataEntryForm = observer(() => {
                         </tr>
                         <tr>
                             <td className="border p-1">
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Intentional self-harm"
-                                            ]
-                                    }
-                                </b>
+                                <b>Injury at work?</b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
-                                    name="wX3i3gkTG4m"
+                                    name="F9GjQAoVNCU"
                                     className="m-0"
-                                    valuePropName="checked"
                                 >
                                     <Checkbox
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.wX3i3gkTG4m
+                                            store.allDisabled.F9GjQAoVNCU
                                         }
+                                        // checked={injuryAtWork}
+                                        onChange={(val: any) => {
+                                            console.log(
+                                                "VAL IS ",
+                                                val?.target?.checked
+                                            );
+                                            setInjuryAtWork(val?.target?.checked);
+                                            form.setFieldsValue({
+                                                F9GjQAoVNCU: "Yes",
+                                            });
+                                        }}
                                     >
                                         {activeLanguage.lang["Yes"]}
+                                    </Checkbox>
+
+                                    <Checkbox
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.F9GjQAoVNCU
+                                        }
+                                        // checked={!injuryAtWork}
+                                        onChange={(val: any) => {
+                                            console.log(
+                                                "VAL IS ",
+                                                val?.target?.checked
+                                            );
+                                            setInjuryAtWork(!val?.target?.checked);
+                                            form.setFieldsValue({
+                                                F9GjQAoVNCU: "No",
+                                            });
+
+                                        }}
+                                    >
+                                        {activeLanguage.lang["No"]}
                                     </Checkbox>
                                 </Form.Item>
                             </td>
+
                             <td className="border p-1">
-                                <b>{activeLanguage.lang["War"]}</b>
+                                <b>Location of Injury (geographical)</b>
                             </td>
-                            <td className="border p-1">
+                            <td className="border p-1" colSpan={3}>
                                 <Form.Item
-                                    name="xDMX2CJ4Xw3"
+                                    name="location"
                                     className="m-0"
-                                    valuePropName="checked"
                                 >
-                                    <Checkbox
+                                    <Input
+                                        size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.xDMX2CJ4Xw3
+                                            store.allDisabled.DKlOhZJOCrX
                                         }
-                                    >
-                                        {activeLanguage.lang["Yes"]}
-                                    </Checkbox>
-                                </Form.Item>
-                            </td>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Unknown"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="o1hG9vr0peF"
-                                    className="m-0"
-                                    valuePropName="checked"
-                                >
-                                    <Checkbox
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.o1hG9vr0peF
-                                        }
-                                    >
-                                        {activeLanguage.lang["Yes"]}
-                                    </Checkbox>
+                                    />
                                 </Form.Item>
                             </td>
                         </tr>
@@ -5012,7 +5167,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <b>
-                                    {activeLanguage.lang["Date of injury"]}
+                                    Date and time of injury
                                 </b>
                             </td>
                             <td className="border p-1" colSpan={2}>
@@ -5024,9 +5179,16 @@ export const DataEntryForm = observer(() => {
                                     <DatePicker
                                         disabledDate={notTomorrow}
                                         size="large"
+                                        showTime
+                                        format="YYYY-MM-DD HH:mm:ss"
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.U18Tnfz9EKd
+                                        }
+                                        placeholder={
+                                            activeLanguage.lang[
+                                                "Select date and time of death"
+                                                ]
                                         }
                                     />
                                 </Form.Item>
@@ -5428,111 +5590,111 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
 
-                        <tr>
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Parity"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="ymyLrfEcYkD"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ymyLrfEcYkD
-                                        }
-                                        key={pregnantKey4}
-                                    />
-                                </Form.Item>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="border p-1">
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Mode of delivery"
-                                            ]
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                {optionSets ? (
-                                    <Form.Item
-                                        name="K5BDPJQk1BP"
-                                        className="m-0"
-                                    >
-                                        {optionSet(
-                                            "MD01",
-                                            "K5BDPJQk1BP",
-                                            () => {
-                                            },
-                                            store.viewMode,
-                                            pregnantKey5
-                                        )}
-                                    </Form.Item>
-                                ) : null}
-                            </td>
-                        </tr>
+                        {/*<tr>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        <b>{activeLanguage.lang["Parity"]}</b>*/}
+                        {/*    </td>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        <Form.Item*/}
+                        {/*            name="ymyLrfEcYkD"*/}
+                        {/*            className="m-0"*/}
+                        {/*        >*/}
+                        {/*            <Input*/}
+                        {/*                size="large"*/}
+                        {/*                disabled={*/}
+                        {/*                    store.viewMode ||*/}
+                        {/*                    store.allDisabled.ymyLrfEcYkD*/}
+                        {/*                }*/}
+                        {/*                key={pregnantKey4}*/}
+                        {/*            />*/}
+                        {/*        </Form.Item>*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
+                        {/*<tr>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        <b>*/}
+                        {/*            {*/}
+                        {/*                activeLanguage.lang[*/}
+                        {/*                    "Mode of delivery"*/}
+                        {/*                    ]*/}
+                        {/*            }*/}
+                        {/*        </b>*/}
+                        {/*    </td>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        {optionSets ? (*/}
+                        {/*            <Form.Item*/}
+                        {/*                name="K5BDPJQk1BP"*/}
+                        {/*                className="m-0"*/}
+                        {/*            >*/}
+                        {/*                {optionSet(*/}
+                        {/*                    "MD01",*/}
+                        {/*                    "K5BDPJQk1BP",*/}
+                        {/*                    () => {*/}
+                        {/*                    },*/}
+                        {/*                    store.viewMode,*/}
+                        {/*                    pregnantKey5*/}
+                        {/*                )}*/}
+                        {/*            </Form.Item>*/}
+                        {/*        ) : null}*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
 
-                        <tr>
-                            <td className="border p-1">
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Place of delivery"
-                                            ]
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                {optionSets ? (
-                                    <Form.Item
-                                        name="Z41di0TRjIu"
-                                        className="m-0"
-                                    >
-                                        {optionSet(
-                                            "PD01",
-                                            "Z41di0TRjIu",
-                                            () => {
-                                            },
-                                            store.viewMode,
-                                            pregnantKey6
-                                        )}
-                                    </Form.Item>
-                                ) : null}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td className="border p-1">
-                                <b>
-                                    {
-                                        activeLanguage.lang[
-                                            "Delivered by skilled attendant"
-                                            ]
-                                    }
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                {optionSets ? (
-                                    <Form.Item
-                                        name="uaxjt0inPNF"
-                                        className="m-0"
-                                    >
-                                        {optionSet(
-                                            "YN01",
-                                            "uaxjt0inPNF",
-                                            () => {
-                                            },
-                                            store.viewMode,
-                                            pregnantKey7
-                                        )}
-                                    </Form.Item>
-                                ) : null}
-                            </td>
-                        </tr>
+                        {/*<tr>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        <b>*/}
+                        {/*            {*/}
+                        {/*                activeLanguage.lang[*/}
+                        {/*                    "Place of delivery"*/}
+                        {/*                    ]*/}
+                        {/*            }*/}
+                        {/*        </b>*/}
+                        {/*    </td>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        {optionSets ? (*/}
+                        {/*            <Form.Item*/}
+                        {/*                name="Z41di0TRjIu"*/}
+                        {/*                className="m-0"*/}
+                        {/*            >*/}
+                        {/*                {optionSet(*/}
+                        {/*                    "PD01",*/}
+                        {/*                    "Z41di0TRjIu",*/}
+                        {/*                    () => {*/}
+                        {/*                    },*/}
+                        {/*                    store.viewMode,*/}
+                        {/*                    pregnantKey6*/}
+                        {/*                )}*/}
+                        {/*            </Form.Item>*/}
+                        {/*        ) : null}*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
+                        {/*<tr>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        <b>*/}
+                        {/*            {*/}
+                        {/*                activeLanguage.lang[*/}
+                        {/*                    "Delivered by skilled attendant"*/}
+                        {/*                    ]*/}
+                        {/*            }*/}
+                        {/*        </b>*/}
+                        {/*    </td>*/}
+                        {/*    <td className="border p-1">*/}
+                        {/*        {optionSets ? (*/}
+                        {/*            <Form.Item*/}
+                        {/*                name="uaxjt0inPNF"*/}
+                        {/*                className="m-0"*/}
+                        {/*            >*/}
+                        {/*                {optionSet(*/}
+                        {/*                    "YN01",*/}
+                        {/*                    "uaxjt0inPNF",*/}
+                        {/*                    () => {*/}
+                        {/*                    },*/}
+                        {/*                    store.viewMode,*/}
+                        {/*                    pregnantKey7*/}
+                        {/*                )}*/}
+                        {/*            </Form.Item>*/}
+                        {/*        ) : null}*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
                         </tbody>
                     </table>
                     <table className="my-2 w-full border-collapse px-2">
