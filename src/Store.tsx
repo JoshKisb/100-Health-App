@@ -403,6 +403,13 @@ class Store {
 		TgFI46omIEg: false,
 		VJXpmHCaAFG: false,
 		v8mvHHXo06E: false,
+		kfhJtRuczEq: false,
+		zOva5u6Hku8: false,
+		Pe7K0GzBM4f: false,
+		mTZLaxMhlEG: false,
+		oeX5dU3s7dW: false,
+		CdDUEZ8cymj: false,
+		F9GjQAoVNCU: false,
 	};
 
 	@action showEvents = () => {
