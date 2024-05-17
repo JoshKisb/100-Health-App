@@ -2481,13 +2481,29 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
                         <tr>
-
+                            <td className="border p-1">
+                                <b>{activeLanguage.lang["Occupation"]}</b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+                                    name="b70okb06FWa"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.b70okb06FWa
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
                             <td className="border p-1">
                                 <b>
                                     {activeLanguage.lang["Date of Birth"]}
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={3}>
+                            <td className="border p-1">
                                 {!forceResetDOB ? (
                                     <Form.Item
 
@@ -2538,41 +2554,28 @@ export const DataEntryForm = observer(() => {
                                 ) : null}
                             </td>
                         </tr>
-                        <tr>
 
-                            <td className="border p-1">
-                                <b>{activeLanguage.lang["Occupation"]}</b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-                                    name="b70okb06FWa"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.b70okb06FWa
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                        <tr>
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex">
+                            <td className="border p-1" colSpan={3}>
+                                <div style={{ display: 'flex', gap: '8px', width: '100%' }}>
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
                                     className="m-0"
-                                    label="Years"
+                                    // label="Years"
+                                    style={{ flex: 1 }}
                                 >
-                                    <InputNumber
+                                    <Input
                                         size="large"
+                                        placeholder="years"
                                         disabled={
                                             store.viewMode ||
                                             store.allDisabled.q7e7FOXKnOf
                                         }
+
                                         onChange={(e: any) => {
                                             console.log("Age changed to", e);
 
@@ -2617,14 +2620,26 @@ export const DataEntryForm = observer(() => {
                                             }
                                         }}
                                     />
+
                                 </Form.Item>
+
                                 <Form.Item
                                     name="WYykJO0Vh3s"
                                     className="m-0"
-                                    style={{width: "100%"}}
-                                    label="Months:"
+                                    // style={{width: "100%"}}
+                                    // label="Months:"
+                                    style={{ flex: 1 }}
                                 >
-                                    <InputNumber
+                                    {/*<InputNumber*/}
+                                    {/*    size="large"*/}
+                                    {/*    placeholder="months"*/}
+                                    {/*    disabled={*/}
+                                    {/*        store.viewMode ||*/}
+                                    {/*        store.allDisabled.n9s5bKgCCVq*/}
+                                    {/*    }*/}
+                                    {/*/>*/}
+
+                                    <Input
                                         size="large"
                                         placeholder="months"
                                         disabled={
@@ -2633,78 +2648,83 @@ export const DataEntryForm = observer(() => {
                                         }
                                     />
 
-
                                 </Form.Item>
+
                                 {/*check for baby age fields */}
-                                {
-                                    mcodmap.rjoVXlCWLYM !== undefined && mcodmap.rjoVXlCWLYM && (
-                                        <Form.Item
-                                            name="TgFI46omIEg"
-                                            className="m-0"
-                                            style={{width: "100%"}}
-                                            label="Minutes"
-                                        >
-                                            <InputNumber
-                                                size="large"
-                                                placeholder="0"
-                                                disabled={
-                                                    store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
-                                                }
-                                            />
-                                        </Form.Item>
-                                    )
-                                }
-
-
-                                {
-                                    mcodmap.rDI0uhcVLAk !== undefined && mcodmap.rDI0uhcVLAk && (
-                                        <Form.Item
-                                            name="VJXpmHCaAFG"
-                                            className="m-0"
-                                            style={{width: "100%"}}
-                                            label="Hours"
-                                        >
-                                            <InputNumber
-                                                size="large"
-                                                placeholder="0"
-                                                disabled={
-                                                    store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
-                                                }
-                                            />
-                                        </Form.Item>
-                                    )}
                                 {
 
                                     mcodmap.quKRjZzkSRA !== undefined && mcodmap.quKRjZzkSRA && (
                                         <Form.Item
                                             name="v8mvHHXo06E"
                                             className="m-0"
-                                            style={{width: "100%"}}
-                                            label="Days"
+                                            // label="Days"
+                                            style={{ flex: 1 }}
                                         >
-                                            <InputNumber
+                                            <Input
                                                 size="large"
-                                                placeholder="0"
+                                                placeholder="Days"
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
+                                                    store.allDisabled.v8mvHHXo06E
                                                 }
                                             />
-
                                         </Form.Item>
                                     )
                                 }
-                                {/*fix css for age row*/}
-                                <Form.Item
-                                    // name="v8mvHHXo06E"
-                                    className="m-0"
-                                    style={{width: "100%"}}
-                                >
+                                {
+                                    mcodmap.rDI0uhcVLAk !== undefined && mcodmap.rDI0uhcVLAk && (
+                                        <Form.Item
+                                            name="VJXpmHCaAFG"
+                                            className="m-0"
+                                            style={{ flex: 1 }}
+                                            // label="Hours"
 
-                                </Form.Item>
+                                        >
+                                            <Input
+                                                size="large"
+                                                placeholder="Hours"
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.VJXpmHCaAFG
+                                                }
+                                            />
+                                        </Form.Item>
+                                    )}
+
+                                {
+                                    mcodmap.rjoVXlCWLYM !== undefined && mcodmap.rjoVXlCWLYM && (
+                                        <Form.Item
+                                            name="TgFI46omIEg"
+                                            className="m-0"
+                                            style={{ flex: 1 }}
+                                            // label="Minutes"
+                                        >
+                                            <Input
+                                                size="large"
+                                                placeholder="Minutes"
+                                                disabled={
+                                                    store.viewMode ||
+                                                    store.allDisabled.TgFI46omIEg
+                                                }
+                                            />
+                                        </Form.Item>
+                                    )
+                                }
+                                </div>
+
                             </td>
+
+                            {/*<td className="border p-1 d-flex">*/}
+                            {/*    */}
+                            {/*    /!*fix css for age row*!/*/}
+                            {/*    <Form.Item*/}
+                            {/*        // name="v8mvHHXo06E"*/}
+                            {/*        className="m-0"*/}
+                            {/*        style={{width: "100%"}}*/}
+                            {/*    >*/}
+
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
                         </tr>
                         <tr>
                             {/*<td className="border p-1">*/}
@@ -2729,7 +2749,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Sex"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={3}>
+                            <td className="border p-1">
                                 {optionSets ? (
                                     <Form.Item
 
@@ -2790,6 +2810,35 @@ export const DataEntryForm = observer(() => {
                                         )}
                                     </Form.Item>
                                 ) : null}
+                            </td>
+
+                            <td className="border p-1">
+                                <b>Location of Death</b>
+                            </td>
+                            {/*no id for this*/}
+                            <td className="border p-1">
+                                <Form.Item
+                                    name=""
+                                    className="m-0"
+                                >
+                                    <DistSearchPopup
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.t5nTEmlScSt
+                                        }
+                                        searchType={validSearchTypes.region}
+                                        // setLimitedArray={limitedRegionParent}
+                                        dictatedContent={chosenDistrict}
+                                        // setLimitedArrayParent={setLimitedRegionParent}
+                                        receiveOutput={(text: any) => {
+                                            console.log("Chosen district is ", text);
+                                            setChosenLocOfDeathToSubmit(
+                                                `${text}`
+                                            );
+                                        }}
+                                    />
+
+                                </Form.Item>
                             </td>
                         </tr>
                         <tr>
@@ -2991,36 +3040,6 @@ export const DataEntryForm = observer(() => {
                             </td>
                         </tr>
 
-                        <tr>
-                            <td className="border p-1" colSpan={2}>
-                                <b>Location of Death</b>
-                            </td>
-                            {/*no id for this*/}
-                            <td className="border p-1">
-                                <Form.Item
-                                    name=""
-                                    className="m-0"
-                                >
-                                    <DistSearchPopup
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.t5nTEmlScSt
-                                        }
-                                        searchType={validSearchTypes.region}
-                                        // setLimitedArray={limitedRegionParent}
-                                        dictatedContent={chosenDistrict}
-                                        // setLimitedArrayParent={setLimitedRegionParent}
-                                        receiveOutput={(text: any) => {
-                                            console.log("Chosen district is ", text);
-                                            setChosenLocOfDeathToSubmit(
-                                                `${text}`
-                                            );
-                                        }}
-                                    />
-
-                                </Form.Item>
-                            </td>
-                        </tr>
 
                         {customRows.map(
                             (
@@ -3419,14 +3438,22 @@ export const DataEntryForm = observer(() => {
                                     name="WkXxkKEJLsg"
                                     className="m-0"
                                 >
-                                    <InputNumber
-                                        min={1}
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.WkXxkKEJLsg
-                                        }
+                                    <Input
+                                    min={1}
+                                    size="large"
+                                    disabled={
+                                        store.viewMode ||
+                                        store.allDisabled.WkXxkKEJLsg
+                                    }
                                     />
+                                    {/*<InputNumber*/}
+                                    {/*    min={1}*/}
+                                    {/*    size="large"*/}
+                                    {/*    disabled={*/}
+                                    {/*        store.viewMode ||*/}
+                                    {/*        store.allDisabled.WkXxkKEJLsg*/}
+                                    {/*    }*/}
+                                    {/*/>*/}
                                 </Form.Item>
                             </td>
                         </tr>
@@ -3596,7 +3623,7 @@ export const DataEntryForm = observer(() => {
                                     name="fleGy9CvHYh"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -3764,7 +3791,7 @@ export const DataEntryForm = observer(() => {
                                     name="hO8No9fHVd2"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -3931,7 +3958,7 @@ export const DataEntryForm = observer(() => {
                                     name="eCVDO6lt4go"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={

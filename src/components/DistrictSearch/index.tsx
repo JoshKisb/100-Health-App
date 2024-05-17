@@ -341,8 +341,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                           " "
                                   //changed form regions
                         : store?.activeLanguage?.lang?.["districts"] + " "}
-                      {store?.activeLanguage?.lang?.["in"]}{" "}
-                      {parentName || store?.activeLanguage?.lang?.["Uganda"]}
+                      {/*{store?.activeLanguage?.lang?.["in"]}{" "}*/}
+                      {/*{parentName || store?.activeLanguage?.lang?.["Uganda"]}*/}
                     </div>
                   ) : (
                     ""
