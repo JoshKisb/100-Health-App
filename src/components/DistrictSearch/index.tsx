@@ -249,7 +249,7 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
 
         return;
       }
-      
+
       const allRegionsReceived = await store.getRegions();
       const actualRegions = allRegionsReceived.organisationUnits;
       let districtsArr = new Array();
@@ -339,7 +339,8 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                         : searchType === validSearchTypes.facility
                         ? store?.activeLanguage?.lang?.["health facilities"] +
                           " "
-                        : store?.activeLanguage?.lang?.["regions"] + " "}
+                                  //changed form regions
+                        : store?.activeLanguage?.lang?.["districts"] + " "}
                       {store?.activeLanguage?.lang?.["in"]}{" "}
                       {parentName || store?.activeLanguage?.lang?.["Uganda"]}
                     </div>
