@@ -2241,6 +2241,13 @@ class Store {
 			this.queryEvents();
 		} catch (error) {
 			console.error("Failed to fetch projects", error);
+
+			// Adding a fail message notification
+			notification.error({
+				message: "Failed to save MCCOD record",
+				onClick: () => {},
+				duration: 3,
+			});
 		}
 		this.selectedOrgUnit = this.actualSelOrgUnit;
 		this.showEvents();
