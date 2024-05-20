@@ -414,9 +414,9 @@ export const DataEntryForm = observer(() => {
             if (chosenFacilityToSubmit || chosenFacility) {
                 values.QDHeWslaEoH = chosenFacilityToSubmit || chosenFacility;
             }
-            // if (chosenLocOfDeathToSubmit) {
-            //     values.loc = chosenLocOfDeathToSubmit;
-            // } // location of death
+            if (chosenLocOfDeathToSubmit) {
+                values.FtMLWgwaAaT	 = chosenLocOfDeathToSubmit;
+            } // location of death
             console.log("Saved ", chosenFacilityToSubmit);
             values = {
                 ...values,
@@ -1809,44 +1809,6 @@ export const DataEntryForm = observer(() => {
                 setFetching(false);
                 return;
             }
-            // console.log(usedCustomIds.current)
-            // find first unused
-            // let idx = Object.keys(usedCustomIds.current).findIndex((k)=>{
-            //   // console.log(usedCustomIds.current[k])
-            //   return !usedCustomIds.current[k];
-            // })
-            // // console.log(idx);
-            // idx = idx > -1 ? idx : 0;
-            // let field = { ...customRows[idx] };
-            // // console.log(customRowLength);
-            // // console.log(customFieldsReservedIds[idx]);
-
-            // field.id = customFieldsReservedIds[idx].id;
-            // usedCustomIds.current[field.id] = true;
-
-            // const attachPayload = {
-            //   aggregationType: "NONE",
-            //   code: customFieldName,
-            //   domainType: "TRACKER",
-            //   // publicAccess: "rw------",
-            //   // lastUpdated: "2021-10-06T13:41:20.427",
-            //   valueType: "TEXT",
-            //   formName: customFieldName,
-            //   id: field.id,
-            //   // created: "2021-10-06T11:38:18.755",
-            //   // attributeValues: [],
-            //   // zeroIsSignificant: false,
-            //   name: customFieldName,
-            //   shortName: customFieldName,
-            //   categoryCombo: { id: "bjDvmb4bfuf" },
-            //   // lastUpdatedBy: { id: "M5zQapPyTZI" },
-            //   // user: { id: "M5zQapPyTZI" },
-            //   // translations: [],
-            //   // userGroupAccesses: [],
-            //   // userAccesses: [],
-            //   // legendSets: [],
-            //   // aggregationLevels: [],
-            // };
 
             createDataElement(customFieldName)
                 .then(async (uid: any) => {
@@ -2818,7 +2780,7 @@ export const DataEntryForm = observer(() => {
                             {/*no id for this*/}
                             <td className="border p-1">
                                 <Form.Item
-                                    name=""
+                                    name="FtMLWgwaAaT"
                                     className="m-0"
                                 >
                                     <DistSearchPopup
@@ -5153,14 +5115,14 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1" colSpan={3}>
                                 <Form.Item
-                                    name="location"
+                                    name="pr8wYTkMCHD"
                                     className="m-0"
                                 >
                                     <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.DKlOhZJOCrX
+                                            store.allDisabled.pr8wYTkMCHD
                                         }
                                     />
                                 </Form.Item>
