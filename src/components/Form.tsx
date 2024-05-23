@@ -262,7 +262,6 @@ export const DataEntryForm = observer(() => {
     const [ageKnown, setAgeKnown] = useState(true);
     const [forceResetDOB, setForceResetDOB] = useState(false);
     const [actualTimeOfDeath, setActualTimeOfDeath] = useState(moment());
-    const [injuryAtWork, setInjuryAtWork] = useState(true);
 
     // End of Testing
     const [fromReview, setFromReview] = useState(false);
@@ -2812,14 +2811,14 @@ export const DataEntryForm = observer(() => {
                                 <td> <b>HOSPITAL</b>
                                     <td>
                                         <Form.Item
-                                            name="Pe7K0GzBM4f"
+                                            name="SzV9NHlkyoY"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.Pe7K0GzBM4f
+                                                    store.allDisabled.SzV9NHlkyoY
                                                 }
                                             >
                                                 Inpatient
@@ -2828,14 +2827,14 @@ export const DataEntryForm = observer(() => {
                                     </td>
                                     <td>
                                         <Form.Item
-                                            name="zOva5u6Hku8"
+                                            name="UuCvolJreeY"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.zOva5u6Hku8
+                                                    store.allDisabled.UuCvolJreeY
                                                 }
                                             >
                                                 ER/Outpatient
@@ -2844,14 +2843,14 @@ export const DataEntryForm = observer(() => {
                                     </td>
                                     <td>
                                         <Form.Item
-                                            name="kfhJtRuczEq"
+                                            name="yAdP1G98U3H"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.kfhJtRuczEq
+                                                    store.allDisabled.yAdP1G98U3H
                                                 }
                                             >
                                                 DOA
@@ -2863,14 +2862,14 @@ export const DataEntryForm = observer(() => {
                                 <td  style={{paddingLeft: "100px"}}> <b>OTHER</b>
                                     <td>
                                         <Form.Item
-                                            name="mTZLaxMhlEG"
+                                            name="VfZb9xmNeVu"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.mTZLaxMhlEG
+                                                    store.allDisabled.VfZb9xmNeVu
                                                 }
                                             >
                                                 Instituion
@@ -2879,14 +2878,14 @@ export const DataEntryForm = observer(() => {
                                     </td>
                                     <td>
                                         <Form.Item
-                                            name="oeX5dU3s7dW"
+                                            name="sK4h4jGAuk2"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.oeX5dU3s7dW
+                                                    store.allDisabled.sK4h4jGAuk2
                                                 }
                                             >
                                                 Residence
@@ -2895,14 +2894,14 @@ export const DataEntryForm = observer(() => {
                                     </td>
                                     <td>
                                         <Form.Item
-                                            name="CdDUEZ8cymj"
+                                            name="wBFe8BOJwLA"
                                             className="m-0"
                                             valuePropName="checked"
                                         >
                                             <Checkbox
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.CdDUEZ8cymj
+                                                    store.allDisabled.wBFe8BOJwLA
                                                 }
                                             >
                                                 Other (Specify)
@@ -5064,48 +5063,16 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item
-                                    name="F9GjQAoVNCU"
+                                    name="NtqO9ijENK0"
                                     className="m-0"
                                 >
                                     <Checkbox
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.F9GjQAoVNCU
+                                            store.allDisabled.NtqO9ijENK0
                                         }
-                                        // checked={injuryAtWork}
-                                        onChange={(val: any) => {
-                                            console.log(
-                                                "VAL IS ",
-                                                val?.target?.checked
-                                            );
-                                            setInjuryAtWork(val?.target?.checked);
-                                            form.setFieldsValue({
-                                                F9GjQAoVNCU: "Yes",
-                                            });
-                                        }}
                                     >
                                         {activeLanguage.lang["Yes"]}
-                                    </Checkbox>
-
-                                    <Checkbox
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.F9GjQAoVNCU
-                                        }
-                                        // checked={!injuryAtWork}
-                                        onChange={(val: any) => {
-                                            console.log(
-                                                "VAL IS ",
-                                                val?.target?.checked
-                                            );
-                                            setInjuryAtWork(!val?.target?.checked);
-                                            form.setFieldsValue({
-                                                F9GjQAoVNCU: "No",
-                                            });
-
-                                        }}
-                                    >
-                                        {activeLanguage.lang["No"]}
                                     </Checkbox>
                                 </Form.Item>
                             </td>
