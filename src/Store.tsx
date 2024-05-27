@@ -2224,6 +2224,12 @@ class Store {
 			this.queryEvents();
 		} catch (error) {
 			console.error("Failed to fetch projects", error);
+			notification.error({
+				message: "MCCOD record failed to save",
+				// description: "Your translation passed all validation checks!",
+				onClick: () => {},
+				duration: 3,
+			});
 		}
 		this.selectedOrgUnit = this.actualSelOrgUnit;
 		this.showEvents();

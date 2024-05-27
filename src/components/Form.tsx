@@ -2210,7 +2210,7 @@ export const DataEntryForm = observer(() => {
                     <table className="my-2 w-full border-collapse">
                         <tbody>
                         <tr>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <b>
                                     {
                                         activeLanguage.lang[
@@ -2219,7 +2219,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="ZKBE8Xm9DJG"
                                     className="m-0"
@@ -2315,7 +2315,7 @@ export const DataEntryForm = observer(() => {
                         </tr>
 
                         <tr>
-                            <td className="border p-1" style={{ width: '16.66%' }}>
+                            <td className="border p-1">
                                 <b>
                                     {idTypeLabel}
                                 </b>
@@ -2377,29 +2377,54 @@ export const DataEntryForm = observer(() => {
                         </tr>
                         <tr>
 
-                            <td className="border p-1" style={{ width: '16.66%' }}>
+                            <td className="border p-1">
                                 <b>
                                     {/*{activeLanguage.lang["Name (Full name):"]}*/}
                                     {/*firstname*/}
                                     Prénom:
-                                    { tr("Qualification de l'agent de santé ayant rempli le formulaire") }
                                 </b>
                             </td>
                             <td className="border p-1">
                                 <Form.Item
 
-                                    name="hxSaoqC5Uk7"
+                                    name="ZYKmQ9GPOaF"
                                     className="m-0"
                                 >
                                     <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.hxSaoqC5Uk7
+                                            store.allDisabled.ZYKmQ9GPOaF
                                         }
                                     />
                                 </Form.Item>
                             </td>
+                            <td className="border p-1">
+                                <b>
+                                    {/*{activeLanguage.lang["Name (Full name):"]}*/}
+                                    {/*lastname*/}
+                                    Nom de famille:
+                                </b>
+                            </td>
+                            <td className="border p-1">
+                                <Form.Item
+
+                                    name="ynAIfL7Fef2"
+                                    className="m-0"
+                                >
+                                    <Input
+                                        size="large"
+                                        disabled={
+                                            store.viewMode ||
+                                            store.allDisabled.ZYKmQ9GPOaF
+                                        }
+                                    />
+                                </Form.Item>
+                            </td>
+
+
+                        </tr>
+                        <tr>
                             <td className="border p-1">
                                 <b>
                                     { tr("Numéro ordre professionnel") }
@@ -2420,9 +2445,6 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
-                        </tr>
-                        <tr>
-
                             <td className="border p-1">
                                 <b>
                                     { tr("en service") }
@@ -2444,26 +2466,26 @@ export const DataEntryForm = observer(() => {
                                 </Form.Item>
                             </td>
 
-                            <td className="border p-1">
-                                <b>
-                                    { tr("Unite/service de soins") }
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
+                            {/*<td className="border p-1">*/}
+                            {/*    <b>*/}
+                            {/*        { tr("Unite/service de soins") }*/}
+                            {/*    </b>*/}
+                            {/*</td>*/}
+                            {/*<td className="border p-1">*/}
+                            {/*    <Form.Item*/}
 
-                                    name="CMRjkaFwqDt"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.CMRjkaFwqDt
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
+                            {/*        name="CMRjkaFwqDt"*/}
+                            {/*        className="m-0"*/}
+                            {/*    >*/}
+                            {/*        <Input*/}
+                            {/*            size="large"*/}
+                            {/*            disabled={*/}
+                            {/*                store.viewMode ||*/}
+                            {/*                store.allDisabled.CMRjkaFwqDt*/}
+                            {/*            }*/}
+                            {/*        />*/}
+                            {/*    </Form.Item>*/}
+                            {/*</td>*/}
 
                         </tr>
                         <tr>
@@ -2489,77 +2511,11 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
-                            <td className="border p-1" colSpan={2}></td>
                         </tr>
+
                         <tr>
 
-                            <td className="border p-1">
-                                <b>
-                                    { tr("First Name") }
-                                </b>
-                            </td>
-                            <td className="border p-1" style={{ width: '16.66%' }}>
-                                <Form.Item
-
-                                    name="ZYKmQ9GPOaF"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ZYKmQ9GPOaF
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-                            <td className="border p-1">
-                                <b>
-                                    { tr("Last Name") }
-                                </b>
-                            </td>
-                            <td className="border p-1">
-                                <Form.Item
-
-                                    name="ynAIfL7Fef2"
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ynAIfL7Fef2
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-
-                            <td className="border p-1" style={{ width: '16.66%' }}>
-                                <b>
-                                    {/*{activeLanguage.lang["Name (Full name):"]}*/}
-                                    {/*lastname*/}
-                                    Nom de famille:
-                                </b>
-                            </td>
-                            <td className="border p-1" style={{ width: '16.66%' }}>
-                                <Form.Item
-
-                                    name=""
-                                    className="m-0"
-                                >
-                                    <Input
-                                        size="large"
-                                        disabled={
-                                            store.viewMode ||
-                                            store.allDisabled.ZYKmQ9GPOaF
-                                        }
-                                    />
-                                </Form.Item>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td className="border p-1" colSpan={6}>
+                            <td className="border p-1" colSpan={4}>
 
                                 <h3
                                     style={{
@@ -2594,8 +2550,6 @@ export const DataEntryForm = observer(() => {
                                     />
                                 </Form.Item>
                             </td>
-                            <td className="border p-1"></td>
-
                         </tr>
 
 
@@ -2603,7 +2557,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Region"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="zwKo51BEayZ"
                                     className="m-0"
@@ -2632,7 +2586,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{tr("Profession")}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="b70okb06FWa"
                                     className="m-0"
@@ -2652,7 +2606,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["District"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="t5nTEmlScSt"
                                     className="m-0"
@@ -2693,7 +2647,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Checkbox
                                     disabled={
                                         store.viewMode ||
@@ -2746,7 +2700,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["County"] ?? "County"}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="se3wRj1bYPo"
                                     className="m-0"
@@ -2767,7 +2721,7 @@ export const DataEntryForm = observer(() => {
                                     {activeLanguage.lang["Date of Birth"]}
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 {!forceResetDOB ? (
                                     <Form.Item
 
@@ -2822,7 +2776,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Sub-County"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="u44XP9fZweA"
                                     className="m-0"
@@ -2853,8 +2807,8 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Age"]}</b>
                             </td>
-                            <td className="border p-1 d-flex" colSpan={2}>
-                            <td className="border p-1 d-flex" style={{ maxWidth: "470px" }}>
+                            <td className="border p-1 d-flex">
+                            {/*<td className="border p-1 d-flex" style={{ maxWidth: "470px" }}>*/}
                                 <Form.Item
 
                                     name="q7e7FOXKnOf"
@@ -3005,7 +2959,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Village"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="dsiwvNQLe5n"
                                     className="m-0"
@@ -3024,7 +2978,7 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <b>{activeLanguage.lang["Sex"]}</b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 {optionSets ? (
                                     <Form.Item
 
@@ -3082,7 +3036,7 @@ export const DataEntryForm = observer(() => {
                                     {activeLanguage.lang["Place of Birth"]}
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="xNCSFrgdUgi"
                                     className="m-0"
@@ -3105,7 +3059,7 @@ export const DataEntryForm = observer(() => {
                                     }
                                 </b>
                             </td>
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1">
                                 <Form.Item
                                     name="i8rrl8YWxLF"
                                     className="m-0"
@@ -3167,8 +3121,7 @@ export const DataEntryForm = observer(() => {
                         </tr>
 
                         <tr>
-
-                            <td className="border p-1" colSpan={2}>
+                            <td className="border p-1" colSpan={4}>
                                 <h3
                                     style={{
                                         fontWeight: "bolder",
@@ -3178,10 +3131,6 @@ export const DataEntryForm = observer(() => {
                                     {tr("Personne référente:")}
                                 </h3>
                             </td>
-
-
-
-
                         </tr>
 
                         <tr>

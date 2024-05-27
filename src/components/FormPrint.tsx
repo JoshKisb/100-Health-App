@@ -60,10 +60,11 @@ const PrintableFormData = observer((props: any) => {
 	const tr = useTranslation();
 
 	const firstName = props.formVals["ZYKmQ9GPOaF"];
-	const lastName = props.formVals["ZYKmQ9GPOaF"];
+	const lastName = props.formVals["ynAIfL7Fef2"];
 	const nin = props.formVals["MOstDqSY0gO"];
 	const sex = props.formVals["e96GB4CXyd3"];
 	const dob = props.formVals["RbrUuKFSqkZ"];
+	const dateOfBirth = !!dob ? moment(dob).format("DD/MM/YYYY") : ""
 	const age = props.formVals["q7e7FOXKnOf"];
 	const ageMonths = props.formVals["WYykJO0Vh3s"];
 	const ageDays = props.formVals["v8mvHHXo06E"];
@@ -100,10 +101,10 @@ const PrintableFormData = observer((props: any) => {
 	const certified = props.certified;
 	const causeOfDeath = props.formVals["QTKk2Xt8KDu"];
 
-	let age_fmt = !!age ? `${age} years` : "";
-	age_fmt += !!ageMonths ? ` ${ageMonths} months`: "";
-	age_fmt += !!ageDays ? ` ${ageDays} days`: "";
-	age_fmt += !!ageHours ? ` ${ageHours} hours`: "";
+	let age_fmt = !!age ? `${age} ans` : "";
+	age_fmt += !!ageMonths ? ` ${ageMonths} mois`: "";
+	age_fmt += !!ageDays ? ` ${ageDays} jours`: "";
+	age_fmt += !!ageHours ? ` ${ageHours} heures`: "";
 	age_fmt += !!ageMinutes ? ` ${ageMinutes} minutes`: "";
 
 	const getDEValue = (dataElementId) => {
@@ -160,9 +161,9 @@ const PrintableFormData = observer((props: any) => {
 			<div style={{ textAlign: "left" }}>
 				<p style={{ fontStyle: "italic" }}>
 					{ tr(`Nom de famille: _____________${lastName || ""}________________________________ Prénom(s): ___________${firstName || ""}______________________`) }<br/>
-					{ tr(`Sexe: _________${sex||""}____________________Néle:___________${dob|| ""}______________________________`) }<br/>
-					{ tr(`Âge: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
-					{ tr(`ou Age: ________${age_fmt|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
+					{ tr(`Sexe: _________${sex||""}____________________Néle:___________${dateOfBirth|| ""}______________________________`) }<br/>
+					{/*{ tr(`Âge: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>*/}
+					{ tr(`Âge: ________${age_fmt|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
 					{ tr(`Nationalité:............................................................................... N° Identifiant du patient:_________${inpatientNo || ""}_____________________`) }<br/>
 					{ tr(`Adresse: _____________________${village || ""}______________________________________________________`) }<br/>
 					{ tr(`Personne référente: Norm: ______________${ref_firstname || ""}__________________Prénom(s) : _______________________${ref_lastname || ""}__________________-`) }<br/>
