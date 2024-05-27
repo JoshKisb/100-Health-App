@@ -59,7 +59,8 @@ const PrintableFormData = observer((props: any) => {
 	const facility = store.currentOrganisationTree;
 	const tr = useTranslation();
 
-	const name = props.formVals["ZYKmQ9GPOaF"];
+	const firstName = props.formVals["ZYKmQ9GPOaF"];
+	const lastName = props.formVals["ZYKmQ9GPOaF"];
 	const nin = props.formVals["MOstDqSY0gO"];
 	const sex = props.formVals["e96GB4CXyd3"];
 	const dob = props.formVals["RbrUuKFSqkZ"];
@@ -73,7 +74,7 @@ const PrintableFormData = observer((props: any) => {
 	const dateOfDeath = !!dod ? moment(dod).format("DD-MMM-YYYY") : "";
 	const timeOfDeath = !!dod ? moment(dod).format('HH:mm:ss') : "";
 	const placeOfBirth = props.formVals["xNCSFrgdUgi"];
-	console.log(dod)
+
 
 	const parish = "";
 
@@ -132,9 +133,9 @@ const PrintableFormData = observer((props: any) => {
 
 			<div style={{ textAlign: "left" }}>
 				<p style={{ fontStyle: "italic" }}>
-					{ tr(`Nom: _____________${name || ""}________________________________ Prénom(s): _________________________________`) }<br/>
+					{ tr(`Nom de famille: _____________${lastName || ""}________________________________ Prénom(s): ___________${firstName || ""}______________________`) }<br/>
 					{ tr(`Sexe: _________${sex||""}____________________Néle:___________${dob|| ""}______________________________`) }<br/>
-					{ tr(`ou Age: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
+					{ tr(`Âge: _______________${age|| ""}_________________Domicile:________________________________________profession______${profession||""}_________`) }<br/>
 					{ tr(`Nationalité:............................................................................... N° Identifiant du patient:_________${inpatientNo || ""}_____________________`) }<br/>
 					{ tr(`Adresse: _____________________${village || ""}______________________________________________________`) }<br/>
 					{ tr('Personne référente: Norm: _______________________________________Prénom(s) : _______________________________________________-') }<br/>
@@ -238,6 +239,7 @@ const PrintableFormData = observer((props: any) => {
 
 const CardTitle = observer((props: any) => {
 	const tr = useTranslation();
+	const region = props.formVals["zwKo51BEayZ"] ? props.formVals["zwKo51BEayZ"]  : "";
 	return (
 		<>
 			{/*<Title className="text-center" level={2}>*/}
@@ -266,9 +268,10 @@ const CardTitle = observer((props: any) => {
 						</p>
 					</p>
 
-					<p style={{ fontStyle: "italic" }}>
+					<p style={{ fontStyle: "italic", textTransform: "uppercase" }}>
 						{ tr('CENTRE HOSPITALIER') }<br/>
-						{ tr(' REGIONAL DE ZINIARE') }
+						{/*{ tr(' REGIONAL DE ZINIARE') }*/}
+						{ tr(`REGIONAL DE ${region}`) }
 					</p>
 				</div>
 
@@ -300,7 +303,7 @@ const CardTitle = observer((props: any) => {
 
 export const FormPrint = React.forwardRef<any, any>((props, ref) => {
 	return (
-		<Card ref={ref} title={<CardTitle />}>
+		<Card ref={ref} title={<CardTitle {...props}/>}>
 			<PrintableFormData {...props} />
 		</Card>
 	);

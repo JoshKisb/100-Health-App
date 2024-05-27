@@ -302,12 +302,16 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
           }}
           placeholder={
             searchType === validSearchTypes.subCounty
-              ? store?.activeLanguage?.lang?.["Search for a Sub County..."]
+              // ? store?.activeLanguage?.lang?.["Search for a Sub County..."]
+              ? "Rechercher un sous-comté..."
               : searchType === validSearchTypes.district
-              ? store?.activeLanguage?.lang?.["Search for a District..."]
+              // ? store?.activeLanguage?.lang?.["Search for a District..."]
+              ? "Rechercher un quartier..."
               : searchType === validSearchTypes.region
-              ? store?.activeLanguage?.lang?.["Search for a Region..."]
-              : store?.activeLanguage?.lang?.["Search for a Health Facility..."]
+              // ? store?.activeLanguage?.lang?.["Search for a Region..."]
+              ? "Rechercher une région..."
+              // : store?.activeLanguage?.lang?.["Search for a Health Facility..."]
+              : "Rechercher un établissement de santé..."
           }
         />
 
@@ -331,17 +335,22 @@ export const DistrictSearchPopup: SFC<SearchType> = observer(
                       style={styles.topDistrict}
                       onClick={resetSubCountySearch}
                     >
-                      {store?.activeLanguage?.lang?.["Show all"]}{" "}
+                      {/*{store?.activeLanguage?.lang?.["Show all"]}{" "}*/}
+                      {"Afficher tout"}{" "}
                       {searchType === validSearchTypes.subCounty
-                        ? store?.activeLanguage?.lang?.["subcounties"] + " "
+                        // ? store?.activeLanguage?.lang?.["subcounties"] + " "
+                        ? "sous-comtés" + " "
                         : searchType === validSearchTypes.district
-                        ? store?.activeLanguage?.lang?.["districts"] + " "
+                        // ? store?.activeLanguage?.lang?.["districts"] + " "
+                        ? "les quartiers" + " "
                         : searchType === validSearchTypes.facility
-                        ? store?.activeLanguage?.lang?.["health facilities"] +
+                        // ? store?.activeLanguage?.lang?.["health facilities"] +
+                        ? "établissements de santé" +
                           " "
-                        : store?.activeLanguage?.lang?.["regions"] + " "}
-                      {store?.activeLanguage?.lang?.["in"]}{" "}
-                      {parentName || store?.activeLanguage?.lang?.["Uganda"]}
+                        // : store?.activeLanguage?.lang?.["regions"] + " "}
+                        : "Régions" + " "}
+                      {/*{store?.activeLanguage?.lang?.["in"]}{" "}*/}
+                      {/*{parentName || store?.activeLanguage?.lang?.["Uganda"]}*/}
                     </div>
                   ) : (
                     ""
