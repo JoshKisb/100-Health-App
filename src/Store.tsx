@@ -32,8 +32,8 @@ export const mcodmap = {
 	WzauwhVOwM0: "i8rrl8YWxLF",
 	eJwpqR9t7YM: "RJhbkjYrODG",
 	FIfoObQJvNp: "ZYKmQ9GPOaF",
-	H34bcwaOliX: "FGagV1Utrdh",  //form 17 inpatient number
-	BRtcz4HV7Ak: "FGagV1Utrdh", //form 20 inpatient number
+	H34bcwaOliX: "RQZQMq1hat8",  //form 17 inpatient number
+	BRtcz4HV7Ak: "RQZQMq1hat8", //form 20 inpatient number
 	uFoaTRJ16Ch: "gNM2Yhypydx",
 	K4FUK590rIU: "KsGOxFyzIs1",
 	FHmHV9mElbD: "u44XP9fZweA", // district
@@ -80,7 +80,7 @@ export const mcodmap = {
 const dlcolumns = [
 	"ZKBE8Xm9DJG",
 	"ZYKmQ9GPOaF",
-	"FGagV1Utrdh",
+	"RQZQMq1hat8",
 	"MOstDqSY0gO",
 
 	"zwKo51BEayZ",
@@ -403,6 +403,13 @@ class Store {
 		TgFI46omIEg: false,
 		VJXpmHCaAFG: false,
 		v8mvHHXo06E: false,
+		Xw2cbAyh4qx: false,
+		bNtOacqHziT: false,
+		FkwAS4gwdIg: false,
+		clTs5F3Y6Ku: false,
+		E0VFpoZaH2F: false,
+		RQZQMq1hat8: false,
+
 	};
 
 	@action showEvents = () => {
@@ -1824,7 +1831,7 @@ class Store {
 				params: {
 					program: this.program,
 					programStage: this.programStage,
-					filter: `FGagV1Utrdh:in:${inpatientno}`,
+					filter: `RQZQMq1hat8:in:${inpatientno}`,
 				},
 			},
 		};
@@ -2131,8 +2138,8 @@ class Store {
 		// 		return;
 		// 	}
 		// }
-		// if (!!form["FGagV1Utrdh"]) {
-		// 	const found = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
+		// if (!!form["RQZQMq1hat8"]) {
+		// 	const found = await this.getEventByInpatientNo(form["RQZQMq1hat8"]);
 		// 	if (!!found && evt !== found.event) {
 		// 		notification.error({
 		// 			message: "Failed to save MCCOD Record",
@@ -2167,7 +2174,7 @@ class Store {
 		//
 
 
-		if (!!form["ZKBE8Xm9DJG"] || !!form["FGagV1Utrdh"] || !!form["MOstDqSY0gO"]) {
+		if (!!form["ZKBE8Xm9DJG"] || !!form["RQZQMq1hat8"] || !!form["MOstDqSY0gO"]) {
 			let errorMessage = "";
 
 			if (!!form["ZKBE8Xm9DJG"]) {
@@ -2177,8 +2184,8 @@ class Store {
 				}
 			}
 
-			if (!!form["FGagV1Utrdh"]) {
-				const foundInpatient = await this.getEventByInpatientNo(form["FGagV1Utrdh"]);
+			if (!!form["RQZQMq1hat8"]) {
+				const foundInpatient = await this.getEventByInpatientNo(form["RQZQMq1hat8"]);
 				if (!!foundInpatient && evt !== foundInpatient.event) {
 					errorMessage += "An event with the same Inpatient number was already recorded.\n";
 				}

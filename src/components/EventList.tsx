@@ -76,7 +76,7 @@ const FilterMenu = observer(({ field }) => {
           </div>
 
           <Button type="primary" htmlType="button" onClick={onFinish}>
-            Update
+              Mise à jour
           </Button>
         </div>
       }
@@ -100,7 +100,7 @@ const DeleteRecordAction = observer(({ record }) => {
     await store.deleteEvent(record.event);
     store.queryEvents();
     notification.success({
-      message: "Record deleted successfully",
+      message: "Enregistrement supprimé avec succès",
       duration: 3,
     });
     setLoading(false);
@@ -297,7 +297,7 @@ export const EventList = observer(() => {
   const menu = (
     <Menu>
       <Menu.Item>
-        <Button onClick={() => alert("deleted")}>Delete</Button>
+       <Button onClick={() => alert("Supprimé")}>Supprimer</Button>  {/*delete*/}
       </Menu.Item>
     </Menu>
   );
@@ -337,7 +337,7 @@ export const EventList = observer(() => {
         {/* <TabPane tab="Mortality Report" key="1">
                <WeeklyReport />
             </TabPane> */}
-        <TabPane tab="Top 20 Causes of Death" key="1">
+        <TabPane tab="Les 20 principales causes de décès" key="1">
           <TopDiseasesChart />
         </TabPane>
       </Tabs>
@@ -345,7 +345,7 @@ export const EventList = observer(() => {
       {/* <AnacodDownload /> */}
       {store.data ? (
         <Card
-          title="Cases"
+          title="Cas"
           bodyStyle={{ maxWidth: "100vw", padding: 0, margin: 0 }}
           extra={
             <div style={{ display: "flex", gap: "10px" }}>
@@ -365,13 +365,13 @@ export const EventList = observer(() => {
                 overlay={
                   <Menu>
                     <Menu.Item onClick={() => handleDownload(true)}>
-                      Download from all org units
+                        Télécharger depuis toutes les unités organisationnelles
                     </Menu.Item>
                     <Menu.Item>
                       <AnacodDownload />
                     </Menu.Item>
                     <Menu.Item onClick={() => downloadFile()}>
-                      Data Dictionary
+                        Dictionnaire de données
                     </Menu.Item>
                   </Menu>
                 }
@@ -379,7 +379,7 @@ export const EventList = observer(() => {
                 style={{ fontSize: "24px" }}
               >
                 {downloadng && <LoadingOutlined style={{ fontSize: "14px" }} />}
-                Download
+                  Télécharger
               </Dropdown.Button>
             </div>
           }

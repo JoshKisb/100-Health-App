@@ -82,7 +82,7 @@ const AnacodDownload = () => {
   return (
     <>
       <Button onClick={showModal} type="link" size="small">
-        Anacod Download
+        Anacod Télécharger
       </Button>
       <CSVLink
         ref={anacodCsvBtn}
@@ -107,7 +107,7 @@ const AnacodDownload = () => {
             disabled={!year}
             onClick={handleOk}
           >
-            Download
+            Télécharger
           </Button>,
         ]}
       >

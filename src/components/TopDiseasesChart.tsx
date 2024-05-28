@@ -35,7 +35,7 @@ Highcharts.AST.allowedAttributes.push("viewBox");
 export const TopDiseasesChart = observer(() => {
    const store = useStore();
    let chart: any = useRef(null);
-   const [chartTitle, setChartTitle] = useState("Top 20 causes of death");
+   const [chartTitle, setChartTitle] = useState("Les 20 principales causes de décès");
    const [mortalityFilter, setMortalityFilter] = React.useState<string>(undefined);
    const [genderFilter, setGenderFilter] = React.useState<string>(undefined);
    const [currChartType, setCurrChartType] = useState("column");
@@ -185,12 +185,12 @@ export const TopDiseasesChart = observer(() => {
       yAxis: {
          min: 0,
          title: {
-            text: "Death count",
+            text: "Nombre de décès",
          },
       },
       series: [
           {
-             name: "Deaths",
+             name: "Décès",
           dataLabels:{
              enabled: true, // Enable data labels for each point
              format: '{y}', // Display the y value on each column
@@ -263,7 +263,7 @@ export const TopDiseasesChart = observer(() => {
       },
       series: [
          {
-            name: "Deaths",
+            name: "Décès",
             colorByPoint: true,
             data: [{}],
          } as any,
@@ -307,7 +307,7 @@ export const TopDiseasesChart = observer(() => {
    useEffect(() => {
       if (!chart.current) return;
       console.log("currChart", chart.current);
-      if (store.loadingTopDiseases) chart.current.showLoading("Loading data ...");
+      if (store.loadingTopDiseases) chart.current.showLoading("Chargement des données ...");
       else {
          if (!!store.topDiseases) {
             let sortedDiseases = store.topDiseases;
@@ -349,28 +349,28 @@ export const TopDiseasesChart = observer(() => {
             // );
             currDiseases.current = sortedDiseases;
             let title = store.selectedCauseOfDeath
-                ? `${store.selectedCauseOfDeath} contributed ${(
+                ? `${store.selectedCauseOfDeath} contribué ${(
                     (store.totalCauseDeathCount / store.totalDeathCount) *
                     100
-                ).toFixed(2)}%  of total reported deaths`
-                : "Top 20 causes of death";
+                ).toFixed(2)}%  du total des décès signalés`
+                : "Les 20 principales causes de décès";
             if (mortalityFilter) {
                title = `${title} [${mortalityFilter} ${(
                    (totalMortalityFilteredDeathCount / store.totalDeathCount) *
                    100
-               ).toFixed(2)}% of total]`;
+               ).toFixed(2)}% du total]`;
             }
             if (genderFilter) {
                let mortalityStr = "";
                if (mortalityFilter) {
-                  mortalityStr = `that are ${mortalityFilter}`;
+                  mortalityStr = `qui sont ${mortalityFilter}`;
                }
                title = `${title} [${genderFilter} ${(
                    (totalGenderFilteredDeathCount / store.totalDeathCount) *
                    100
                ).toFixed(2)}% ${mortalityStr}]`;
             }
-            if (!!store.selectedOrgUnitName) title = `${title} in ${store.selectedOrgUnitName}`;
+            if (!!store.selectedOrgUnitName) title = `${title} dans ${store.selectedOrgUnitName}`;
 
             setChartTitle(title);
             chart.current.setTitle({ text: title });
@@ -459,28 +459,28 @@ export const TopDiseasesChart = observer(() => {
          }
 
          let title = !!store.selectedCauseOfDeath
-             ? `${store.selectedCauseOfDeath} contributed ${(
+             ? `${store.selectedCauseOfDeath} contribué ${(
                  (store.totalCauseDeathCount / store.totalDeathCount) *
                  100
-             ).toFixed(2)}%  of total reported deaths`
-             : "Top 20 causes of death";
+             ).toFixed(2)}%  du total des décès signalés`
+             : "Les 20 principales causes de décès";
          if (!!mortalityFilter) {
             title = `${title} [${mortalityFilter} ${(
                 (totalMortalityFilteredDeathCount / store.totalDeathCount) *
                 100
-            ).toFixed(2)}% of total]`;
+            ).toFixed(2)}% du total]`;
          }
          if (!!genderFilter) {
             let mortalityStr = "";
             if (!!mortalityFilter) {
-               mortalityStr = `that are ${mortalityFilter}`;
+               mortalityStr = `qui sont ${mortalityFilter}`;
             }
             title = `${title} [${genderFilter} ${(
                 (totalGenderFilteredDeathCount / store.totalDeathCount) *
                 100
             ).toFixed(2)}% ${mortalityStr}]`;
          }
-         if (!!store.selectedOrgUnitName) title = `${title} in ${store.selectedOrgUnitName}`;
+         if (!!store.selectedOrgUnitName) title = `${title} dans ${store.selectedOrgUnitName}`;
          setChartTitle(title);
          chart.current.setTitle({ text: title });
 
@@ -540,38 +540,31 @@ export const TopDiseasesChart = observer(() => {
                        minWidth: "200px",
                     }}
                 >
-                   <Select.Option value="">{activeLanguage.lang["All Diseases"]}</Select.Option>
-                   <Select.Option value="Malaria Deaths">{activeLanguage.lang["Malaria Deaths"]}</Select.Option>
-                   <Select.Option value="TB Deaths">{activeLanguage.lang["TB Deaths"]}</Select.Option>
-                   <Select.Option value="HIV Related Deaths">{activeLanguage.lang["HIV Related Deaths"]}</Select.Option>
+                   <Select.Option value="">Toutes les maladies</Select.Option>
+                   <Select.Option value="Malaria Deaths">Décès dus au paludisme</Select.Option>
+                   <Select.Option value="TB Deaths">Décès dus à la tuberculose</Select.Option>
+                   <Select.Option value="HIV Related Deaths">Décès liés au HIV </Select.Option>
                    <Select.Option value="Deaths from cardiovascular diseases">
-                      {activeLanguage.lang["Cardiovascular Disease"]}
-                   </Select.Option>
+                      Maladie cardiovasculaire</Select.Option>
                    <Select.Option value="Cancer Deaths">{activeLanguage.lang["Cancer"]}</Select.Option>
                    <Select.Option value="Obstructive Pulmonary Disease">
-                      {activeLanguage.lang["Chronic Obstructive Pulmonary Disease"]}
-                   </Select.Option>
-                   <Select.Option value="Diabetes Mellitus">{activeLanguage.lang["Diabetes Mellitus"]}</Select.Option>
+                     Bronchopneumopathie chronique obstructive</Select.Option>
+                   <Select.Option value="Diabetes Mellitus">Diabète sucré</Select.Option>
                    <Select.Option value="Premature noncommunicable disease (NCD)">
                       {activeLanguage.lang["Premature noncommunicable disease (NCD)"]}
                    </Select.Option>
                    <Select.Option value="covid19">{activeLanguage.lang["covid-19"]}</Select.Option>
-                   <Select.Option value="pneumonia">{activeLanguage.lang["pneumonia"]}</Select.Option>
-                   <Select.Option value="Road traffic accidents">
-                      {activeLanguage.lang["Road traffic accidents"]}
-                   </Select.Option>
+                   <Select.Option value="pneumonia">pneumonie</Select.Option>
+                   <Select.Option value="Road traffic accidents">Accidents de la route</Select.Option>
                    <Select.Option value="Suicide">{activeLanguage.lang["Suicide"]}</Select.Option>
-                   <Select.Option value="Maternal deaths">{activeLanguage.lang["Maternal deaths"]}</Select.Option>
-                   <Select.Option value="injuries">{activeLanguage.lang["Traffic Injuries"]}</Select.Option>
-                   <Select.Option value="Total NCD Deaths">
-                      {activeLanguage.lang["Total Deaths from NCDs"]}
-                   </Select.Option>
+                   <Select.Option value="Maternal deaths">Décès maternels</Select.Option>
+                   <Select.Option value="injuries">Blessures de la route</Select.Option>
+                   <Select.Option value="Total NCD Deaths">Total des décès dus à NCDs</Select.Option>
                    <Select.Option value="Total Communicable Deaths">
-                      {activeLanguage.lang["Total Deaths from communicable Diseases"]}
-                   </Select.Option>
+                      Total des décès dus à des maladies transmissibles</Select.Option>
                 </Select>
                 <Select
-                    placeholder={activeLanguage.lang["Gender"] ?? "Gender"}
+                    placeholder= "Genre"
                     onChange={(e) => {
                        if (!!e) {
                           setGenderFilter(e);
@@ -585,16 +578,16 @@ export const TopDiseasesChart = observer(() => {
                        minWidth: "100px",
                     }}
                 >
-                   <Select.Option value="Female">{activeLanguage.lang["Female"]}</Select.Option>
+                   <Select.Option value="Female">Femelle</Select.Option>
                    {store.selectedCauseOfDeath !== "Maternal deaths" && (
-                       <Select.Option value="Male">{activeLanguage.lang["Male"]}</Select.Option>
+                       <Select.Option value="Male">Mâle</Select.Option>
                    )}
                 </Select>
                 <Select
                     placeholder={
                        !store.selectedCauseOfDeath
-                           ? activeLanguage.lang["All Deaths Mortality Filter"]
-                           : `${store.selectedCauseOfDeath} Mortalility FIlter`
+                           ? "Filtre de mortalité de tous les décès"
+                           : `${store.selectedCauseOfDeath} Filtre de mortalité`
                     }
                     allowClear
                     onChange={(e) => {
@@ -610,14 +603,14 @@ export const TopDiseasesChart = observer(() => {
                     }}
                     value={mortalityFilter}
                 >
-                   <Select.Option value="Stillbirth">{activeLanguage.lang["Stillbirth"]}</Select.Option>
-                   <Select.Option value="Neonatal">{activeLanguage.lang["Neonatal"]}</Select.Option>
-                   <Select.Option value="Early Neonatal">{activeLanguage.lang["Early Neonatal"]}</Select.Option>
+                   <Select.Option value="Stillbirth">Mortinaissance</Select.Option>
+                   <Select.Option value="Neonatal">Néonatale</Select.Option>
+                   <Select.Option value="Early Neonatal">Néonatal précoce</Select.Option>
                    {/* <Select.Option value="Perinatal">Perinatal</Select.Option> */}
-                   <Select.Option value="Infant">{activeLanguage.lang["Infant"]}</Select.Option>
-                   <Select.Option value="Under-five">{activeLanguage.lang["Under-five"]}</Select.Option>
+                   <Select.Option value="Infant">Nourrisson</Select.Option>
+                   <Select.Option value="Under-five">Moins de cinq ans</Select.Option>
                    <Select.Option value="Adolescent">{activeLanguage.lang["Adolescent"]}</Select.Option>
-                   <Select.Option value="Adult">{activeLanguage.lang["Adult"]}</Select.Option>
+                   <Select.Option value="Adult">Adulte</Select.Option>
                    // 41 and 77
                 </Select>
              </div>

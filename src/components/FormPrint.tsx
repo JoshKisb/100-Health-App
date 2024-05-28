@@ -60,7 +60,7 @@ const PrintableFormData = observer((props: any) => {
 	const tr = useTranslation();
 
 	const firstName = props.formVals["ZYKmQ9GPOaF"];
-	const lastName = props.formVals["ynAIfL7Fef2"];
+	const lastName = props.formVals["Xw2cbAyh4qx"];
 	const nin = props.formVals["MOstDqSY0gO"];
 	const sex = props.formVals["e96GB4CXyd3"];
 	const dob = props.formVals["RbrUuKFSqkZ"];
@@ -82,7 +82,7 @@ const PrintableFormData = observer((props: any) => {
 
 
 
-	const declarant = props.formVals["qhDD59pxEap"];
+	const declarant = props.formVals["bNtOacqHziT"];
 	const qualification = props.formVals["hxSaoqC5Uk7"];
 	const employee_id = props.formVals["BlQ0xVxY4xg"];
 	const service = props.formVals["FkwAS4gwdIg"];

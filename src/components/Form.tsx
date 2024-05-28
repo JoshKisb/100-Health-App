@@ -564,7 +564,7 @@ export const DataEntryForm = observer(() => {
         store.enableValue("roxn33dtLLx");
         store.enableValue("RbrUuKFSqkZ");
         store.enableValue("q7e7FOXKnOf");
-        store.enableValue("FGagV1Utrdh");
+        store.enableValue("RQZQMq1hat8");
 
     }, [store]);
 
@@ -2263,13 +2263,13 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item
 
-                                    name="FGagV1Utrdh"
+                                    name="RQZQMq1hat8"
                                     className="m-0"
                                     rules={
                                         !store.editing ? [
                                             {
                                                 validator: async (_, value) => {
-                                                    const fieldValue = form.getFieldValue("FGagV1Utrdh");
+                                                    const fieldValue = form.getFieldValue("RQZQMq1hat8");
                                                     if (fieldValue) {
                                                         const foundInpatient = await store.getEventByInpatientNo(fieldValue);
                                                         if (foundInpatient && null !== foundInpatient.event) {
@@ -2288,7 +2288,7 @@ export const DataEntryForm = observer(() => {
                                         size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.FGagV1Utrdh
+                                            store.allDisabled.RQZQMq1hat8
                                         }
                                     />
                                 </Form.Item>
@@ -2362,14 +2362,14 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item
 
-                                    name="qhDD59pxEap"
+                                    name="bNtOacqHziT"
                                     className="m-0"
                                 >
                                     <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.qhDD59pxEap
+                                            store.allDisabled.bNtOacqHziT
                                         }
                                     />
                                 </Form.Item>
@@ -2409,14 +2409,14 @@ export const DataEntryForm = observer(() => {
                             <td className="border p-1">
                                 <Form.Item
 
-                                    name="ynAIfL7Fef2"
+                                    name="Xw2cbAyh4qx"
                                     className="m-0"
                                 >
                                     <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.ZYKmQ9GPOaF
+                                            store.allDisabled.Xw2cbAyh4qx
                                         }
                                     />
                                 </Form.Item>
@@ -2815,7 +2815,7 @@ export const DataEntryForm = observer(() => {
                                     className="m-0"
                                     label="Years"
                                 >
-                                    <InputNumber
+                                    <Input
                                         placeholder="0"
                                         size="large"
                                         disabled={
@@ -2873,7 +2873,7 @@ export const DataEntryForm = observer(() => {
                                     // style={{width: "100%"}}
                                     label="Months:"
                                 >
-                                    <InputNumber
+                                    <Input
                                         size="large"
                                         placeholder="0"
                                         disabled={
@@ -2894,12 +2894,12 @@ export const DataEntryForm = observer(() => {
                                             // style={{width: "100%"}}
                                             label="Days"
                                         >
-                                            <InputNumber
+                                            <Input
                                                 size="large"
                                                 placeholder="0"
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
+                                                    store.allDisabled.v8mvHHXo06E
                                                 }
                                             />
 
@@ -2915,12 +2915,12 @@ export const DataEntryForm = observer(() => {
                                             // style={{width: "100%"}}
                                             label="Hours"
                                         >
-                                            <InputNumber
+                                            <Input
                                                 size="large"
                                                 placeholder="0"
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
+                                                    store.allDisabled.VJXpmHCaAFG
                                                 }
                                             />
                                         </Form.Item>
@@ -2933,12 +2933,12 @@ export const DataEntryForm = observer(() => {
                                             // style={{width: "100%"}}
                                             label="Minutes"
                                         >
-                                            <InputNumber
+                                            <Input
                                                 size="large"
                                                 placeholder="0"
                                                 disabled={
                                                     store.viewMode ||
-                                                    store.allDisabled.n9s5bKgCCVq
+                                                    store.allDisabled.TgFI46omIEg
                                                 }
                                             />
                                         </Form.Item>
@@ -3597,7 +3597,7 @@ export const DataEntryForm = observer(() => {
                                     name="WkXxkKEJLsg"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -3774,7 +3774,7 @@ export const DataEntryForm = observer(() => {
                                     name="fleGy9CvHYh"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -3942,7 +3942,7 @@ export const DataEntryForm = observer(() => {
                                     name="hO8No9fHVd2"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -4109,7 +4109,7 @@ export const DataEntryForm = observer(() => {
                                     name="eCVDO6lt4go"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
@@ -5521,7 +5521,7 @@ export const DataEntryForm = observer(() => {
 
                                 >
 
-                                    <InputNumber
+                                    <Input
                                         size="large"
                                         disabled={false}
                                         key={fetalDisableKey}
@@ -5542,7 +5542,7 @@ export const DataEntryForm = observer(() => {
                                     name="xAWYJtQsg8M"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
@@ -5567,7 +5567,7 @@ export const DataEntryForm = observer(() => {
                                     name="lQ1Byr04JTx"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         size="large"
                                         disabled={
                                             store.viewMode ||
@@ -5591,7 +5591,7 @@ export const DataEntryForm = observer(() => {
                                     name="DdfDMFW4EJ9"
                                     className="m-0"
                                 >
-                                    <InputNumber
+                                    <Input
                                         min={1}
                                         size="large"
                                         disabled={
