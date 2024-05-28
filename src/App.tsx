@@ -147,7 +147,6 @@ export const App = observer(() => {
           ) : (
             <></>
           )}
-          {/* <DataEntryForm /> */}
           {store.currentPage === "3" ? <DataEntryForm /> : <EventList />}
         </div>
       )}
