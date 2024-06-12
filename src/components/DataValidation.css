@@ -1,0 +1,88 @@
+.app {
+    font-family: Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-buttons button {
+    margin-left: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.header-buttons button:hover {
+    background-color: #0056b3;
+}
+
+.program-selection, .progress-bar, .results {
+    margin-bottom: 20px;
+}
+
+.program-selection ul {
+    list-style: none;
+    padding: 0;
+}
+
+.program-selection li {
+    margin: 5px 0;
+}
+
+.progress {
+    height: 20px;
+    background-color: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-completed {
+    width: 50%; /* Adjust this value to represent actual progress */
+    height: 100%;
+    background-color: #007bff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    text-align: left;
+}
+
+th {
+    background-color: #f8f8f8;
+}
+
+.download-report-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.download-report {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+.download-report:hover {
+    background-color: #218838;
+}

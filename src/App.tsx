@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { HeaderBar } from "@dhis2/ui-widgets";
 import ExcelToJsonConverter from "./components/FileUpload";
+import DataUi from "./components/DataValidation";
 
 
 
@@ -19,7 +20,8 @@ export const App = observer(() => {
                   zIndex: 1000,
               }}
           />
-          <ExcelToJsonConverter/>
+          {/*<ExcelToJsonConverter/>*/}
+          <DataUi/>
       </>
 
   );
