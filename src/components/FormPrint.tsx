@@ -67,17 +67,16 @@ const PrintableFormData = observer((props: any) => {
     const name = props.formVals["ZYKmQ9GPOaF"];
     const nin = props.formVals["MOstDqSY0gO"];
     const sex = props.formVals["e96GB4CXyd3"];
-    const district = props.formVals["t5nTEmlScSt"];
-    const subcounty = props.formVals["u44XP9fZweA"];
+    const district = props.formVals["u44XP9fZweA"];
+    const subcounty = props.formVals["t5nTEmlScSt"];
     const village = props.formVals["dsiwvNQLe5n"];
     const dod = props.formVals["i8rrl8YWxLF"];
     const dateOfDeath = !!dod ? moment(dod).format("DD-MMM-YYYY") : "";
 
-    const parish = props.formVals["xNCSFrgdUgi"];;
-
+    const county = props.formVals["se3wRj1bYPo"];
     const certified = props.certified;
     const causeOfDeath = props.formVals["QTKk2Xt8KDu"];
-    const placeOfDeath = props.formVals["kGIDD5xIeLC"];
+    const placeOfDeath = props.formVals["xNCSFrgdUgi"];
 
 
     const getDEValue = (dataElementId) => {
@@ -112,7 +111,7 @@ const PrintableFormData = observer((props: any) => {
                     <th style={cellStyle}>SEX</th>
                     <th style={cellStyle}>DISTRICT</th>
                     <th style={cellStyle}>SUB-COUNTY</th>
-                    <th style={cellStyle}>PARISH</th>
+                    <th style={cellStyle}>COUNTY</th>
                     <th style={cellStyle}>VILLAGE</th>
                 </tr>
                 </thead>
@@ -122,7 +121,7 @@ const PrintableFormData = observer((props: any) => {
                     <td style={cellStyle}>{sex}</td>
                     <td style={cellStyle}> {district}</td>
                     <td style={cellStyle}>{subcounty}</td>
-                    <td style={cellStyle}> {parish}</td>
+                    <td style={cellStyle}> {county}</td>
                     <td style={cellStyle}>{village}</td>
                 </tr>
                 </tbody>
