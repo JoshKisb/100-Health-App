@@ -309,7 +309,8 @@ export const DataEntryForm = observer(() => {
                     orgUnit: store.selectedOrgUnit,
                     program: 'vf8dN49jprI',
                     programStage: 'aKclf7Yl1PE',
-                    eventDate: moment(),
+                    // eventDate: moment(),
+                    eventDate:  form.getFieldValue("i8rrl8YWxLF"),
                     dataValues: [
                         {dataElement: 'ZKBE8Xm9DJG', value: values['ZKBE8Xm9DJG']},
                         {dataElement: 'MOstDqSY0gO', value: values['MOstDqSY0gO']},

@@ -2050,7 +2050,9 @@ class Store {
 	};
 
 	@action addEvent = async (form: any) => {
-		const { eventDate, ...rest } = form;
+		// const { eventDate, ...rest } = form;
+		let eventDate;
+		const { ...rest } = form;
 
 		console.log("FORM RECEIVED IS ", form);
 		const dataValues = Object.entries(rest)
@@ -2058,6 +2060,7 @@ class Store {
 				if (value instanceof moment) {
 					if (dataElement === "i8rrl8YWxLF") {
 						value = moment(value).format("YYYY-MM-DDTHH:mm:ss.SSSZ");
+						eventDate = value;
 					} else {
 						value = moment(value).format("YYYY-MM-DD");
 					}
@@ -2069,13 +2072,18 @@ class Store {
 			})
 			.filter((dv) => !!dv.value || dv.value === 0);
 
+		// If eventDate is not set by i8rrl8YWxLF, fallback to the original eventDate if present
+		if (!eventDate && form.eventDate) {
+			eventDate = moment(form.eventDate).format("YYYY-MM-DD");
+		}
+
 		console.log("OBJECT ENTRIES ARE:", dataValues);
 		let event: any = {
 			attributeCategoryOptions: this.selectedNationality || "l4UMmqvSBe5",
 			orgUnit: this.selectedOrgUnit,
 			program: this.program,
 			programStage: this.programStage,
-			eventDate: moment(eventDate).format("YYYY-MM-DD"),
+			eventDate: eventDate || moment(eventDate).format("YYYY-MM-DD"),
 			event: "",
 			dataValues,
 		};
