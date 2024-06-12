@@ -1259,13 +1259,13 @@ export const DataEntryForm = observer(() => {
                         // district
                         setChosenDistrict(district.displayName)
                         setChosenDistrictToSubmit(district.displayName)
-                        form.setFieldsValue({t5nTEmlScSt: district.displayName});
-                        store.disableValue("t5nTEmlScSt")
+                        form.setFieldsValue({u44XP9fZweA: district.displayName});
+                        store.disableValue("u44XP9fZweA")
 
                         //  subCounty chosenSubCounty
                         setChosenSubcounty(subCounty.displayName)
-                        form.setFieldsValue({u44XP9fZweA: subCounty.displayName});
-                        if (!!subCounty) store.disableValue("u44XP9fZweA")
+                        form.setFieldsValue({t5nTEmlScSt: subCounty.displayName});
+                        if (!!subCounty) store.disableValue("t5nTEmlScSt")
 
                     }
                     // dsiwvNQLe5n Village
@@ -2501,13 +2501,13 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item
-                                    name="t5nTEmlScSt"
+                                    name="u44XP9fZweA"
                                     className="m-0"
                                 >
                                     <DistSearchPopup
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.t5nTEmlScSt
+                                            store.allDisabled.u44XP9fZweA
                                         }
                                         searchType={
                                             validSearchTypes.district
@@ -2671,7 +2671,7 @@ export const DataEntryForm = observer(() => {
                             </td>
                             <td className="border p-1">
                                 <Form.Item
-                                    name="u44XP9fZweA"
+                                    name="t5nTEmlScSt"
                                     className="m-0"
                                 >
                                     <DistSearchPopup
@@ -2679,7 +2679,7 @@ export const DataEntryForm = observer(() => {
                                         parentName={chosenDistrictToSubmit}
                                         disabled={
                                             store.viewMode ||
-                                            store.allDisabled.u44XP9fZweA
+                                            store.allDisabled.t5nTEmlScSt
                                         }
                                         searchType={
                                             validSearchTypes.subCounty

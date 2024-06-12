@@ -2050,9 +2050,9 @@ class Store {
 	};
 
 	@action addEvent = async (form: any) => {
-		// const { eventDate, ...rest } = form;
-		let eventDate;
-		const { ...rest } = form;
+		 let { eventDate, ...rest } = form;
+		// let eventDate;
+		// const { ...rest } = form;
 
 		console.log("FORM RECEIVED IS ", form);
 		const dataValues = Object.entries(rest)
@@ -2073,9 +2073,9 @@ class Store {
 			.filter((dv) => !!dv.value || dv.value === 0);
 
 		// If eventDate is not set by i8rrl8YWxLF, fallback to the original eventDate if present
-		if (!eventDate && form.eventDate) {
-			eventDate = moment(form.eventDate).format("YYYY-MM-DD");
-		}
+		// if (!eventDate && form.eventDate) {
+		// 	eventDate = moment(form.eventDate).format("YYYY-MM-DD");
+		// }
 
 		console.log("OBJECT ENTRIES ARE:", dataValues);
 		let event: any = {
