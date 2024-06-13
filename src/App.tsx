@@ -3,13 +3,17 @@ import React from "react";
 import { HeaderBar } from "@dhis2/ui-widgets";
 import ExcelToJsonConverter from "./components/FileUpload";
 import DataUi from "./components/DataValidation";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import MnhData from "./components/MnhData";
 
 
 
 export const App = observer(() => {
 
   return (
+      <Router>
       <>
+
           <HeaderBar
               appName={" File uploader"}
               style={{
@@ -21,8 +25,14 @@ export const App = observer(() => {
               }}
           />
           {/*<ExcelToJsonConverter/>*/}
-          <DataUi/>
+              <Switch>
+                  <Route exact path="/"><DataUi/></Route>
+                  <Route path="/mnh"><MnhData/></Route>
+              </Switch>
+
       </>
+      </Router>
+
 
   );
 });

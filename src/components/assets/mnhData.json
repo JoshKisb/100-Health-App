@@ -1,0 +1,14 @@
+{
+  "facilities": [
+    {
+      "name": " F1",
+      "val1": "Pass",
+      "val2": "Fail"
+    },
+    {
+      "name": " F2",
+      "val1": "Pass",
+      "val2": "Pass"
+    }
+  ]
+}

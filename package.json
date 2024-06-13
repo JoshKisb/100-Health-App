@@ -2,7 +2,7 @@
   "name": "mccod",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:8080",
+  "proxy": "http://localhost:8001",
   "homepage": ".",
   "cacheVersion": "1",
   "dependencies": {
@@ -82,7 +82,7 @@
   },
   "manifest.webapp": {
     "version": "2.0.0",
-    "name": "file upload",
+    "name": "sss validation",
     "description": " Upload excel files",
     "launch_path": "index.html",
     "appType": "APP",
