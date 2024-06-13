@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import './DataValidation.css';
 import { Link } from 'react-router-dom'
+import jsonData from "./assets/mnhData.json";  //for  json file
 
 const DataUi = () => {
-    const [data, setData]= useState(null);
+    // const [data, setData]= useState(null);
+    const [data, setData]= useState(jsonData); // json file
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [totalMnhRecords, setTotalMnhRecords] = useState(0);
@@ -33,7 +35,7 @@ const DataUi = () => {
                 return response.json();
             })
             .then((data) => {
-                setData(data);
+                // setData(data);  //use for actual endpoint
                 setLoading(false);
                 console.log("data", data)
 
@@ -58,13 +60,13 @@ const DataUi = () => {
             });
     }, []);
 
-    if(loading){
-        return <div>Loading...</div>
-    }
+    // if(loading){
+    //     return <div>Loading...</div>
+    // }
 
-    if(error){
-        return <div>Error: {error.message}</div>;
-    }
+    // if(error){
+    //     return <div>Error: {error.message}</div>;
+    // }
 
     return (
         <div className="app">
