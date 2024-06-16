@@ -18,7 +18,7 @@ const actualBaseUrl = pathname
   ? `${dynamicBaseUrl}${pathname}/`
   : dynamicBaseUrl;
 
-console.log("actualBaseUrl is ", actualBaseUrl);
+// console.log("actualBaseUrl is ", actualBaseUrl);
 
 const appConfig = {
   // baseUrl: process.env.REACT_APP_DHIS2_BASE_URL,
