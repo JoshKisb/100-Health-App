@@ -98,9 +98,14 @@ function ExcelToJsonConverter() {
                         })).filter(row => row.value === true);
                         console.log("true values ", eventTwo)
 
-                        // update data
+
+                        // update data rethink logic
                         for (const event of eventTwo) {
                             const updatedData = {
+                                program: "h0iSBI3xoS6",
+                                orgUnit: row.OrgUIDs,
+                                eventDate: formatDateFromExcelSerial(row.eventTwoDate),
+                                programStage: "s1kg8duJ8U1",
                                 dataValues: [{
                                     dataElement: event.dataElement,
                                     value: event.value
@@ -112,7 +117,7 @@ function ExcelToJsonConverter() {
                             await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
                             // updatedCount++;
                         }
-
+                        updatedCount++;
 
                     } else {
                         // If ID doesn't exist, create payload and post
@@ -164,7 +169,7 @@ function ExcelToJsonConverter() {
                         setJsonData(JSON.stringify(convertedJsonData, null, 2));
 
                         await createRecord(convertedJsonData,createdCount);
-                        // createdCount++;
+                        createdCount++;
 
                     }
                 }
@@ -256,14 +261,14 @@ function ExcelToJsonConverter() {
             });
 
             if (response.ok) {
-                console.log(`Record with ID ${id} updated successfully.`);
+                console.log(` Event one record with ID ${id} updated successfully.`);
             } else {
-                console.error(`Failed to update record with ID ${id}.`);
+                console.error(`Failed to update event one record with ID ${id}.`);
             }
             updatedCount++;
 
         } catch (error) {
-            console.error(`Error updating record with ID ${id}:`, error);
+            console.error(`Error updating event one record with ID ${id}:`, error);
         }
         setUpdatedEventsCount(updatedCount);
     };
@@ -284,14 +289,14 @@ function ExcelToJsonConverter() {
             });
 
             if (response.ok) {
-                console.log(`Record with ID ${id} updated successfully.`);
+                console.log(`event two column with ID ${id} updated successfully.`);
             } else {
-                console.error(`Failed to update record with ID ${id}.`);
+                console.error(`Failed to update event two column with ID ${id}.`);
             }
             updatedCount++;
 
         } catch (error) {
-            console.error(`Error updating record with ID ${id}:`, error);
+            console.error(`Error updating event two column with ID ${id}:`, error);
         }
         setUpdatedEventsCount(updatedCount);
     };
