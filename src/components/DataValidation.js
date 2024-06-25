@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import jsonData from "./assets/mnhData.json"; //for  json file
 import jsonData2 from "./assets/sample.json"; //for  json file
 import { toLower } from "lodash";
+import Loader from "./Loader/Loader";
 
 const DataUi = () => {
 	// const [data, setData]= useState(null);
@@ -64,10 +65,19 @@ const DataUi = () => {
 	// }, []);
 
 	useEffect(() => {
+		const script = document.createElement('script');
+		script.src = `${process.env.PUBLIC_URL}/script.js`; ;
+		script.async = true;
+		document.body.appendChild(script);
+
+		// return () => {
+		// 	document.body.removeChild(script);
+		// };
+
 		const data = jsonData2["Program Area"];
         let datavalues = [];
 
-		setLoading(false);
+		// setLoading(false);
 		console.log("data", data);
 
         
@@ -112,18 +122,27 @@ const DataUi = () => {
 		// setPassCount(totalPass);
 		// setFailCount(totalFail);
 		// setNullCount(0);
+
+		setTimeout(() => {
+			setLoading(false);
+		}, 5000); // 5 seconds
+
+		return () => clearTimeout(setTimeout); // Cleanup timeout on unmount
+
 	}, []);
 
-	// if(loading){
-	//     return <div>Loading...</div>
-	// }
+	if(loading){
+	    return <Loader/>
+	}
 
-	// if(error){
-	//     return <div>Error: {error.message}</div>;
-	// }
+	if(error){
+	    return <div>Error: {error.message}</div>;
+	}
 
 	return (
 		<div className="app">
+			<div id="particles-background" className="vertical-centered-box"></div>
+			<div id="particles-foreground" className="vertical-centered-box"></div>
 			<header className="app-header">
 				<h1>Data Validation Suite</h1>
 				<div className="header-buttons">
@@ -150,29 +169,29 @@ const DataUi = () => {
 					<h2>List of Program Areas Processed</h2>
 					<table>
 						<thead>
-							<tr>
-								<th>Program Area</th>
-								<th>Total Validations</th>
-								<th>Total Passed</th>
-								<th>Failed</th>
-								<th>Null</th>
-							</tr>
+						<tr>
+							<th>Program Area</th>
+							<th>Total Validations</th>
+							<th>Total Passed</th>
+							<th>Failed</th>
+							<th>Null</th>
+						</tr>
 						</thead>
 						<tbody>
-							{processedAreas.map((area) => (
-								<tr key={area.name}>
-									<td>
-										<Link to={`/${area.name}`} key={area}>
-											{area.name}
-										</Link>
-									</td>
-									{/*<td>{area.name}</td>*/}
-									<td>{area.total}</td>
-									<td>{area.passed}</td>
-									<td>{area.failed}</td>
-									<td>{nullCount}</td>
-								</tr>
-							))}
+						{processedAreas.map((area) => (
+							<tr key={area.name}>
+								<td>
+									<Link to={`/${area.name}`} key={area}>
+										{area.name}
+									</Link>
+								</td>
+								{/*<td>{area.name}</td>*/}
+								<td>{area.total}</td>
+								<td>{area.passed}</td>
+								<td>{area.failed}</td>
+								<td>{nullCount}</td>
+							</tr>
+						))}
 						</tbody>
 					</table>
 				</section>
@@ -181,26 +200,26 @@ const DataUi = () => {
 					<h2>List of Data Values</h2>
 					<table>
 						<thead>
-							<tr>
-								<th>dataElement</th>
-								<th>categoryOptionCombo</th>
-								<th>attributeOptionCombo</th>
-								<th>value</th>
-								<th>period</th>
-								<th>orgUnit</th>
-							</tr>
+						<tr>
+							<th>dataElement</th>
+							<th>categoryOptionCombo</th>
+							<th>attributeOptionCombo</th>
+							<th>value</th>
+							<th>period</th>
+							<th>orgUnit</th>
+						</tr>
 						</thead>
 						<tbody>
-							{data.data_values.map((dataValue, index) => (
-								<tr key={index}>
-									<td>{dataValue.dataElement}</td>
-									<td>{dataValue.categoryOptionCombo}</td>
-									<td>{dataValue.attributeOptionCombo}</td>
-									<td>{dataValue.value}</td>
-									<td>{dataValue.period}</td>
-									<td>{dataValue.orgUnit}</td>
-								</tr>
-							))}
+						{data.data_values.map((dataValue, index) => (
+							<tr key={index}>
+								<td>{dataValue.dataElement}</td>
+								<td>{dataValue.categoryOptionCombo}</td>
+								<td>{dataValue.attributeOptionCombo}</td>
+								<td>{dataValue.value}</td>
+								<td>{dataValue.period}</td>
+								<td>{dataValue.orgUnit}</td>
+							</tr>
+						))}
 						</tbody>
 					</table>
 				</section>
