@@ -114,7 +114,8 @@ function ExcelToJsonConverter() {
 
                             setJsonData(JSON.stringify(updatedData, null, 2));
                             console.log("update data", updatedData);
-                            await updateRecord(exists.eventId, event.dataElement, updatedData, updatedCount);
+                            const eventDateData = { eventDate: formatDateFromExcelSerial(row.eventTwoDate) }; //data to update event 2 date
+                            await updateRecord(exists.eventId, event.dataElement, updatedData, eventDateData, updatedCount);
                             // updatedCount++;
                         }
                         updatedCount++;
@@ -274,7 +275,7 @@ function ExcelToJsonConverter() {
     };
 
     // Function to update record at
-    const updateRecord = async (eventId, id, data, updatedCount) => {
+    const updateRecord = async (eventId, id, data, eventDateData, updatedCount) => {
 
         //  POST jsonData to an API endpoint
         try {
@@ -293,6 +294,27 @@ function ExcelToJsonConverter() {
             } else {
                 console.error(`Failed to update event two column with ID ${id}.`);
             }
+
+
+            // Add the second PUT request here
+            // const eventDateData = { eventDate: '2023-08-22' };
+            const eventDateResponse = await fetch(`https://uthabitiactivity.org/uthabiti2/api/events/${eventId}/eventDate`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa('Sci_test:Save1234!'),
+                },
+                body: JSON.stringify(eventDateData),
+                credentials: 'include',
+            });
+
+            if (eventDateResponse.ok) {
+                console.log(`Event date updated successfully.`);
+            } else {
+                console.error(`Failed to update event date.`);
+            }
+
+
             updatedCount++;
 
         } catch (error) {
