@@ -1,11 +1,11 @@
-import { observer } from "mobx-react";
 import React from "react";
 import { HeaderBar } from "@dhis2/ui-widgets";
-import ExcelToJsonConverter from "./components/FileUpload";
+
 import DataUi from "./components/DataValidation";
 import { HashRouter as Router, Route, Switch } from "react-router-dom";
 import MnhData from "./components/MnhData";
 import Loader from "./components/Loader/Loader";
+
 
 export const App = () => {
 	return (
@@ -21,7 +21,6 @@ export const App = () => {
 						zIndex: 1000,
 					}}
 				/>
-				{/*<ExcelToJsonConverter/>*/}
 				{/*<Loader/>*/}
 				<Switch>
 					<Route exact path="/">
