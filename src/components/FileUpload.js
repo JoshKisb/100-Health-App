@@ -84,7 +84,7 @@ function ExcelToJsonConverter() {
                                     orgUnit: row.OrgUIDs,
                                     trackedEntityInstance: row.TrackedEntityInstances,
                                     trackedEntityType: "T5DWDr5Swce",
-                                    eventDate: formatDateFromExcelSerial(row.sKrn2rY6l0w),
+                                    eventDate: formatDateFromExcelSerial(row.eventOneDate),
                                     completedDate: "2024-01-27"
                                 }
                             ]
@@ -142,7 +142,7 @@ function ExcelToJsonConverter() {
                                             {
                                                 program: "h0iSBI3xoS6",
                                                 orgUnit: row.OrgUIDs,
-                                                eventDate: formatDateFromExcelSerial(row.uxHOAUsyDKz),
+                                                eventDate: formatDateFromExcelSerial(row.eventOneDate),
                                                 programStage: "nknoeOj6dLq",
                                                 dataValues: Object.keys(row).slice(12, 24).map((key) => ({
                                                     dataElement: key,
