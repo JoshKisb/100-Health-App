@@ -6,18 +6,19 @@ import { toLower } from "lodash";
 import Loader from "./Loader/Loader";
 
 const DataUi = () => {
-	// const [data, setData]= useState(null);
+
 	const [data, setData] = useState({data_values: []}); // json file
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [totalMnhRecords, setTotalMnhRecords] = useState(0);
-	const [passCount, setPassCount] = useState(0);
-	const [failCount, setFailCount] = useState(0);
-	const [nullCount, setNullCount] = useState(0);
+
+
+
 	const [uploading, setUploading] = useState(false);
 
 	const [file, setFile] = useState(null);
-	const [programAreas, setProgramAreas] = useState([])
+	const [programAreas, setProgramAreas] = useState([]);
+	const [period, setPeriod] = useState("");
+	const [validationData, setValidationData] = useState([])
 
 
 
@@ -76,7 +77,6 @@ const DataUi = () => {
         let datavalues = [];
 
 		// setLoading(false);
-		console.log("data", data);
 
 
 		// for (const programArea in data) {
@@ -101,29 +101,14 @@ const DataUi = () => {
 		// 		totalPass += orgUnits[orgUnit].validation?.filter(
 		// 			(record) => toLower(record[1]) === "pass"
 		// 		).length;
-		// 		totalFail += orgUnits[orgUnit].validation?.filter(
-		// 			(record) => toLower(record[1]) === "fail"
-		// 		).length;
-		//
-		//
-		// 	}
-		//
-        //     setProcessedAreas((pa) => [...pa, {
-        //         name: programArea,
-        //         total: total,
-        //         passed: totalPass,
-        //         failed: totalFail,
-        //     }])
+
 		// }
         setData((data) => ({...data, data_values: datavalues}))
-		// setTotalMnhRecords(total);
-		// setPassCount(totalPass);
-		// setFailCount(totalFail);
-		// setNullCount(0);
+
 
 		setTimeout(() => {
 			setLoading(false);
-		}, 3000); // 3 seconds
+		}, 0o000); // 3 seconds
 
 		return () => clearTimeout(setTimeout); // Cleanup timeout on unmount
 
@@ -149,7 +134,7 @@ const DataUi = () => {
 				const data = await response.json();
 				setProgramAreas(data);
 				setLoading(false);
-				console.log("program areas", data);
+				// console.log("program areas", data);
 
 
 			} catch (error) {
@@ -166,6 +151,33 @@ const DataUi = () => {
 		}
 	}
 
+	const handlePeriodChange = (e) => {
+		setPeriod(e.target.value);
+
+	};
+
+	const handleValidate =  (prog_area) => async () => {
+		// console.log(`http://localhost:8001/validate?period=${period}&program_area=${prog_area}`)
+		const serverUrl = "http://localhost:8001";
+		try {
+			const response = await fetch(`${serverUrl}/validate?period=${period}&program_area=${prog_area}`);
+
+			if (!response.ok) {
+				throw new Error("Network response was not ok");
+			}
+
+			const data = await response.json();
+			setValidationData(data);
+			setLoading(false);
+			console.log("validation", validationData
+			);
+
+
+		} catch (error) {
+			console.error('Error validating:', error);
+		}
+	}
+
 	if(loading){
 	    return <Loader/>
 	}
@@ -176,23 +188,21 @@ const DataUi = () => {
 
 	return (
 		<div className="app">
-			{/*<div id="particles-background" className="vertical-centered-box"></div>*/}
-			{/*<div id="particles-foreground" className="vertical-centered-box"></div>*/}
 			<header className="app-header">
 				<h1>Data Validation Suite</h1>
 			</header>
 
 
 				<div className="form-container">
-					<div className="file-upload">
 						<input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])}/>
-						<div className="header-buttons">
-							<button onClick={handleUpload} disabled={uploading}>{uploading ? 'Uploading...' : 'Upload'}</button>
-							<button>Select Period</button>
-						</div>
+					<div className="header-buttons">
+						<button onClick={handleUpload}
+								disabled={uploading}>{uploading ? 'Uploading...' : 'Upload'}</button>
+						<br/><br/>
+						<input type="text" placeholder="Add period" value={period} onChange={handlePeriodChange}/>
+
 					</div>
 				</div>
-
 
 
 			<main>
@@ -226,15 +236,13 @@ const DataUi = () => {
 						{programAreas.map((area) => (
 							<tr key={area.title}>
 								<td>
-									<Link to={`/${area.title}`} key={area.title}>
+									<Link to={`/${area.title}`} onClick={handleValidate(area.title)}>
 										{area.title}
 									</Link>
 								</td>
 								{/*<td>{area.name}</td>*/}
 								<td>{area.number_of_validations}</td>
-								{/*<td>{area.passed}</td>*/}
-								{/*<td>{area.failed}</td>*/}
-								{/*<td>{nullCount}</td>*/}
+
 							</tr>
 						))}
 						</tbody>
