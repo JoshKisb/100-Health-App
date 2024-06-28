@@ -55,7 +55,7 @@ function ExcelToJsonConverter() {
                 // setJsonData(JSON.stringify(json, null, 2));
 
                 // Get column names from the first row (excluding first 13 columns)
-                const columnNames = Object.keys(json[0]).slice(12,26);
+                const columnNames = Object.keys(json[0]).slice(13,26);
                 const eventTwoColumnNames = Object.keys(json[0]).slice(27,44);
                 let createdCount = 0;
                 let updatedCount = 0;
@@ -144,7 +144,7 @@ function ExcelToJsonConverter() {
                                                 orgUnit: row.OrgUIDs,
                                                 eventDate: formatDateFromExcelSerial(row.eventOneDate),
                                                 programStage: "nknoeOj6dLq",
-                                                dataValues: Object.keys(row).slice(12, 24).map((key) => ({
+                                                dataValues: Object.keys(row).slice(13, 24).map((key) => ({
                                                     dataElement: key,
                                                     // value: row[key]
                                                     value: key === 'uxHOAUsyDKz' || key === 'sKrn2rY6l0w' || key === 'ArUaftNaqGt' || key === 'WnHQ3OUmUal' ? formatDateFromExcelSerial(row[key]) : row[key]
