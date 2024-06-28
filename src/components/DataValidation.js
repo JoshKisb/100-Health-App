@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from "react";
 import "./DataValidation.css";
-import { Link } from "react-router-dom";
-import jsonData2 from "./assets/sample.json"; //for  json file
-import { toLower } from "lodash";
+import { Link, useHistory   } from "react-router-dom";
 import Loader from "./Loader/Loader";
+
+const periods = ["202401", "202402", "202403"];
 
 const DataUi = () => {
 
-	const [data, setData] = useState({data_values: []}); // json file
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-
-
 
 	const [uploading, setUploading] = useState(false);
 
 	const [file, setFile] = useState(null);
 	const [programAreas, setProgramAreas] = useState([]);
 	const [period, setPeriod] = useState("");
-	const [validationData, setValidationData] = useState([])
+	// const [validationData, setValidationData] = useState([]);
 
-
+	const history = useHistory();
 
 	// useEffect(() => {
 	// 	// fetch('http://localhost:8001/validate?period=202401')
@@ -73,8 +70,8 @@ const DataUi = () => {
 		// 	document.body.removeChild(script);
 		// };
 
-		const data = jsonData2["Program Area"];
-        let datavalues = [];
+
+
 
 		// setLoading(false);
 
@@ -103,12 +100,11 @@ const DataUi = () => {
 		// 		).length;
 
 		// }
-        setData((data) => ({...data, data_values: datavalues}))
 
 
 		setTimeout(() => {
 			setLoading(false);
-		}, 0o000); // 3 seconds
+		}, 1000); // 3 seconds
 
 		return () => clearTimeout(setTimeout); // Cleanup timeout on unmount
 
@@ -156,9 +152,10 @@ const DataUi = () => {
 
 	};
 
-	const handleValidate =  (prog_area) => async () => {
-		// console.log(`http://localhost:8001/validate?period=${period}&program_area=${prog_area}`)
+	const handleValidate =  (prog_area) => async (e) => {
+		e.preventDefault();
 		const serverUrl = "http://localhost:8001";
+		setLoading(true);
 		try {
 			const response = await fetch(`${serverUrl}/validate?period=${period}&program_area=${prog_area}`);
 
@@ -167,16 +164,24 @@ const DataUi = () => {
 			}
 
 			const data = await response.json();
-			setValidationData(data);
+			// setValidationData(data);
 			setLoading(false);
-			console.log("validation", validationData
-			);
+			// console.log("validation", data);
+			// console.log("validation", validationData);
 
+			// Redirect to the validation details page with state
+			history.push({
+				pathname: `/${prog_area}`,
+				state: { validationData: data }
+			});
 
 		} catch (error) {
 			console.error('Error validating:', error);
-		}
+		} finally {
+		setLoading(false);
 	}
+	};
+
 
 	if(loading){
 	    return <Loader/>
@@ -190,30 +195,47 @@ const DataUi = () => {
 		<div className="app">
 			<header className="app-header">
 				<h1>Data Validation Suite</h1>
+				{/*<div className="">*/}
+					<input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])}/>
+				<div className="header-buttons">
+					<button onClick={handleUpload}
+							disabled={uploading}>{uploading ? 'Uploading...' : 'Upload'}</button>
+
+					<select value={period} onChange={handlePeriodChange}>
+						<option value="">Select period</option>
+						{periods.map((period) => (
+							<option key={period} value={period}>
+								{period}
+							</option>
+						))}
+					</select>
+
+				</div>
+				{/*</div>*/}
 			</header>
 
 
-				<div className="form-container">
-						<input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])}/>
-					<div className="header-buttons">
-						<button onClick={handleUpload}
-								disabled={uploading}>{uploading ? 'Uploading...' : 'Upload'}</button>
-						<br/><br/>
-						<input type="text" placeholder="Add period" value={period} onChange={handlePeriodChange}/>
+			{/*<div className="form-container">*/}
+			{/*	<input type="file" accept=".xls,.xlsx" onChange={e => setFile(e.target.files[0])}/>*/}
+			{/*	<div className="header-buttons">*/}
+			{/*		<button onClick={handleUpload}*/}
+			{/*				disabled={uploading}>{uploading ? 'Uploading...' : 'Upload'}</button>*/}
+			{/*		<br/><br/>*/}
+			{/*		<input type="text" placeholder="Add period" value={period} onChange={handlePeriodChange}/>*/}
 
-					</div>
-				</div>
+			{/*	</div>*/}
+			{/*</div>*/}
 
 
 			<main>
-				<section className="program-selection">
-					<h2>Select Program Areas to Run Validation On</h2>
-					<ul>
-						{programAreas.map((area) => (
-							<li key={area.title}>{area.title}</li>
-						))}
-					</ul>
-				</section>
+				{/*<section className="program-selection">*/}
+				{/*	<h2>Select Program Areas to Run Validation On</h2>*/}
+				{/*	<ul>*/}
+				{/*		{programAreas.map((area) => (*/}
+				{/*			<li key={area.title}>{area.title}</li>*/}
+				{/*		))}*/}
+				{/*	</ul>*/}
+				{/*</section>*/}
 				{/*<section className="progress-bar">*/}
 				{/*	<h2>Progress</h2>*/}
 				{/*	<div className="progress">*/}
@@ -236,7 +258,7 @@ const DataUi = () => {
 						{programAreas.map((area) => (
 							<tr key={area.title}>
 								<td>
-									<Link to={`/${area.title}`} onClick={handleValidate(area.title)}>
+									<Link to={`/${area.title}`}  onClick={handleValidate(area.title)}>
 										{area.title}
 									</Link>
 								</td>
@@ -263,16 +285,16 @@ const DataUi = () => {
 						</tr>
 						</thead>
 						<tbody>
-						{data.data_values.map((dataValue, index) => (
-							<tr key={index}>
-								<td>{dataValue.dataElement}</td>
-								<td>{dataValue.categoryOptionCombo}</td>
-								<td>{dataValue.attributeOptionCombo}</td>
-								<td>{dataValue.value}</td>
-								<td>{dataValue.period}</td>
-								<td>{dataValue.orgUnit}</td>
-							</tr>
-						))}
+						{/*{data.data_values.map((dataValue, index) => (*/}
+						{/*	<tr key={index}>*/}
+						{/*		<td>{dataValue.dataElement}</td>*/}
+						{/*		<td>{dataValue.categoryOptionCombo}</td>*/}
+						{/*		<td>{dataValue.attributeOptionCombo}</td>*/}
+						{/*		<td>{dataValue.value}</td>*/}
+						{/*		<td>{dataValue.period}</td>*/}
+						{/*		<td>{dataValue.orgUnit}</td>*/}
+						{/*	</tr>*/}
+						{/*))}*/}
 						</tbody>
 					</table>
 				</section>
