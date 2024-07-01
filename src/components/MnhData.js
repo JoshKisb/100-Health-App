@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import "./DataValidation.css";
 import { useLocation, useParams, useHistory } from "react-router-dom";
 
@@ -7,6 +7,9 @@ const MnhData = () => {
 	const history = useHistory();
 	const location = useLocation();
 	const { validationData } = location.state || {};
+
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submissionMessage, setSubmissionMessage] = useState('');
 
 	useEffect(() => {
 		console.log("Received data:", validationData);
@@ -64,6 +67,48 @@ const MnhData = () => {
 		});
 	};
 
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setIsSubmitting(true);
+		setSubmissionMessage('');
+
+		// Combine all data_values into a single array
+		let combinedDataValues = [];
+
+		// Loop through the MNH object
+		for (const key in validationData[area]) {
+			if (validationData[area][key].data_values.length > 0) {
+				combinedDataValues = combinedDataValues.concat(validationData[area][key].data_values);
+			}
+		}
+
+		console.log("data Values are ", combinedDataValues);
+
+		try {
+			const response = await fetch('https://ug.sk-engine.cloud/sss/api/dataValueSets?', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Basic ' + btoa(`${process.env.REACT_APP_USERNAME}:${process.env.REACT_APP_PASSWORD}`),
+				},
+				body: JSON.stringify({dataValues: combinedDataValues}),
+			});
+
+			if (!response.ok) {
+				throw new Error('Network response was not ok');
+			}
+
+			const result = await response.json();
+			setSubmissionMessage('Data submitted successfully!');
+			console.log('Success:', result);
+		} catch (error) {
+			setSubmissionMessage('Failed to submit data. Please try again.');
+			console.error('Error:', error);
+		}finally {
+			setIsSubmitting(false);
+		}
+
+	}
 
 	return (
 		<div className="app">
@@ -95,8 +140,15 @@ const MnhData = () => {
 					</table>
 				</section>
 				<div className="header-buttons">
-					<button onClick={() => history.push('/')}>Submit Validated Data</button>
+					<button onClick={handleSubmit} disabled={isSubmitting}>
+						{isSubmitting ? 'Submitting...' : 'Submit Validated Data'}
+					</button>
 				</div>
+				{submissionMessage && (
+					<div className="submission-message">
+						{submissionMessage}
+					</div>
+				)}
 			</main>
 		</div>
 	);
