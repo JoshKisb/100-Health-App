@@ -4,7 +4,7 @@ import { useLocation, useParams, useHistory } from "react-router-dom";
 import generateExcelFile from "./GenerateExcelFile";
 
 const MnhData = () => {
-	let { area } = useParams();
+	let { area } = useParams(); //program area
 	const history = useHistory();
 	const location = useLocation();
 	const { validationData } = location.state || {};
@@ -115,7 +115,7 @@ const MnhData = () => {
 	}
 
 	const handleDownload = (facilityId) => {
-		generateExcelFile(facilityId, validationData[area]);
+		generateExcelFile(facilityId, validationData[area],area);
 	};
 
 	return (

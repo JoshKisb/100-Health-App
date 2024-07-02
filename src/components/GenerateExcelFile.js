@@ -1,6 +1,7 @@
 import * as XLSX from 'xlsx';
+import {useParams} from "react-router-dom";
 
-const generateExcelFile = (facilityId, validationData) => {
+const generateExcelFile = (facilityId, validationData, area) => {
     const facilityData = validationData[facilityId];
     console.log("download data", facilityData);
 
@@ -15,7 +16,7 @@ const generateExcelFile = (facilityId, validationData) => {
 
     // Define the worksheet data based on the template
     const worksheetData = [
-        ['Program Area', ':', validationData[0]],
+        ['Program Area', ':', area],
         ['Facility', ':', facilityId],
         ['Total Number of Validations', ':', records.length],
         ['Total Passed', ':', records.filter(record => record[1] === 'Pass').length],
