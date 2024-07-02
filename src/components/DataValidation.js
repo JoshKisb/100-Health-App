@@ -104,7 +104,7 @@ const DataUi = () => {
 
 		setTimeout(() => {
 			setLoading(false);
-		}, 1000); // 3 seconds
+		}, 3000); // 3 seconds
 
 		return () => clearTimeout(setTimeout); // Cleanup timeout on unmount
 
@@ -271,33 +271,33 @@ const DataUi = () => {
 					</table>
 				</section>
 
-				<section className="results">
-					<h2>List of Data Values</h2>
-					<table>
-						<thead>
-						<tr>
-							<th>dataElement</th>
-							<th>categoryOptionCombo</th>
-							<th>attributeOptionCombo</th>
-							<th>value</th>
-							<th>period</th>
-							<th>orgUnit</th>
-						</tr>
-						</thead>
-						<tbody>
-						{/*{data.data_values.map((dataValue, index) => (*/}
-						{/*	<tr key={index}>*/}
-						{/*		<td>{dataValue.dataElement}</td>*/}
-						{/*		<td>{dataValue.categoryOptionCombo}</td>*/}
-						{/*		<td>{dataValue.attributeOptionCombo}</td>*/}
-						{/*		<td>{dataValue.value}</td>*/}
-						{/*		<td>{dataValue.period}</td>*/}
-						{/*		<td>{dataValue.orgUnit}</td>*/}
-						{/*	</tr>*/}
-						{/*))}*/}
-						</tbody>
-					</table>
-				</section>
+				{/*<section className="results">*/}
+				{/*	<h2>List of Data Values</h2>*/}
+				{/*	<table>*/}
+				{/*		<thead>*/}
+				{/*		<tr>*/}
+				{/*			<th>dataElement</th>*/}
+				{/*			<th>categoryOptionCombo</th>*/}
+				{/*			<th>attributeOptionCombo</th>*/}
+				{/*			<th>value</th>*/}
+				{/*			<th>period</th>*/}
+				{/*			<th>orgUnit</th>*/}
+				{/*		</tr>*/}
+				{/*		</thead>*/}
+				{/*		<tbody>*/}
+				{/*		/!*{data.data_values.map((dataValue, index) => (*!/*/}
+				{/*		/!*	<tr key={index}>*!/*/}
+				{/*		/!*		<td>{dataValue.dataElement}</td>*!/*/}
+				{/*		/!*		<td>{dataValue.categoryOptionCombo}</td>*!/*/}
+				{/*		/!*		<td>{dataValue.attributeOptionCombo}</td>*!/*/}
+				{/*		/!*		<td>{dataValue.value}</td>*!/*/}
+				{/*		/!*		<td>{dataValue.period}</td>*!/*/}
+				{/*		/!*		<td>{dataValue.orgUnit}</td>*!/*/}
+				{/*		/!*	</tr>*!/*/}
+				{/*		/!*))}*!/*/}
+				{/*		</tbody>*/}
+				{/*	</table>*/}
+				{/*</section>*/}
 				<div className="download-report-container">
 					<button className="download-report">Download Report</button>
 				</div>

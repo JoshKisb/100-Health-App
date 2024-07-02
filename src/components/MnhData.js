@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./DataValidation.css";
 import { useLocation, useParams, useHistory } from "react-router-dom";
+import generateExcelFile from "./GenerateExcelFile";
 
 const MnhData = () => {
 	let { area } = useParams();
@@ -58,9 +59,12 @@ const MnhData = () => {
 					<td>{totalFailed}</td>
 					<td>{totalNull}</td>
 					<td>
-						<button onClick={() => alert(`Downloading report for ${id}`)}>
+						<button onClick={() => handleDownload(id)}>
 							Download
 						</button>
+						{/*<button onClick={() => alert(`Downloading report for ${id}`)}>*/}
+						{/*	Download*/}
+						{/*</button>*/}
 					</td>
 				</tr>
 			);
@@ -85,7 +89,7 @@ const MnhData = () => {
 		console.log("data Values are ", combinedDataValues);
 
 		try {
-			const response = await fetch('https://ug.sk-engine.cloud/sss/api/dataValueSets?', {
+			const response = await fetch('/api/dataValueSets?', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -109,6 +113,10 @@ const MnhData = () => {
 		}
 
 	}
+
+	const handleDownload = (facilityId) => {
+		generateExcelFile(facilityId, validationData[area]);
+	};
 
 	return (
 		<div className="app">
