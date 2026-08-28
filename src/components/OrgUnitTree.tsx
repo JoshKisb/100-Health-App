@@ -3,7 +3,7 @@ import { TreeSelect, Select, Button, Popover, Spin, DatePicker } from "antd";
 import { observer } from "mobx-react";
 import { useStore } from "../Context";
 import moment, { Moment } from "moment";
-import { getQueryParams } from "../utils/extra";
+import { getQueryParams , nationalitiesComboOptions } from "../utils/extra";
 
 const { Option } = Select;
 
@@ -119,7 +119,10 @@ export const OrgUnitTree: FunctionComponent<OrgUnitTreeTypes> = observer(({ load
       if(params['iframe_edit'] != undefined && params['iframe_edit'] == 'true'){
          store.setIsIframeEdit(true);
          localStorage.setItem("mcodtemp", JSON.stringify(params));
-         debugger
+         //Use nationlaity param to select the nationality
+         const nationalitySting =  params.nationality ?? "1. National"
+         const nationality = nationalitiesComboOptions.find(nationality   =>  nationality.name ==  nationalitySting.trim())
+         store.setSelectedNationality(nationality.id)
       }
 
       const mcodtemp = localStorage.getItem("mcodtemp");
